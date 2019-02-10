@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://aaronryu.github.io/"/>
-  <updated>2019-02-09T20:53:13.768Z</updated>
+  <updated>2019-02-09T23:20:24.972Z</updated>
   <id>https://aaronryu.github.io/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="https://aaronryu.github.io/2019/02/09/hello-world/"/>
     <id>https://aaronryu.github.io/2019/02/09/hello-world/</id>
     <published>2019-02-09T14:21:37.906Z</published>
-    <updated>2019-02-09T20:53:13.768Z</updated>
+    <updated>2019-02-09T23:20:24.972Z</updated>
     
     <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="hljs-string">"My New Post"</span></span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>]]></content>
     
@@ -34,19 +34,38 @@
     
     </summary>
     
+      <category term="Test" scheme="https://aaronryu.github.io/categories/Test/"/>
+    
+      <category term="Nested" scheme="https://aaronryu.github.io/categories/Test/Nested/"/>
+    
+      <category term="haha" scheme="https://aaronryu.github.io/categories/Test/Nested/haha/"/>
+    
+      <category term="hehe" scheme="https://aaronryu.github.io/categories/Test/Nested/haha/hehe/"/>
+    
     
   </entry>
   
   <entry>
-    <title>new post using hexo markdown, and edited after creation</title>
+    <title>1. 디자인 패턴에 앞서</title>
     <link href="https://aaronryu.github.io/2018/12/30/new-post-using-hexo-markdown/"/>
     <id>https://aaronryu.github.io/2018/12/30/new-post-using-hexo-markdown/</id>
     <published>2018-12-29T15:13:33.000Z</published>
-    <updated>2019-02-09T14:21:37.906Z</updated>
+    <updated>2019-02-09T23:23:41.037Z</updated>
+    
+    <content type="html"><![CDATA[<p>디자인 패턴은 객체지향 패러다임에서 더 좋은 코드란 무엇인가에 대한 답으로써 핵심은 다음과 같다.</p><ul><li><strong>중복의</strong> <strong>최소화</strong>: 잦은 수정 - 중복 코드 중 한곳을 고치려면 중복된 모든 코드에서도 같은 작업이 필요하다</li><li><strong>코드</strong> <strong>변경의</strong> <strong>용이성</strong>: 잦은 수정 - 코드는 항상 완벽하지 않고, 요구사항은 상시 바뀔 수 있다.</li><li><strong>재사용성</strong>: 정돈된 코드는 마치 프레임워크처럼 전혀 다른 요구사항 및 경우에도 그대로 쓸 수 있다.</li></ul><p>설명은 글로도 충분히 할 수 있지만 학습에는 그림만한것이 없다. 그림 설명을 위해 몇가지 숙지해야할 클래스 다이어그램 요소들이 있는데 다음과 같다.<br>–    실선 빈 화살표 = implements (구현)  : 코드는 인터페이스를 단위로 구성된다. 해당 인터페이스의 구현 클래스가 실제 작업 클래스로 주입된다. 사용하려는 구현 클래스를 코드 내에 지정하지 않고, 외부에서 타의에 의해 결정된다. 타의에 의해 주입되는것을 Dependency Injection, 내지는 Inversion of Control 이라 부른다. 정확히 IoC/DI 개념은 Spring 프레임워크에서 배웠지만 그 이전에 하나의 디자인 패턴으로 강구된것이었으며, 1) 생성자, 2) Setter, 3) 초기화 인터페이스 세 방법을 이용한 구현 클래스 주입 방법이 있다. 주입은 구현 클래스 결정권자인 ‘타인’인 Container 를 통해 이뤄진다. 따로 프레임워크 도움없이 하려면 Container 없이 직접 코드의 가장 외부에서 주입하기도 한다.<br>–    점선 빈 화살표 = extends (상속)<br>–    실선 찬 화살표 = composite (구성) : A 클래스가 B 클래스를 갖고있을때, 거의 인터페이스 형태로 갖고있다.</p><p>사실상 이 세 개의 화살표가 디자인 패턴의 모든것을 말해준다해도 과언이 아니다. 디자인 패턴은 객체지향 패러다임을 어떻게 사용하는것이 올바르게 사용하는것인가란 고찰이므로, 앞으로의 글은 객체지향 패러다임에 등장한 세 요소, 구현, 상속, 구성을 어떻게 사용해야하는지에 대한 이야기가 될 것이다 </p><p>출처 1: <a href="https://martinfowler.com/articles/injection.html" target="_blank" rel="noopener">https://martinfowler.com/articles/injection.html</a><br>출처 2: <a href="http://www.nextree.co.kr/p11247/" target="_blank" rel="noopener">http://www.nextree.co.kr/p11247/</a></p><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="hljs-string">"My New Post"</span></span><br></pre></td></tr></table></figure>]]></content>
     
     <summary type="html">
     
+      
+      
+        &lt;p&gt;디자인 패턴은 객체지향 패러다임에서 더 좋은 코드란 무엇인가에 대한 답으로써 핵심은 다음과 같다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;중복의&lt;/strong&gt; &lt;strong&gt;최소화&lt;/strong&gt;: 잦은 수정 - 중복 코드 중 한곳을 고치려면 중
+      
+    
     </summary>
+    
+      <category term="Design Pattern" scheme="https://aaronryu.github.io/categories/Design-Pattern/"/>
     
     
   </entry>
