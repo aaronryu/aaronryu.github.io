@@ -2,25 +2,32 @@
 <html lang="en">
 <head><meta name="generator" content="Hexo 3.8.0">
     <meta charset="utf-8">
-<title>Category: Design Pattern - Crucian Carp</title>
+<title>1. 디자인 패턴에 앞서 - Crucian Carp</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 
 
-    <meta name="description" content="Cool heads but warm hearts">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Crucian Carp">
-<meta property="og:url" content="https://aaronryu.github.io/categories/Design-Pattern/index.html">
+    <meta name="description" content="디자인 패턴은 대학교에서 간단하게만 배웠던 기억이 닙니다. 대학원에서도 입사 준비 때도 주변에서는 디자인 패턴이 중요하다지만 실제로 잘 사용하는 사람은 없었고, 이게 왜 중요한지에 대해서도 체감하기 힘들었었습니다. 어렸을때는 내 코드에 대한 리뷰어나 배울만한 시니어 개발자들이 없었으니 당연하다 생각합니다. 제가 코딩과 공부를 능동적으로 안해온것이 크겠지만">
+<meta property="og:type" content="article">
+<meta property="og:title" content="1. 디자인 패턴에 앞서">
+<meta property="og:url" content="https://aaronryu.github.io/2018/12/30/introduction-to-design-pattern/index.html">
 <meta property="og:site_name" content="Crucian Carp">
-<meta property="og:description" content="Cool heads but warm hearts">
+<meta property="og:description" content="디자인 패턴은 대학교에서 간단하게만 배웠던 기억이 닙니다. 대학원에서도 입사 준비 때도 주변에서는 디자인 패턴이 중요하다지만 실제로 잘 사용하는 사람은 없었고, 이게 왜 중요한지에 대해서도 체감하기 힘들었었습니다. 어렸을때는 내 코드에 대한 리뷰어나 배울만한 시니어 개발자들이 없었으니 당연하다 생각합니다. 제가 코딩과 공부를 능동적으로 안해온것이 크겠지만">
 <meta property="og:locale" content="en">
+<meta property="og:image" content="https://aaronryu.github.io/2018/12/30/introduction-to-design-pattern/implements.svg">
+<meta property="og:image" content="https://aaronryu.github.io/2018/12/30/introduction-to-design-pattern/extends.svg">
+<meta property="og:image" content="https://aaronryu.github.io/2018/12/30/introduction-to-design-pattern/has.svg">
+<meta property="og:image" content="https://aaronryu.github.io/2018/12/30/introduction-to-design-pattern/extends2.svg">
+<meta property="og:image" content="https://aaronryu.github.io/2018/12/30/introduction-to-design-pattern/extends3.svg">
+<meta property="og:updated_time" content="2019-02-18T18:29:49.524Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Crucian Carp">
-<meta name="twitter:description" content="Cool heads but warm hearts">
+<meta name="twitter:title" content="1. 디자인 패턴에 앞서">
+<meta name="twitter:description" content="디자인 패턴은 대학교에서 간단하게만 배웠던 기억이 닙니다. 대학원에서도 입사 준비 때도 주변에서는 디자인 패턴이 중요하다지만 실제로 잘 사용하는 사람은 없었고, 이게 왜 중요한지에 대해서도 체감하기 힘들었었습니다. 어렸을때는 내 코드에 대한 리뷰어나 배울만한 시니어 개발자들이 없었으니 당연하다 생각합니다. 제가 코딩과 공부를 능동적으로 안해온것이 크겠지만">
+<meta name="twitter:image" content="https://aaronryu.github.io/2018/12/30/introduction-to-design-pattern/implements.svg">
 
 
 
-<link rel="alternative" href="atom.xml" title="Crucian Carp" type="application/atom+xml">
+<link rel="alternative" href="atom.xml" title="1. 디자인 패턴에 앞서" type="application/atom+xml">
 
 
 
@@ -111,6 +118,10 @@
             <div class="navbar-end">
                 
                 
+                <a class="navbar-item is-hidden-tablet catalogue" title="Catalogue" href="javascript:;">
+                    <i class="fas fa-list-ul"></i>
+                </a>
+                
                 
                 <a class="navbar-item search" title="Search" href="javascript:;">
                     <i class="fas fa-search"></i>
@@ -125,18 +136,6 @@
         <div class="container">
             <div class="columns">
                 <div class="column is-9-tablet is-9-desktop is-9-widescreen has-order-2 column-main"><div class="card">
-    <div class="card-content">
-        <nav class="breadcrumb" aria-label="breadcrumbs">
-        <ul>
-            <li><a href="/categories">Categories</a></li>
-            
-            <li class="is-active"><a href="#" aria-current="page">Design Pattern</a></li>
-        </ul>
-        </nav>
-    </div>
-</div>
-
-    <div class="card">
     
     <div class="card-content article ">
         
@@ -156,7 +155,7 @@
         
         <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
             
-                <a class="has-link-black-ter" href="/2018/12/30/introduction-to-design-pattern/">1. 디자인 패턴에 앞서</a>
+                1. 디자인 패턴에 앞서
             
         </h1>
         <div class="content">
@@ -218,9 +217,45 @@
 
 
 
+<div class="card card-transparent">
+    <div class="level post-navigation is-flex-wrap is-mobile">
+        
+        <div class="level-start">
+            <a class="level level-item has-link-grey  article-nav-prev" href="/2019/02/17/how-do-i-make-email-address/">
+                <i class="level-item fas fa-chevron-left"></i>
+                <span class="level-item">프로페셔널한 메일 주소를 만드는 방법</span>
+            </a>
+        </div>
+        
+        
+    </div>
+</div>
 
 
 
+<div class="card">
+    <div class="card-content">
+        <h3 class="title is-5 has-text-weight-normal">Comments</h3>
+        
+<script>
+    var disqus_config = function () {
+        this.page.url = 'https://aaronryu.github.io/2018/12/30/introduction-to-design-pattern/';
+        this.page.identifier = '2018/12/30/introduction-to-design-pattern/';
+    };
+    (function() {
+        var d = document, s = d.createElement('script');  
+        s.src = '//' + 'aaronryu' + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+
+<div id="disqus_thread">
+    
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+    </div>
+</div>
 
 </div>
                 
@@ -232,6 +267,41 @@
 <div class="column is-3-tablet is-3-desktop is-3-widescreen  has-order-1 column-left is-sticky">
     
         
+<div class="card widget" id="toc">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                Catalogue
+            </h3>
+            <ul class="menu-list"><li>
+        <a class="is-flex" href="#디자인-패턴">
+        <span class="has-mr-6">1</span>
+        <span>디자인 패턴</span>
+        </a></li><li>
+        <a class="is-flex" href="#너무나도-먼-디자인-패턴">
+        <span class="has-mr-6">2</span>
+        <span>너무나도 먼 디자인 패턴</span>
+        </a></li><li>
+        <a class="is-flex" href="#클래스-다이어그램-화살표">
+        <span class="has-mr-6">3</span>
+        <span>클래스 다이어그램 화살표</span>
+        </a><ul class="menu-list"><li>
+        <a class="is-flex" href="#implements-구현">
+        <span class="has-mr-6">3.1</span>
+        <span>implements (구현)</span>
+        </a></li><li>
+        <a class="is-flex" href="#extends-상속">
+        <span class="has-mr-6">3.2</span>
+        <span>extends (상속)</span>
+        </a></li><li>
+        <a class="is-flex" href="#composite-구성-합성">
+        <span class="has-mr-6">3.3</span>
+        <span>composite (구성, 합성)</span>
+        </a></li></ul></li></ul>
+        </div>
+    </div>
+</div>
+
     
         
 <div class="card widget">
