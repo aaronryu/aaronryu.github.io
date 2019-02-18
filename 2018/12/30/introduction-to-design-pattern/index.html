@@ -19,7 +19,7 @@
 <meta property="og:image" content="https://aaronryu.github.io/2018/12/30/introduction-to-design-pattern/has.svg">
 <meta property="og:image" content="https://aaronryu.github.io/2018/12/30/introduction-to-design-pattern/extends2.svg">
 <meta property="og:image" content="https://aaronryu.github.io/2018/12/30/introduction-to-design-pattern/extends3.svg">
-<meta property="og:updated_time" content="2019-02-18T18:33:35.587Z">
+<meta property="og:updated_time" content="2019-02-18T18:35:52.979Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="1. 디자인 패턴에 앞서">
 <meta name="twitter:description" content="디자인 패턴은 대학교에서 간단하게만 배웠던 기억이 닙니다. 대학원에서도 입사 준비 때도 주변에서는 디자인 패턴이 중요하다지만 실제로 잘 사용하는 사람은 없었고, 이게 왜 중요한지에 대해서도 체감하기 힘들었었습니다. 어렸을때는 내 코드에 대한 리뷰어나 배울만한 시니어 개발자들이 없었으니 당연하다 생각합니다. 제가 코딩과 공부를 능동적으로 안해온것이 크겠지만">
@@ -187,7 +187,7 @@
 <p>우리가 배운 다형성을 활용하면 <strong>인터페이스와 구현 클래스를 나눠서 인터페이스에 우리가 원하는 구현 클래스들을 다음과 같이 동적으로 주입</strong>할 수 있습니다.<br><figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Interface <span class="hljs-class"><span class="hljs-keyword">class</span> </span>= <span class="hljs-keyword">new</span> ConcreteClass();</span><br></pre></td></tr></table></figure></p>
 <figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Interface <span class="hljs-class"><span class="hljs-keyword">class</span> </span>= <span class="hljs-keyword">new</span> SuperConcreteClass();</span><br></pre></td></tr></table></figure>
 <p>주입을 직접 Interface 에 하지않고 아래처럼 더 간편하게 함수를 통해 해줄 수 있습니다.<br><figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">private</span> Interface <span class="hljs-class"><span class="hljs-keyword">class</span></span>;</span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">setClass</span><span class="hljs-params">(Interface class)</span> </span>&#123;</span><br><span class="line">    <span class="hljs-keyword">this</span>.class = <span class="hljs-class"><span class="hljs-keyword">class</span></span>;</span><br><span class="line">&#125;</span><br><span class="line">setClass(<span class="hljs-keyword">new</span> ConcreteClass();</span><br></pre></td></tr></table></figure></p>
-<p>사용하려는 구현 클래스가 무엇인지 바로 명시하지 않고 원하는 구현 클래스를 동적으로 Interface 에 외부에서 주입하기 때문에 무슨 클래스를 쓸지에 대한 결정권을 제안하지 않기 때문에 Dependency Injection, 내지는 Inversion of Control 이라 부릅니다.</p>
+<p>사용하려는 구현 클래스가 무엇인지 바로 명시하지 않고 원하는 구현 클래스를 동적으로 Interface 에 외부에서 주입하기 때문에 결정권을 갖지 않는다는 이유로 <strong>Dependency Injection</strong>, 내지는 <strong>Inversion of Control</strong> 이라 부릅니다.</p>
 <h2 id="extends-상속"><a href="#extends-상속" class="headerlink" title="extends (상속)"></a>extends (상속)</h2><center><img src="/2018/12/30/introduction-to-design-pattern/extends.svg"></center>
 
 <p>상속은 클래스의 몇몇 함수에 대해 추가적인 기능이나 다른 로직의 함수로 대체하고 싶을때 사용합니다. 일반적으로 대학교때 객체지향 프로그램의 가장 큰 특성을 상속으로 배우고 Animal 과 같은 상위  클래스와 그를 상속하는 Cat, Dog 같은 하위 개념 클래스를 예제로 배우니 상위, 하위 클래스를 사용할때 상속을 많이 사용합니다. 하지만 상위, 하위 개념은 앞서 설명드린 implements(구현)에 해당합니다. 상위 개념을 Interface 로 두고 상위 개념에 해당하는 함수들을 하위 개념 Class 에서 명시하는것입니다. </p>
@@ -197,7 +197,7 @@
 <p>특정 클래스가 특정 클래스를 내부 변수로 갖고있는것을 뜻합니다. 구성은 단순히 갖고있다는 의미인데 왜 패턴에서 중요하게 쓰일까요. extend 가 interface 와 composite 의 조합으로 표현될 수 있기 때문입니다.</p>
 <center><img src="/2018/12/30/introduction-to-design-pattern/extends2.svg"></center>
 
-<p>CatClass 가 줄무늬를 갖는것을 상속을 통해 Sprite 함수 및 변수를 넣어주지 않고, “종” 이라는 하나의 상위 클래스를 두고 “줄무늬종” 임을 하위 클래스로 명시해준다면 상위 개념인 “종”에 그 하위에 무슨 “종”이든 다 넣을 수 있는 확장성을 갖게됩니다. 바로 위 extends(상속)과 비교해보십시오. <strong>좌측에 SpriteCatClass 가 갖고있던 Sprite 정보가 우측 클래스로 이동했습니다.</strong></p>
+<p>CatClass 가 줄무늬를 갖는것을 상속을 통해 Sprite 함수 및 변수를 넣어주지 않고, “종” 이라는 하나의 상위 클래스를 두고 “줄무늬종” 임을 하위 클래스로 명시해준다면 상위 개념인 “종”에 그 하위에 무슨 “종”이든 다 넣을 수 있는 확장성을 갖게됩니다. 바로 위 extends(상속)과 비교해보십시오. <strong>좌측에 SpriteCatClass 가 갖고있던 Sprite 정보가 우측 클래스로 이동했습니다.</strong> <strong>Inversion of Control</strong> 의 의미가 조금 짐작되시는지요.</p>
 <center><img src="/2018/12/30/introduction-to-design-pattern/extends3.svg"></center>
 
 <p>CatClass 가 줄무늬뿐만 아니라 두 눈이 오드아이라고 설정해봅시다. 이 또한 상위-하위 개념인 interface 와 has 를 통해 EyesClass 에 OddEyesClass 를 명시하는것이 좋겠지요. 아까 제 1 원칙 <strong>“구현이 아닌 인터페이스에 맞춰 프로그래밍 한다.”</strong> 다음에 제 2 원칙 <strong>“상속대신 구성과 인터페이스를 사용한다”</strong> 가 되겠습니다.</p>
