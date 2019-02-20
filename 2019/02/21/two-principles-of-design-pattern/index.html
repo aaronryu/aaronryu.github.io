@@ -7,17 +7,17 @@
 
 
 
-    <meta name="description" content="설명에 사용할 코드는 Java-like Pseudo Code 입니다.  내게 대학교 시절에 객체지향 프로그램은 다형성과 상속뿐이었지만 책이 아닌 실제 프로그래밍으로 접한 객체지향 프로그램은 학문이 아니라 실전이었습니다. 왜 이걸 배웠고 이게 사실 어떤 의미를 가졌는지 그제서야 깨달을 수 있었습니다. 여기서는 짧게 상속에 대한 우리의 믿음을 살펴보고 디자인">
+    <meta name="description" content="설명에 사용할 코드는 Java-like Pseudo Code 입니다.  내게 대학교 시절에 객체지향 프로그램은 다형성과 상속뿐이었지만 책이 아닌 실제 프로그래밍으로 접한 객체지향 프로그램은 학문이 아니라 실전이었습니다. 왜 이걸 배웠고 이게 사실 어떤 의미를 갖는건지 그제서야 깨달을 수 있었습니다. 여기서는 짧게 우리가 생각했던 상속을 살펴보고 디자인 패턴">
 <meta property="og:type" content="article">
 <meta property="og:title" content="2. 디자인 패턴의 제 1, 2 원칙">
 <meta property="og:url" content="https://aaronryu.github.io/2019/02/21/two-principles-of-design-pattern/index.html">
 <meta property="og:site_name" content="Crucian Carp">
-<meta property="og:description" content="설명에 사용할 코드는 Java-like Pseudo Code 입니다.  내게 대학교 시절에 객체지향 프로그램은 다형성과 상속뿐이었지만 책이 아닌 실제 프로그래밍으로 접한 객체지향 프로그램은 학문이 아니라 실전이었습니다. 왜 이걸 배웠고 이게 사실 어떤 의미를 가졌는지 그제서야 깨달을 수 있었습니다. 여기서는 짧게 상속에 대한 우리의 믿음을 살펴보고 디자인">
+<meta property="og:description" content="설명에 사용할 코드는 Java-like Pseudo Code 입니다.  내게 대학교 시절에 객체지향 프로그램은 다형성과 상속뿐이었지만 책이 아닌 실제 프로그래밍으로 접한 객체지향 프로그램은 학문이 아니라 실전이었습니다. 왜 이걸 배웠고 이게 사실 어떤 의미를 갖는건지 그제서야 깨달을 수 있었습니다. 여기서는 짧게 우리가 생각했던 상속을 살펴보고 디자인 패턴">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-02-20T18:17:48.605Z">
+<meta property="og:updated_time" content="2019-02-20T18:25:53.866Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="2. 디자인 패턴의 제 1, 2 원칙">
-<meta name="twitter:description" content="설명에 사용할 코드는 Java-like Pseudo Code 입니다.  내게 대학교 시절에 객체지향 프로그램은 다형성과 상속뿐이었지만 책이 아닌 실제 프로그래밍으로 접한 객체지향 프로그램은 학문이 아니라 실전이었습니다. 왜 이걸 배웠고 이게 사실 어떤 의미를 가졌는지 그제서야 깨달을 수 있었습니다. 여기서는 짧게 상속에 대한 우리의 믿음을 살펴보고 디자인">
+<meta name="twitter:description" content="설명에 사용할 코드는 Java-like Pseudo Code 입니다.  내게 대학교 시절에 객체지향 프로그램은 다형성과 상속뿐이었지만 책이 아닌 실제 프로그래밍으로 접한 객체지향 프로그램은 학문이 아니라 실전이었습니다. 왜 이걸 배웠고 이게 사실 어떤 의미를 갖는건지 그제서야 깨달을 수 있었습니다. 여기서는 짧게 우리가 생각했던 상속을 살펴보고 디자인 패턴">
 
 
 
@@ -155,7 +155,7 @@
         <div class="content">
             <p>설명에 사용할 코드는 Java-like Pseudo Code 입니다.</p>
 <hr>
-<p>내게 대학교 시절에 객체지향 프로그램은 다형성과 상속뿐이었지만 책이 아닌 실제 프로그래밍으로 접한 객체지향 프로그램은 학문이 아니라 실전이었습니다. 왜 이걸 배웠고 이게 사실 어떤 의미를 가졌는지 그제서야 깨달을 수 있었습니다. 여기서는 짧게 상속에 대한 우리의 믿음을 살펴보고 디자인 패턴으로 도약하기 위해 상속을 버리는 두 개의 원칙을 익히려고 합니다.</p>
+<p>내게 대학교 시절에 객체지향 프로그램은 다형성과 상속뿐이었지만 책이 아닌 실제 프로그래밍으로 접한 객체지향 프로그램은 학문이 아니라 실전이었습니다. 왜 이걸 배웠고 이게 사실 어떤 의미를 갖는건지 그제서야 깨달을 수 있었습니다. 여기서는 짧게 우리가 생각했던 상속을 살펴보고 디자인 패턴으로 도약하기 위해 상속을 버리는 두 개의 원칙을 익히려고 합니다.</p>
 <h1 id="상속-객체지향-프로그램"><a href="#상속-객체지향-프로그램" class="headerlink" title="상속 = 객체지향 프로그램?"></a>상속 = 객체지향 프로그램?</h1><p>처음 엔터프라이즈 객체지향 프로그램을 작성한다고 가정해봅시다. 학교에서 공부한대로라면 <strong>객체지향 프로그램은 상속</strong>이라고 배웠습니다. 그래서 우리는 과감히 상위 클래스를 만들고 이를 상속하여 하위 개념에 해당하는 클래스를 활용할 것입니다. 그리고 객체지향 프로그래밍 프로젝트 #1 이라고 이름 짓겠죠. 코드는 아래 헤드퍼스트 책의 예제와 같을 것입니다.</p>
 <h2 id="처음-배웠던-상속"><a href="#처음-배웠던-상속" class="headerlink" title="처음 배웠던 상속"></a>처음 배웠던 상속</h2><ul>
 <li><p><strong>상위 클래스 + 상위 행위</strong></p>
@@ -165,7 +165,7 @@
 <figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">RedHeadDuck</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Duck</span> </span></span><br><span class="line"><span class="hljs-class"></span>&#123; swim(), display(), fly(), quack()&#123; <span class="hljs-keyword">null</span> &#125; &#125;</span><br><span class="line"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">RubberDuck</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Duck</span> </span></span><br><span class="line"><span class="hljs-class"></span>&#123; swim(), display(), fly()&#123; <span class="hljs-keyword">null</span> &#125;, quack() &#125;</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
-<p>상속을 사용하였더니 상위 Duck 클래스에 있는 모든 상위 행위들을 하위 Duck 클래스들이 모두 갖게됩니다. 어떤 하위 Duck 클래스는 의지와 상관없이 갖고싶지 않지만 무조건 모든 상위 행위를 갖고 확장해야합니다. 개발에 있어 불필요한 제약을 갖게되는 것입니다. 그럼 아래와 같이 <strong>선택적으로 행위를 가져갈 수 있도록 행위를 인터페이스로 분리해 가져보겠습니다.</strong></p>
+<p>상속을 사용하였더니 상위 Duck 클래스에 있는 모든 상위 행위들을 하위 Duck 클래스들이 모두 갖게됩니다. 어떤 <strong>하위 Duck 클래스는 의지와 상관없이 갖고싶지 않지만 무조건 모든 상위 행위를 갖고 확장해야합니다.</strong> 개발에 있어 불필요한 제약을 갖게되는 것입니다. 그럼 아래와 같이 <strong>선택적으로 행위를 가져갈 수 있도록 행위를 인터페이스로 분리해 가져보겠습니다.</strong></p>
 <h2 id="상속-대신-인터페이스"><a href="#상속-대신-인터페이스" class="headerlink" title="상속 대신 인터페이스"></a>상속 대신 인터페이스</h2><ul>
 <li><p><strong>상위 클래스</strong></p>
 <figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Duck</span> </span>&#123; swim(), display() &#125;</span><br></pre></td></tr></table></figure>
@@ -177,7 +177,7 @@
 <figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">RedHeadDuck</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Duck</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">Flyable</span>, <span class="hljs-title">Quackable</span> </span></span><br><span class="line"><span class="hljs-class"></span>&#123; swim(), display(), fly(), quack() &#125;</span><br><span class="line"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">RubberDuck</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Duck</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">Quackable</span> </span></span><br><span class="line"><span class="hljs-class"></span>&#123; swim(), display(), quack() &#125;</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
-<p>드디어 <strong>상위 클래스에 속하던 행위를 인터페이스로 분리하여 하위 클래스에 원하는 행위들만 붙일 수 있게 되었습니다.</strong> 하지만 두 개의 오리가 같은 소리를 갖는다면 Quackable 오리 각각에 quack() 을 똑같이 구현해주어야 합니다. 두 개의 오리면 괜찮겠지만 100 중 70 종의 오리가 같은 소리를 낸다면 70 개의 같은 quack() 구현 코드를 작성해야합니다. 그 중 몇 개의 quack() 소리를 다른 타입으로 바꾸려해도 같은 반복작업이 생기게 됩니다. 그럼 행위 인터페이스 구현을 따로 만들어서 원하는 구현을 가져보면 더 좋지 않을까요?</p>
+<p>드디어 <strong>상위 클래스에 속하던 행위를 인터페이스로 분리하여 하위 클래스에 원하는 행위들만 붙일 수 있게 되었습니다.</strong> 하지만 두 개의 오리가 같은 소리를 갖는다면 Quackable 오리 각각에 quack() 을 똑같이 구현해주어야 합니다. 두 개의 오리면 괜찮겠지만 100 중 70 종의 오리가 같은 소리를 낸다면 70 개의 같은 quack() 구현 코드를 작성해야합니다. 그 중 몇 개의 quack() 소리를 다른 타입으로 바꾸려해도 같은 반복작업이 생기게 됩니다. 그럼 <strong>행위 인터페이스 구현을 따로 만들어서 원하는 구현을 선택적으로 가져보면</strong> 더 좋지 않을까요?</p>
 <h2 id="인터페이스-‘구현’이-아닌-‘구성’"><a href="#인터페이스-‘구현’이-아닌-‘구성’" class="headerlink" title="인터페이스 ‘구현’이 아닌 ‘구성’"></a>인터페이스 ‘구현’이 아닌 ‘구성’</h2><ul>
 <li><p><strong>상위 클래스</strong></p>
 <figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Duck</span> </span>&#123; swim(), display() &#125;</span><br></pre></td></tr></table></figure>
