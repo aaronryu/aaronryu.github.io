@@ -8,13 +8,6 @@
     </url>
 
     <url>
-        <loc>https://aaronryu.github.io/categories/Design-Pattern/</loc>
-        <lastmod>2019-02-23T10:30:45.810Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.2</priority>
-    </url>
-
-    <url>
         <loc>https://aaronryu.github.io/categories/Design-Pattern/Factory/</loc>
         <lastmod>2019-02-23T10:30:45.810Z</lastmod>
         <changefreq>weekly</changefreq>
@@ -24,6 +17,13 @@
     <url>
         <loc>https://aaronryu.github.io/categories/Workplace/</loc>
         <lastmod>2019-02-23T10:31:15.431Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>https://aaronryu.github.io/categories/Design-Pattern/</loc>
+        <lastmod>2019-02-23T11:09:34.477Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
