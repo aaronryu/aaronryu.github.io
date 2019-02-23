@@ -142,6 +142,191 @@
         
         <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
             <div class="level-left">
+                <!-- <time class="level-item has-text-grey" datetime="2019-02-21T17:33:46.000Z">2019-02-22</time> -->
+                <div class="level-item has-text-grey">2019-02-22</div>
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/categories/Design-Pattern/">Design Pattern</a>&nbsp;/&nbsp;<a class="has-link-grey -link" href="/categories/Design-Pattern/Factory/">Factory</a>
+                </div>
+                
+                
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2019/02/22/factory-method-and-abstract-factory-pattern/">3. 팩토리 메소드, 추상 팩토리 패턴</a>
+            
+        </h1>
+        <div class="content">
+            <p>디자인 패턴은 무조건 아래 두 글을 선행해야합니다. 짧으니 간단히 읽고 오시면 이해가 쉽습니다.</p>
+<ul>
+<li><a href="../2018/12/30/introduction-to-design-pattern/">1. 디자인 패턴에 앞서</a></li>
+<li><a href="../2019/02/21/two-principles-of-design-pattern/">2. 디자인 패턴의 제 1, 2 원칙</a></li>
+</ul>
+<p>설명에 사용할 코드는 Java-like Pseudo Code 입니다.</p>
+<hr>
+<h1 id="여러-상태에-따른-코드"><a href="#여러-상태에-따른-코드" class="headerlink" title="여러 상태에 따른 코드"></a>여러 상태에 따른 코드</h1><p>개발을 하다보면 어떤 <strong>상태에 따라 다른 플로</strong>를 작성해야할 상황이 발생합니다. 단순히 예/아니오 같은 <strong>단일 상태</strong>라면 if 문을 사용하도록 배웠고, <strong>다중 상태</strong>라면 if-else 혹은 switch 를 사용하도록 배웠습니다. 코드는 간단하게는 로직의 나열이라고 볼 수 있는데요. 우리의 실생활에서도 이처럼 다중 상태에 따라 다양한 작업을 수행하곤 합니다. 결국 모든 실생활도 if-else/switch 로 설명이 가능하다는 의미겠지요.</p>
+<h2 id="if-else-에-“의존한”-처리"><a href="#if-else-에-“의존한”-처리" class="headerlink" title="if-else 에 “의존한” 처리"></a>if-else 에 “의존한” 처리</h2><ul>
+<li><strong>라면 종류별 끓이기</strong><figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">RamemMaker</span> </span>&#123;</span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">makeRamen</span><span class="hljs-params">(String type)</span> </span>&#123;</span><br><span class="line">        Water water = <span class="hljs-keyword">new</span> Water(<span class="hljs-number">100</span>);</span><br><span class="line">        Ramen ramen;</span><br><span class="line">        heat(water);</span><br><span class="line">        <span class="hljs-keyword">if</span> (type == <span class="hljs-string">"볶음"</span>) &#123;</span><br><span class="line">            ramen = 볶음라면;</span><br><span class="line">        &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (type == <span class="hljs-string">"국물"</span>) &#123;</span><br><span class="line">            ramen = 국물라면;</span><br><span class="line">        &#125;</span><br><span class="line">        water.add(ramen);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>라면 종류를 상태로 본다면 명시해준 라면 종류 String type 따라서 다른 라면을 끓입니다. 함수 makeRamen(String type) 은 아래와 같이 두 파트로 나눠볼 수 있습니다.</p>
+<ol>
+<li><strong>상태</strong>:<br> 1.1. <strong>라면 종류</strong>를 고르고 </li>
+<li><strong>처리</strong>: 라면을 <strong>끓입니다.</strong> </li>
+</ol>
+<p>상태와 처리라는 두 책임이 하나의 코드에 모여있군요. 1.상태와 2.처리를 한번 떼어내볼까요.</p>
+<h2 id="if-else-를-“분리한”-처리"><a href="#if-else-를-“분리한”-처리" class="headerlink" title="if-else 를 “분리한” 처리"></a>if-else 를 “분리한” 처리</h2><ul>
+<li><p><strong>라면 끓이기</strong></p>
+<figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">RamemMaker</span> </span>&#123;</span><br><span class="line">    RamenGetter ramenGetter = <span class="hljs-keyword">new</span> RamenGetter();</span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">makeRamen</span><span class="hljs-params">(String type)</span> </span>&#123;</span><br><span class="line">        Water water = <span class="hljs-keyword">new</span> Water(<span class="hljs-number">100</span>);</span><br><span class="line">        Ramen ramen = ramenGetter.getRamen(type);</span><br><span class="line">        heat(water);</span><br><span class="line">        water.add(ramen);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>라면 종류별 생성</strong></p>
+<figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">RamenGetter</span> </span>&#123;</span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">public</span> Ramen <span class="hljs-title">getRamen</span><span class="hljs-params">(String type)</span> </span>&#123;</span><br><span class="line">        <span class="hljs-keyword">if</span> (type == <span class="hljs-string">"볶음"</span>) &#123;</span><br><span class="line">            <span class="hljs-keyword">return</span> 볶음라면;</span><br><span class="line">        &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (type == <span class="hljs-string">"국물"</span>) &#123;</span><br><span class="line">            <span class="hljs-keyword">return</span> 국물라면;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>라면 종류별 생성을 책임지는 <strong>상태 함수</strong>는 <strong>재사용성</strong>을 갖게되었고, <strong>상태</strong> 책임이 더 명확해 졌습니다. 여기서 함수 getRamen(String type)와 같이 <strong>상태에 따라 알맞은 클래스를 만들어서 주입해주는 함수</strong>를 <strong>팩토리</strong>라고 합니다.</p>
+<blockquote>
+<p><strong>팩토리</strong>는 if-else/switch <strong>상태</strong>에 따라 <strong>다른 클래스를 생성 및 주입해주는 함수</strong>를 의미합니다.</p>
+</blockquote>
+<p>일반적으로 팩토리 함수는 하나만으로 충분하기 때문에 정적 팩토리로 많이 사용됩니다. 다만 static 으로 정의된 함수는 상속을 통해 하위 클래스에서 해당 함수 사용 및 확장이 불가능하다는 단점만 유념하시면 됩니다.</p>
+<h2 id="if-else-if-else"><a href="#if-else-if-else" class="headerlink" title="if-else + if-else"></a>if-else + if-else</h2><p>팩토리는 단순히 한 상태에 따른 구현 클래스를 생성합니다. 라면은 <strong>라면 종류</strong>라는 한 상태뿐만 아니라 <strong>라면 업체</strong>라는 또 하나의 상태도 있습니다. 두 개의 상태가 생겼군요. 이를 <strong>이차원 상태</strong>로 보면 아래와 같이 if-else 문 안에 또 하나의 if-else 문을 갖는 구조로 볼 수 있습니다.</p>
+<ul>
+<li><strong>이차원 상태: 라면 업체 + 라면 종류</strong><figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">if</span> (company == <span class="hljs-string">"A 업체"</span>) &#123;</span><br><span class="line">    <span class="hljs-keyword">if</span> (type == <span class="hljs-string">"볶음"</span>) &#123;</span><br><span class="line">        <span class="hljs-keyword">return</span> A_볶음라면;</span><br><span class="line">    &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (type == <span class="hljs-string">"국물"</span>) &#123;</span><br><span class="line">        <span class="hljs-keyword">return</span> A_국물라면;</span><br><span class="line">    &#125;</span><br><span class="line">&#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (company == <span class="hljs-string">"B 업체"</span>) &#123;</span><br><span class="line">    <span class="hljs-keyword">if</span> (type == <span class="hljs-string">"볶음"</span>) &#123;</span><br><span class="line">        <span class="hljs-keyword">return</span> B_볶음라면;</span><br><span class="line">    &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (type == <span class="hljs-string">"국물"</span>) &#123;</span><br><span class="line">        <span class="hljs-keyword">return</span> B_국물라면;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>같은 볶음라면이지만 제조를 어느 업체에서 했는지에 따라서도 나눌 수 있는것이죠. 일차원 상태분기는 비교적 쉬웠습니다. 이차원 상태를 고려하도록 확장하려면 아래와 같이 될텐데요.</p>
+<ol>
+<li><p><strong>상태</strong>:<br> 1.1. <strong>라면 종류</strong>를 고르고<br> 1.2. <strong>라면 업체</strong>를 고르고 </p>
+</li>
+<li><p><strong>처리</strong>: 라면을 <strong>끓입니다.</strong> </p>
+</li>
+</ol>
+<p>이번에는 1.상태와 2.처리라는 두 책임뿐 아니라 <strong>두 상태인 1.1.과 1.2.</strong>도 나누어야겠군요.</p>
+<ul>
+<li><p><strong>라면 끓이기</strong></p>
+<figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">RamemMaker</span> </span>&#123;</span><br><span class="line">    RamenGetter ramenGetter = <span class="hljs-keyword">new</span> ACompanyRamenGetter();</span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">makeRamen</span><span class="hljs-params">(String type)</span> </span>&#123;</span><br><span class="line">        Water water = <span class="hljs-keyword">new</span> Water(<span class="hljs-number">100</span>);</span><br><span class="line">        Ramen ramen = ramenGetter.getRamen(type);</span><br><span class="line">        heat(water);</span><br><span class="line">        water.add(ramen);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>라면 종류별 생성</strong></p>
+<figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-class"><span class="hljs-keyword">interface</span> <span class="hljs-title">RamenGetter</span> </span>&#123;</span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">public</span> Ramen <span class="hljs-title">getRamen</span><span class="hljs-params">(String type)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>A 업체의 라면 종류별 생성</strong></p>
+<figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ACompanyRamenGetter</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">RamenGetter</span> </span>&#123;</span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">public</span> Ramen <span class="hljs-title">getRamen</span><span class="hljs-params">(String type)</span> </span>&#123;</span><br><span class="line">        <span class="hljs-keyword">if</span> (type == <span class="hljs-string">"볶음"</span>) &#123;</span><br><span class="line">            <span class="hljs-keyword">return</span> A_볶음라면;</span><br><span class="line">        &#125; <span class="hljs-keyword">else</span> (type == <span class="hljs-string">"국물"</span>) &#123;</span><br><span class="line">            <span class="hljs-keyword">return</span> A_국물라면;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>B 업체의 라면 종류별 생성</strong></p>
+<figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">BCompanyRamenGetter</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">RamenGetter</span> </span>&#123;</span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">public</span> Ramen <span class="hljs-title">getRamen</span><span class="hljs-params">(String type)</span> </span>&#123;</span><br><span class="line">        <span class="hljs-keyword">if</span> (type == <span class="hljs-string">"볶음"</span>) &#123;</span><br><span class="line">            <span class="hljs-keyword">return</span> B_볶음라면;</span><br><span class="line">        &#125; <span class="hljs-keyword">else</span> (type == <span class="hljs-string">"국물"</span>) &#123;</span><br><span class="line">            <span class="hljs-keyword">return</span> B_국물라면;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>라면 종류가 함수 내 if-else 로 분기를 탔다면, 라면 업체는 클래스를 따로 만들어서 분기를 탔습니다. 전자를 <strong>팩토리 함수</strong> 후자를 <strong>팩토리 클래스</strong>로 볼 수 있겠네요. <strong>어떤 회사</strong>의 <strong>어떤 종류</strong>의 라면인지에 따라 그에 맞는 RamenGetter 팩토리 클래스를 선택하면 RamenMaker 는 RamenGetter 가 생성한 라면을 만들어줍니다. </p>
+<blockquote>
+<p><strong>상태</strong>와 <strong>처리</strong>뿐만 아니라 <strong>두 상태</strong>도 깔끔하게 책임이 분리되었습니다.</p>
+</blockquote>
+<p>지금까지 살펴본 코드에서는 어떤 라면인지 다양한 <strong>상태</strong>에 따라 RamenMaker 는 makeRamen 라는 <strong>동일한 처리</strong> 함수를 수행합니다. 하지만 잘 생각해보면 볶음라면과 국물라면은 끓이는 법은 동일할지라도 그 이후에 물을 버리느냐에 대한 차이가 있습니다. </p>
+<blockquote>
+<p>즉 <strong>어떤 상태(What)</strong>인지에 따라 <strong>어떻게 처리(How)</strong>할지가 바뀌어야할 경우가 존재합니다.</p>
+</blockquote>
+<h1 id="팩토리-메서드-패턴"><a href="#팩토리-메서드-패턴" class="headerlink" title="팩토리 메서드 패턴"></a>팩토리 메서드 패턴</h1><p>상태에 따라서 처리 함수를 바꿔주고 싶은데, RamemMaker 는 하나밖에 존재하지 않습니다. 그러면 RamemMaker 를 인터페이스로 만들어서 ACompanyRamemMaker, BCompanyRamemMaker 와 같이 원하는 상태(라면 회사)에 따라 다른 처리 함수를 수행할 수 있습니다. 심지어 이전 처리 함수를 활용해서말이죠.</p>
+<ul>
+<li><p><strong>라면 생성 + 라면 끓이기</strong></p>
+<figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">abstract</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">RamemMaker</span> </span>&#123;</span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">protected</span> <span class="hljs-keyword">abstract</span> Ramem <span class="hljs-title">getRamen</span><span class="hljs-params">(String type)</span></span>;</span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">makeRamen</span><span class="hljs-params">(String type)</span> </span>&#123;</span><br><span class="line">        Water water = <span class="hljs-keyword">new</span> Water(<span class="hljs-number">100</span>);</span><br><span class="line">        Ramen ramen = getRamen(type);</span><br><span class="line">        heat(water);</span><br><span class="line">        water.add(ramen);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>A 업체의 라면 종류별 생성 + 라면 끓이기</strong></p>
+<figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ACompanyRamenMaker</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">RamenMaker</span> </span>&#123;</span><br><span class="line">    <span class="hljs-meta">@Override</span></span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">public</span> Ramen <span class="hljs-title">getRamen</span><span class="hljs-params">(String type)</span> </span>&#123;</span><br><span class="line">        <span class="hljs-keyword">if</span> (type == <span class="hljs-string">"볶음"</span>) &#123;</span><br><span class="line">            <span class="hljs-keyword">return</span> A_볶음라면;</span><br><span class="line">        &#125; <span class="hljs-keyword">else</span> (type == <span class="hljs-string">"국물"</span>) &#123;</span><br><span class="line">            <span class="hljs-keyword">return</span> A_국물라면;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="hljs-meta">@Override</span></span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">makeRamen</span><span class="hljs-params">(String type)</span> </span>&#123;</span><br><span class="line">        <span class="hljs-keyword">super</span>.makeRamen(type);</span><br><span class="line">        <span class="hljs-keyword">if</span> (type == <span class="hljs-string">"볶음"</span>) &#123;</span><br><span class="line">            drainWaterForFrying();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>기존에는 라면 종류를 RamenGetter 팩토리 클래스를 통해 선택했지만 위 코드에서는 getRamen 추상함수에서 선택하도록 만들었습니다. <strong>상태 추상함수</strong>를 상속하여 오버라이드해서 원하는 <strong>상태 구현함수</strong>를 만들어 사용하는 것입니다.</p>
+<blockquote>
+<p><strong>팩토리 메서드 패턴</strong>은 팩토리가 생성하는 <strong>구현 클래스</strong>를 팩토리 클래스가 아닌 <strong>추상함수에 의존</strong>합니다</p>
+</blockquote>
+<ul>
+<li><p><strong>팩토리 클래스</strong> - 팩토리는 클래스 RamenGetter 로 존재</p>
+<figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">RamenMaker</span> </span>&#123;</span><br><span class="line">    RamenGetter ramenGetter = <span class="hljs-keyword">new</span> ... ;</span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">makeRamen</span><span class="hljs-params">(String type)</span> </span>&#123; ...</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>팩토리 메서드 패턴</strong> - 팩토리는 추상함수 getRamen 으로 존재 </p>
+<figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">abstract</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">RamenMaker</span> </span>&#123;</span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">protected</span> <span class="hljs-keyword">abstract</span> Ramem <span class="hljs-title">getRamen</span><span class="hljs-params">(String type)</span></span>;</span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">makeRamen</span><span class="hljs-params">(String type)</span> </span>&#123; ...</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>왜 팩토리 클래스로도 충분한데 추상함수를 갖는 추상 클래스를 상속받아서 구현하도록 제안할까요?</p>
+<blockquote>
+<p>RamenMaker 에 <strong>상태 추상로직</strong>과 <strong>처리 구현로직</strong>을 넣어서<br>해당 클래스를 상속받으면 원하는 <strong>상태 구현로직</strong>을 만들 수 있을 뿐더러<br>덩달아 <strong>처리 구현로직</strong>도 <strong>“확장”</strong>할 수 있다는 큰 장점을 갖기 때문입니다. </p>
+</blockquote>
+<p>선택 추상로직을 클래스로 받았을때는 행위 구현로직에 대해 개입이 전혀 불가능했던것에 비하면 유연성이 매우 높아졌습니다.</p>
+<h1 id="추상-팩토리-패턴"><a href="#추상-팩토리-패턴" class="headerlink" title="추상 팩토리 패턴"></a>추상 팩토리 패턴</h1><p>항상 팩토리를 검색하면 “팩토리 메서드 패턴”과 “추상 팩토리 패턴” 두 패턴이 나와 배울때 그 차이를 이해하는데 꽤나 힘들었습니다. 구분하자면 <strong>일차원 조건은 ‘팩토리’</strong>로 충분했으며, <strong>이차원 조건을 위해 ‘팩토리 메서드 패턴’</strong>을 사용했습니다. 다음 <strong>‘추상 팩토리 패턴’은 삼차원 조건을 처리하기위핸 패턴</strong>이라고 이해하시면 쉽습니다. 라면업체와 라면종류 뿐만 아니라 라면에 들어가는 재료에 따라서 다른 라면이 생성된다고 가정합시다.</p>
+<ol>
+<li><p><strong>상태</strong>:<br> 1.1. <strong>라면 종류</strong>를 고르고<br> 1.2. <strong>라면 업체</strong>를 고르고<br> 1.3. <strong>라면 재료</strong>를 고르고</p>
+</li>
+<li><p><strong>처리</strong>: 라면을 <strong>끓입니다.</strong> </p>
+</li>
+</ol>
+<p>쉬운 이해를 위해 아래와 같이 분류될 수 있습니다.</p>
+<ul>
+<li><strong>삼차원 상태: 라면 업체 + 라면 종류 + 재료</strong><figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">if</span> (company == <span class="hljs-string">"A 업체"</span>) &#123;</span><br><span class="line">    <span class="hljs-keyword">if</span> (type == <span class="hljs-string">"볶음"</span>) &#123;</span><br><span class="line">        <span class="hljs-keyword">if</span> (type == <span class="hljs-string">"치즈"</span>) &#123;</span><br><span class="line">            <span class="hljs-keyword">return</span> A_치즈_볶음라면;</span><br><span class="line">        &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (type == <span class="hljs-string">"불닭"</span>) &#123;</span><br><span class="line">            <span class="hljs-keyword">return</span> A_불닭_볶음라면;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (type == <span class="hljs-string">"국물"</span>) &#123;</span><br><span class="line">        <span class="hljs-keyword">if</span> (type == <span class="hljs-string">"해물"</span>) &#123;</span><br><span class="line">            <span class="hljs-keyword">return</span> A_해물_국물라면;</span><br><span class="line">        &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (type == <span class="hljs-string">"사골"</span>) &#123;</span><br><span class="line">            <span class="hljs-keyword">return</span> A_사골_국물라면;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (company == <span class="hljs-string">"B 업체"</span>) &#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>추가된 재료 상태를 지원하기 위해서는 단순히 재료를 생성해서 주입해주는 <strong>팩토리 클래스</strong> 단 한줄만 추가해주면 됩니다. 무언가 떠오르지 않으신가요? 가장 처음에 우리가 배웠던 <strong>팩토리 클래스</strong> 말입니다. 상태에 따른 라면 생성을 위해 팩토리 클래스를 적용하였다가 팩토리 메서드 패턴으로 바꾸었었는데요, 여기서는 그 팩토리 클래스를 다시 활용합니다. 단 이번엔 라면 생성 팩토리가 아닌 재료 생성 팩토리 클래스라는점이 다릅니다.</p>
+<ul>
+<li><p><strong>라면 끓이기</strong></p>
+<figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">RamemMaker</span> </span>&#123;</span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">protected</span> <span class="hljs-keyword">abstract</span> Ramem <span class="hljs-title">getRamen</span><span class="hljs-params">(String type)</span></span>;</span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">makeRamen</span><span class="hljs-params">(String type)</span> </span>&#123;</span><br><span class="line">        Water water = <span class="hljs-keyword">new</span> Water(<span class="hljs-number">100</span>);</span><br><span class="line">        Ramen ramen = getRamen(type);</span><br><span class="line">        heat(water);</span><br><span class="line">        water.add(ramen);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>A 업체의 라면 종류별 끓이기</strong></p>
+<figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ACompanyRamenMaker</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">RamenMaker</span> </span>&#123;</span><br><span class="line">    IngredientFactory ingredientFactory = <span class="hljs-keyword">new</span> HotIngredientFactory();</span><br><span class="line">    <span class="hljs-meta">@Override</span></span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">public</span> Ramen <span class="hljs-title">getRamen</span><span class="hljs-params">(String type)</span> </span>&#123;</span><br><span class="line">        <span class="hljs-keyword">if</span> (type == <span class="hljs-string">"볶음"</span>) &#123;</span><br><span class="line">            <span class="hljs-keyword">return</span> A_볶음라면(ingredientFactory);</span><br><span class="line">        &#125; <span class="hljs-keyword">else</span> (type == <span class="hljs-string">"국물"</span>) &#123;</span><br><span class="line">            <span class="hljs-keyword">return</span> A_국물라면(ingredientFactory);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="hljs-meta">@Override</span></span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">makeRamen</span><span class="hljs-params">(String type)</span> </span>&#123;</span><br><span class="line">        <span class="hljs-keyword">super</span>.makeRamen(type);</span><br><span class="line">        <span class="hljs-keyword">if</span> (type == <span class="hljs-string">"볶음"</span>) &#123;</span><br><span class="line">            drainWaterForFrying();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>이제 재료에 따라서 A 업체의 볶음라면은 다양한 바리에이션을 갖게 되었습니다. 위 예제에서는 HotIngredientFactory 매운재료를 사용했으니 A_불닭<em>볶음라면이 생성될테고 부드러운 맛을 좋아한다면 MildIngredientFactory 치즈와 같은 재료를 가미한 A</em>치즈_볶음라면을 생성할 수 있습니다.</p>
+<p>라면을 만들었던 팩토리 클래스와 재료를 만드는 팩토리 클래스는 무엇을 만드는지가 다르다는것을 알 수 있습니다. 재료를 만드는 팩토리 클래스는 결국에 <strong>라면에 재료라는 상태 하나를 더 추가</strong>하여 한번 더 추상화한것입니다.</p>
+<ul>
+<li><p><strong>(구현) 팩토리 클래스</strong></p>
+<figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">RamemMaker</span> </span>&#123;</span><br><span class="line">    RamenGetter ramenGetter = <span class="hljs-keyword">new</span> ACompanyRamenGetter();</span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">makeRamen</span><span class="hljs-params">(String type)</span> </span>&#123;</span><br><span class="line">        ...</span><br><span class="line">        Ramen ramen = ramenGetter.getRamen(type) <span class="hljs-comment">// A_불닭_볶음라면</span></span><br><span class="line">        ...</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>추상 팩토리 클래스</strong></p>
+<figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ACompanyRamenMaker</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">RamenMaker</span> </span>&#123;</span><br><span class="line">    IngredientFactory ingredientFactory = <span class="hljs-keyword">new</span> HotIngredientFactory();</span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">public</span> Ramen <span class="hljs-title">getRamen</span><span class="hljs-params">(String type)</span> </span>&#123;</span><br><span class="line">        ...</span><br><span class="line">        <span class="hljs-keyword">return</span> A_볶음라면(ingredientFactory); <span class="hljs-comment">// Hot 이므로 A_불닭_볶음라면</span></span><br><span class="line">        ...</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<blockquote>
+<p>1) 라면 팩토리 클래스는 그 자체로 완전한(재료가 다 가미된) 라면(구현 클래스)을 반환합니다.<br>2) 재료 팩토리 클래스는 불완전한 라면(추상 클래스)에 가미할 재료들을 반환합니다.<br>1) 을 완제품 라면(구현 클래스)을 만드는 구현 팩토리 클래스라면<br>2) 는 불완전 라면에 재료를 가미하여 완제품 라면(구현 클래스)로 만들어주는 추상 팩토리 클래스입니다. </p>
+</blockquote>
+<p>두 클래스 RamenGetter, IngredientFactory 모두 내부에서 클래스를 생성해서 주입해주는 ‘팩토리’ 클래스 입니다. 다만 전자의 경우는 <strong>A_불닭_볶음라면이라는 구현 클래스</strong>를 주입해주고, 후자의 경우는 <strong>A_볶음라면(ingredientFactory) 이라는 추상 클래스</strong>를 주입해줍니다. A_볶음라면이 A_불닭<em>볶음라면이 될지 A</em>치즈<em>볶음라면이 될지는 IngredientFactory 클래스의 구현에 의존하기 때문이지요. 위의 예를 보자면 HotIngredientFactory 라는 매운재료를 사용했으니까 A</em>불닭_볶음라면이라는 구현 클래스가 생성 &amp; 반환될 것입니다.</p>
+<blockquote>
+<p>추상 팩토리 패턴은 추상 팩토리 클래스를 통해 팩토리가 생성하는 구현 클래스를 동적으로 변경할 수 있습니다.</p>
+</blockquote>
+<p>이번 챕터에서는 팩토리 - 일차원, 팩토리 메서드 패턴 - 이차원, 추상 팩토리 패턴 - 삼차원을 익혔습니다. 앞으로는 “팩토리 메서드 패턴”, “추상 팩토리 패턴”을 구분 못할일은 없을것입니다. 더불어 누군가가 팩토리 패턴이라고 말한다면 그건 패턴이 아니라 클래스나 함수를 명명하는것이라고 귀띔해줄 수 있습니다.</p>
+<p>상태가 삼차원도 아니라 4차원, 5차원이라면 어떻게 다루면 될까요? 이 또한 재료뿐만 아니라 육수나 냄비와 같이 모두 추상 팩토리 패턴으로 추상화하면 됩니다. 하지만 상태가 그렇게 복잡해진다면 불필요하게 상태가 많아진것은 아닌지, 조건들을 단순화할 수 있는지 다시 한번 동료 프로그래머와 함께 검토해보시기 바랍니다.</p>
+<hr>
+<p><strong>팩토리 클래스</strong></p>
+<blockquote>
+<p><strong>상태</strong>에 따라 그에 맞는 <strong>구현 클래스</strong>를 생성합니다.</p>
+</blockquote>
+<p><strong>팩토리 메서드 패턴</strong></p>
+<blockquote>
+<p>추상 클래스의 <strong>상태 추상함수</strong>를 통해 <strong>구현 클래스</strong>를 생성합니다.<br><strong>상태 추상함수</strong>가 구현 클래스를 생성한다는 의미로 <strong>팩토리 메서드</strong>라고 합니다.<br>추상 클래스를 상속하여 <strong>상태 추상함수</strong> 오버라이드를 통해 <strong>상태 구현함수</strong>를 구현합니다.<br>추상 클래스의 <strong>처리 구현함수</strong> 또한 오버라이드를 통해 확장할 수 있는 장점이 있다.</p>
+</blockquote>
+<p><strong>추상 팩토리 패턴</strong></p>
+<blockquote>
+<p>추상 팩토리 클래스를 통해 <strong>추상 클래스(불완전 라면)</strong>를 <strong>특정 구현 클래스(완전 라면)</strong>로 결정할 <strong>구현 클래스(재료)</strong>를 생성합니다. <strong>추상 클래스(불완전 라면)</strong>가 <strong>어떤 구현 클래스(완전 라면)</strong>가 될지는 추상 팩토리 클래스를 상속받은 <strong>구현 팩토리 클래스(재료 팩토리)를 구성(composition)</strong>함으로써 동적으로 결정됩니다.</p>
+</blockquote>
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
                 <!-- <time class="level-item has-text-grey" datetime="2019-02-20T18:17:48.000Z">2019-02-21</time> -->
                 <div class="level-item has-text-grey">2019-02-21</div>
                 
@@ -156,7 +341,7 @@
         
         <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
             
-                <a class="has-link-black-ter" href="/2019/02/21/two-principles-of-design-pattern/">2. 디자인 패턴의 제 1, 2 원칙</a>
+                <a class="has-link-black-ter" href="/2019/02/21/two-principles-of-design-patterns/">2. 디자인 패턴의 제 1, 2 원칙</a>
             
         </h1>
         <div class="content">
@@ -248,7 +433,7 @@
         
         <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
             
-                <a class="has-link-black-ter" href="/2019/02/17/how-do-i-make-email-address/">프로페셔널한 메일 주소를 만드는 방법</a>
+                <a class="has-link-black-ter" href="/2019/02/17/how-do-i-make-email-address/">프로페셔널해 보이는 메일 주소 만드는 방법</a>
             
         </h1>
         <div class="content">
@@ -326,7 +511,7 @@
         
         <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
             
-                <a class="has-link-black-ter" href="/2018/12/30/introduction-to-design-pattern/">1. 디자인 패턴에 앞서</a>
+                <a class="has-link-black-ter" href="/2018/12/30/a-introduction-to-design-patterns/">1. 디자인 패턴에 앞서</a>
             
         </h1>
         <div class="content">
@@ -351,7 +536,7 @@
 </blockquote>
 <p>앞으로 본 카테고리에선 여러 디자인 패턴들에 대해서 살펴보려합니다. 각 패턴의 설명은 기본적으로 글을 사용하겠지만 <strong>클래스 다이어그램</strong>을 통해 이해를 도우려고 합니다.</p>
 <h1 id="클래스-다이어그램-화살표"><a href="#클래스-다이어그램-화살표" class="headerlink" title="클래스 다이어그램 화살표"></a>클래스 다이어그램 화살표</h1><p>클래스 다이어그램은 이름 자체가 내포하고있듯 Class 간의 관계를 표로 간단하게 설명한 것으로 Class 개념이 존재하는 객체지향 프로그래밍(OOP)에서 프로젝트 구현을 위한 설계도라고 보시면 될 것 같습니다. 클래스 다이어그램 자체로 한 챕터 분량이지만, 디자인 패턴에는 Class, Interface 이 둘만 필요하므로 딱 핵심적인 화살표 세 개만 살펴보겠습니다. 앞으로 Java 기반으로 설명하겠습니다.</p>
-<h2 id="implements-구현"><a href="#implements-구현" class="headerlink" title="implements (구현)"></a>implements (구현)</h2><center><img src="/2018/12/30/introduction-to-design-pattern/implements.svg"></center>
+<h2 id="implements-구현"><a href="#implements-구현" class="headerlink" title="implements (구현)"></a>implements (구현)</h2><center><img src="/2018/12/30/a-introduction-to-design-patterns/implements.svg"></center>
 
 <p>일반적으로 코드는 인터페이스를 단위로 구성됩니다. 사용하려는 구현 클래스를 코드 내에 지정하지 않고 인터페이스만을 명시하고 그 인터페이스의 위치에 원하는 구현 클래스를 연결(주입)하여 실제 작업을 수행합니다. 앞으로 설명할 모든 디자인 패턴의 주축이 되는 제 1 원칙이니 조금 더 설명드리겠습니다. </p>
 <p>학생분들은 모든 클래스를 사용할때 아래 코드를 사용하실겁니다.<br><figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ConcreteClass <span class="hljs-class"><span class="hljs-keyword">class</span> </span>= <span class="hljs-keyword">new</span> ConcreteClass();</span><br></pre></td></tr></table></figure></p>
@@ -359,17 +544,17 @@
 <figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Interface <span class="hljs-class"><span class="hljs-keyword">class</span> </span>= <span class="hljs-keyword">new</span> SuperConcreteClass();</span><br></pre></td></tr></table></figure>
 <p>주입을 직접 Interface 에 하지않고 아래처럼 더 간편하게 함수를 통해 해줄 수 있습니다.<br><figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">private</span> Interface <span class="hljs-class"><span class="hljs-keyword">class</span></span>;</span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">setClass</span><span class="hljs-params">(Interface class)</span> </span>&#123;</span><br><span class="line">    <span class="hljs-keyword">this</span>.class = <span class="hljs-class"><span class="hljs-keyword">class</span></span>;</span><br><span class="line">&#125;</span><br><span class="line">setClass(<span class="hljs-keyword">new</span> ConcreteClass();</span><br></pre></td></tr></table></figure></p>
 <p>사용하려는 구현 클래스가 무엇인지 바로 명시하지 않고 원하는 구현 클래스를 동적으로 Interface 에 외부에서 주입하기 때문에 결정권을 갖지 않는다는 이유로 <strong>Dependency Injection</strong>, 내지는 <strong>Inversion of Control</strong> 이라 부릅니다.</p>
-<h2 id="extends-상속"><a href="#extends-상속" class="headerlink" title="extends (상속)"></a>extends (상속)</h2><center><img src="/2018/12/30/introduction-to-design-pattern/extends.svg"></center>
+<h2 id="extends-상속"><a href="#extends-상속" class="headerlink" title="extends (상속)"></a>extends (상속)</h2><center><img src="/2018/12/30/a-introduction-to-design-patterns/extends.svg"></center>
 
 <p>상속은 클래스의 몇몇 함수에 대해 추가적인 기능이나 다른 로직의 함수로 대체하고 싶을때 사용합니다. 일반적으로 대학교때 객체지향 프로그램의 가장 큰 특성을 상속으로 배우고 Animal 과 같은 상위  클래스와 그를 상속하는 Cat, Dog 같은 하위 개념 클래스를 예제로 배우니 상위, 하위 클래스를 사용할때 상속을 많이 사용합니다. 하지만 상위, 하위 개념은 앞서 설명드린 implements(구현)에 해당합니다. 상위 개념을 Interface 로 두고 상위 개념에 해당하는 함수들을 하위 개념 Class 에서 명시하는것입니다. </p>
 <p>반면 extends(상속)은 extends 가 의미하는대로 단순 확장에 해당합니다. Cat 중에서 줄무늬가 있는 Cat이 있을때 StripeCat 은 Cat 의 줄무늬를 제외한 모든 함수와 변수는 동일합니다.</p>
-<h2 id="composite-구성-합성"><a href="#composite-구성-합성" class="headerlink" title="composite (구성, 합성)"></a>composite (구성, 합성)</h2><center><img src="/2018/12/30/introduction-to-design-pattern/has.svg"></center>
+<h2 id="composite-구성-합성"><a href="#composite-구성-합성" class="headerlink" title="composite (구성, 합성)"></a>composite (구성, 합성)</h2><center><img src="/2018/12/30/a-introduction-to-design-patterns/has.svg"></center>
 
 <p>특정 클래스가 특정 클래스를 내부 변수로 갖고있는것을 뜻합니다. 구성은 단순히 갖고있다는 의미인데 왜 패턴에서 중요하게 쓰일까요. extend 가 interface 와 composite 의 조합으로 표현될 수 있기 때문입니다.</p>
-<center><img src="/2018/12/30/introduction-to-design-pattern/extends2.svg"></center>
+<center><img src="/2018/12/30/a-introduction-to-design-patterns/extends2.svg"></center>
 
 <p>CatClass 가 줄무늬를 갖는것을 상속을 통해 Sprite 함수 및 변수를 넣어주지 않고, “종” 이라는 하나의 상위 클래스를 두고 “줄무늬종” 임을 하위 클래스로 명시해준다면 상위 개념인 “종”에 그 하위에 무슨 “종”이든 다 넣을 수 있는 확장성을 갖게됩니다. 바로 위 extends(상속)과 비교해보십시오. <strong>좌측에 SpriteCatClass 가 갖고있던 Sprite 정보가 우측 클래스로 이동했습니다.</strong> <strong>Inversion of Control</strong> 의 의미가 조금 짐작되시는지요.</p>
-<center><img src="/2018/12/30/introduction-to-design-pattern/extends3.svg"></center>
+<center><img src="/2018/12/30/a-introduction-to-design-patterns/extends3.svg"></center>
 
 <p>CatClass 가 줄무늬뿐만 아니라 두 눈이 오드아이라고 설정해봅시다. 이 또한 상위-하위 개념인 interface 와 has 를 통해 EyesClass 에 OddEyesClass 를 명시하는것이 좋겠지요. 아까 제 1 원칙 <strong>“구현이 아닌 인터페이스에 맞춰 프로그래밍 한다.”</strong> 다음에 제 2 원칙 <strong>“상속대신 구성과 인터페이스를 사용한다”</strong> 가 되겠습니다.</p>
 <p>이제 이 세 개의 화살표(구현, 상속, 구성)와 두 개의 원칙으로 디자인 패턴들을 살펴보겠습니다.</p>
@@ -417,9 +602,17 @@
                 <span class="level-item">Design Pattern</span>
             </span>
             <span class="level-end">
-                <span class="level-item tag">2</span>
+                <span class="level-item tag">3</span>
             </span>
-        </a></li><li>
+        </a><ul><li>
+        <a class="level is-marginless" href="/categories/Design-Pattern/Factory/">
+            <span class="level-start">
+                <span class="level-item">Factory</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">1</span>
+            </span>
+        </a></li></ul></li><li>
         <a class="level is-marginless" href="/categories/Workplace/">
             <span class="level-start">
                 <span class="level-item">Workplace</span>
@@ -487,7 +680,7 @@
                         Posts
                     </p>
                     <p class="title has-text-weight-normal">
-                        3
+                        4
                     </p>
                 </div>
             </div>
@@ -497,7 +690,7 @@
                         Categories
                     </p>
                     <p class="title has-text-weight-normal">
-                        2
+                        3
                     </p>
                 </div>
             </div>
@@ -517,8 +710,21 @@
             
             <div class="media-content">
                 <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-02-21T17:33:46.000Z">2019-02-22</time></div>
+                    <a href="/2019/02/22/factory-method-and-abstract-factory-pattern/" class="has-link-black-ter is-size-6">3. 팩토리 메소드, 추상 팩토리 패턴</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/Design-Pattern/">Design Pattern</a> / <a class="has-link-grey -link" href="/categories/Design-Pattern/Factory/">Factory</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <div class="media-content">
+                <div class="content">
                     <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-02-20T18:17:48.000Z">2019-02-21</time></div>
-                    <a href="/2019/02/21/two-principles-of-design-pattern/" class="has-link-black-ter is-size-6">2. 디자인 패턴의 제 1, 2 원칙</a>
+                    <a href="/2019/02/21/two-principles-of-design-patterns/" class="has-link-black-ter is-size-6">2. 디자인 패턴의 제 1, 2 원칙</a>
                     <p class="is-size-7 is-uppercase">
                         <a class="has-link-grey -link" href="/categories/Design-Pattern/">Design Pattern</a>
                     </p>
@@ -531,22 +737,9 @@
             <div class="media-content">
                 <div class="content">
                     <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-02-17T07:59:20.000Z">2019-02-17</time></div>
-                    <a href="/2019/02/17/how-do-i-make-email-address/" class="has-link-black-ter is-size-6">프로페셔널한 메일 주소를 만드는 방법</a>
+                    <a href="/2019/02/17/how-do-i-make-email-address/" class="has-link-black-ter is-size-6">프로페셔널해 보이는 메일 주소 만드는 방법</a>
                     <p class="is-size-7 is-uppercase">
                         <a class="has-link-grey -link" href="/categories/Workplace/">Workplace</a>
-                    </p>
-                </div>
-            </div>
-        </article>
-        
-        <article class="media">
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-12-29T15:13:33.000Z">2018-12-30</time></div>
-                    <a href="/2018/12/30/introduction-to-design-pattern/" class="has-link-black-ter is-size-6">1. 디자인 패턴에 앞서</a>
-                    <p class="is-size-7 is-uppercase">
-                        <a class="has-link-grey -link" href="/categories/Design-Pattern/">Design Pattern</a>
                     </p>
                 </div>
             </div>

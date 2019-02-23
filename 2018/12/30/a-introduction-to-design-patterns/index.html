@@ -2,28 +2,34 @@
 <html lang="en">
 <head><meta name="generator" content="Hexo 3.8.0">
     <meta charset="utf-8">
-<title>프로페셔널해 보이는 메일 주소 만드는 방법 - Crucian Carp</title>
+<title>1. 디자인 패턴에 앞서 - Crucian Carp</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="naver-site-verification" content="2316a6af47a7b653c7f6af966d7c718fb98027ed">
 
-<link rel="canonical" href="https://aaronryu.github.io/2019/02/17/how-do-i-make-email-address/">
+<link rel="canonical" href="https://aaronryu.github.io/2018/12/30/a-introduction-to-design-patterns/">
 
 
-    <meta name="description" content="좋은 메일 주소메일은 내용 및 형식뿐만 아니라 주소에도 예절이 있습니다. 가끔 전화번호에도 외우기 쉬운 전화번호들이 있습니다. 어떤 일에 연락하기 적합한 사람을 찾을때 머릿속에서 가장 쉽고, 먼저 떠오른다면 업무에 있어서나 헤드헌터에 의해 회사와 연결될때 더 많은 성과를 가져갈 수 있겠죠. 우리의 이메일 주소는 대개 아이디에 그 뒤에 네이버나 다음같은 도메">
+    <meta name="description" content="디자인 패턴은 대학교에서 간단하게만 배웠던 기억이 닙니다. 대학원에서도 입사 준비 때도 주변에서는 디자인 패턴이 중요하다지만 실제로 잘 사용하는 사람은 없었고, 이게 왜 중요한지에 대해서도 체감하기 힘들었었습니다. 어렸을때는 내 코드에 대한 리뷰어나 배울만한 시니어 개발자들이 없었으니 당연하다 생각합니다. 제가 코딩과 공부를 능동적으로 안해온것이 크겠지만">
 <meta property="og:type" content="article">
-<meta property="og:title" content="프로페셔널해 보이는 메일 주소 만드는 방법">
-<meta property="og:url" content="https://aaronryu.github.io/2019/02/17/how-do-i-make-email-address/index.html">
+<meta property="og:title" content="1. 디자인 패턴에 앞서">
+<meta property="og:url" content="https://aaronryu.github.io/2018/12/30/a-introduction-to-design-patterns/index.html">
 <meta property="og:site_name" content="Crucian Carp">
-<meta property="og:description" content="좋은 메일 주소메일은 내용 및 형식뿐만 아니라 주소에도 예절이 있습니다. 가끔 전화번호에도 외우기 쉬운 전화번호들이 있습니다. 어떤 일에 연락하기 적합한 사람을 찾을때 머릿속에서 가장 쉽고, 먼저 떠오른다면 업무에 있어서나 헤드헌터에 의해 회사와 연결될때 더 많은 성과를 가져갈 수 있겠죠. 우리의 이메일 주소는 대개 아이디에 그 뒤에 네이버나 다음같은 도메">
+<meta property="og:description" content="디자인 패턴은 대학교에서 간단하게만 배웠던 기억이 닙니다. 대학원에서도 입사 준비 때도 주변에서는 디자인 패턴이 중요하다지만 실제로 잘 사용하는 사람은 없었고, 이게 왜 중요한지에 대해서도 체감하기 힘들었었습니다. 어렸을때는 내 코드에 대한 리뷰어나 배울만한 시니어 개발자들이 없었으니 당연하다 생각합니다. 제가 코딩과 공부를 능동적으로 안해온것이 크겠지만">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-02-23T10:31:15.431Z">
+<meta property="og:image" content="https://aaronryu.github.io/2018/12/30/a-introduction-to-design-patterns/implements.svg">
+<meta property="og:image" content="https://aaronryu.github.io/2018/12/30/a-introduction-to-design-patterns/extends.svg">
+<meta property="og:image" content="https://aaronryu.github.io/2018/12/30/a-introduction-to-design-patterns/has.svg">
+<meta property="og:image" content="https://aaronryu.github.io/2018/12/30/a-introduction-to-design-patterns/extends2.svg">
+<meta property="og:image" content="https://aaronryu.github.io/2018/12/30/a-introduction-to-design-patterns/extends3.svg">
+<meta property="og:updated_time" content="2019-02-23T10:29:51.858Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="프로페셔널해 보이는 메일 주소 만드는 방법">
-<meta name="twitter:description" content="좋은 메일 주소메일은 내용 및 형식뿐만 아니라 주소에도 예절이 있습니다. 가끔 전화번호에도 외우기 쉬운 전화번호들이 있습니다. 어떤 일에 연락하기 적합한 사람을 찾을때 머릿속에서 가장 쉽고, 먼저 떠오른다면 업무에 있어서나 헤드헌터에 의해 회사와 연결될때 더 많은 성과를 가져갈 수 있겠죠. 우리의 이메일 주소는 대개 아이디에 그 뒤에 네이버나 다음같은 도메">
+<meta name="twitter:title" content="1. 디자인 패턴에 앞서">
+<meta name="twitter:description" content="디자인 패턴은 대학교에서 간단하게만 배웠던 기억이 닙니다. 대학원에서도 입사 준비 때도 주변에서는 디자인 패턴이 중요하다지만 실제로 잘 사용하는 사람은 없었고, 이게 왜 중요한지에 대해서도 체감하기 힘들었었습니다. 어렸을때는 내 코드에 대한 리뷰어나 배울만한 시니어 개발자들이 없었으니 당연하다 생각합니다. 제가 코딩과 공부를 능동적으로 안해온것이 크겠지만">
+<meta name="twitter:image" content="https://aaronryu.github.io/2018/12/30/a-introduction-to-design-patterns/implements.svg">
 
 
 
-<link rel="alternative" href="atom.xml" title="프로페셔널해 보이는 메일 주소 만드는 방법" type="application/atom+xml">
+<link rel="alternative" href="atom.xml" title="1. 디자인 패턴에 앞서" type="application/atom+xml">
 
 
 
@@ -146,11 +152,11 @@
         
         <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
             <div class="level-left">
-                <!-- <time class="level-item has-text-grey" datetime="2019-02-17T07:59:20.000Z">2019-02-17</time> -->
-                <div class="level-item has-text-grey">2019-02-17</div>
+                <!-- <time class="level-item has-text-grey" datetime="2018-12-29T15:13:33.000Z">2018-12-30</time> -->
+                <div class="level-item has-text-grey">2018-12-30</div>
                 
                 <div class="level-item">
-                <a class="has-link-grey -link" href="/categories/Workplace/">Workplace</a>
+                <a class="has-link-grey -link" href="/categories/Design-Pattern/">Design Pattern</a>
                 </div>
                 
                 
@@ -160,47 +166,55 @@
         
         <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
             
-                프로페셔널해 보이는 메일 주소 만드는 방법
+                1. 디자인 패턴에 앞서
             
         </h1>
         <div class="content">
-            <h2 id="좋은-메일-주소"><a href="#좋은-메일-주소" class="headerlink" title="좋은 메일 주소"></a>좋은 메일 주소</h2><p>메일은 내용 및 형식뿐만 아니라 주소에도 예절이 있습니다. 가끔 전화번호에도 외우기 쉬운 전화번호들이 있습니다. 어떤 일에 연락하기 적합한 사람을 찾을때 머릿속에서 가장 쉽고, 먼저 떠오른다면 업무에 있어서나 헤드헌터에 의해 회사와 연결될때 더 많은 성과를 가져갈 수 있겠죠.</p>
-<p>우리의 이메일 주소는 대개 아이디에 그 뒤에 네이버나 다음같은 도메인이 붙습니다.<br>문제는 우리가 매우 어린나이에 네이버주니어 같은 서비스를 이용하기 위해 해당 도메인에 가입을 했다는것입니다. 그러다보면 우스꽝스럽거나 어떤 캐릭터 이름 혹은 귀여운 아이디가 대다수입니다. 마치 과거 버디버디 아이디를 들췄을때 부끄러운 그것 말이죠. 부끄러운건 당사자 뿐만이 아닙니다. 그 아이디로 연락을 하는 상대분들은 어떨까요.</p>
-<p>외국 대학, 기업뿐아니라 외국인과 같이 커뮤니케이션을 하고싶다면 위와 같은 과거의 주소는 지양하는것이 좋습니다. 계속 써왔던 메일이라 새 메일주소를 생성하는것이 불편하시다면 <strong>메일 포워딩</strong>을 사용하시길 권장합니다.</p>
-<h2 id="추천-이메일"><a href="#추천-이메일" class="headerlink" title="추천 이메일"></a>추천 이메일</h2><p>일반적으로 다음과 같은 규칙을 갖기를 추천합니다. 핵심은 기억하기 쉬운 이메일 입니다.<br>각 규칙에 들어가는 단어들은 첫글자나 약어로 하셔도 좋습니다만 되도록이면 온전한 단어로 쓰시는것이 기억하기 좋습니다.</p>
+            <p>디자인 패턴은 대학교에서 간단하게만 배웠던 기억이 닙니다. 대학원에서도 입사 준비 때도 주변에서는 디자인 패턴이 중요하다지만 실제로 잘 사용하는 사람은 없었고, 이게 왜 중요한지에 대해서도 체감하기 힘들었었습니다. 어렸을때는 내 코드에 대한 리뷰어나 배울만한 시니어 개발자들이 없었으니 당연하다 생각합니다. 제가 코딩과 공부를 능동적으로 안해온것이 크겠지만 패턴이 왜 쓰이는지 경험적으로 습득한것은 입사하고 나서부터 였으니까요.</p>
+<h1 id="디자인-패턴"><a href="#디자인-패턴" class="headerlink" title="디자인 패턴"></a>디자인 패턴</h1><p>디자인 패턴은 짧게 <strong>“객체지향 패러다임에서 더 좋은 코드란 무엇인가에 대한 고민의 결과”</strong> 입니다.</p>
 <ul>
-<li>First Name 이름</li>
-<li>First Name 이름 + Last Name 성</li>
-<li>Generic : 메일 수신 목적에 맞는 이름</li>
+<li><strong>중복의 최소화</strong>: 한 곳의 수정이 중복된 다른 코드에서의 수정을 동반해선 안됩니다</li>
+<li><strong>코드 변경의 용이성</strong>: 코드는 항상 완벽하지 않고, 요구사항은 상시 바뀔 수 있습니다.</li>
+<li><strong>재사용성</strong>: 정돈된 코드는 전혀 다른 요구사항 및 비슷한 경우에도 그대로 사용이 가능합니다.</li>
 </ul>
-<p>예는 다음과 같습니다.</p>
-<ul>
-<li><a href="mailto:aaron@domain.com" target="_blank" rel="noopener">aaron@domain.com</a></li>
-<li><a href="mailto:aaronryu@domain.com" target="_blank" rel="noopener">aaronryu@domain.com</a></li>
-<li><a href="mailto:contact@domain.com" target="_blank" rel="noopener">contact@domain.com</a></li>
-</ul>
-<p>만약 Gmail 을 사용하신다면 다음과 같은 좋은 기능<a href="http://765749953.tistory.com/10" target="_blank" rel="noopener">^1</a>을 제공해주니 활용하시는것이 좋습니다.</p>
-<ol>
-<li><strong>.</strong> : 마음껏 점을 찍어서 가독성을 높힐 수 있습니다. 점을 찍지않은 본래의 메일로 자동 포워딩됩니다.<ul>
-<li><a href="mailto:aaron.ryu@domain.com" target="_blank" rel="noopener">aaron.ryu@domain.com</a></li>
-</ul>
-</li>
-</ol>
-<ol start="2">
-<li><strong>+</strong> : 받을때 특정 필터를 적용한 채로 메일을 수신할 수 있습니다. 이 또한 본래의 메일로 자동 포워딩됩니다. 이력서에 명시한 메일은 aaron.ryu+recruit 이라면 recruit 필터 규칙에 걸러집니다. <ul>
-<li><a href="mailto:aaron.ryu+recruit@domain.com" target="_blank" rel="noopener">aaron.ryu+recruit@domain.com</a></li>
-</ul>
-</li>
-</ol>
-<h2 id="중복-이메일"><a href="#중복-이메일" class="headerlink" title="중복 이메일"></a>중복 이메일</h2><p>개인적으로 지메일에서 메일을 생성하려하니 중복된 주소가 이미 생성되어있었습니다.<br>그럴때에는 각 아이디나 메일 입력 폼에 숫자를 붙이거나 성과 이름의 방향을 바꿔 추천해줍니다만 사용하지 않는것이 좋습니다. 외국인들은 이름 내 순서를 이름 + 성 으로 사용하기때문에 그 규칙을 그대로 따르는것이 좋습니다. 그렇지 않다면 외국인이 “성” 으로 저를 부를지도 모릅니다.<br>생년을 적는다면 특히 나이에 대해 동양만큼 민감하지 않은 외국인들에게 그 사람을 떠올렸을때 몇년에 태어났는지까지 기억해야하는 불필요한 정보를 제공하게 됩니다.</p>
-<p>이럴땐 어떻게 하는것이 좋을까요.<br>쉽게는 직무를 명시할 수 있겠고, 번거롭게는 하나의 도메인을 생성하는것도 좋습니다.</p>
-<ul>
-<li><a href="mailto:aaron.ryu.dev@domain.com" target="_blank" rel="noopener">aaron.ryu.dev@domain.com</a> = <a href="mailto:aaronryudev@domain.com" target="_blank" rel="noopener">aaronryudev@domain.com</a></li>
-<li><a href="mailto:aaronryu@aaronryu.com" target="_blank" rel="noopener">aaronryu@aaronryu.com</a></li>
-</ul>
-<p>아이디뿐만 아니라 도메인에도 자신의 이름이 중복으로 들어가서 언프로페셔널하게 느껴질것이 걱정되신다면 걱정하지 않으셔도 될 것 같습니다. 오히려 자신만의 도메인이 있다는것과 메일 시 직접 그 사람과 이야기한다는 느낌을 줄 수 있을 것입니다.<a href="https://workplace.stackexchange.com/questions/127195/does-repeating-name-in-email-address-look-unprofessional" target="_blank" rel="noopener">^2</a></p>
+<h1 id="너무나도-먼-디자인-패턴"><a href="#너무나도-먼-디자인-패턴" class="headerlink" title="너무나도 먼 디자인 패턴"></a>너무나도 먼 디자인 패턴</h1><p>우리는 어떻게보면 디자인 패턴을 모르는것이 당연합니다. </p>
+<blockquote>
+<p>코드 한 줄의 변경이 다른 줄의 변경을 일으킬만한 큰 프로젝트를 만들어본적이 없습니다. </p>
+</blockquote>
+<p>교내 팀 프로젝트에서 Web Application 으로 API 서버를 만들어서 고객 폰의 앱으로 주변 AP 정보를 파싱하고, LCD 패널이 붙은 라즈베리 파이로 해당 고객 위치에 따른 재실표시기를 만들었을때도 정말 코드가 단순명료했습니다. 학생분들이라면 아시죠 환경 계획 및 구축이 60% 고 개발이 20% 입니다. 남은 20% 은 술마셔야죠. </p>
+<blockquote>
+<p>팀 프로젝트로 만든 코드는 다신 볼일이 없습니다.<br>요구사항 변경을 요청할 교수도 다른 프로젝트에 활용할 일도 없습니다.</p>
+</blockquote>
+<p>팀 프로젝트 발표를 마치고 학점을 받으면 친척동생이 놀러와 롤을 깔때즘 용량문제로 소스코드를 지우는 상황에 이릅니다. 가끔 입사 준비 중 볼일이 있습니다만 예로 학부생 코드는 고쳐쓰는게 아니라했습니다.</p>
+<blockquote>
+<p><strong>결국엔 직접 해보아야 합니다.</strong><br>본 카테고리에선 직접 해보며 조금이나마 짧고 명료하게 정리해놓으려합니다.<br>복습없인 항상 까먹기 일수거든요.</p>
+</blockquote>
+<p>앞으로 본 카테고리에선 여러 디자인 패턴들에 대해서 살펴보려합니다. 각 패턴의 설명은 기본적으로 글을 사용하겠지만 <strong>클래스 다이어그램</strong>을 통해 이해를 도우려고 합니다.</p>
+<h1 id="클래스-다이어그램-화살표"><a href="#클래스-다이어그램-화살표" class="headerlink" title="클래스 다이어그램 화살표"></a>클래스 다이어그램 화살표</h1><p>클래스 다이어그램은 이름 자체가 내포하고있듯 Class 간의 관계를 표로 간단하게 설명한 것으로 Class 개념이 존재하는 객체지향 프로그래밍(OOP)에서 프로젝트 구현을 위한 설계도라고 보시면 될 것 같습니다. 클래스 다이어그램 자체로 한 챕터 분량이지만, 디자인 패턴에는 Class, Interface 이 둘만 필요하므로 딱 핵심적인 화살표 세 개만 살펴보겠습니다. 앞으로 Java 기반으로 설명하겠습니다.</p>
+<h2 id="implements-구현"><a href="#implements-구현" class="headerlink" title="implements (구현)"></a>implements (구현)</h2><center><img src="/2018/12/30/a-introduction-to-design-patterns/implements.svg"></center>
+
+<p>일반적으로 코드는 인터페이스를 단위로 구성됩니다. 사용하려는 구현 클래스를 코드 내에 지정하지 않고 인터페이스만을 명시하고 그 인터페이스의 위치에 원하는 구현 클래스를 연결(주입)하여 실제 작업을 수행합니다. 앞으로 설명할 모든 디자인 패턴의 주축이 되는 제 1 원칙이니 조금 더 설명드리겠습니다. </p>
+<p>학생분들은 모든 클래스를 사용할때 아래 코드를 사용하실겁니다.<br><figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ConcreteClass <span class="hljs-class"><span class="hljs-keyword">class</span> </span>= <span class="hljs-keyword">new</span> ConcreteClass();</span><br></pre></td></tr></table></figure></p>
+<p>우리가 배운 다형성을 활용하면 <strong>인터페이스와 구현 클래스를 나눠서 인터페이스에 우리가 원하는 구현 클래스들을 다음과 같이 동적으로 주입</strong>할 수 있습니다.<br><figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Interface <span class="hljs-class"><span class="hljs-keyword">class</span> </span>= <span class="hljs-keyword">new</span> ConcreteClass();</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Interface <span class="hljs-class"><span class="hljs-keyword">class</span> </span>= <span class="hljs-keyword">new</span> SuperConcreteClass();</span><br></pre></td></tr></table></figure>
+<p>주입을 직접 Interface 에 하지않고 아래처럼 더 간편하게 함수를 통해 해줄 수 있습니다.<br><figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">private</span> Interface <span class="hljs-class"><span class="hljs-keyword">class</span></span>;</span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">setClass</span><span class="hljs-params">(Interface class)</span> </span>&#123;</span><br><span class="line">    <span class="hljs-keyword">this</span>.class = <span class="hljs-class"><span class="hljs-keyword">class</span></span>;</span><br><span class="line">&#125;</span><br><span class="line">setClass(<span class="hljs-keyword">new</span> ConcreteClass();</span><br></pre></td></tr></table></figure></p>
+<p>사용하려는 구현 클래스가 무엇인지 바로 명시하지 않고 원하는 구현 클래스를 동적으로 Interface 에 외부에서 주입하기 때문에 결정권을 갖지 않는다는 이유로 <strong>Dependency Injection</strong>, 내지는 <strong>Inversion of Control</strong> 이라 부릅니다.</p>
+<h2 id="extends-상속"><a href="#extends-상속" class="headerlink" title="extends (상속)"></a>extends (상속)</h2><center><img src="/2018/12/30/a-introduction-to-design-patterns/extends.svg"></center>
+
+<p>상속은 클래스의 몇몇 함수에 대해 추가적인 기능이나 다른 로직의 함수로 대체하고 싶을때 사용합니다. 일반적으로 대학교때 객체지향 프로그램의 가장 큰 특성을 상속으로 배우고 Animal 과 같은 상위  클래스와 그를 상속하는 Cat, Dog 같은 하위 개념 클래스를 예제로 배우니 상위, 하위 클래스를 사용할때 상속을 많이 사용합니다. 하지만 상위, 하위 개념은 앞서 설명드린 implements(구현)에 해당합니다. 상위 개념을 Interface 로 두고 상위 개념에 해당하는 함수들을 하위 개념 Class 에서 명시하는것입니다. </p>
+<p>반면 extends(상속)은 extends 가 의미하는대로 단순 확장에 해당합니다. Cat 중에서 줄무늬가 있는 Cat이 있을때 StripeCat 은 Cat 의 줄무늬를 제외한 모든 함수와 변수는 동일합니다.</p>
+<h2 id="composite-구성-합성"><a href="#composite-구성-합성" class="headerlink" title="composite (구성, 합성)"></a>composite (구성, 합성)</h2><center><img src="/2018/12/30/a-introduction-to-design-patterns/has.svg"></center>
+
+<p>특정 클래스가 특정 클래스를 내부 변수로 갖고있는것을 뜻합니다. 구성은 단순히 갖고있다는 의미인데 왜 패턴에서 중요하게 쓰일까요. extend 가 interface 와 composite 의 조합으로 표현될 수 있기 때문입니다.</p>
+<center><img src="/2018/12/30/a-introduction-to-design-patterns/extends2.svg"></center>
+
+<p>CatClass 가 줄무늬를 갖는것을 상속을 통해 Sprite 함수 및 변수를 넣어주지 않고, “종” 이라는 하나의 상위 클래스를 두고 “줄무늬종” 임을 하위 클래스로 명시해준다면 상위 개념인 “종”에 그 하위에 무슨 “종”이든 다 넣을 수 있는 확장성을 갖게됩니다. 바로 위 extends(상속)과 비교해보십시오. <strong>좌측에 SpriteCatClass 가 갖고있던 Sprite 정보가 우측 클래스로 이동했습니다.</strong> <strong>Inversion of Control</strong> 의 의미가 조금 짐작되시는지요.</p>
+<center><img src="/2018/12/30/a-introduction-to-design-patterns/extends3.svg"></center>
+
+<p>CatClass 가 줄무늬뿐만 아니라 두 눈이 오드아이라고 설정해봅시다. 이 또한 상위-하위 개념인 interface 와 has 를 통해 EyesClass 에 OddEyesClass 를 명시하는것이 좋겠지요. 아까 제 1 원칙 <strong>“구현이 아닌 인터페이스에 맞춰 프로그래밍 한다.”</strong> 다음에 제 2 원칙 <strong>“상속대신 구성과 인터페이스를 사용한다”</strong> 가 되겠습니다.</p>
+<p>이제 이 세 개의 화살표(구현, 상속, 구성)와 두 개의 원칙으로 디자인 패턴들을 살펴보겠습니다.</p>
 <hr>
-<p>1: <a href="http://consultantjournal.com/blog/professional-email-address-ideas-for-common-names" target="_blank" rel="noopener">http://consultantjournal.com/blog/professional-email-address-ideas-for-common-names</a><br>2: <a href="https://yeonlab.com/check-your-email-address/" target="_blank" rel="noopener">https://yeonlab.com/check-your-email-address/</a><br>3: <a href="https://workplace.stackexchange.com/questions/11731/what-should-a-professional-email-address-look-like" target="_blank" rel="noopener">https://workplace.stackexchange.com/questions/11731/what-should-a-professional-email-address-look-like</a></p>
+<p>1: <a href="https://martinfowler.com/articles/injection.html" target="_blank" rel="noopener">https://martinfowler.com/articles/injection.html</a><br>2: <a href="http://www.nextree.co.kr/p11247/" target="_blank" rel="noopener">http://www.nextree.co.kr/p11247/</a><br>3: <a href="http://www.nextree.co.kr/p6753/" target="_blank" rel="noopener">http://www.nextree.co.kr/p6753/</a></p>
 
         </div>
         
@@ -218,19 +232,12 @@
     <div class="level post-navigation is-flex-wrap is-mobile">
         
         <div class="level-start">
-            <a class="level level-item has-link-grey  article-nav-prev" href="/2019/02/21/two-principles-of-design-patterns/">
+            <a class="level level-item has-link-grey  article-nav-prev" href="/2019/02/17/how-do-i-make-email-address/">
                 <i class="level-item fas fa-chevron-left"></i>
-                <span class="level-item">2. 디자인 패턴의 제 1, 2 원칙</span>
+                <span class="level-item">프로페셔널해 보이는 메일 주소 만드는 방법</span>
             </a>
         </div>
         
-        
-        <div class="level-end">
-            <a class="level level-item has-link-grey  article-nav-next" href="/2018/12/30/a-introduction-to-design-patterns/">
-                <span class="level-item">1. 디자인 패턴에 앞서</span>
-                <i class="level-item fas fa-chevron-right"></i>
-            </a>
-        </div>
         
     </div>
 </div>
@@ -243,8 +250,8 @@
         
 <script>
     var disqus_config = function () {
-        this.page.url = 'https://aaronryu.github.io/2019/02/17/how-do-i-make-email-address/';
-        this.page.identifier = '2019/02/17/how-do-i-make-email-address/';
+        this.page.url = 'https://aaronryu.github.io/2018/12/30/a-introduction-to-design-patterns/';
+        this.page.identifier = '2018/12/30/a-introduction-to-design-patterns/';
     };
     (function() {
         var d = document, s = d.createElement('script');  
@@ -278,18 +285,30 @@
                 Catalogue
             </h3>
             <ul class="menu-list"><li>
-        <a class="is-flex" href="#좋은-메일-주소">
+        <a class="is-flex" href="#디자인-패턴">
         <span class="has-mr-6">1</span>
-        <span>좋은 메일 주소</span>
+        <span>디자인 패턴</span>
         </a></li><li>
-        <a class="is-flex" href="#추천-이메일">
+        <a class="is-flex" href="#너무나도-먼-디자인-패턴">
         <span class="has-mr-6">2</span>
-        <span>추천 이메일</span>
+        <span>너무나도 먼 디자인 패턴</span>
         </a></li><li>
-        <a class="is-flex" href="#중복-이메일">
+        <a class="is-flex" href="#클래스-다이어그램-화살표">
         <span class="has-mr-6">3</span>
-        <span>중복 이메일</span>
-        </a></li></ul>
+        <span>클래스 다이어그램 화살표</span>
+        </a><ul class="menu-list"><li>
+        <a class="is-flex" href="#implements-구현">
+        <span class="has-mr-6">3.1</span>
+        <span>implements (구현)</span>
+        </a></li><li>
+        <a class="is-flex" href="#extends-상속">
+        <span class="has-mr-6">3.2</span>
+        <span>extends (상속)</span>
+        </a></li><li>
+        <a class="is-flex" href="#composite-구성-합성">
+        <span class="has-mr-6">3.3</span>
+        <span>composite (구성, 합성)</span>
+        </a></li></ul></li></ul>
         </div>
     </div>
 </div>
