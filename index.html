@@ -142,6 +142,177 @@
         
         <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
             <div class="level-left">
+                <!-- <time class="level-item has-text-grey" datetime="2019-02-26T17:59:41.000Z">2019-02-27</time> -->
+                <div class="level-item has-text-grey">2019-02-27</div>
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/categories/Design-Pattern/">Design Pattern</a>&nbsp;/&nbsp;<a class="has-link-grey -link" href="/categories/Design-Pattern/Adapter-Decorator/">Adapter, Decorator</a>
+                </div>
+                
+                
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2019/02/27/adapter-decorator-facade/">4. 데코레이터, 어댑터, 퍼사드 패턴</a>
+            
+        </h1>
+        <div class="content">
+            <p>디자인 패턴은 무조건 아래 두 글을 선행해야합니다. 짧으니 간단히 읽고 오시면 이해가 쉽습니다.</p>
+<ul>
+<li><a href="https://aaronryu.github.io/2018/12/30/a-introduction-to-design-patterns/">1. 디자인 패턴에 앞서</a></li>
+<li><a href="https://aaronryu.github.io/2019/02/21/two-principles-of-design-patterns/">2. 디자인 패턴의 제 1, 2 원칙</a></li>
+</ul>
+<p>설명에 사용할 코드는 Java-like Pseudo Code 입니다.</p>
+<hr>
+<h1 id="분장술"><a href="#분장술" class="headerlink" title="분장술"></a>분장술</h1><p>아기돼지 삼형제를 보면 양가죽을 쓰고 하얀색 분으로 손을 칠해 양으로 변장한 늑대가 나옵니다. 물론 너무 어설픈 나머지 막내돼지한테 비웃음을 당하지만 돼지들의 집을 들어가기 위해서는 ‘변장’이 필요했던 것이죠. 이번에 얘기할 내용은 분장과 변장에 대한 이야기입니다. 여기서 잠깐 그 차이를 알아볼까요.</p>
+<h2 id="분장"><a href="#분장" class="headerlink" title="분장"></a>분장</h2><p>분장은 현재 <strong>나의 모습</strong>에서 조금 더 <strong>과장한 나의 모습</strong>으로 꾸민것입니다.<br><strong>나 자신은 그대로</strong>, 어렵게 말하면 본질은 해치지 않는 선에서 그 위에 <strong>무엇인가를 추가로 꾸민것</strong>이죠.</p>
+<h2 id="변장"><a href="#변장" class="headerlink" title="변장"></a>변장</h2><p>변장은 현재 <strong>나의 모습</strong>에서 <strong>완전 다른것의 모습</strong>으로 꾸민것입니다.<br><strong>나 자신이 아닌 완전 다른 어떤것으로 꾸민것</strong>이죠.</p>
+<p>이번 챕터에서 배울것은 <strong>분장에 해당하는 데코레이터 패턴</strong>과 <strong>변장에 해당하는 어댑터 패턴</strong>입니다. 마지막으론 앞서 두 패턴처럼 한 클래스를 다른 클래스로 바꾸는것이 아닌 <strong>다수의 클래스를 하나의 클래스로 단순히 묶어주는 퍼사드 패턴</strong>을 다루고 마칠 예정입니다.</p>
+<h1 id="어댑터-패턴-변장"><a href="#어댑터-패턴-변장" class="headerlink" title="어댑터 패턴 - 변장"></a>어댑터 패턴 - 변장</h1><p>앞서 늑대가 돼지삼형제 집으로 들어가기 위해 순한 양으로 변장했습니다. 무시무시한 발톱을 하얀 분칠을 통해 예뻐보이는 손으로 바꾸었고, 그르렁거리는 목소리를 순한 양처럼 메에 흉내내기도 해봅니다. 이를 클래스로 표현하면 이해가 매우 Sheep습니다.</p>
+<ul>
+<li><p><strong>늑대</strong></p>
+<figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Wolf</span> </span>&#123;</span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">Claw</span><span class="hljs-params">()</span> </span>&#123;</span><br><span class="line">        <span class="hljs-keyword">return</span> <span class="hljs-string">"Sharp Claw"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">Growl</span><span class="hljs-params">()</span> </span>&#123;</span><br><span class="line">        <span class="hljs-keyword">return</span> <span class="hljs-string">"Grrrrrrr"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>늑대가 돼지삼형제 집에 들어가기 위해 양으로 ‘변장’했군요.</strong></p>
+<figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">WolfWantsToBeSheep</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">Sheep</span> </span>&#123;</span><br><span class="line">    <span class="hljs-keyword">public</span> Wolf wolf;</span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">Hand</span><span class="hljs-params">()</span> </span>&#123;</span><br><span class="line">        wolf.Claw().replace(<span class="hljs-string">"Sharp Claw"</span>, <span class="hljs-string">"White Hand"</span>);   </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">Sound</span><span class="hljs-params">()</span> </span>&#123;</span><br><span class="line">        wolf.Growl().replace(<span class="hljs-string">"Grrrrrrr"</span>, <span class="hljs-string">"Baaaaaaa"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>이제 늑대는 양이 들어갈 수 있는곳이면 어디든 갈 수 있습니다. 양만 들어갈 수 있는 돼지삼형제 집에 한번 들어가보겠습니다.</p>
+<ul>
+<li><p><strong>돼지삼형제 집</strong></p>
+<figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">WelcomeToPigHouse</span><span class="hljs-params">(Sheep sheep)</span></span>;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>실제 양은 돼지삼형제 집에 잘 들어갑니다.</strong></p>
+<figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">WelcomeToPigHouse(<span class="hljs-keyword">new</span> Sheep());</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>이런, 양으로 변한 늑대도 돼지삼형제 집에 들어갔군요.</strong></p>
+<figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">WelcomeToPigHouse(<span class="hljs-keyword">new</span> WolfWantsToBeSheep(<span class="hljs-keyword">new</span> Wolf()));</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>어떤 클래스나 함수를 <strong>클라이언트</strong>로 본다면 <strong>클라이언트들은 특정 타켓 인터페이스에만 맞게 구현</strong>되어있습니다. 이런 제약때문에 다른 클래스를 해당 클라이언트에서 사용하고 싶을지라도, <strong>해당 클래스가 타겟 인터페이스의 구현체가 아니라면 사용할 수 없습니다.</strong> 위의 예처럼 태어났을때부터 늑대였지만 돼지삼형제 집에 가기위해서는 순한 양이 되어야하는 상황말이죠. 일반 비지니스에서도 이와 같이 어떤 클래스를 클라이언트 목적에 맞는 클래스로 사용해야하는 갑작스런 요구사항이 발생하곤 합니다.</p>
+<h2 id="객체-어댑터"><a href="#객체-어댑터" class="headerlink" title="객체 어댑터"></a>객체 어댑터</h2><p>위 늑대와 양의 예시처럼 어댑터 패턴은 <strong>어댑터</strong>라는 <strong>타겟 인터페이스의 구현 클래스</strong>를 생성하고 그 안에 <strong>타켓 인터페이스로 변장하고자 하는 클래스를 객체</strong>로 갖습니다. 이를 <strong>어댑티</strong>라고 명명하는데요. 어댑티의 원래 함수와 프로퍼티들을 활용하여 <strong>타겟 인터페이스의 각 함수들을 구현</strong>하면 됩니다. </p>
+<p>이걸 <strong>객체 어댑터</strong>로 부르는 이유는 <strong>어댑티를 어댑터가 객체로 갖고 있기 때문</strong>입니다. 이를 우리는 ‘구성’이라고 배웠었지요. 아래의 코드를 보면 Adapter 가 Adaptee 를 객체로 가지고 있습니다. 클래스 다이어그램이 이해를 조금 더 도와줄겁니다.</p>
+<figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Client</span><span class="hljs-params">(TargetInterface interface)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Adapter</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">TargetInterface</span> </span>&#123;</span><br><span class="line">    <span class="hljs-keyword">private</span> Adaptee adaptee; </span><br><span class="line">    <span class="hljs-comment">// ... adaptee 함수를 활용해 TargetInterface 의 함수를 구현합니다.</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">this</span>.Client(<span class="hljs-keyword">new</span> Adapter(<span class="hljs-keyword">new</span> Adaptee()));</span><br></pre></td></tr></table></figure>
+<p>어답티는 어답터의 도움으로 TargetInterface 만을 사용하는 클라이언트에 주입가능해졌습니다.</p>
+<center><img src="/2019/02/27/adapter-decorator-facade/adapter.svg"></center>
+
+<p>그럼 <strong>클래스 어댑터</strong>은 무엇일까요? Adapter 가 Adaptee 를 <strong>객체의 형태로 ‘구성’</strong>하지 않고 <strong>클래스의 형태로 ‘상속’</strong>하면 됩니다.</p>
+<h2 id="클래스-어댑터"><a href="#클래스-어댑터" class="headerlink" title="클래스 어댑터"></a>클래스 어댑터</h2><p>클래스 어댑터는 되려 단순합니다. 아래 코드와 클래스 다이어그램을 보시면 객체 어댑터와 두 가지 차이점이 있습니다.</p>
+<ol>
+<li>Adapter 가 Adaptee 를 구성(has)하지 않고 상속(extends)하고 있습니다.</li>
+<li>Target 이 Interface 가 아니라 Class 로 존재하며, 그에 따라 구현(implements)이 아닌 상속(extends)을 하고 있습니다.</li>
+</ol>
+<ul>
+<li><strong>객체 어댑터</strong><figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Adapter</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">TargetInterface</span> </span>&#123;</span><br><span class="line">    <span class="hljs-keyword">private</span> Adaptee adaptee; </span><br><span class="line">    <span class="hljs-comment">// ... adaptee 함수를 활용해 TargetInterface 의 함수를 구현합니다.</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<center><img src="/2019/02/27/adapter-decorator-facade/object-adapter.svg"></center>
+
+
+<ul>
+<li><strong>클래스 어댑터</strong><figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Adapter</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Target</span>, <span class="hljs-title">Adaptee</span> </span>&#123;</span><br><span class="line">    <span class="hljs-comment">// ... adaptee 함수를 활용해 Target 의 함수를 확장합니다.</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<center><img src="/2019/02/27/adapter-decorator-facade/class-adapter.svg"></center>
+
+<p>위 코드를 보고 흠칫하셨을것입니다. Java 에서는 다중 상속을 지원하지 않기때문에 extends A, B 와 같은 문법은 사용할 수 없습니다. 또한 이렇게 사용할 경우 Target 이 Interface 가 아닌 Class 이기 때문에 다른 클래스로 대체할 수 없을뿐더러 Adapter 와 Target 이 단단히 엮어버렸습니다. 이는 배운대로 유연성을 해치는 구조이기에 사용을 권하지 않습니다.</p>
+<h2 id="다중-어댑터"><a href="#다중-어댑터" class="headerlink" title="다중 어댑터"></a>다중 어댑터</h2><p>다중 어댑터는 기존에 <strong>하나의 타겟 인터페이스만 지원</strong>하는것이 아닌 <strong>다수의 타겟 인터페이스를 모두 지원</strong>하는걸 의미합니다. 하나의 어댑티 클래스를 <strong>여기 인터페이스뿐만 아니라 저 인터페이스에서도 사용하고 싶을때</strong> TargetOneInterface, TargetTwoInterface 를 하나의 어댑터 클래스로 연결하고 두 인터페이스의 모든 것을 구현하면 됩니다. 객체 어댑터가 아니라 클래스 어댑터라면 두 개의 클래스 TargetOne, TargetTwo 를 상속(extends) 하면 됩니다.</p>
+<ul>
+<li><strong>다중 (객체) 어댑터</strong><figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">ClientOne</span><span class="hljs-params">(TargetOneInterface interface1)</span></span>;</span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">ClientAnother</span><span class="hljs-params">(TargetTwoInterface interface2)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Adapter</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">TargetOneInterface</span>, <span class="hljs-title">TargetTwoInterface</span> </span>&#123;</span><br><span class="line">    <span class="hljs-keyword">private</span> Adaptee adaptee; </span><br><span class="line">    <span class="hljs-comment">// ... adaptee 함수를 활용해 TargetOne/TwoInterface 의 함수들을 모두 구현합니다.</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h1 id="데코레이터-패턴-분장"><a href="#데코레이터-패턴-분장" class="headerlink" title="데코레이터 패턴 - 분장"></a>데코레이터 패턴 - 분장</h1><p>데코레이터 패턴은 클래스에 추가적인 기능을 무수히 많이 추가하더라도 그 클래스는 본래 클래스의 기능을 유지하는 ‘분장’에 해당합니다. 데코레이터 패턴을 어댑터 패턴 다음에 같이 다루는 이유는 사실 원리는 어댑터-어댑티 개념과 같기 때문입니다. 어댑터가 <strong>Adaptee</strong>를 <strong>TargetInterface</strong>로 변장시켰다면, 데코레이터는 <strong>Decoratee</strong>를 <strong>Decoratee</strong> 자기 자신으로 분장시키는 꼴이 됩니다.</p>
+<ul>
+<li><p><strong>어댑터 패턴 - 변장</strong>: Adaptee != TargetInterface</p>
+<figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Adapter</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">TargetInterface</span> </span>&#123;</span><br><span class="line">    <span class="hljs-keyword">private</span> Adaptee adaptee;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>데코레이터 패턴 - 분장</strong>: Decoratee == Decoratee</p>
+<figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Decorator</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Decoratee</span> </span>&#123;</span><br><span class="line">    <span class="hljs-keyword">private</span> Decoratee decoratee; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>데코레이터 패턴은 한번만 분장하기 위해 사용되지 않습니다. 자기 자신을 재귀적으로 계속 분장할 수 있는데요. 아무리 다양한 DecoratorA, DecoratorB 를 만들어 꾸미더라도 결국에 Decoratee 클래스기 때문에 기존 클라이언트에서는 크게 신경쓰지 않고 쓰던 그대로 사용하면 됩니다.</p>
+<blockquote>
+<p>데코레이터 패턴은 Decorater 클래스가 Decoratee 를 Decoratee 로 분장하는것입니다.<br>Decorator 는 Decoratee 를 상속받기 때문에 그 자신도 Decoratee 가 될 수 있습니다.<br>따라서 Decorator 는 재귀적으로 Decoratee 에 위치할 수 있어 무한정 분장될 수 있습니다.</p>
+</blockquote>
+<ul>
+<li><p><strong>데코레이티</strong>: 꾸미고 싶은 객체</p>
+<figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Decoratee</span> </span>&#123;</span><br><span class="line">    <span class="hljs-comment">// ... </span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>데코레이터</strong>: 꾸며주는 객체</p>
+<figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Decorator</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Decoratee</span> </span>&#123;</span><br><span class="line">    <span class="hljs-keyword">private</span> Decoratee decoratee; </span><br><span class="line">    <span class="hljs-comment">// ... decoratee 함수를 활용해 더 개선된 decoratee 함수로 확장합니다.</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>단순한 코드는 위와 같지만 아마 책으로 접하신 데코레이터 패턴 코드는 아래와 같은 구조를 갖고 있었을것입니다.</p>
+<ul>
+<li><p><strong>추상 데코레이터</strong>: 꾸며주는 추상 객체</p>
+<figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">abstract</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Decorator</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Decoratee</span> </span>&#123;</span><br><span class="line">    <span class="hljs-keyword">protected</span> Decoratee decoratee; </span><br><span class="line">    Decorator(Decoratee decoratee) &#123; </span><br><span class="line">        <span class="hljs-keyword">this</span>.decoratee = decoratee </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>구현 데코레이터</strong>: 꾸며주는 구현 객체</p>
+<figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">DecoratorA</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Decorator</span> </span>&#123;</span><br><span class="line">    DecoratorA(Decoratee decoratee) &#123;</span><br><span class="line">        <span class="hljs-keyword">super</span>(decoratee)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="hljs-comment">// ... </span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>정말 단순한 데코레이팅만 원하신다면 처음에 설명해드린 형태로도 충분합니다. 그렇다 하더라도 위와 같이 <strong>추상 데코레이터</strong>와 <strong>구현 데코레이터</strong>를 나누는 걸 추천드리는 이유는 다음과 같은 이점을 갖기 때문입니다.</p>
+<ul>
+<li>구현 데코레이터에서 공통으로 필요로하는 로직이나 프로퍼티(특히 데코레이티)를 두고 구현 시 활용 가능합니다.</li>
+<li>수많은 구현 데코레이터들을 추상 데코레이터 하나로 관리할 수 있습니다.</li>
+</ul>
+<p><strong>구현보다 인터페이스를 사용하라.</strong>던 <strong>디자인 패턴 제 1원칙</strong> 기억하시나요? 구현이 아닌 인터페이스(혹은 추상클래스)의 이점은 원하는 구현클래스를 붙였다 떼었다 할 수 있는 유용성과 재사용성이었습니다. 예를 들어 구현 데코레이터들을 하나의 리스트나 셋으로 담아 관리하고싶을때 추상 데코레이터 타입의 리스트, 셋을 생성하여 사용할 수 있겠죠.</p>
+<h1 id="퍼사드-패턴-묶음"><a href="#퍼사드-패턴-묶음" class="headerlink" title="퍼사드 패턴 - 묶음"></a>퍼사드 패턴 - 묶음</h1><p>마지막으로 배울 패턴은 퍼사드 패턴입니다. 어댑터와 데코레이터 패턴은 <strong>각 하나의 어댑티나 데코레이티를 갖는다</strong>는 <strong>공통점</strong>이 있고, <strong>차이점</strong>은 <strong>어댑터는 다른 클래스로 ‘변장’</strong>하고 <strong>데코레이터는 같은 데코레이터(사실상 데코레이티)로 ‘분장’</strong>한다는 것 이었습니다. 퍼사드 패턴을 이 챕터에서 다룬다는것은 이들과 공통점이 있다는 것일텐데요. 어떤것이 같을까요?</p>
+<p>퍼사드 패턴은 어댑터, 데코레이터 패턴의 공통점을 그대로 갖습니다. 어댑티, 데코레이티와 같이 활용하기 위한 클래스를 내부에 갖고있습니다. 다만 어댑터, 데코레이터가 어댑티, 데코레이티를 하나씩만 가졌다면 <strong>퍼사드는 엄청 많은 수의 클래스를 갖습니다.</strong> 그리고 어댑터와 데코레이터의 차이점이 ‘변장’이나 ‘분장’이냐의 차이였다면 퍼사드는 그저 그 자체로 새로운 클래스가 됩니다. <strong>어댑터 패턴</strong>도 클래스 자신이 아닌 <strong>다른 클래스</strong>로 ‘변장’한다고 했는데 그럼 퍼사드 패턴도 마찬가지가 아닐까요? <strong>아닙니다.</strong> 퍼사드 패턴은 특정 클래스가 다른 특정 클래스로 변장하는것이 아닌 <strong>다수의 클래스가 다른 하나의 클래스로 단순히 묶이는 것</strong>입니다.</p>
+<ul>
+<li><p><strong>(객체) 어댑터</strong></p>
+<figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Adapter</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">TargetInterface</span> </span>&#123;</span><br><span class="line">    <span class="hljs-keyword">private</span> Adaptee adaptee; </span><br><span class="line">    <span class="hljs-comment">// ... adaptee 함수를 활용해 TargetInterface 의 함수를 구현합니다.</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>퍼사드</strong></p>
+<figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Facade</span> </span>&#123;</span><br><span class="line">    <span class="hljs-keyword">private</span> ClassA classA;</span><br><span class="line">    <span class="hljs-keyword">private</span> ClassB classB; </span><br><span class="line">    <span class="hljs-keyword">private</span> ClassC classC; </span><br><span class="line">    <span class="hljs-comment">// ... ClassA, B, C 를 활용한 새 함수들을 만듭니다.</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>퍼사드는 뒤에 어떠한 extends, implements 도 존재하지 않습니다. 단순히 여러 클래스를 묶어주는 하나의 클래스인 셈입니다. </p>
+<p>항상 마지막에 가면 집중력이 흐트러지곤 합니다. 중간쯤 읽다보면 세줄요약을 시급하게 찾는 자신을 발견하셨을겁니다. 그래도 꼭 한번은 다 잃고 아래 세줄요약을 읽어주시기 바랍니다. 그래야 머리속에 한번에 들어갈 수 있으니까요.</p>
+<hr>
+<p><strong>어댑터 패턴</strong></p>
+<blockquote>
+<p><strong>하나의 클래스</strong>(어댑티)를 <strong>다른 하나의 클래스</strong>(타겟 인터페이스)로 <strong>‘변장’</strong>합니다.</p>
+</blockquote>
+<figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Adapter</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">TargetInterface</span> </span>&#123;</span><br><span class="line">    <span class="hljs-keyword">private</span> Adaptee adaptee; </span><br><span class="line">    <span class="hljs-comment">// ... adaptee 함수를 활용해 TargetInterface 의 함수를 구현합니다.</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>데코레이터 패턴</strong></p>
+<blockquote>
+<p><strong>하나의 클래스</strong>(데코레이티)를 <strong>그 하나의 클래스</strong>(데코레이티)로 <strong>‘분장’</strong>합니다.</p>
+</blockquote>
+<figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Decorator</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Decoratee</span> </span>&#123;</span><br><span class="line">    <span class="hljs-keyword">private</span> Decoratee decoratee; </span><br><span class="line">    <span class="hljs-comment">// ... decoratee 함수를 활용해 더 개선된 decoratee 함수로 확장합니다.</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>위 예제 코드는 이해를 위해 간단한 데코레이터 클래스를 작성했습니다. 본문에서 설명드린바와 같이 추상/구현 데코레이터로 사용하는걸 추천드립니다.</p>
+<p><strong>퍼사드 패턴</strong></p>
+<blockquote>
+<p><strong>다수의 클래스</strong>를 <strong>다른 하나의 클래스</strong>로 <strong>묶습</strong>니다.</p>
+</blockquote>
+<figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Facade</span> </span>&#123;</span><br><span class="line">    <span class="hljs-keyword">private</span> ClassA classA;</span><br><span class="line">    <span class="hljs-keyword">private</span> ClassB classB; </span><br><span class="line">    <span class="hljs-keyword">private</span> ClassC classC; </span><br><span class="line">    <span class="hljs-comment">// ... ClassA, B, C 를 활용한 새 함수들을 만듭니다.</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
                 <!-- <time class="level-item has-text-grey" datetime="2019-02-21T17:33:46.000Z">2019-02-22</time> -->
                 <div class="level-item has-text-grey">2019-02-22</div>
                 
@@ -607,9 +778,17 @@
                 <span class="level-item">Design Pattern</span>
             </span>
             <span class="level-end">
-                <span class="level-item tag">3</span>
+                <span class="level-item tag">4</span>
             </span>
         </a><ul><li>
+        <a class="level is-marginless" href="/categories/Design-Pattern/Adapter-Decorator/">
+            <span class="level-start">
+                <span class="level-item">Adapter, Decorator</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">1</span>
+            </span>
+        </a></li><li>
         <a class="level is-marginless" href="/categories/Design-Pattern/Factory/">
             <span class="level-start">
                 <span class="level-item">Factory</span>
@@ -685,7 +864,7 @@
                         Posts
                     </p>
                     <p class="title has-text-weight-normal">
-                        4
+                        5
                     </p>
                 </div>
             </div>
@@ -695,7 +874,7 @@
                         Categories
                     </p>
                     <p class="title has-text-weight-normal">
-                        3
+                        4
                     </p>
                 </div>
             </div>
@@ -710,6 +889,19 @@
         <h3 class="menu-label">
             Recent
         </h3>
+        
+        <article class="media">
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-02-26T17:59:41.000Z">2019-02-27</time></div>
+                    <a href="/2019/02/27/adapter-decorator-facade/" class="has-link-black-ter is-size-6">4. 데코레이터, 어댑터, 퍼사드 패턴</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/Design-Pattern/">Design Pattern</a> / <a class="has-link-grey -link" href="/categories/Design-Pattern/Adapter-Decorator/">Adapter, Decorator</a>
+                    </p>
+                </div>
+            </div>
+        </article>
         
         <article class="media">
             
@@ -732,19 +924,6 @@
                     <a href="/2019/02/21/two-principles-of-design-patterns/" class="has-link-black-ter is-size-6">2. 디자인 패턴의 제 1, 2 원칙</a>
                     <p class="is-size-7 is-uppercase">
                         <a class="has-link-grey -link" href="/categories/Design-Pattern/">Design Pattern</a>
-                    </p>
-                </div>
-            </div>
-        </article>
-        
-        <article class="media">
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-02-17T07:59:20.000Z">2019-02-17</time></div>
-                    <a href="/2019/02/17/how-do-i-make-email-address/" class="has-link-black-ter is-size-6">프로페셔널해 보이는 메일 주소 만드는 방법</a>
-                    <p class="is-size-7 is-uppercase">
-                        <a class="has-link-grey -link" href="/categories/Workplace/">Workplace</a>
                     </p>
                 </div>
             </div>
