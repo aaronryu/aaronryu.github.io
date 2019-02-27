@@ -8,8 +8,8 @@
     </url>
 
     <url>
-        <loc>https://aaronryu.github.io/2019/02/21/two-principles-of-design-patterns/</loc>
-        <lastmod>2019-02-27T12:03:56.869Z</lastmod>
+        <loc>https://aaronryu.github.io/2019/02/27/observer-pattern/</loc>
+        <lastmod>2019-02-27T16:31:13.699Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
 
@@ -17,7 +17,15 @@
 
     <url>
         <loc>https://aaronryu.github.io/2019/02/27/adapter-decorator-facade/</loc>
-        <lastmod>2019-02-26T17:59:41.396Z</lastmod>
+        <lastmod>2019-02-27T14:56:28.706Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://aaronryu.github.io/2019/02/21/two-principles-of-design-patterns/</loc>
+        <lastmod>2019-02-27T12:03:56.869Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
 
