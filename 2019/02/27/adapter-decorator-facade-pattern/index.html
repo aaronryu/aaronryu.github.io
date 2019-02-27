@@ -6,24 +6,24 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="naver-site-verification" content="2316a6af47a7b653c7f6af966d7c718fb98027ed">
 
-<link rel="canonical" href="https://aaronryu.github.io/2019/02/27/adapter-decorator-facade/">
+<link rel="canonical" href="https://aaronryu.github.io/2019/02/27/adapter-decorator-facade-pattern/">
 
 
     <meta name="description" content="디자인 패턴은 무조건 아래 두 글을 선행해야합니다. 짧으니 간단히 읽고 오시면 이해가 쉽습니다.  1. 디자인 패턴에 앞서 2. 디자인 패턴의 제 1, 2 원칙  설명에 사용할 코드는 Java-like Pseudo Code 입니다.  분장술아기돼지 삼형제를 보면 양가죽을 쓰고 하얀색 분으로 손을 칠해 양으로 변장한 늑대가 나옵니다. 물론 너무 어설픈 나머지">
 <meta property="og:type" content="article">
 <meta property="og:title" content="4. 데코레이터, 어댑터, 퍼사드 패턴">
-<meta property="og:url" content="https://aaronryu.github.io/2019/02/27/adapter-decorator-facade/index.html">
+<meta property="og:url" content="https://aaronryu.github.io/2019/02/27/adapter-decorator-facade-pattern/index.html">
 <meta property="og:site_name" content="Crucian Carp">
 <meta property="og:description" content="디자인 패턴은 무조건 아래 두 글을 선행해야합니다. 짧으니 간단히 읽고 오시면 이해가 쉽습니다.  1. 디자인 패턴에 앞서 2. 디자인 패턴의 제 1, 2 원칙  설명에 사용할 코드는 Java-like Pseudo Code 입니다.  분장술아기돼지 삼형제를 보면 양가죽을 쓰고 하얀색 분으로 손을 칠해 양으로 변장한 늑대가 나옵니다. 물론 너무 어설픈 나머지">
 <meta property="og:locale" content="en">
-<meta property="og:image" content="https://aaronryu.github.io/2019/02/27/adapter-decorator-facade/adapter.svg">
-<meta property="og:image" content="https://aaronryu.github.io/2019/02/27/adapter-decorator-facade/object-adapter.svg">
-<meta property="og:image" content="https://aaronryu.github.io/2019/02/27/adapter-decorator-facade/class-adapter.svg">
-<meta property="og:updated_time" content="2019-02-27T14:56:28.706Z">
+<meta property="og:image" content="https://aaronryu.github.io/2019/02/27/adapter-decorator-facade-pattern/adapter.svg">
+<meta property="og:image" content="https://aaronryu.github.io/2019/02/27/adapter-decorator-facade-pattern/object-adapter.svg">
+<meta property="og:image" content="https://aaronryu.github.io/2019/02/27/adapter-decorator-facade-pattern/class-adapter.svg">
+<meta property="og:updated_time" content="2019-02-27T16:35:26.892Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="4. 데코레이터, 어댑터, 퍼사드 패턴">
 <meta name="twitter:description" content="디자인 패턴은 무조건 아래 두 글을 선행해야합니다. 짧으니 간단히 읽고 오시면 이해가 쉽습니다.  1. 디자인 패턴에 앞서 2. 디자인 패턴의 제 1, 2 원칙  설명에 사용할 코드는 Java-like Pseudo Code 입니다.  분장술아기돼지 삼형제를 보면 양가죽을 쓰고 하얀색 분으로 손을 칠해 양으로 변장한 늑대가 나옵니다. 물론 너무 어설픈 나머지">
-<meta name="twitter:image" content="https://aaronryu.github.io/2019/02/27/adapter-decorator-facade/adapter.svg">
+<meta name="twitter:image" content="https://aaronryu.github.io/2019/02/27/adapter-decorator-facade-pattern/adapter.svg">
 
 
 
@@ -206,7 +206,7 @@
 <figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Client</span><span class="hljs-params">(TargetInterface interface)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Adapter</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">TargetInterface</span> </span>&#123;</span><br><span class="line">    <span class="hljs-keyword">private</span> Adaptee adaptee; </span><br><span class="line">    <span class="hljs-comment">// ... adaptee 함수를 활용해 TargetInterface 의 함수를 구현합니다.</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">this</span>.Client(<span class="hljs-keyword">new</span> Adapter(<span class="hljs-keyword">new</span> Adaptee()));</span><br></pre></td></tr></table></figure>
 <p>어답티는 어답터의 도움으로 TargetInterface 만을 사용하는 클라이언트에 주입가능해졌습니다.</p>
-<center><img src="/2019/02/27/adapter-decorator-facade/adapter.svg"></center>
+<center><img src="/2019/02/27/adapter-decorator-facade-pattern/adapter.svg"></center>
 
 <p>그럼 <strong>클래스 어댑터</strong>은 무엇일까요? Adapter 가 Adaptee 를 <strong>객체의 형태로 ‘구성’</strong>하지 않고 <strong>클래스의 형태로 ‘상속’</strong>하면 됩니다.</p>
 <h2 id="클래스-어댑터"><a href="#클래스-어댑터" class="headerlink" title="클래스 어댑터"></a>클래스 어댑터</h2><p>클래스 어댑터는 되려 단순합니다. 아래 코드와 클래스 다이어그램을 보시면 객체 어댑터와 두 가지 차이점이 있습니다.</p>
@@ -218,14 +218,14 @@
 <li><strong>객체 어댑터</strong><figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Adapter</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">TargetInterface</span> </span>&#123;</span><br><span class="line">    <span class="hljs-keyword">private</span> Adaptee adaptee; </span><br><span class="line">    <span class="hljs-comment">// ... adaptee 함수를 활용해 TargetInterface 의 함수를 구현합니다.</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
-<center><img src="/2019/02/27/adapter-decorator-facade/object-adapter.svg"></center>
+<center><img src="/2019/02/27/adapter-decorator-facade-pattern/object-adapter.svg"></center>
 
 
 <ul>
 <li><strong>클래스 어댑터</strong><figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Adapter</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Target</span>, <span class="hljs-title">Adaptee</span> </span>&#123;</span><br><span class="line">    <span class="hljs-comment">// ... adaptee 함수를 활용해 Target 의 함수를 확장합니다.</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
-<center><img src="/2019/02/27/adapter-decorator-facade/class-adapter.svg"></center>
+<center><img src="/2019/02/27/adapter-decorator-facade-pattern/class-adapter.svg"></center>
 
 <p>위 코드를 보고 흠칫하셨을것입니다. Java 에서는 다중 상속을 지원하지 않기때문에 extends A, B 와 같은 문법은 사용할 수 없습니다. 또한 이렇게 사용할 경우 Target 이 Interface 가 아닌 Class 이기 때문에 다른 클래스로 대체할 수 없을뿐더러 Adapter 와 Target 이 단단히 엮어버렸습니다. 이는 배운대로 유연성을 해치는 구조이기에 사용을 권하지 않습니다.</p>
 <h2 id="다중-어댑터"><a href="#다중-어댑터" class="headerlink" title="다중 어댑터"></a>다중 어댑터</h2><p>다중 어댑터는 기존에 <strong>하나의 타겟 인터페이스만 지원</strong>하는것이 아닌 <strong>다수의 타겟 인터페이스를 모두 지원</strong>하는걸 의미합니다. 하나의 어댑티 클래스를 <strong>여기 인터페이스뿐만 아니라 저 인터페이스에서도 사용하고 싶을때</strong> TargetOneInterface, TargetTwoInterface 를 하나의 어댑터 클래스로 연결하고 두 인터페이스의 모든 것을 구현하면 됩니다. 객체 어댑터가 아니라 클래스 어댑터라면 두 개의 클래스 TargetOne, TargetTwo 를 상속(extends) 하면 됩니다.</p>
@@ -340,8 +340,8 @@
         
 <script>
     var disqus_config = function () {
-        this.page.url = 'https://aaronryu.github.io/2019/02/27/adapter-decorator-facade/';
-        this.page.identifier = '2019/02/27/adapter-decorator-facade/';
+        this.page.url = 'https://aaronryu.github.io/2019/02/27/adapter-decorator-facade-pattern/';
+        this.page.identifier = '2019/02/27/adapter-decorator-facade-pattern/';
     };
     (function() {
         var d = document, s = d.createElement('script');  
@@ -568,7 +568,7 @@
             <div class="media-content">
                 <div class="content">
                     <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-02-26T17:59:41.000Z">2019-02-27</time></div>
-                    <a href="/2019/02/27/adapter-decorator-facade/" class="has-link-black-ter is-size-6">4. 데코레이터, 어댑터, 퍼사드 패턴</a>
+                    <a href="/2019/02/27/adapter-decorator-facade-pattern/" class="has-link-black-ter is-size-6">4. 데코레이터, 어댑터, 퍼사드 패턴</a>
                     <p class="is-size-7 is-uppercase">
                         <a class="has-link-grey -link" href="/categories/Design-Pattern/">Design Pattern</a> / <a class="has-link-grey -link" href="/categories/Design-Pattern/Adapter-Decorator/">Adapter, Decorator</a>
                     </p>

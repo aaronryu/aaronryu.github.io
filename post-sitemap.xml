@@ -8,24 +8,8 @@
     </url>
 
     <url>
-        <loc>https://aaronryu.github.io/2019/02/27/observer-pattern/</loc>
-        <lastmod>2019-02-27T16:31:13.699Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.6</priority>
-
-    </url>
-
-    <url>
-        <loc>https://aaronryu.github.io/2019/02/27/adapter-decorator-facade/</loc>
-        <lastmod>2019-02-27T14:56:28.706Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.6</priority>
-
-    </url>
-
-    <url>
-        <loc>https://aaronryu.github.io/2019/02/21/two-principles-of-design-patterns/</loc>
-        <lastmod>2019-02-27T12:03:56.869Z</lastmod>
+        <loc>https://aaronryu.github.io/2019/02/27/adapter-decorator-facade-pattern/</loc>
+        <lastmod>2019-02-27T16:35:26.892Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
 
@@ -33,7 +17,31 @@
 
     <url>
         <loc>https://aaronryu.github.io/2019/02/22/factory-method-and-abstract-factory-pattern/</loc>
-        <lastmod>2019-02-23T13:50:45.160Z</lastmod>
+        <lastmod>2019-02-27T16:35:04.825Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://aaronryu.github.io/2019/02/27/observer-pattern/</loc>
+        <lastmod>2019-02-27T16:34:37.994Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://aaronryu.github.io/2019/02/21/two-principles-of-design-patterns/</loc>
+        <lastmod>2019-02-27T16:33:57.122Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://aaronryu.github.io/2019/02/17/how-do-i-make-email-address/</loc>
+        <lastmod>2019-02-27T16:33:44.365Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
 
@@ -42,14 +50,6 @@
     <url>
         <loc>https://aaronryu.github.io/2018/12/30/a-introduction-to-design-patterns/</loc>
         <lastmod>2019-02-23T11:09:34.477Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.6</priority>
-
-    </url>
-
-    <url>
-        <loc>https://aaronryu.github.io/2019/02/17/how-do-i-make-email-address/</loc>
-        <lastmod>2019-02-23T10:31:15.431Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
 
