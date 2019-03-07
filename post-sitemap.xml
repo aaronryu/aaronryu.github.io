@@ -8,6 +8,14 @@
     </url>
 
     <url>
+        <loc>https://aaronryu.github.io/2019/03/08/all-about-locks-of-nolock-in-mssql/</loc>
+        <lastmod>2019-03-07T16:46:09.987Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
         <loc>https://aaronryu.github.io/2019/03/02/singleton-pattern/</loc>
         <lastmod>2019-03-03T13:31:24.988Z</lastmod>
         <changefreq>weekly</changefreq>
