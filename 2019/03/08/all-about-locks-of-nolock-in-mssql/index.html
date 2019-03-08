@@ -17,7 +17,7 @@
 <meta property="og:description" content="이슈 - ALTER Lock 에 의한 DB 커넥션 급증특정 테이블에 ALTER 를 사용하여 필드 한개를 추가하자 해당 테이블을 사용하는 서비스에 이슈가 발생했었습니다. 당시 RDB 로 MSSQL 을 사용하고 있었는데 ALTER 를 수행한 순간부터 DB에 대한 커넥션이 급증하였고 커넥션 그래프는 마치 예술처럼 가운데 손가락을 정말로 네 손가락의 디테일까지 다">
 <meta property="og:locale" content="en">
 <meta property="og:image" content="https://aaronryu.github.io/2019/03/08/all-about-locks-of-nolock-in-mssql/connection.jpg">
-<meta property="og:updated_time" content="2019-03-08T14:55:08.420Z">
+<meta property="og:updated_time" content="2019-03-08T15:00:36.386Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MSSQL - &#39;NOLOCK&#39; 은 사실 또 다른 &#39;LOCK&#39; 이다">
 <meta name="twitter:description" content="이슈 - ALTER Lock 에 의한 DB 커넥션 급증특정 테이블에 ALTER 를 사용하여 필드 한개를 추가하자 해당 테이블을 사용하는 서비스에 이슈가 발생했었습니다. 당시 RDB 로 MSSQL 을 사용하고 있었는데 ALTER 를 수행한 순간부터 DB에 대한 커넥션이 급증하였고 커넥션 그래프는 마치 예술처럼 가운데 손가락을 정말로 네 손가락의 디테일까지 다">
@@ -222,7 +222,8 @@
 <li>테이블 스키마를 변경(DDL)한다는 의미의 (Modification on Schema) Schema Modification Lock 로 부릅니다.</li>
 <li><strong>테이블 스키마 변경 과정에서 통계나 인덱싱 등 테이블 자체에 대한 추가 작업을 위해</strong></li>
 </ul>
-<p>일반적인 Lock 은 <strong>테이블</strong>에 걸려있는데, MSSQL 에서는 이런 Lock 에 의해 <strong>테이블 스키마</strong>와 <strong>테이블 데이터</strong> 두 작업이 한번에 잠기는걸 꺼린것으로 보입니다. 결국 Sch-S/M 은 테이블이 아닌 <strong>테이블 스키마</strong>의 변경에 대한 Lock 으로 <strong>테이블 스키마</strong>와 <strong>테이블 데이터</strong>를 나누어서 서로 영향을 최소화하려는 것으로 해석됩니다. 하지만 이런 의도 때문에 NOLOCK 이 사실은 LOCK (정확히는 Sch-S Lock) 이 되었고, 일반적으로는 이를 생각하지 못한채 NOLOCK 을 사용하다 에러가 발생하게 됩니다. 아래서는 이 문제점을 가상 시나리오 별로 추적하면서 알아보겠습니다.</p>
+<p>일반적인 Lock 은 <strong>테이블</strong>에 걸려있는데, MSSQL 에서는 이런 Lock 에 의해 <strong>테이블 스키마</strong>와 <strong>테이블 데이터</strong> 두 작업이 한번에 잠기는걸 꺼린것으로 보입니다. 결국 Sch-S/M 은 테이블이 아닌 <strong>테이블 스키마</strong>와 <strong>테이블 데이터</strong> 각각의 변경에 대한 Lock 으로 <strong>테이블 스키마</strong>와 <strong>테이블 데이터</strong>를 나누어서 서로 영향을 최소화하려는 것으로 해석됩니다. 하지만 이런 의도 때문에 NOLOCK 이 사실은 LOCK (정확히는 Sch-S Lock) 이 되었고, 일반적으로는 이를 생각하지 못한채 NOLOCK 을 사용하다 에러가 발생하게 됩니다. </p>
+<p>아래서는 이 문제점을 가상 시나리오를 추적하면서 알아보겠습니다.</p>
 <h1 id="LOCK-on-NOLOCK-시나리오"><a href="#LOCK-on-NOLOCK-시나리오" class="headerlink" title="LOCK on NOLOCK 시나리오"></a>LOCK on NOLOCK 시나리오</h1><h2 id="NOLOCK-is-“Locking”"><a href="#NOLOCK-is-“Locking”" class="headerlink" title="NOLOCK is “Locking”"></a>NOLOCK is <strong>“Locking”</strong></h2><ol>
 <li><strong>S</strong> = SELECT</li>
 </ol>
