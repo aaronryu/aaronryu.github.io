@@ -2,7 +2,7 @@
 <html lang="en">
 <head><meta name="generator" content="Hexo 3.8.0">
     <meta charset="utf-8">
-<title>MSSQL - &#39;NOLOCK&#39; 은 사실 &#39;LOCK&#39; 이다 - Crucian Carp</title>
+<title>MSSQL - &#39;NOLOCK&#39; 은 사실 또 다른 &#39;LOCK&#39; 이다 - Crucian Carp</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="naver-site-verification" content="2316a6af47a7b653c7f6af966d7c718fb98027ed">
 
@@ -11,21 +11,21 @@
 
     <meta name="description" content="이슈 - ALTER Lock 에 의한 DB 커넥션 급증특정 테이블에 ALTER 를 사용하여 필드 한개를 추가하자 해당 테이블을 사용하는 서비스에 이슈가 발생했었습니다. 당시 RDB 로 MSSQL 을 사용하고 있었는데 ALTER 를 수행한 순간부터 DB에 대한 커넥션이 급증하였고 커넥션 그래프는 마치 예술처럼 가운데 손가락을 정말로 네 손가락의 디테일까지 다">
 <meta property="og:type" content="article">
-<meta property="og:title" content="MSSQL - &#39;NOLOCK&#39; 은 사실 &#39;LOCK&#39; 이다">
+<meta property="og:title" content="MSSQL - &#39;NOLOCK&#39; 은 사실 또 다른 &#39;LOCK&#39; 이다">
 <meta property="og:url" content="https://aaronryu.github.io/2019/03/08/all-about-locks-of-nolock-in-mssql/index.html">
 <meta property="og:site_name" content="Crucian Carp">
 <meta property="og:description" content="이슈 - ALTER Lock 에 의한 DB 커넥션 급증특정 테이블에 ALTER 를 사용하여 필드 한개를 추가하자 해당 테이블을 사용하는 서비스에 이슈가 발생했었습니다. 당시 RDB 로 MSSQL 을 사용하고 있었는데 ALTER 를 수행한 순간부터 DB에 대한 커넥션이 급증하였고 커넥션 그래프는 마치 예술처럼 가운데 손가락을 정말로 네 손가락의 디테일까지 다">
 <meta property="og:locale" content="en">
 <meta property="og:image" content="https://aaronryu.github.io/2019/03/08/all-about-locks-of-nolock-in-mssql/connection.jpg">
-<meta property="og:updated_time" content="2019-03-07T16:46:09.987Z">
+<meta property="og:updated_time" content="2019-03-08T14:55:08.420Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="MSSQL - &#39;NOLOCK&#39; 은 사실 &#39;LOCK&#39; 이다">
+<meta name="twitter:title" content="MSSQL - &#39;NOLOCK&#39; 은 사실 또 다른 &#39;LOCK&#39; 이다">
 <meta name="twitter:description" content="이슈 - ALTER Lock 에 의한 DB 커넥션 급증특정 테이블에 ALTER 를 사용하여 필드 한개를 추가하자 해당 테이블을 사용하는 서비스에 이슈가 발생했었습니다. 당시 RDB 로 MSSQL 을 사용하고 있었는데 ALTER 를 수행한 순간부터 DB에 대한 커넥션이 급증하였고 커넥션 그래프는 마치 예술처럼 가운데 손가락을 정말로 네 손가락의 디테일까지 다">
 <meta name="twitter:image" content="https://aaronryu.github.io/2019/03/08/all-about-locks-of-nolock-in-mssql/connection.jpg">
 
 
 
-<link rel="alternative" href="atom.xml" title="MSSQL - &#39;NOLOCK&#39; 은 사실 &#39;LOCK&#39; 이다" type="application/atom+xml">
+<link rel="alternative" href="atom.xml" title="MSSQL - &#39;NOLOCK&#39; 은 사실 또 다른 &#39;LOCK&#39; 이다" type="application/atom+xml">
 
 
 
@@ -162,7 +162,7 @@
         
         <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
             
-                MSSQL - &#39;NOLOCK&#39; 은 사실 &#39;LOCK&#39; 이다
+                MSSQL - &#39;NOLOCK&#39; 은 사실 또 다른 &#39;LOCK&#39; 이다
             
         </h1>
         <div class="content">
@@ -575,7 +575,7 @@
             <div class="media-content">
                 <div class="content">
                     <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-03-07T16:46:09.000Z">2019-03-08</time></div>
-                    <a href="/2019/03/08/all-about-locks-of-nolock-in-mssql/" class="has-link-black-ter is-size-6">MSSQL - &#39;NOLOCK&#39; 은 사실 &#39;LOCK&#39; 이다</a>
+                    <a href="/2019/03/08/all-about-locks-of-nolock-in-mssql/" class="has-link-black-ter is-size-6">MSSQL - &#39;NOLOCK&#39; 은 사실 또 다른 &#39;LOCK&#39; 이다</a>
                     <p class="is-size-7 is-uppercase">
                         <a class="has-link-grey -link" href="/categories/Troubleshoot/">Troubleshoot</a> / <a class="has-link-grey -link" href="/categories/Troubleshoot/Database/">Database</a>
                     </p>
