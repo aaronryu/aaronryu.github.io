@@ -333,7 +333,7 @@
 <center><img src="/2019/03/24/only-one-page-for-functional-programming/monad-return-functor.svg"></center>
 
 <p>우리는 Unwrap 과정만 필요하고, Wrap 과정은 불필요합니다. 해결을 위해 우리는 Unwrap/Wrap 구조를 사용하지 않고 명시적으로 Unwrap 에 대한 함수만 정의해 주면 됩니다. 그리고 Functor 와 똑같이 Unwrap(flatMap) 함수에 의해 얻어진 ‘데이터 구조의 내부 원소’에 대한 Mapping 을 정의하고 그 결과를 내부에서 ‘데이터 구조’로 반환하도록 하는것이 <strong>모나드</strong> 패턴입니다.</p>
-<h2 id="Unwrap-flatMap-for-knowing-‘State’"><a href="#Unwrap-flatMap-for-knowing-‘State’" class="headerlink" title="Unwrap(flatMap) for knowing ‘State’"></a>Unwrap(flatMap) for knowing ‘State’</h2><blockquote>
+<h2 id="Monad-1"><a href="#Monad-1" class="headerlink" title="Monad?"></a>Monad?</h2><blockquote>
 <p><strong>Monad</strong>는 <strong>Unwrap(flatMap) 함수</strong>를 포함하는 <strong>Mappable 데이터 구조</strong>입니다.<br><strong>Monad</strong>의 <strong>Mapping 함수</strong>는 <strong>‘결과’와 ‘상태’ 모두를 갖는 데이터 구조를 반환</strong>합니다. 모나드는 아래 세 요소를 갖습니다.</p>
 </blockquote>
 <center><img src="/2019/03/24/only-one-page-for-functional-programming/monad-definition.svg"></center>
