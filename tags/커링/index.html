@@ -2,37 +2,27 @@
 <html lang="en">
 <head><meta name="generator" content="Hexo 3.8.0">
     <meta charset="utf-8">
-<title>한 장으로 보는 함수형 프로그래밍 - 클로저, 커링, Functor, 모나드 - Crucian Carp</title>
+<title>Tag: 커링 - Crucian Carp</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="naver-site-verification" content="2316a6af47a7b653c7f6af966d7c718fb98027ed">
 
-<link rel="canonical" href="https://aaronryu.github.io/2019/03/24/only-one-page-for-functional-programming/">
+<link rel="canonical" href="https://aaronryu.github.io/tags/커링/">
 
 
-    <meta name="description" content="Swift 를 무턱대고 집어서 개인 프로젝트를 진행하던 중 함수형 프로그래밍 개념을 처음 제대로 마주했습니다. 개념을 제대로 모른채 사용해왔었지만 (사용은 정말 쉬우니까요) 이번 기회로 한번 정리해보았습니다. 클로저, 커링, Functor, 모나드. 희안하게 이름만 들어도 배우고 싶지 않은 ‘함수형 프로그래밍’을 처음 접하는 분들에게 도움이 되었으면 좋겠습">
-<meta name="keywords" content="Functional Programming,함수형 프로그래밍,Closure,클로저,High-order Function,고차함수,Curring,커링,Functor,펑터,Monad,모나드">
-<meta property="og:type" content="article">
-<meta property="og:title" content="한 장으로 보는 함수형 프로그래밍 - 클로저, 커링, Functor, 모나드">
-<meta property="og:url" content="https://aaronryu.github.io/2019/03/24/only-one-page-for-functional-programming/index.html">
+    <meta name="description" content="Cool heads but warm hearts">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Crucian Carp">
+<meta property="og:url" content="https://aaronryu.github.io/tags/커링/index.html">
 <meta property="og:site_name" content="Crucian Carp">
-<meta property="og:description" content="Swift 를 무턱대고 집어서 개인 프로젝트를 진행하던 중 함수형 프로그래밍 개념을 처음 제대로 마주했습니다. 개념을 제대로 모른채 사용해왔었지만 (사용은 정말 쉬우니까요) 이번 기회로 한번 정리해보았습니다. 클로저, 커링, Functor, 모나드. 희안하게 이름만 들어도 배우고 싶지 않은 ‘함수형 프로그래밍’을 처음 접하는 분들에게 도움이 되었으면 좋겠습">
+<meta property="og:description" content="Cool heads but warm hearts">
 <meta property="og:locale" content="en">
-<meta property="og:image" content="https://aaronryu.github.io/2019/03/24/only-one-page-for-functional-programming/closure.svg">
-<meta property="og:image" content="https://aaronryu.github.io/2019/03/24/only-one-page-for-functional-programming/functor-example.svg">
-<meta property="og:image" content="https://aaronryu.github.io/2019/03/24/only-one-page-for-functional-programming/functor-definition.svg">
-<meta property="og:image" content="https://aaronryu.github.io/2019/03/24/only-one-page-for-functional-programming/functor-return-functor.svg">
-<meta property="og:image" content="https://aaronryu.github.io/2019/03/24/only-one-page-for-functional-programming/monad-return-functor.svg">
-<meta property="og:image" content="https://aaronryu.github.io/2019/03/24/only-one-page-for-functional-programming/monad-definition.svg">
-<meta property="og:image" content="https://aaronryu.github.io/2019/03/24/only-one-page-for-functional-programming/monad-composition.svg">
-<meta property="og:updated_time" content="2019-03-24T12:54:34.334Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="한 장으로 보는 함수형 프로그래밍 - 클로저, 커링, Functor, 모나드">
-<meta name="twitter:description" content="Swift 를 무턱대고 집어서 개인 프로젝트를 진행하던 중 함수형 프로그래밍 개념을 처음 제대로 마주했습니다. 개념을 제대로 모른채 사용해왔었지만 (사용은 정말 쉬우니까요) 이번 기회로 한번 정리해보았습니다. 클로저, 커링, Functor, 모나드. 희안하게 이름만 들어도 배우고 싶지 않은 ‘함수형 프로그래밍’을 처음 접하는 분들에게 도움이 되었으면 좋겠습">
-<meta name="twitter:image" content="https://aaronryu.github.io/2019/03/24/only-one-page-for-functional-programming/closure.svg">
+<meta name="twitter:title" content="Crucian Carp">
+<meta name="twitter:description" content="Cool heads but warm hearts">
 
 
 
-<link rel="alternative" href="atom.xml" title="한 장으로 보는 함수형 프로그래밍 - 클로저, 커링, Functor, 모나드" type="application/atom+xml">
+<link rel="alternative" href="atom.xml" title="Crucian Carp" type="application/atom+xml">
 
 
 
@@ -132,10 +122,6 @@
             <div class="navbar-end">
                 
                 
-                <a class="navbar-item is-hidden-tablet catalogue" title="Catalogue" href="javascript:;">
-                    <i class="fas fa-list-ul"></i>
-                </a>
-                
                 
                 <a class="navbar-item search" title="Search" href="javascript:;">
                     <i class="fas fa-search"></i>
@@ -150,6 +136,17 @@
         <div class="container">
             <div class="columns">
                 <div class="column is-9-tablet is-9-desktop is-9-widescreen has-order-2 column-main"><div class="card">
+    <div class="card-content">
+        <nav class="breadcrumb" aria-label="breadcrumbs">
+        <ul>
+            <li><a href="/tags">Tags</a></li>
+            <li class="is-active"><a href="#" aria-current="page">커링</a></li>
+        </ul>
+        </nav>
+    </div>
+</div>
+
+    <div class="card">
     
     <div class="card-content article ">
         
@@ -169,7 +166,7 @@
         
         <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
             
-                한 장으로 보는 함수형 프로그래밍 - 클로저, 커링, Functor, 모나드
+                <a class="has-link-black-ter" href="/2019/03/24/only-one-page-for-functional-programming/">한 장으로 보는 함수형 프로그래밍 - 클로저, 커링, Functor, 모나드</a>
             
         </h1>
         <div class="content">
@@ -379,15 +376,6 @@
 
         </div>
         
-        <div class="level is-size-7 is-uppercase">
-            <div class="level-start">
-                <div class="level-item">
-                    <span class="is-size-6 has-text-grey has-mr-7">#</span>
-                    <a class="has-link-grey -link" href="/tags/Closure/">Closure</a>, <a class="has-link-grey -link" href="/tags/Curring/">Curring</a>, <a class="has-link-grey -link" href="/tags/Functional-Programming/">Functional Programming</a>, <a class="has-link-grey -link" href="/tags/Functor/">Functor</a>, <a class="has-link-grey -link" href="/tags/High-order-Function/">High-order Function</a>, <a class="has-link-grey -link" href="/tags/Monad/">Monad</a>, <a class="has-link-grey -link" href="/tags/고차함수/">고차함수</a>, <a class="has-link-grey -link" href="/tags/모나드/">모나드</a>, <a class="has-link-grey -link" href="/tags/커링/">커링</a>, <a class="has-link-grey -link" href="/tags/클로저/">클로저</a>, <a class="has-link-grey -link" href="/tags/펑터/">펑터</a>, <a class="has-link-grey -link" href="/tags/함수형-프로그래밍/">함수형 프로그래밍</a>
-                </div>
-            </div>
-        </div>
-        
         
         
     </div>
@@ -398,45 +386,9 @@
 
 
 
-<div class="card card-transparent">
-    <div class="level post-navigation is-flex-wrap is-mobile">
-        
-        
-        <div class="level-end">
-            <a class="level level-item has-link-grey  article-nav-next" href="/2019/03/02/singleton-pattern/">
-                <span class="level-item">6. 싱글턴 패턴</span>
-                <i class="level-item fas fa-chevron-right"></i>
-            </a>
-        </div>
-        
-    </div>
-</div>
 
 
 
-<div class="card">
-    <div class="card-content">
-        <h3 class="title is-5 has-text-weight-normal">Comments</h3>
-        
-<script>
-    var disqus_config = function () {
-        this.page.url = 'https://aaronryu.github.io/2019/03/24/only-one-page-for-functional-programming/';
-        this.page.identifier = '2019/03/24/only-one-page-for-functional-programming/';
-    };
-    (function() {
-        var d = document, s = d.createElement('script');  
-        s.src = '//' + 'aaronryu' + '.disqus.com/embed.js';
-        s.setAttribute('data-timestamp', +new Date());
-        (d.head || d.body).appendChild(s);
-    })();
-</script>
-
-<div id="disqus_thread">
-    
-    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-</div>
-    </div>
-</div>
 
 </div>
                 
@@ -448,81 +400,6 @@
 <div class="column is-3-tablet is-3-desktop is-3-widescreen  has-order-1 column-left is-sticky">
     
         
-<div class="card widget" id="toc">
-    <div class="card-content">
-        <div class="menu">
-            <h3 class="menu-label">
-                Catalogue
-            </h3>
-            <ul class="menu-list"><li>
-        <a class="is-flex" href="#‘함수’형-프로그래밍">
-        <span class="has-mr-6">1</span>
-        <span>‘함수’형 프로그래밍</span>
-        </a><ul class="menu-list"><li>
-        <a class="is-flex" href="#함수-포인터">
-        <span class="has-mr-6">1.1</span>
-        <span>함수 포인터</span>
-        </a></li><li>
-        <a class="is-flex" href="#함수-값">
-        <span class="has-mr-6">1.2</span>
-        <span>함수 값</span>
-        </a></li></ul></li><li>
-        <a class="is-flex" href="#클로저-람다-익명함수">
-        <span class="has-mr-6">2</span>
-        <span>클로저 (람다, 익명함수)</span>
-        </a><ul class="menu-list"><li>
-        <a class="is-flex" href="#Swift-클로저">
-        <span class="has-mr-6">2.1</span>
-        <span>Swift 클로저</span>
-        </a></li><li>
-        <a class="is-flex" href="#함수객체">
-        <span class="has-mr-6">2.2</span>
-        <span>함수객체</span>
-        </a></li></ul></li><li>
-        <a class="is-flex" href="#고차함수">
-        <span class="has-mr-6">3</span>
-        <span>고차함수</span>
-        </a></li><li>
-        <a class="is-flex" href="#커링">
-        <span class="has-mr-6">4</span>
-        <span>커링</span>
-        </a></li><li>
-        <a class="is-flex" href="#Functor">
-        <span class="has-mr-6">5</span>
-        <span>Functor</span>
-        </a><ul class="menu-list"><li>
-        <a class="is-flex" href="#Mapping">
-        <span class="has-mr-6">5.1</span>
-        <span>Mapping</span>
-        </a></li><li>
-        <a class="is-flex" href="#Mappable">
-        <span class="has-mr-6">5.2</span>
-        <span>Mappable</span>
-        </a></li><li>
-        <a class="is-flex" href="#Functor-Mappable">
-        <span class="has-mr-6">5.3</span>
-        <span>Functor = Mappable</span>
-        </a><ul class="menu-list"><li>
-        <a class="is-flex" href="#Haskell’s-Functor">
-        <span class="has-mr-6">5.3.1</span>
-        <span>Haskell’s Functor</span>
-        </a></li></ul></li></ul></li><li>
-        <a class="is-flex" href="#Monad">
-        <span class="has-mr-6">6</span>
-        <span>Monad</span>
-        </a><ul class="menu-list"><li>
-        <a class="is-flex" href="#Monad-1">
-        <span class="has-mr-6">6.1</span>
-        <span>Monad?</span>
-        </a></li><li>
-        <a class="is-flex" href="#Function-Composition">
-        <span class="has-mr-6">6.2</span>
-        <span>Function Composition</span>
-        </a></li></ul></li></ul>
-        </div>
-    </div>
-</div>
-
     
         
 <div class="card widget">
