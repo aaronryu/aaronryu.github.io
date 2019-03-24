@@ -2,17 +2,17 @@
 <html lang="en">
 <head><meta name="generator" content="Hexo 3.8.0">
     <meta charset="utf-8">
-<title>Archives: 2018 - Crucian Carp</title>
+<title>Category: Swift 4+ - Crucian Carp</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="naver-site-verification" content="2316a6af47a7b653c7f6af966d7c718fb98027ed">
 
-<link rel="canonical" href="https://aaronryu.github.io/archives/2018/">
+<link rel="canonical" href="https://aaronryu.github.io/categories/language/swift-4/">
 
 
     <meta name="description" content="Cool heads but warm hearts">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Crucian Carp">
-<meta property="og:url" content="https://aaronryu.github.io/archives/2018/index.html">
+<meta property="og:url" content="https://aaronryu.github.io/categories/Language/Swift-4/index.html">
 <meta property="og:site_name" content="Crucian Carp">
 <meta property="og:description" content="Cool heads but warm hearts">
 <meta property="og:locale" content="en">
@@ -135,37 +135,72 @@
     <section class="section">
         <div class="container">
             <div class="columns">
-                <div class="column is-9-tablet is-9-desktop is-9-widescreen has-order-2 column-main">
-
-<div class="card widget">
+                <div class="column is-9-tablet is-9-desktop is-9-widescreen has-order-2 column-main"><div class="card">
     <div class="card-content">
-        <h3 class="tag is-link">
-        2018
-        </h3>
-        <div class="timeline">
-        
-            <article class="media">
-                
-                <div class="media-content">
-                    <div class="content">
-                        <time class="has-text-grey is-size-7 is-block is-uppercase" datetime="2018-12-29T15:13:33.000Z">2018-12-30</time>
-                        <a href="/2018/12/30/a-introduction-to-design-patterns/" class="has-link-black-ter is-size-6">1. 디자인 패턴에 앞서</a>
-                        <div class="level article-meta is-mobile">
-                            <div class="level-left">
-                                
-                                <div class="level-item is-size-7 is-uppercase">
-                                <a class="has-link-grey -link" href="/categories/Design-Pattern/">Design Pattern</a>
-                                </div>
-                                
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </article>
-        
-        </div>
+        <nav class="breadcrumb" aria-label="breadcrumbs">
+        <ul>
+            <li><a href="/categories">Categories</a></li>
+            
+            <li><a href="/categories/Language/">Language</a></li>
+            
+            <li class="is-active"><a href="#" aria-current="page">Swift 4+</a></li>
+        </ul>
+        </nav>
     </div>
 </div>
+
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <!-- <time class="level-item has-text-grey" datetime="2019-03-09T07:24:17.000Z">2019-03-09</time> -->
+                <div class="level-item has-text-grey">2019-03-09</div>
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/categories/Language/">Language</a>&nbsp;/&nbsp;<a class="has-link-grey -link" href="/categories/Language/Swift-4/">Swift 4+</a>
+                </div>
+                
+                
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2019/03/09/swift-keyword-open/">Swift 4+ Keywords - &#34;open&#34;</a>
+            
+        </h1>
+        <div class="content">
+            <h1 id="Java-Class"><a href="#Java-Class" class="headerlink" title="Java - Class"></a>Java - Class</h1><p>자바에서는 Class 를 정의하면 기본적으로 상속이 가능합니다.</p>
+<h1 id="Java-Abstract-Class"><a href="#Java-Abstract-Class" class="headerlink" title="Java - Abstract Class"></a>Java - Abstract Class</h1><p>자바에서는 공통된 부분은 구현해놓고, 변경이 필요한 부분은 추상 메서드로 분리하여 상속한 클래스에서 구현하도록 강제합니다. 이 전략 패턴을 위해 추상 클래스을 제공합니다. 추상 클래스는 아래 두 부분으로 구성됩니다.</p>
+<ol>
+<li><strong>변경이 필요한 부분</strong>: 추상 클래스 상속 시 따로 정의해야하는 추상 메서드와 <strong>(오버라이딩 필수)</strong></li>
+<li><strong>공통 부분</strong>: 기본으로 제공되는 메서드 <strong>(오버라이딩 불가)</strong></li>
+</ol>
+<p>기본 메서드는 일반 상속과 달리 상속임에도 오버라이딩이 불가능한 반면 추상 메서드는 상속 시 꼭 오버라이딩을 통해 구현해주어야합니다. <strong>Swift 에서 “open” 키워드가 Java - Abstract Class 와 동일</strong>합니다.</p>
+<h1 id="Swift-Open"><a href="#Swift-Open" class="headerlink" title="Swift - Open"></a>Swift - Open</h1><figure class="highlight swift hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">open</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">User</span> </span>&#123;</span><br><span class="line">    <span class="hljs-keyword">open</span> <span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">login</span><span class="hljs-params">()</span></span> &#123; &#125;</span><br><span class="line">    <span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">playGame</span><span class="hljs-params">()</span></span> &#123; &#125;</span><br><span class="line">    <span class="hljs-keyword">public</span> <span class="hljs-keyword">init</span>() &#123; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="“public”-Uninheritable-Callable"><a href="#“public”-Uninheritable-Callable" class="headerlink" title="“public” = Uninheritable, Callable"></a>“public” = Uninheritable, Callable</h2><p><strong>Swift 에서는</strong> Java - Class 와 달리 class 가 <strong>기본적으로 상속가능하지 않습니다.</strong> <strong>public 도</strong> 마찬가지로 Java - Public 과 달리 <strong>기본적으로 상속가능하지 않습니다.</strong> struct 도 마찬가지입니다.</p>
+<h2 id="“open”-Inheritable-Callable"><a href="#“open”-Inheritable-Callable" class="headerlink" title="“open” = Inheritable, Callable"></a>“open” = Inheritable, Callable</h2><p><strong>클래스</strong>를 상속을 하기 위해서는 class 에 상속이 가능하다는 의미의 “open” 키워드를 추가해야합니다. <strong>함수</strong>에 “open” 키워드를 사용한다면 클래스 전체가 아니라 함수 레벨에서 ‘상속 가능한 함수’와 ‘상속 불가능한 함수’들을 쉽게 관리할 수 있습니다.</p>
+<p>Java 와 Swift 의 상속에 대한 처리는 완전히 반대입니다. Public 한 클래스와 함수들에게 <strong>기본적으로 상속 가능</strong>하게 하고 상속을 제한하기 위해서 private 나 protected 와 같은 접근 제한자를 사용하는 <strong>Java</strong> 와 반대로 <strong>Swift</strong> 는 개발자들에게 <strong>기본적으로 모두 상속 불가능</strong>하게 하고 상속을 하기위해선 open 을 명시하게끔 제한함으로써 잘못 상속하는걸 방지합니다.</p>
+<hr>
+<p>출처: <a href="https://www.hackingwithswift.com/example-code/language/what-does-the-open-keyword-do" target="_blank" rel="noopener">https://www.hackingwithswift.com/example-code/language/what-does-the-open-keyword-do</a></p>
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+
+
+
 
 
 </div>
