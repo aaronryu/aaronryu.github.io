@@ -4,7 +4,7 @@
 
     <sitemap>
         <loc>https://aaronryu.github.io/post-sitemap.xml</loc>
-        <lastmod>2019-03-27T17:20:04.713Z</lastmod>
+        <lastmod>2019-03-24T22:09:10.133Z</lastmod>
     </sitemap>
 
     <sitemap>
@@ -15,11 +15,6 @@
     <sitemap>
         <loc>https://aaronryu.github.io/category-sitemap.xml</loc>
         <lastmod>2019-02-27T16:33:44.365Z</lastmod>
-    </sitemap>
-
-    <sitemap>
-        <loc>https://aaronryu.github.io/tag-sitemap.xml</loc>
-        
     </sitemap>
 
 </sitemapindex>
