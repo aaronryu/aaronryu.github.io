@@ -281,7 +281,10 @@
 <li>‘함수’를 <strong>반환</strong>하는 함수</li>
 </ol>
 <blockquote>
-<p><strong>커링(Curring)</strong>은 <strong>‘함수’가 ‘함수’를 반환하는 것</strong>을 의미합니다.</p>
+<p><strong>커링(Curring)</strong>은 <strong>‘함수’가 ‘함수’를 반환하는 것</strong>을 의미합니다. </p>
+<ul>
+<li>일반적으로 <strong>Swift</strong> 에서 <strong>커링</strong>은 <strong>함수가 ‘클로저’를 반환</strong>하는 방식으로 많이 사용됩니다.</li>
+</ul>
 </blockquote>
 <figure class="highlight swift hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">curringExample</span>: <span class="hljs-params">(a: Int, b: Int, <span class="hljs-built_in">c</span>: Int)</span></span> -&gt; (<span class="hljs-type">Int</span>, <span class="hljs-type">Int</span>) -&gt; (<span class="hljs-type">Bool</span>) &#123; ... &#125;</span><br></pre></td></tr></table></figure>
 <p>위 <code>curringExample</code> 예를 보면 a, b, c 파라미터를 받아 <code>(Int, Int) 두 파라미터를 받아 -&gt; (Bool) 을 반환하는 함수</code>를 <strong>반환</strong>합니다</p>
@@ -301,12 +304,12 @@
 </ul>
 <center><img src="/2019/03/24/only-one-page-for-functional-programming/functor-example.svg"></center>
 
-<p><strong>각 원소에 대한 매핑 함수를 적용할 수 있음</strong>을 Mappable 로 정의한다면, 예로 살펴본 리스트는 <strong>Mappable 데이터 구조</strong>라고 정의할 수 있습니다. 위 그림 예는 Int 데이터 구조에서 String 데이터 구조로 각 원소에 대해 stringfy 한 Functor 의 예입니다.</p>
+<p><strong>각 원소에 대한 매핑 함수를 적용할 수 있음</strong>을 Mappable 로 정의한다면, 예로 살펴본 리스트는 <strong>Mappable 데이터 구조</strong>라고 정의할 수 있습니다. 위 그림 예는 Int 데이터 구조에서 String 데이터 구조로 각 원소에 대해 stringify 한 Functor 의 예입니다.</p>
 <ul>
 <li><strong>Functor</strong> 정의</li>
 </ul>
 <blockquote>
-<p><strong>Functor</strong> 는 <strong>Mappable 데이터 구조</strong><a href="https://medium.com/@sjsyrek/five-minutes-to-functor-83ef9075978b" target="_blank" rel="noopener">^9</a>입니다.<br>각 원소에 대한 매핑 함수를 적용할 수 있는 데이터 구조라면 Functor 로 부를 수 있습니다.</p>
+<p><strong>Functor</strong> 는 <strong>Mappable (Mapping 함수를 갖는) 데이터 구조</strong><a href="https://medium.com/@sjsyrek/five-minutes-to-functor-83ef9075978b" target="_blank" rel="noopener">^9</a>입니다.<br>각 원소에 대한 매핑 함수를 적용할 수 있는 데이터 구조라면 Functor 로 부를 수 있습니다.</p>
 </blockquote>
 <center><img src="/2019/03/24/only-one-page-for-functional-programming/functor-definition.svg"></center>
 
@@ -314,7 +317,7 @@
 <li><strong>‘단위 원소’들로 구성된 데이터 구조</strong></li>
 <li><strong>각 ‘단위 원소’에서 ‘단위 윈소’로의 Mapping 함수</strong></li>
 </ol>
-<p>어떤 <strong>1. 데이터 구조</strong>든 원하는 연산을 적용하고싶다면 데이터 구조안의 <strong>단위 원소</strong>가 어떤 타입(T)이고, <strong>2. 단위 원소(T)에 대한 Mapping</strong>만 정의하면 됩니다. 1.을 클래스의 프로퍼티, 2.를 클래스의 메서드로 본다면 Functor 를 <strong>Function Object, 함수객체</strong> 로 부르기도 합니다.<a href="https://en.wikipedia.org/wiki/Function_object" target="_blank" rel="noopener">^10</a></p>
+<p>어떤 <strong>1. 데이터 구조</strong>든 원하는 연산을 적용하고싶다면 데이터 구조안의 <strong>단위 원소</strong>가 어떤 타입(T)이고, <strong>2. 단위 원소(T)에 대한 Mapping</strong>만 정의하면 됩니다. 1.을 클래스의 프로퍼티, 2.를 클래스의 메서드로 본다면 <strong>Functor 를 Function Object, 함수객체로 부르기도 합니다.</strong><a href="https://en.wikipedia.org/wiki/Function_object" target="_blank" rel="noopener">^10</a></p>
 <blockquote>
 <p><strong>Functor</strong> 는 <strong>범주론(Category Theory)</strong>에서 <strong>카테고리에서 동일 카테고리로 사상</strong>되는 개념에서 유래했습니다. <strong>데이터 구조에서 동일 데이터 구조로 각 단위 원소들에 대해 Mapping</strong>하는것과 개념적으로 동일한 것을 알 수 있습니다. 이처럼 데이터 구조(카테고리)는 바뀌지 않은 채 값만 Mapping 되는 것을 범주론에서는 <strong>natural transformation<a href="https://en.wikipedia.org/wiki/Natural_transformation" target="_blank" rel="noopener">^6</a></strong> 라고 정의합니다.</p>
 </blockquote>
@@ -378,7 +381,7 @@
 <p>Functor 는 자신의 데이터 구조의 내부 원소에서 그에 대한 연산을 수행하고 결과 원소를 데이터 구조에 Mapping 하여 반환하기 때문입니다.</p>
 <center><img src="/2019/03/24/only-one-page-for-functional-programming/monad-return-functor.svg"></center>
 
-<p>불필요하게 두 번 감싸지 않고 Exception 상태만을 포함한 데이터 구조를 반환하기 위하여 Mapping 함수의 결과를 그대로 반환하고, Mapping 함수 수행 전에 갖고있는 데이터 구조에서 값을 추출하는 Unwrap 함수를 명시합니다. 이를 flatMap 함수라고 부르며 이 flatMap 으로 얻어진 ‘데이터 구조의 내부 원소’에 대한 Mapping 결과인 ‘데이터 구조’를 바로 반환하도록 하는것이 <strong>모나드</strong> 패턴입니다.</p>
+<p>불필요하게 두 번 감싸지 않고 Exception 상태만을 포함한 데이터 구조를 반환하기 위하여 Mapping 함수의 결과를 그대로 반환하고, Mapping 함수 수행 전에 갖고있는 데이터 구조에서 값을 추출하는 Unwrap 함수를 명시합니다. 이를 flatMap 함수라고 부르며 이 <strong>flatMap 으로 얻어진 ‘데이터 구조의 내부 원소’</strong>에 대한 <strong>Mapping 결과인 ‘데이터 구조’를 바로 반환</strong>하도록 하는것이 <strong>모나드</strong> 패턴입니다.</p>
 <ul>
 <li><strong>Monad</strong> 정의</li>
 </ul>
@@ -393,15 +396,13 @@
 <li><strong>(1) 데이터 구조에서 ‘단위 원소’을 꺼내는 Unwrap(flatMap) 함수</strong></li>
 </ol>
 <p>모나드에 대한 설명을 보면 Context 와 Content 이 둘을 가진 데이터 타입으로 설명하는 글들이 많습니다. Context 를 값이 있음/없음에 대한 ‘상태’값으로, Content 는 우리가 연산하려는 ‘값’ 내지 ‘결과’값으로 설명합니다. Monad 의 Context 가 꼭 값이 있음/없음의 상태를 가져야하는것은 아니지만 <strong>일반적으로 함수 수행 중에 Exception 이 발생할 수 있는 경우들은 값이 null 인 경우</strong>가 대부분이기 때문에 많은 설명들에서 nullable 로 설명하는것 같습니다. </p>
-<p>모나드를 확실하게 이해했다면 nullable 이 아닌 다른 ‘상태’를 갖게 할 수 있을것 같습니다. 예를 들면 Async 를 위한 데이터 구조의 경우 NotRequested, Requested, Wait, Responsed 와 같이 다양한 상태들을 갖고 각각에 대한 Mapping 함수들도 원하는대로 만들 수 있지 않을까요.</p>
-<h2 id="Function-Composition"><a href="#Function-Composition" class="headerlink" title="Function Composition"></a>Function Composition</h2><p>모나드는 설명드렸듯이 ‘프로그래밍 함수’의 ‘순수함수’화를 위해 ‘함수형 프로그래밍’에 도입된 개념입니다. <strong>순수함수는 두 성질을 갖는데요.</strong> 모나드의 의의는 <strong>결과 데이터 구조가 ‘상태’를 갖는다는것</strong> 뿐만 아니라 순수함수 성질 중 <strong>함수의 합성이 가능</strong>하다는 점도 있습니다.</p>
+<h2 id="Function-Composition"><a href="#Function-Composition" class="headerlink" title="Function Composition"></a>Function Composition</h2><p>모나드는 <strong>결과 데이터 구조가 ‘상태’를 갖는다는것</strong> 뿐만 아니라 <strong>함수의 합성이 가능하다는 성질</strong>도 갖습니다.</p>
 <ul>
-<li><strong>identity</strong>:<br>자기 자신으로 Mapping 할 경우 외/내부 어떤 변화도 없이 처음과 같은 값을 언제나 반환해야한다.</li>
-<li><strong>composition</strong>:<br>두 Mapping 함수 f(x), g(x) 가 있다면 두 함수를 합성시 f(g(x)) = (f.g)(x) 의 결과를 갖는다.</li>
+<li><strong>composition</strong> with <strong>associative</strong>:<br>두 Mapping 함수 f(x), g(x) 가 있다면 두 함수를 합성시 f(g(x)) = (f.g)(x) 의 결과를 갖는다.<br>또한 associative 성질에 의해 f(g(x)) = (f.g)(x) = (g.f)(x) = g(f(x)) 도 만족한다.</li>
 </ul>
 <center><img src="/2019/03/24/only-one-page-for-functional-programming/monad-composition.svg"></center>
 
-<p>이렇게 함수형 프로그래밍의 클로저, 고차함수, 커링, Functor, 모나드 총 5개의 개념을 다뤄보았습니다. 질문이나 논의할 사항이 있으면 댓글이나 개인적으로 알려주시면 감사하겠습니다. 특히 이번 글은 시니어 개발자분의 도움으로 틀린 내용들을 가다듬고 다시 보완할 수 있었습니다. 다음 글에서는 Swift 의 클로저가 외부 변수를 참조하면서 생기는 참조 순환 문제와 그걸 해결하기 위한 기법들을 설명하겠습니다.</p>
+<p>이렇게 함수형 프로그래밍의 클로저, 고차함수, 커링, Functor, 모나드 총 5개의 개념을 다뤄보았습니다. 질문이나 논의할 사항이 있으면 댓글이나 개인적으로 알려주시면 감사하겠습니다. 특히 이번 글은 시니어 개발자분의 도움으로 틀린 내용들을 가다듬고 다시 보완할 수 있었습니다. (감사합니다 :)) 다음 글에서는 Swift 의 클로저가 외부 변수를 참조하면서 생기는 참조 순환 문제와 그걸 해결하기 위한 기법들을 설명하겠습니다.</p>
 <hr>
 <p>참조</p>
 <ol>
