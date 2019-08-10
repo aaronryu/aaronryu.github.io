@@ -8,8 +8,32 @@
     </url>
 
     <url>
+        <loc>https://aaronryu.github.io/2019/06/29/ios-design-patterns/</loc>
+        <lastmod>2019-08-10T16:31:32.700Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://aaronryu.github.io/2019/08/10/software-licences/</loc>
+        <lastmod>2019-08-10T16:30:00.720Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://aaronryu.github.io/2019/03/09/swift-keyword-open/</loc>
+        <lastmod>2019-06-29T05:22:17.368Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
         <loc>https://aaronryu.github.io/2019/05/27/coroutine-and-thread/</loc>
-        <lastmod>2019-05-26T18:22:09.518Z</lastmod>
+        <lastmod>2019-06-02T17:01:17.644Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
 
@@ -18,14 +42,6 @@
     <url>
         <loc>https://aaronryu.github.io/2019/03/02/singleton-pattern/</loc>
         <lastmod>2019-05-25T10:19:06.697Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.6</priority>
-
-    </url>
-
-    <url>
-        <loc>https://aaronryu.github.io/2019/03/09/swift-keyword-open/</loc>
-        <lastmod>2019-04-07T13:52:25.700Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
 
