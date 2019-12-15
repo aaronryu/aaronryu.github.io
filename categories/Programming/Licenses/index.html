@@ -155,6 +155,80 @@
         
         <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
             <div class="level-left">
+                <!-- <time class="level-item has-text-grey" datetime="2019-12-14T17:32:23.000Z">2019-12-15</time> -->
+                <div class="level-item has-text-grey">2019-12-15</div>
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/categories/Programming/">Programming</a>&nbsp;/&nbsp;<a class="has-link-grey -link" href="/categories/Programming/Licenses/">Licenses</a>
+                </div>
+                
+                
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2019/12/15/one-page-for-regular-expression/">한 장으로 보는 정규표현식</a>
+            
+        </h1>
+        <div class="content">
+            <h1 id="중요성"><a href="#중요성" class="headerlink" title="중요성"></a>중요성</h1><p>개인적으로 좋아했던 구글 Tech Lead 유튜버가 개발자라면 당연히 알아야할 몇가지 스킬을 업로드<a href="https://www.youtube.com/watch?v=3MtrUf81k6c" target="_blank" rel="noopener">^1</a>한적이 있다.</p>
+<ol>
+<li>Regular expressions</li>
+<li>SQL</li>
+<li>Debugging Skills (problem solving).</li>
+<li>Tooling language</li>
+<li>Anti-Social skill </li>
+</ol>
+<p>이 중 오늘의 주제는 가장 첫번째에 언급된 <strong>정규표현식</strong>이다. 중간에 5번이라는 스파이가 있는듯 한데 개발자는 사실상 코딩보단 말을 많이하는 직업이라 생각해서 그리 좋은 전략은 아닌듯하다. <strong>정규표현식</strong>은 학사때도 나중에 공부해야지 하고 메모는 많이 해놓았는데 정작 제대로 외우진 않고 매번 필요할때마다 찾아 쓴듯하다. 최근에 정리하였는데 나름 문법처럼 분류해서 외우면 쉽다. 사실 Regex 는 Tech Lead 말대로 개발하는데 너무 널리 사용된다. 텍스트 검색, 정확히는 패턴 매칭에 사용되는데 검색이라면 아래같이 수많은 유즈케이스들이 있다.</p>
+<ul>
+<li>grep 을 통한 로그/텍스트 분석</li>
+<li>개발하고 있는 코드/디렉토리 검색</li>
+<li>commit 이전 코드 체킹</li>
+<li>웹 크롤링</li>
+<li>URL 파싱</li>
+<li>값/포맷 validation</li>
+</ul>
+<h1 id="개요"><a href="#개요" class="headerlink" title="개요"></a>개요</h1><p>Regex 는 처음보았을때나 공부하기 전까지는 암호내지 외계어처럼 보이긴 한다. 우리가 흔히 접하는 언어는 semantic 이 word 혹은 그 조합으로 표현되지만, semantic 들이 각각 하나의 charactor 에 매핑되어있는건 암호체계와 동일하기 때문이다. 이것도 syntax 로 분류하면 아래와 같이 나뉘어지는데, 정규표현식을 익히는데 많은 도움이 된다.</p>
+<center><img src="/2019/12/15/one-page-for-regular-expression/one-page-regex.png"></center>
+
+<p>기본적으로 특정 단어를 검색하기 위해 정규표현식을 사용하는데, 단순히 찾고싶은 <strong>1. 특정 단어</strong>를 명시하는 방법도 있지만 <strong>2. 글자나 숫자 조합</strong>으로써 단어를 명시할수도 있다. 정규표현식은 이에 두 가지 방법을 제공한다.</p>
+<h1 id="기본"><a href="#기본" class="headerlink" title="기본"></a>기본</h1><h2 id="단어"><a href="#단어" class="headerlink" title="단어"></a>단어</h2><p>간단하게 검색하고 싶은 <strong>특정 단어</strong>만 명시하면 된다.<br>만약 여러 단어를 한번에 검색하고 싶다면 <strong>()</strong> 를 사용하여 <strong>|</strong> 를 통해 다수의 단어를 넣으면 된다.</p>
+<h2 id="글자-타입"><a href="#글자-타입" class="headerlink" title="글자 - 타입"></a>글자 - 타입</h2><p><strong>특정 글자</strong>를 명시하고 싶을땐 <strong>단어</strong>와 같은 방식으로 사용하면 되는데 <strong>[]</strong>를 통해 여러 글자를 찾을수도 있고, <strong>[]</strong> 내부에서 확장 표현을 통해 A 부터 Z 까지(<strong>A-Z</strong>) 규칙을 추가하거나 특정 글자를 제외할 수도 있다.</p>
+<p>숫자 글자를 검색하고 싶다면 위에서 배운대로 <strong>[0-9]</strong> 도 좋지만 <strong>‘숫자’ 글자 타입</strong>을 명시하여 검색할수도 있다. <strong>글자의 타입</strong>을 명시하기 위한것이 역슬래시(\)며 예를 들면 <strong>‘숫자’ 글자 타입</strong>은 <strong>\d</strong> 로 표현할 수 있고 <strong>‘숫자가 아닌’ 글자 타입</strong>은 <strong>\D</strong> 와 같이 대문자로 표기할 수 있다.</p>
+<hr>
+<h1 id="확장"><a href="#확장" class="headerlink" title="확장"></a>확장</h1><h2 id="앞-뒤"><a href="#앞-뒤" class="headerlink" title="앞/뒤"></a>앞/뒤</h2><p>특정 단어 혹은 글자를 찾더라도 글의 <strong>가장 앞쪽에</strong> 혹은 <strong>가장 뒷쪽에</strong> 존재하는 것을 찾고 싶을때 사용한다.</p>
+<h2 id="횟수"><a href="#횟수" class="headerlink" title="횟수"></a>횟수</h2><p>특정 단어 혹은 글자가 <strong>몇번 반복된 것</strong>을 검색하고 싶은지 명시할 수 있다.</p>
+<blockquote>
+<p>(abc){1} = abc<br>(abc){1,3} = abc, abcabc, abcabcabc<br>(abc)? = (공백), abc<br>(abc)+ = abc, abcabc …</p>
+</blockquote>
+<h2 id="캡쳐"><a href="#캡쳐" class="headerlink" title="캡쳐"></a>캡쳐</h2><p>앞부분에서 설명하였듯 패턴으로 검색할 단어를 집합으로 묶을때 사용하거나 <strong>검색한 결과물</strong>들을 활용하려고 할때 결과값을 저장하는 역할을 한다.</p>
+<hr>
+<p>정규표현식은 한번 배워두면 어떤 개발 언어에서든 모든곳에서 범용적으로 사용가능하며, 개발에서 활용할 수 있는 경우의 수가 매우 많아 유용하다. 이렇게 정리함으로써 이젠 매번 검색할일 없이 잘 사용할 수 있을듯하다.</p>
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
                 <!-- <time class="level-item has-text-grey" datetime="2019-08-10T06:31:23.000Z">2019-08-10</time> -->
                 <div class="level-item has-text-grey">2019-08-10</div>
                 
@@ -343,7 +417,7 @@
                 <span class="level-item">Programming</span>
             </span>
             <span class="level-end">
-                <span class="level-item tag">2</span>
+                <span class="level-item tag">3</span>
             </span>
         </a><ul><li>
         <a class="level is-marginless" href="/categories/Programming/Develop/">
@@ -359,7 +433,7 @@
                 <span class="level-item">Licenses</span>
             </span>
             <span class="level-end">
-                <span class="level-item tag">1</span>
+                <span class="level-item tag">2</span>
             </span>
         </a></li></ul></li><li>
         <a class="level is-marginless" href="/categories/Workplace/">
@@ -429,7 +503,7 @@
                         Posts
                     </p>
                     <p class="title has-text-weight-normal">
-                        12
+                        13
                     </p>
                 </div>
             </div>
@@ -459,6 +533,19 @@
             
             <div class="media-content">
                 <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-12-14T17:32:23.000Z">2019-12-15</time></div>
+                    <a href="/2019/12/15/one-page-for-regular-expression/" class="has-link-black-ter is-size-6">한 장으로 보는 정규표현식</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/Programming/">Programming</a> / <a class="has-link-grey -link" href="/categories/Programming/Licenses/">Licenses</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <div class="media-content">
+                <div class="content">
                     <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-08-10T06:31:23.000Z">2019-08-10</time></div>
                     <a href="/2019/08/10/software-licences/" class="has-link-black-ter is-size-6">오픈 소스(공개 소프트웨어)의 다양한 라이센스들</a>
                     <p class="is-size-7 is-uppercase">
@@ -476,19 +563,6 @@
                     <a href="/2019/06/29/ios-design-patterns/" class="has-link-black-ter is-size-6">개발 일지 - iOS 아키텍쳐 패턴 MVC, MVVM, VIPER</a>
                     <p class="is-size-7 is-uppercase">
                         <a class="has-link-grey -link" href="/categories/Programming/">Programming</a> / <a class="has-link-grey -link" href="/categories/Programming/Develop/">Develop</a>
-                    </p>
-                </div>
-            </div>
-        </article>
-        
-        <article class="media">
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-05-26T18:20:22.000Z">2019-05-27</time></div>
-                    <a href="/2019/05/27/coroutine-and-thread/" class="has-link-black-ter is-size-6">Coroutine, Thread 와의 차이와 그 특징</a>
-                    <p class="is-size-7 is-uppercase">
-                        <a class="has-link-grey -link" href="/categories/Language/">Language</a> / <a class="has-link-grey -link" href="/categories/Language/Kotlin/">Kotlin</a>
                     </p>
                 </div>
             </div>

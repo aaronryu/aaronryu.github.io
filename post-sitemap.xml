@@ -8,8 +8,16 @@
     </url>
 
     <url>
+        <loc>https://aaronryu.github.io/2019/12/15/one-page-for-regular-expression/</loc>
+        <lastmod>2019-12-14T17:33:17.150Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
         <loc>https://aaronryu.github.io/2019/06/29/ios-design-patterns/</loc>
-        <lastmod>2019-08-10T18:26:06.433Z</lastmod>
+        <lastmod>2019-12-08T16:26:22.848Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
 
@@ -17,7 +25,15 @@
 
     <url>
         <loc>https://aaronryu.github.io/2019/08/10/software-licences/</loc>
-        <lastmod>2019-08-10T17:32:49.839Z</lastmod>
+        <lastmod>2019-12-08T15:10:22.012Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>https://aaronryu.github.io/2019/03/24/only-one-page-for-functional-programming/</loc>
+        <lastmod>2019-12-08T15:05:55.564Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
 
@@ -42,14 +58,6 @@
     <url>
         <loc>https://aaronryu.github.io/2019/03/02/singleton-pattern/</loc>
         <lastmod>2019-05-25T10:19:06.697Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.6</priority>
-
-    </url>
-
-    <url>
-        <loc>https://aaronryu.github.io/2019/03/24/only-one-page-for-functional-programming/</loc>
-        <lastmod>2019-04-07T12:52:18.849Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
 

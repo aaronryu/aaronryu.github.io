@@ -36,13 +36,6 @@
     </url>
 
     <url>
-        <loc>https://aaronryu.github.io/categories/Language/Functional-Programming/</loc>
-        <lastmod>2019-04-07T12:52:18.849Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.2</priority>
-    </url>
-
-    <url>
         <loc>https://aaronryu.github.io/categories/Design-Pattern/</loc>
         <lastmod>2019-05-25T10:19:06.697Z</lastmod>
         <changefreq>weekly</changefreq>
@@ -64,13 +57,6 @@
     </url>
 
     <url>
-        <loc>https://aaronryu.github.io/categories/Language/</loc>
-        <lastmod>2019-06-29T05:22:17.368Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.2</priority>
-    </url>
-
-    <url>
         <loc>https://aaronryu.github.io/categories/Language/Swift-4-iOS/</loc>
         <lastmod>2019-06-29T05:22:17.368Z</lastmod>
         <changefreq>weekly</changefreq>
@@ -78,22 +64,36 @@
     </url>
 
     <url>
-        <loc>https://aaronryu.github.io/categories/Programming/Licenses/</loc>
-        <lastmod>2019-08-10T17:32:49.839Z</lastmod>
+        <loc>https://aaronryu.github.io/categories/Language/</loc>
+        <lastmod>2019-12-08T15:05:55.564Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>https://aaronryu.github.io/categories/Programming/</loc>
-        <lastmod>2019-08-10T18:26:06.433Z</lastmod>
+        <loc>https://aaronryu.github.io/categories/Language/Functional-Programming/</loc>
+        <lastmod>2019-12-08T15:05:55.564Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
         <loc>https://aaronryu.github.io/categories/Programming/Develop/</loc>
-        <lastmod>2019-08-10T18:26:06.433Z</lastmod>
+        <lastmod>2019-12-08T16:26:22.848Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>https://aaronryu.github.io/categories/Programming/</loc>
+        <lastmod>2019-12-14T17:33:17.150Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>https://aaronryu.github.io/categories/Programming/Licenses/</loc>
+        <lastmod>2019-12-14T17:33:17.150Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
