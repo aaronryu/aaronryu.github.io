@@ -166,7 +166,7 @@
 <h1 id="상속-객체지향-프로그램"><a href="#상속-객체지향-프로그램" class="headerlink" title="상속 = 객체지향 프로그램?"></a>상속 = 객체지향 프로그램?</h1><p>처음 엔터프라이즈 객체지향 프로그램을 작성한다고 가정해봅시다. 학교에서 공부한대로라면 <strong>객체지향 프로그램은 상속</strong>이라고 배웠습니다. 그래서 우리는 과감히 상위 클래스를 만들고 이를 상속하여 하위 개념에 해당하는 클래스를 활용할 것입니다. 그리고 객체지향 프로그래밍 프로젝트 #1 이라고 이름 짓겠죠. 코드는 아래 헤드퍼스트 책의 예제와 같을 것입니다.</p>
 <h2 id="처음-배웠던-상속"><a href="#처음-배웠던-상속" class="headerlink" title="처음 배웠던 상속"></a>처음 배웠던 상속</h2><ul>
 <li><p><strong>상위 클래스 + 상위 행위</strong></p>
-<figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Duck</span> </span>&#123; swim(), display(), fly(), quack() &#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Duck</span></span></span><br><span class="line"><span class="hljs-class"></span>&#123; swim(), display(), fly(), quack() &#125;</span><br></pre></td></tr></table></figure>
 </li>
 <li><p><strong>하위 클래스 + 상위 행위 확장</strong></p>
 <figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">RedHeadDuck</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Duck</span> </span></span><br><span class="line"><span class="hljs-class"></span>&#123; swim(), display(), fly(), quack() &#125;</span><br><span class="line"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">RubberDuck</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Duck</span> </span></span><br><span class="line"><span class="hljs-class"></span>&#123; swim(), display(), fly()&#123; <span class="hljs-keyword">null</span> &#125;, quack() &#125;</span><br></pre></td></tr></table></figure>
@@ -175,7 +175,7 @@
 <p>상속을 사용하였더니 상위 Duck 클래스에 있는 모든 상위 행위들을 하위 Duck 클래스들이 모두 갖게됩니다. 어떤 <strong>하위 Duck 클래스는 의지와 상관없이 갖고싶지 않지만 무조건 모든 상위 행위를 갖고 확장해야합니다.</strong> 개발에 있어 불필요한 제약을 갖게되는 것입니다. 그럼 아래와 같이 <strong>선택적으로 행위를 가져갈 수 있도록 행위를 인터페이스로 분리해 가져보겠습니다.</strong></p>
 <h2 id="상속-대신-인터페이스"><a href="#상속-대신-인터페이스" class="headerlink" title="상속 대신 인터페이스"></a>상속 대신 인터페이스</h2><ul>
 <li><p><strong>상위 클래스</strong></p>
-<figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Duck</span> </span></span><br><span class="line"><span class="hljs-class"></span>&#123; <span class="hljs-class"><span class="hljs-keyword">interface</span> <span class="hljs-title">Flyable</span></span>;</span><br><span class="line">  <span class="hljs-class"><span class="hljs-keyword">interface</span> <span class="hljs-title">Quackable</span></span>;</span><br><span class="line">  swim(), display() &#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Duck</span> </span></span><br><span class="line"><span class="hljs-class"></span>&#123; swim(), display() &#125;</span><br></pre></td></tr></table></figure>
 </li>
 <li><p><strong>행위 인터페이스</strong></p>
 <figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-class"><span class="hljs-keyword">interface</span> <span class="hljs-title">Flyable</span> </span>&#123; fly() &#125;</span><br><span class="line"><span class="hljs-class"><span class="hljs-keyword">interface</span> <span class="hljs-title">Quackable</span> </span>&#123; quack() &#125;</span><br></pre></td></tr></table></figure>
@@ -689,7 +689,7 @@
                 
                 </a>
                 <p class="is-size-7">
-                &copy; 2019 Aaron Ryu&nbsp;
+                &copy; 2020 Aaron Ryu&nbsp;
                 Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> & <a href="http://github.com/ppoffice/hexo-theme-icarus" target="_blank">Icarus</a>
                 
                 </p>

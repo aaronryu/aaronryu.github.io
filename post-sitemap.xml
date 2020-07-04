@@ -8,6 +8,14 @@
     </url>
 
     <url>
+        <loc>https://aaronryu.github.io/2019/02/21/two-principles-of-design-patterns/</loc>
+        <lastmod>2020-07-04T12:00:08.350Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
         <loc>https://aaronryu.github.io/2019/12/15/one-page-for-regular-expression/</loc>
         <lastmod>2019-12-15T02:47:00.230Z</lastmod>
         <changefreq>weekly</changefreq>
@@ -82,14 +90,6 @@
     <url>
         <loc>https://aaronryu.github.io/2019/02/22/factory-method-and-abstract-factory-pattern/</loc>
         <lastmod>2019-02-27T16:35:04.825Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.6</priority>
-
-    </url>
-
-    <url>
-        <loc>https://aaronryu.github.io/2019/02/21/two-principles-of-design-patterns/</loc>
-        <lastmod>2019-02-27T16:33:57.122Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
 
