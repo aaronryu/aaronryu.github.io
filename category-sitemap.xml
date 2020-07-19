@@ -22,13 +22,6 @@
     </url>
 
     <url>
-        <loc>https://aaronryu.github.io/categories/Design-Pattern/Observer/</loc>
-        <lastmod>2019-03-03T12:10:14.521Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.2</priority>
-    </url>
-
-    <url>
         <loc>https://aaronryu.github.io/categories/Design-Pattern/Singleton/</loc>
         <lastmod>2019-05-25T10:19:06.697Z</lastmod>
         <changefreq>weekly</changefreq>
@@ -85,15 +78,22 @@
     </url>
 
     <url>
-        <loc>https://aaronryu.github.io/categories/Design-Pattern/</loc>
+        <loc>https://aaronryu.github.io/categories/Design-Pattern/Factory/</loc>
         <lastmod>2020-07-04T17:24:15.684Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>https://aaronryu.github.io/categories/Design-Pattern/Factory/</loc>
-        <lastmod>2020-07-04T17:24:15.684Z</lastmod>
+        <loc>https://aaronryu.github.io/categories/Design-Pattern/</loc>
+        <lastmod>2020-07-06T12:16:29.257Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>https://aaronryu.github.io/categories/Design-Pattern/Observer/</loc>
+        <lastmod>2020-07-06T12:16:29.257Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
