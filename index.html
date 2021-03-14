@@ -143,6 +143,10 @@
 
 <h3 id="Filter-Tomcat"><a href="#Filter-Tomcat" class="headerlink" title="Filter (Tomcat)"></a>Filter (Tomcat)</h3><ul>
 <li>Servlet (J2EE 7 표준)스펙에 정의<ul>
+<li>웹 어플리케이션(tomcat) <strong>Deployment Descriptor(web.xml)에 설정</strong><ul>
+<li>이 부분에 대한것도 최신 Spring 에서 설정 가능</li>
+</ul>
+</li>
 <li>Web(Servlet) Container 직전</li>
 </ul>
 </li>
@@ -160,7 +164,10 @@
 </ul>
 <h3 id="Interceptor-Spring"><a href="#Interceptor-Spring" class="headerlink" title="Interceptor (Spring)"></a>Interceptor (Spring)</h3><ul>
 <li>Spring Framework 스펙에 정의<ul>
+<li>Spring <strong>WebApplicationContext에 설정</strong><ul>
 <li>Spring Container 직전</li>
+</ul>
+</li>
 </ul>
 </li>
 <li> <strong>3개</strong>의 함수로 <strong>Controller 이전/이후에 호출</strong><ul>
