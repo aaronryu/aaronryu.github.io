@@ -182,7 +182,28 @@
 <ul>
 <li>컨트롤러 진입 혹은 결과 반환 <strong>시점에 디테일하게 처리해야하는 로직에 적합</strong>합니다. 예를 들어 특정 URL 로 진입되는 요청에 대해서는 컨트롤러 진입 직전에 해당 URL 에 특화된 정보들을 미리 세션에 설정하여 컨트롤러 내부 로직에서 활용할 수 있게 할 수 있습니다. 다른 URL 이라면 본 로직을 수행하지 않도록 조건을 추가할 수도 있습니다.</li>
 </ul>
-<p>웹 서버에서 웹 어플리케이션, 웹 서버와 웹 어플리케이션을 연결하기 위한 CGI 의 예로 Servlet 그리고 Container 를 알아보고, Spring Container 와 Filter, Interceptor 의 차이에 대해 알아보았습니다. Spring 을 공부하시거나 사용하시는 다른 개발자 분들에게 본 글이 도움이 되었길 바랍니다. 참조한 글들도 좋은 글들이니 시간이 되시면 한번씩 훑어보시는걸 추천드립니다.</p>
+<h2 id="다수-Interceptor-와-Filter-의-호출-순서"><a href="#다수-Interceptor-와-Filter-의-호출-순서" class="headerlink" title="다수 Interceptor 와 Filter 의 호출 순서"></a>다수 Interceptor 와 Filter 의 호출 순서</h2><p>필터와 인터셉터는 상황에 따라 여러개를 지정하여 사용할 수 있습니다. 다수의 필터 혹은 인터셉터 사용시 각각의 호출 순서는 설정에 따라 바꿀 수 있는데, 필터도 사실은 DispatcherServlet 호출 전/후에 호출되는 Servlet 설정이기 때문에 tomcat 에서 관리하는것이라 하더라도 인터셉터와 마찬가지로 Spring 설정을 통해 설정할 수 있습니다.</p>
+<p><strong>2개의 필터</strong>와 <strong>2개의 인터셉터</strong>를 사용할때 어떻게 동작하는지 순서를 살펴보기 위해 DispatcherServlet 과 HandlerAdaptor 를 중점적으로 살펴보면 아래와 같습니다.</p>
+<center><img src="/2021/02/14/a-tutorial-for-spring-mvc-and-security/order-of-filters-and-interceptors.png" class=""></center>
+
+<p>정확한 순서는 아래 간략하게 요약한 그림으로 알 수 있습니다.</p>
+<ol>
+<li>doFilter (F1)</li>
+<li>doFilter (F2)</li>
+<li>preHandler (I1)</li>
+<li>preHandler (I2)</li>
+<li><strong>Controller 요청 처리</strong></li>
+<li>postHandler (I2)</li>
+<li>postHandler (I1)</li>
+<li><strong>View 렌더링</strong></li>
+<li>afterCompletion (I2)</li>
+<li>afterCompletion (I1)</li>
+<li>doFilter (F2)</li>
+<li>doFilter (F1)</li>
+</ol>
+<center><img src="/2021/02/14/a-tutorial-for-spring-mvc-and-security/summary-order-of-filters-and-interceptors.png" class=""></center>
+
+<p>웹 서버에서 웹 어플리케이션, 웹 서버와 웹 어플리케이션을 연결하기 위한 CGI 의 예로 Servlet 그리고 Container 를 알아보고, Spring Container 와 Filter, Interceptor 의 차이 그리고 실행 순서에 대해 알아보았습니다. Spring 을 공부하시거나 사용하시는 다른 개발자 분들에게 본 글이 도움이 되었길 바랍니다. 참조한 글들도 좋은 글들이니 시간이 되시면 한번씩 훑어보시는걸 추천드립니다.</p>
 <hr>
 <p>출처: </p>
 <ol>
