@@ -83,7 +83,7 @@
 <p><strong>Integer 에 대한 Wrapper Class Caching 은 -128 ~ 127 값에 대한 객체를 캐싱</strong>해놓습니다.</p>
 </blockquote>
 <hr>
-<h1 id="결론"><a href="#결론" class="headerlink" title="결론"></a>결론</h1><blockquote>
+<h1 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h1><blockquote>
 <p><strong>Wrapper Class 의 동일 여부는 equals() 를 사용합시다.</strong></p>
 </blockquote>
 <p>그렇다면 이제 <code>Integer == Integer</code> 가 어떨때 동작하였고, 어떨때 동작하지 않는지 이유가 명확해졌습니다. Integer 는 <strong>-128 ~ 127</strong> 까지의 값에 대한 객체는 Java 의 <strong>Wrapper Class Caching</strong>에 의해 매번 정의할때마다 메모리에 생성하지 않고, 미리 캐싱되어있는 객체를 사용하게 됩니다. 그리하여 <code>Integer a = 10</code>, <code>Integer b = 10</code> <strong>모두 같은 객체 주소값</strong>을 가지기때문에 <code>a == b</code> 는 <strong><code>10 == 10</code> 값이 같다는 이유가 아닌 <code>9ab2e1 == 9ab2e1</code> 주소가 같다는 이유로 ‘true(같음)’을 반환</strong>하는것이었습니다.</p>
