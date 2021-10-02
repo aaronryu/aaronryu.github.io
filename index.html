@@ -27,7 +27,7 @@
 </ol>
 </blockquote>
 <p><strong>기본 모드</strong>는 <strong>MODE_THREADLOCAL</strong> 였기에, 아무런 설정도 하지 않았던 서버에서는 <strong>메인 Thread</strong>(<strong><code>http-nio-80-exec-3</code></strong>)에서만 SecurityContext 가 반환되었던고, 나머지 <strong>하위 Thread</strong>(<strong><code>ForkJoinPool.commonPool-worker-1~7</code></strong>)에서는 null 이 반환되었던것입니다.</p>
-<h1 id="결론"><a href="#결론" class="headerlink" title="결론"></a>결론</h1><p>SecurityContextHolder 의 기본 설정은 SecurityContext 정보를 Local Thread 만 공유하도록 되어있기 때문에 SecurityContextHolder 를 직접 하위 Thread 안에서 호출하여 사용하는것보다, <strong>메인 Thread 에서 호출하여 해당 값을 하위 Thread 에서 참조하도록 하는것이, 성능적으로나 가시적으로도 더 깔끔한 코드가 될것입니다.</strong> <strong>ParallelStream 혹은 Async 관련된 기능을 사용 시</strong> 하위 Thread 에서 SecurityContextHolder 를 사용해야하는 경우가 있다면 <strong>SecurityContextHolder 의 공유 모드를 MODE_INHERITABLETHREADLOCAL 로 낮추는것을 고려해야합니다.</strong></p>
+<h1 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h1><p>SecurityContextHolder 의 기본 설정은 SecurityContext 정보를 Local Thread 만 공유하도록 되어있기 때문에 SecurityContextHolder 를 직접 하위 Thread 안에서 호출하여 사용하는것보다, <strong>메인 Thread 에서 호출하여 해당 값을 하위 Thread 에서 참조하도록 하는것이, 성능적으로나 가시적으로도 더 깔끔한 코드가 될것입니다.</strong> <strong>ParallelStream 혹은 Async 관련된 기능을 사용 시</strong> 하위 Thread 에서 SecurityContextHolder 를 사용해야하는 경우가 있다면 <strong>SecurityContextHolder 의 공유 모드를 MODE_INHERITABLETHREADLOCAL 로 낮추는것을 고려해야합니다.</strong></p>
 <hr>
 <p>출처:</p>
 <ol>
