@@ -1,28 +1,44 @@
 import { Link } from 'gatsby'
 import { graphql } from 'gatsby'
+import { MDXRenderer } from 'gatsby-plugin-mdx'
 import * as React from 'react'
 import Layout from '../components/layout'
 
 interface Props {
-  data: any
+  data: {
+    contentfulGastbyTutorial: {
+      title: string
+      slug: string
+      creationDate: string
+      body: {
+        childMdx: { body: string },
+      }
+    }
+  }
 }
 
-const Blog: React.FunctionComponent<Props> = ({ data }) => {
-  console.log(data)
-  const blog = data.contentfulGastbyTutorial
-  return (
-    <Layout /* pageTitle="My Blog Posts" */>
-          <article>
-            <h2>
-              <Link to={`/${blog.slug}`}>
-                {blog.title}
-              </Link>
-            </h2>
-            <p>Posted: {blog.creationDate}</p>
-          </article>
-    </Layout>
-  )
-}
+const Blog: React.FunctionComponent<Props> = ({
+  data: {
+    contentfulGastbyTutorial: {
+      title,
+      slug,
+      creationDate,
+      body: {
+        childMdx: { body: mdx },
+      }
+    }
+  }
+}) => (
+  <Layout /* pageTitle="My Blog Posts" */>
+    <header>
+      <h1>{title}</h1>
+      <p>Posted: {creationDate}</p>
+    </header>
+    <div>
+      <MDXRenderer>{mdx}</MDXRenderer>
+    </div>
+  </Layout>
+)
 
 export const query = graphql`
   query($slug: String!) {
@@ -30,9 +46,6 @@ export const query = graphql`
       title
       slug
       creationDate(formatString: "MMMM D, YYYY")
-      contents {
-        raw
-      }
       body {
         childMdx {
           body
