@@ -1,7 +1,6 @@
 import { Link } from 'gatsby'
 import { graphql } from 'gatsby'
 import * as React from 'react'
-import { isConstructorDeclaration } from 'typescript'
 import Layout from '../components/layout'
 
 interface Props {
@@ -33,6 +32,11 @@ export const query = graphql`
       creationDate(formatString: "MMMM D, YYYY")
       contents {
         raw
+      }
+      body {
+        childMdx {
+          body
+        }
       }
     }
   }

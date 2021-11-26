@@ -8,13 +8,12 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
     getFilePostedData(graphql, reporter),
     getContentfulData(graphql, reporter),
   ])
-  
-  filePostedEdged.forEach(childMdx => {
+  filePostedEdged.forEach(edge => {
     createPage({
-      path: childMdx.slug,
+      path: edge.node.childMdx.slug,
       component: `${__dirname}/src/templates/post.tsx`,
       context: {
-        slug: childMdx.slug,
+        slug: edge.node.childMdx.slug,
       }
     })
   })
@@ -33,9 +32,18 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
 async function getFilePostedData(graphql, reporter) {
   const postsResult = await graphql(`
     query {
-      allMdx(sort: {fields: frontmatter___date, order: DESC}) {
-        nodes {
-          slug
+      allFile(
+        filter: {
+          sourceInstanceName: { eq: "blog" }
+          extension: { eq: "mdx" }
+        }
+      ) {
+        edges {
+          node {
+            childMdx {
+              slug
+            }
+          }
         }
       }
     }
@@ -45,7 +53,7 @@ async function getFilePostedData(graphql, reporter) {
     reporter.panic('failed to create posts', postsResult.errors)
   }
 
-  return postsResult.data.allMdx.nodes
+  return postsResult.data.allFile.edges
 }
 
 async function getContentfulData(graphql, reporter) {

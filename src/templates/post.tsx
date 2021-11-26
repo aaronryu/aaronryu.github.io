@@ -1,7 +1,6 @@
 import { Link } from 'gatsby'
 import { graphql } from 'gatsby'
 import * as React from 'react'
-import { isConstructorDeclaration } from 'typescript'
 import Layout from '../components/layout'
 
 interface Props {
@@ -14,7 +13,7 @@ const Post: React.FunctionComponent<Props> = ({ data }) => {
   console.log(idd)
   return (
     <Layout /* pageTitle="My Blog Posts" */>
-          <article>
+          <article key={data.mdx.id}>
             <h2>
               <Link to={`/${data.mdx.slug}`}>
                 {data.mdx.frontmatter.title}
