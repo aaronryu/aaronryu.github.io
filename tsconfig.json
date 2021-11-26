@@ -1,6 +1,9 @@
 {
   "compilerOptions": {
     "jsx": "preserve",
+    // "jsx": "react-jsx",
+    "jsxImportSource": "@emotion/react",
+
     /* Visit https://aka.ms/tsconfig.json to read more about this file */
 
     "lib": [
