@@ -4,12 +4,13 @@ require('dotenv').config({
 
 module.exports = {
   siteMetadata: {
-    title: `Gatsby Default Starter`,
-    description: `Kick off your next, great Gatsby project with this default starter. This barebones starter ships with the main Gatsby configuration files you might need.`,
-    author: `@gatsbyjs`,
-    siteUrl: `https://gatsbystarterdefaultsource.gatsbyjs.io/`,
+    title: 'aaronryu.io',
+    description: 'This website is for posting articles about software engineering, politics and economy',
+    author: '@aaronryu',
+    deployBranch: process.env.NOW_GITHUB_COMMIT_REF,
   },
   plugins: [
+    'gatsby-plugin-dark-mode',
     {
       resolve: "gatsby-source-contentful",
       options: {
