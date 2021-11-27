@@ -45,7 +45,29 @@ module.exports = {
     // this (optional) plugin enables Progressive Web App + Offline functionality
     // To learn more, visit: https://gatsby.dev/offline
     // `gatsby-plugin-offline`,
-    "gatsby-plugin-mdx",
+    {
+      resolve: 'gatsby-plugin-mdx',
+      options: {
+        defaultLayouts: {
+          // File System 별 name 에 따라 이렇게 default 달리 설정해줄수있나봄
+          blog: require.resolve(`${__dirname}/src/components/layout.tsx`),
+          default: require.resolve(`${__dirname}/src/components/layout.tsx`),
+        },
+        gatsbyRemarkPlugins: [
+          // {
+          //   resolve: 'gatsby-remark-code-titles',
+          //   options: {
+          //     className: 'your-custom-class-name',
+          //   },
+          // },
+          // { resolve: 'gatsby-remark-images' },
+          // {
+          //   resolve: 'gatsby-remark-prismjs',
+          // },
+        ],
+        // plugins: [{ resolve: 'gatsby-remark-images' }],
+      },
+    },
     {
       resolve: 'gatsby-source-filesystem',
       options: {

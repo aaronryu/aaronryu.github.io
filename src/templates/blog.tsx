@@ -1,5 +1,4 @@
 import { css } from '@emotion/react'
-import { Link } from 'gatsby'
 import { graphql } from 'gatsby'
 import { MDXRenderer } from 'gatsby-plugin-mdx'
 import * as React from 'react'
@@ -30,7 +29,7 @@ const Blog: React.FunctionComponent<Props> = ({
     }
   }
 }) => (
-  <Layout /* pageTitle="My Blog Posts" */>
+  <article css={styles.container}>
     <header css={styles.header}>
       <h1 css={styles.headline}>{title}</h1>
       <p css={styles.date}>Posted: {creationDate}</p>
@@ -38,7 +37,7 @@ const Blog: React.FunctionComponent<Props> = ({
     <div css={styles.body}>
       <MDXRenderer>{mdx}</MDXRenderer>
     </div>
-  </Layout>
+  </article>
 )
 
 const styles = {

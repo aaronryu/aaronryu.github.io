@@ -7,23 +7,16 @@ interface Props {
   data: any
 }
 
-const Post: React.FunctionComponent<Props> = ({ data }) => {
-  console.log(data)
-  const idd = data.mdx.slug
-  console.log(idd)
-  return (
-    <Layout /* pageTitle="My Blog Posts" */>
-          <article key={data.mdx.id}>
-            <h2>
-              <Link to={`/${data.mdx.slug}`}>
-                {data.mdx.frontmatter.title}
-              </Link>
-            </h2>
-            <p>Posted: {data.mdx.frontmatter.date}</p>
-          </article>
-    </Layout>
-  )
-}
+const Post: React.FunctionComponent<Props> = ({ data }) => (
+  <article key={data.mdx.id}>
+    <h2>
+      <Link to={`/${data.mdx.slug}`}>
+        {data.mdx.frontmatter.title}
+      </Link>
+    </h2>
+    <p>Posted: {data.mdx.frontmatter.date}</p>
+  </article>
+)
 
 export const query = graphql`
     query($slug: String!) {
