@@ -46,13 +46,19 @@ module.exports = {
     // To learn more, visit: https://gatsby.dev/offline
     // `gatsby-plugin-offline`,
     {
+      resolve: `gatsby-plugin-layout`,
+      options: {
+        component: require.resolve(`${__dirname}/src/components/layout.tsx`),
+      },
+    },
+    {
       resolve: 'gatsby-plugin-mdx',
       options: {
-        defaultLayouts: {
-          // File System 별 name 에 따라 이렇게 default 달리 설정해줄수있나봄
-          blog: require.resolve(`${__dirname}/src/components/layout.tsx`),
-          default: require.resolve(`${__dirname}/src/components/layout.tsx`),
-        },
+        // defaultLayouts: {
+        //   // File System 별 name 에 따라 이렇게 default 달리 설정해줄수있나봄
+        //   blog: require.resolve(`${__dirname}/src/components/layout.tsx`),
+        //   default: require.resolve(`${__dirname}/src/components/layout.tsx`),
+        // },
         gatsbyRemarkPlugins: [
           // {
           //   resolve: 'gatsby-remark-code-titles',
