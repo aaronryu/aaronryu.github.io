@@ -4,7 +4,7 @@ require('dotenv').config({
 
 module.exports = {
   siteMetadata: {
-    title: 'aaronryu.io',
+    title: 'Crucian Carp',
     description: 'This website is for posting articles about software engineering, politics and economy',
     author: '@aaronryu',
     deployBranch: process.env.NOW_GITHUB_COMMIT_REF,
