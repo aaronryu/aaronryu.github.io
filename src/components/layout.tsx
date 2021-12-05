@@ -63,7 +63,7 @@ const Layout: React.FunctionComponent<Props> = ({ children }) => {
 
 const styles = {
   global: css`
-    @import url('https://fonts.googleapis.com/css2?family=Questrial&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Questrial&family=Ubuntu&display=swap');
 
     html {
       box-sizing: border-box;
@@ -100,10 +100,14 @@ const styles = {
       --shadow-medium: 0 8px 30px rgba(0, 0, 0, 0.12);
       --shadow-large: 0 30px 60px rgba(0, 0, 0, 0.12);
 
-      font-family: -apple-system, 'BlinkMacSystemFont', 'Segoe UI', 'Roboto',
-        'Helvetica Neue', 'Arial', 'Noto Sans', 'Noto Sans', sans-serif,
-        'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
-        'Noto Color Emoji';
+      font-family:
+        'Ubuntu', 'Noto Sans', sans-serif,
+        -apple-system,
+        'BlinkMacSystemFont',
+        'Segoe UI',
+        'Roboto',
+        'Helvetica Neue', 'Arial',
+        'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
       transition: all 0.1s ease-out;
       background-color: var(--bg);
       color: var(--text);

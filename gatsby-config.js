@@ -18,6 +18,13 @@ module.exports = {
         spaceId: process.env.CONTENTFUL_SPACE_ID,
       },
     },
+    {
+      resolve: 'gatsby-plugin-react-helmet-canonical-urls',
+      options: {
+        siteUrl: process.env.SITE_URL,
+      },
+    },
+    'gatsby-plugin-sitemap',
     `gatsby-plugin-react-helmet`,
     `gatsby-plugin-image`,
     {
@@ -27,6 +34,13 @@ module.exports = {
         path: `${__dirname}/src/images`,
       },
     },
+    // {
+    //   resolve: 'gatsby-plugin-gtag',
+    //   options: {
+    //     trackingId: process.env.GA_TRACKING_ID,
+    //     head: true,
+    //   },
+    // },
     `gatsby-transformer-sharp`,
     `gatsby-plugin-sharp`,
     {
@@ -61,16 +75,16 @@ module.exports = {
         //   default: require.resolve(`${__dirname}/src/components/layout.tsx`),
         // },
         gatsbyRemarkPlugins: [
-          // {
-          //   resolve: 'gatsby-remark-code-titles',
-          //   options: {
-          //     className: 'your-custom-class-name',
-          //   },
-          // },
+          {
+            resolve: 'gatsby-remark-code-titles',
+            options: {
+              className: 'your-custom-class-name',
+            },
+          },
           // { resolve: 'gatsby-remark-images' },
-          // {
-          //   resolve: 'gatsby-remark-prismjs',
-          // },
+          {
+            resolve: 'gatsby-remark-prismjs',
+          },
         ],
         // plugins: [{ resolve: 'gatsby-remark-images' }],
       },
