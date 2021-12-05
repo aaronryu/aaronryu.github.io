@@ -1,7 +1,6 @@
 import { Link } from 'gatsby'
 import { graphql } from 'gatsby'
 import * as React from 'react'
-import Layout from '../components/layout'
 
 interface Props {
   data: any

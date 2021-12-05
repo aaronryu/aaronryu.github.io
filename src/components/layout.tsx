@@ -22,7 +22,7 @@ const Layout: React.FunctionComponent<Props> = ({ children }) => {
   const { title, description, author, deployBranch } = useSiteMetadata()
   const spy = useRef() as React.MutableRefObject<HTMLDivElement>;
   const meta: Array<MetaImage | MetaOption> =
-    [{ property: 'og:image', content: '/images/cover.png' }]
+    [{ property: 'og:image', content: '/images/cover-todo-change.png' }]
   if (deployBranch !== 'master')
     meta.push({ name: 'robots', content: 'noindex,nofollow' })
   
@@ -64,16 +64,6 @@ const Layout: React.FunctionComponent<Props> = ({ children }) => {
 const styles = {
   global: css`
     @import url('https://fonts.googleapis.com/css2?family=Questrial&display=swap');
-
-    @font-face {
-      font-family: 'Fira Code';
-      font-style: normal;
-      font-weight: 400;
-      src: local('Fira Code'),
-        url('/fonts/FiraCode-Regular.woff2') format('woff2'),
-        url('/fonts/FiraCode-Regular.woff') format('woff');
-      font-display: swap;
-    }
 
     html {
       box-sizing: border-box;

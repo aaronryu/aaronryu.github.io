@@ -11,7 +11,7 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
   filePostedEdged.forEach(edge => {
     createPage({
       path: edge.node.childMdx.slug,
-      component: `${__dirname}/src/templates/post.tsx`,
+      component: `${__dirname}/src/templates/post/index.tsx`,
       context: {
         slug: edge.node.childMdx.slug,
       }

@@ -35,12 +35,12 @@ module.exports = {
         name: `aaron.ryu`,
         short_name: `aaron`,
         start_url: `/`,
-        background_color: `#29C785`,
+        background_color: `#2b2836`,
         // This will impact how browsers show your PWA/website
         // https://css-tricks.com/meta-theme-color-and-trickery/
-        theme_color: `#29C785`,
+        theme_color: `#2b2836`,
         display: `minimal-ui`,
-        icon: `src/images/gatsby-icon.png`, // This path is relative to the root of the site.
+        icon: `src/images/aaron-icon-lined-static.svg`, // This path is relative to the root of the site.
       },
     },
     // this (optional) plugin enables Progressive Web App + Offline functionality
