@@ -101,7 +101,7 @@ const styles = {
       --shadow-large: 0 30px 60px rgba(0, 0, 0, 0.12);
 
       font-family:
-        'Ubuntu', 'Noto Sans', sans-serif,
+        'Ubuntu', 'Nanum Gothic', sans-serif,
         -apple-system,
         'BlinkMacSystemFont',
         'Segoe UI',
