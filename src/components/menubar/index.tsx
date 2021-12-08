@@ -88,6 +88,13 @@ const LeftSideMenuBar = ({ visible, close }: Props) => {
             animate={visible ? 'open' : 'closed'}
             exit="closed"
           >
+            <div css={{ padding: "1rem 1rem", textAlign: "center" }}>
+              <section css={{ fontSize: "1.4rem", paddingBottom: "0.4rem" }}>Aaron Ryu</section>
+              <section css={{ fontSize: "0.9rem" }}>Software Developer</section>
+              <div>
+                <p>Tester</p>
+              </div>
+            </div>
           </motion.div>
           <motion.div
             css={styles.menuContainer}
