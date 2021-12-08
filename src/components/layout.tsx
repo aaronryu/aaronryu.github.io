@@ -9,10 +9,11 @@ import * as React from "react"
 import Header from "./header"
 import { css } from "@emotion/react"
 import useSiteMetadata from "../hooks/use-sitemetadata"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useRef } from "react"
 import Seo, { MetaImage, MetaOption } from "./seo"
 import { Global } from "@emotion/react"
+import LeftSideMenuBar from "./menubar"
 
 interface Props {
   children: React.ReactNode
@@ -42,6 +43,12 @@ const Layout: React.FunctionComponent<Props> = ({ children }) => {
     return observer.disconnect
   }, [])
 
+  const [showMenu, setShowMenu] = useState(true)
+  
+  const close = () => {
+    setShowMenu(false)
+  }
+
   return (
     <>
       <Seo
@@ -54,6 +61,7 @@ const Layout: React.FunctionComponent<Props> = ({ children }) => {
       <div css={styles.scrollSpy} ref={spy} />
       <div css={styles.wrapper}>
         <Header siteTitle={title} />
+        <LeftSideMenuBar visible={showMenu} close={close} />
         <main css={styles.main}>{children}</main>
         {/* <Footer author={author} /> */}
       </div>

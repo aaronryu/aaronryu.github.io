@@ -51,7 +51,7 @@ const Article: React.FunctionComponent<ArticleProps> = ({
 }) => (
   <article>
     <div css={styles.headerWrapper}>
-      <Header category={category} headline={headline} deck={deck} />
+      <Header category={category} headline={headline} deck={deck}  date={date} dateFormatted={dateFormatted} />
       <Abstract text={abstract} />
     </div>
     <Epigraph text={epigraph} author={epigraphAuthor} />
@@ -65,10 +65,14 @@ const Header: React.FunctionComponent<{
   category: string
   headline: string
   deck?: string
-}> = ({ category, headline, deck }) => {
+  date: string
+  dateFormatted: string
+}> = ({ category, headline, deck, date, dateFormatted }) => {
   return (
     <header css={styles.header}>
       {category && <p css={styles.category}>{category}</p>}
+      <section css={styles.meta}>
+      </section>
       <h2 css={styles.headline}>{headline}</h2>
       {deck && <section css={styles.deck}>{deck}</section>}
       <div css={styles.titleWrapper}>
@@ -110,10 +114,10 @@ const Footer = () => (
 
 const styles = {
   headerWrapper: css`
-    margin: 0 0 3rem 0;
+    margin: 0 0 1rem 0;
     padding: 0;
 
-    @media only screen and (max-width: 600px) {
+    @media only screen and (max-width: 700px) {
       margin-bottom: 3rem;
       padding-top: 4.5rem;
     }
@@ -121,7 +125,7 @@ const styles = {
   header: css`
     margin: 0 auto;
     padding: 0 1rem;
-    max-width: 650px;
+    max-width: 800px;
   `,
   category: css`
     margin: 0 0 1.1rem 0.15rem;
@@ -134,11 +138,11 @@ const styles = {
     margin: 0;
     padding: 0;
     line-height: 1.4;
-    font-size: 2.1rem;
+    font-size: 1.6rem;
     font-weight: 500;
 
-    @media only screen and (max-width: 600px) {
-      font-size: 1.65rem;
+    @media only screen and (max-width: 700px) {
+      font-size: 1.25rem;
     }
   `,
   titleWrapper: css`
@@ -179,29 +183,29 @@ const styles = {
       transform: translate3d(0, 0, 0);
     }
 
-    @media only screen and (max-width: 650px) {
-      font-size: 0.8rem;
+    @media only screen and (max-width: 700px) {
+      font-size: 0.7rem;
     }
   `,
   deck: css`
     margin: 0.95rem 0 0;
     padding: 0 0.1rem;
     line-height: 1.9;
-    font-size: 1.2rem;
+    font-size: 1.0rem;
 
-    @media only screen and (max-width: 600px) {
-      font-size: 1.05rem;
+    @media only screen and (max-width: 700px) {
+      font-size: 0.95rem;
     }
   `,
   abstract: css`
-    margin: 3.5rem auto 0;
+    margin: 0 auto 0;
     padding: 0 1rem;
-    max-width: 720px;
+    max-width: 750px;
     display: flex;
     justify-content: center;
   `,
   abstractText: css`
-    max-width: 500px;
+    max-width: 700px;
     line-height: 1.9;
   `,
   epigraph: css`
@@ -238,18 +242,19 @@ const styles = {
     margin: 0 auto;
     padding: 0 1rem 0;
     width: 100%;
-    max-width: 650px;
+    max-width: 800px;
     letter-spacing: 0.02rem;
     font-size: 0.83rem;
+    color: var(--brand);
   `,
 
   body: css`
-    margin: 6rem auto 0;
+    margin: 2rem auto 0;
     padding: 0 1rem;
     width: 100%;
-    max-width: 650px;
+    max-width: 800px;
     line-height: 2;
-    font-size: 0.9792rem;
+    font-size: 1.0rem;
 
     @media only screen and (max-width: 600px) {
       margin-top: 5.5rem;

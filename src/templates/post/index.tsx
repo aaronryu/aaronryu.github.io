@@ -87,7 +87,7 @@ const PostTemplate: React.FunctionComponent<Props> = ({
 
 const styles = {
   container: css`
-    margin-top: 8rem;
+    margin-top: 4rem;
 
     @media only screen and (max-width: 600px) {
       margin-top: 0.5rem;
