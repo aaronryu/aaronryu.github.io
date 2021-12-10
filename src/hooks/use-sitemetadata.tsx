@@ -9,6 +9,9 @@ const UseSiteMetadata = () => {
           description
           author
           deployBranch
+          linkGithub
+          linkFacebook
+          linkTwitter
         }
       }
     }

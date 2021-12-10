@@ -2,7 +2,8 @@ import React from "react"
 import { AnimatePresence, motion } from "framer-motion"
 import { css } from "@emotion/react"
 import { Link } from "gatsby"
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faFacebook, faGithub, faTwitter } from "@fortawesome/free-brands-svg-icons"
 
 const SIDEBAR_WIDTH = 230
 const NAV_ITEMS = [
@@ -74,9 +75,14 @@ const variants3 = {
 interface Props {
   visible: boolean
   close: () => void
+  links: {
+    github: string
+    facebook: string
+    twitter: string
+  }
 }
 
-const LeftSideMenuBar = ({ visible, close }: Props) => {
+const LeftSideMenuBar = ({ visible, close, links }: Props) => {
   return (
     <AnimatePresence>
       {visible && (
@@ -88,11 +94,13 @@ const LeftSideMenuBar = ({ visible, close }: Props) => {
             animate={visible ? 'open' : 'closed'}
             exit="closed"
           >
-            <div css={{ padding: "1rem 1rem", textAlign: "center" }}>
+            <div css={{ padding: "0.5rem 1rem 1rem", textAlign: "center" }}>
               <section css={{ fontSize: "1.4rem", paddingBottom: "0.4rem" }}>Aaron Ryu</section>
               <section css={{ fontSize: "0.9rem" }}>Software Developer</section>
-              <div>
-                <p>Tester</p>
+              <div css={{ margin: '0 auto', padding: '16px 0 0 0', width: 156, display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+                <FontAwesomeIcon css={{ cursor: 'pointer'}} size={"lg"} icon={faGithub} onClick={() => window.open(links.github, '_blank')} />
+                <FontAwesomeIcon css={{ cursor: 'pointer'}} size={"lg"} icon={faFacebook} onClick={() => window.open(links.facebook, '_blank')} />
+                <FontAwesomeIcon css={{ cursor: 'pointer'}} size={"lg"} icon={faTwitter} onClick={() => window.open(links.twitter, '_blank')} />
               </div>
             </div>
           </motion.div>
@@ -170,9 +178,9 @@ const styles = {
     border-radius: 7px;
     width: 100%;
     max-width: ${SIDEBAR_WIDTH}px;
-    height: 200px;
+    height: 100px;
     background-color: var(--bg);
-    box-shadow: var(--shadow-small);
+    // box-shadow: var(--shadow-extra-small);
   `,
   menuContainer: css`
     margin: 1rem 0;
@@ -183,7 +191,7 @@ const styles = {
     overflow: scroll;
     transition: background-color 0.1s ease-out;
     background-color: var(--bg);
-    box-shadow: var(--shadow-small);
+    // box-shadow: var(--shadow-small);
   `,
   list: css`
     flex: 1;

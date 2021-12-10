@@ -20,7 +20,7 @@ interface Props {
 }
 
 const Layout: React.FunctionComponent<Props> = ({ children }) => {
-  const { title, description, author, deployBranch } = useSiteMetadata()
+  const { title, description, author, deployBranch, linkGithub, linkFacebook, linkTwitter } = useSiteMetadata()
   const spy = useRef() as React.MutableRefObject<HTMLDivElement>;
   const meta: Array<MetaImage | MetaOption> =
     [{ property: 'og:image', content: '/images/cover-todo-change.png' }]
@@ -61,7 +61,7 @@ const Layout: React.FunctionComponent<Props> = ({ children }) => {
       <div css={styles.scrollSpy} ref={spy} />
       <div css={styles.wrapper}>
         <Header siteTitle={title} />
-        <LeftSideMenuBar visible={showMenu} close={close} />
+        <LeftSideMenuBar visible={showMenu} close={close} links={{ github: linkGithub, facebook: linkFacebook, twitter: linkTwitter }}  />
         <main css={styles.main}>{children}</main>
         {/* <Footer author={author} /> */}
       </div>
@@ -138,6 +138,7 @@ const styles = {
       --text-placeholder: #868e9688;
       --hr: #3a3649;
       --shadow: 0 9px 60px 0 rgba(0, 0, 0, 0.35);
+      --shadow-extra-small: 0 2px 5px rgba(0, 0, 0, 0.35);
       --shadow-small: 0 5px 10px rgba(0, 0, 0, 0.35);
       --shadow-medium: 0 8px 30px rgba(0, 0, 0, 0.35);
       --shadow-large: 0 30px 60px rgba(0, 0, 0, 0.35);

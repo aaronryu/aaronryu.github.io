@@ -47,7 +47,6 @@ interface Props {
 const PostTemplate: React.FunctionComponent<Props> = ({
   data: { mdx },
 }) => {
-  console.log(mdx)
   const { id, frontmatter, body, slug } = mdx
   const { author, siteUrl } = useSiteMetadata()
   const imageSrc = frontmatter.image
