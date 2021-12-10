@@ -29,7 +29,7 @@ const variants = {
   },
   closed: {
     opacity: 1,
-    x: SIDEBAR_WIDTH + 35 + 'px',
+    x: -SIDEBAR_WIDTH + -35 + 'px',
     transition: {
       type: 'tween',
       duration: 0.25,
@@ -37,7 +37,7 @@ const variants = {
   },
   exit: {
     opacity: 1,
-    x: SIDEBAR_WIDTH + 35 + 'px',
+    x: -SIDEBAR_WIDTH + -35 + 'px',
     transition: {
       type: 'tween',
       duration: 0.25,
@@ -70,7 +70,6 @@ const variants3 = {
     },
   },
 }
-
 
 interface Props {
   visible: boolean

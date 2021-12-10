@@ -60,7 +60,7 @@ const Layout: React.FunctionComponent<Props> = ({ children }) => {
       <Global styles={styles.global} />
       <div css={styles.scrollSpy} ref={spy} />
       <div css={styles.wrapper}>
-        <Header siteTitle={title} />
+        <Header siteTitle={title} showMenu={showMenu} toggleShowMenu={() => setShowMenu(!showMenu)} />
         <LeftSideMenuBar visible={showMenu} close={close} links={{ github: linkGithub, facebook: linkFacebook, twitter: linkTwitter }}  />
         <main css={styles.main}>{children}</main>
         {/* <Footer author={author} /> */}
