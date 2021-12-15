@@ -14,6 +14,14 @@ export interface PostPreview {
   deck?: string
 }
 
+export interface TocHeaders {
+  items: Array<TocHeader>
+}
+
+export interface TocHeader {
+  url: string, title: string, items?: Array<TocHeader>
+}
+
 interface Props {
   data: {
     mdx: {
@@ -38,6 +46,7 @@ interface Props {
         epigraph?: string /* (3) 더 작은 폰트로 */
         epigraphAuthor?: string /* (3) 위인 */
       }
+      toc: TocHeaders
       body: string
       slug: string
     }
@@ -47,12 +56,12 @@ interface Props {
 const PostTemplate: React.FunctionComponent<Props> = ({
   data: { mdx },
 }) => {
-  const { id, frontmatter, body, slug } = mdx
+  const { id, frontmatter, toc, body, slug } = mdx
   const { author, siteUrl } = useSiteMetadata()
   const imageSrc = frontmatter.image
     ? frontmatter.image.childImageSharp.fluid.srcWebp
     : ''
-
+  console.log(toc)
   return (
     <div css={styles.container}>
       <PostSeo
@@ -64,6 +73,10 @@ const PostTemplate: React.FunctionComponent<Props> = ({
         abstract={frontmatter.abstract}
         date={frontmatter.date}
         updateDate={frontmatter.updateDate}
+      />
+      <TableOfContents
+        toc={toc}
+        currentHeaderUrl={''}
       />
       <Article
         siteUrl={siteUrl}
@@ -78,11 +91,65 @@ const PostTemplate: React.FunctionComponent<Props> = ({
         dateFormatted={frontmatter.dateFormatted}
         image={frontmatter.image}
         imageAlt={frontmatter.imageAlt}
+        toc={toc}
         body={body}
       />
     </div>
   )
 }
+
+const makeTocHeaderHtml = (each: TocHeader): string => {
+  if (each.items !== undefined) {
+    return `<li><a href='${each.url}'>${each.title}</a></li>` + `<ul>${makeTocHeadersHtml(each.items)}</ul>`;
+  } else {
+    return `<li><a href='${each.url}'>${each.title}</a></li>`;
+  }
+}
+
+const makeTocHeadersHtml = (items: Array<TocHeader>) => {
+  return items.map((each) => makeTocHeaderHtml(each)).join('')
+}
+
+const TableOfContents = ({ toc, currentHeaderUrl }: { toc: TocHeaders, currentHeaderUrl: string }) => {
+  const itemsHtml = `<ul>${makeTocHeadersHtml(toc.items)}</ul>`
+  return (
+    <div
+      css={{
+        position: 'fixed',
+        top: 300,
+        width: 600,
+        height: 100,
+        right: 0,
+        backgroundColor: 'grey',
+        '@media screen and (calc((100vw - 720px) / 2 - 50px))': {
+          display: 'none',
+          '@media screen and (min-width: 1200px)': {
+            display: 'block',
+            fontSize: '14px',
+          },
+        },
+      }}
+    >
+      <div
+        dangerouslySetInnerHTML={{ __html: itemsHtml }}
+        css={{
+          // 낮은 depth가 더 안쪽으로 들어가도록 모든 ul에 marginLeft를 부여한다.
+          '& ul': {
+            marginLeft: '20px', 
+          },
+          // currentHeaderUrl 문자열이 href 속성에 포함된다면 아래 스타일을 부여한다. 
+          // 현재 스크롤에 해당하는 Header를 하이라이트 하기 위함
+          [`& ul > li a[href*="${currentHeaderUrl}"]`]: { 
+            fontSize: '15px',
+            color: '#333333',
+            fontWeight: '600',
+          },
+        }}
+      />
+    </div>
+  )
+}
+
 
 const styles = {
   container: css`
@@ -119,6 +186,7 @@ export const query = graphql`
         epigraph
         epigraphAuthor
       }
+      toc: tableOfContents
       body
       slug
     }

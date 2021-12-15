@@ -84,6 +84,16 @@ module.exports = {
               className: 'your-custom-class-name',
             },
           },
+          {
+            resolve: 'gatsby-remark-autolink-headers',
+            options: {
+              className: 'anchor-header', // 이 class명으로 현재 어떤 헤더의 글에 있는지에 따른 하이라이팅 구현
+              maintainCase: false, // 이 부분은 반드시 false로 하자. url이 대소문자를 구분하기 때문에 링크가 작동하지 않을 수 있다.
+              removeAccents: true,
+              elements: ['h1', 'h2', 'h3', 'h4'], // 링크를 추가할 Header 종류 선택
+              // h2, h3 등에 CSS 'scroll-margin-top: 5rem;' 을 주입하여 링크 클릭하여 스크롤 이동 시 위에 헤더랑 어느 정도 거리를 두게끔 한다. (헤더에 가려지는것 방지)
+            },
+          },
           // { resolve: 'gatsby-remark-images' },
           {
             resolve: 'gatsby-remark-prismjs',

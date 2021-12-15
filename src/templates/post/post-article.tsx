@@ -1,6 +1,7 @@
 import React from 'react'
 import { css } from '@emotion/react'
 import { MDXRenderer } from 'gatsby-plugin-mdx'
+import { TocHeaders } from '.'
 
 export interface GatsbyImageSharpFluidWithWebp {
   aspectRatio: number
@@ -17,6 +18,7 @@ export interface ArticleProps {
   slug: string
   category: string
   headline: string
+  toc: TocHeaders
   body: string
   date: string
   dateFormatted: string
@@ -45,6 +47,7 @@ const Article: React.FunctionComponent<ArticleProps> = ({
   image,
   imageAlt,
   hideHeroImage,
+  toc,
   body,
   date,
   dateFormatted,
@@ -340,6 +343,7 @@ const styles = {
       margin: 2.75rem 0 1.602rem 0;
       line-height: 1.6;
       font-weight: 400;
+      scroll-margin-top: 5rem;
     }
 
     h2 {
