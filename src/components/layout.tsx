@@ -75,10 +75,9 @@ const styles = {
 
     html {
       box-sizing: border-box;
-      font-size: 15px;
 
       @media only screen and (max-width: 600px) {
-        font-size: 17px;
+        font-size: 0.9rem;
       }
     }
     *,

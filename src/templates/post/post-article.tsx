@@ -121,8 +121,7 @@ const styles = {
     padding: 0;
 
     @media only screen and (max-width: 700px) {
-      margin-bottom: 3rem;
-      padding-top: 4.5rem;
+      padding-top: 1rem;
     }
   `,
   header: css`
@@ -145,7 +144,7 @@ const styles = {
     font-weight: 500;
 
     @media only screen and (max-width: 700px) {
-      font-size: 1.25rem;
+      font-size: 1.35rem;
     }
   `,
   titleWrapper: css`
@@ -187,7 +186,7 @@ const styles = {
     }
 
     @media only screen and (max-width: 700px) {
-      font-size: 0.7rem;
+      font-size: 0.9rem;
     }
   `,
   deck: css`
@@ -210,6 +209,10 @@ const styles = {
   abstractText: css`
     max-width: 700px;
     line-height: 1.9;
+
+    @media only screen and (max-width: 700px) {
+      font-size: 0.9rem;
+    }
   `,
   epigraph: css`
     display: flex;
@@ -258,6 +261,10 @@ const styles = {
     max-width: 800px;
     line-height: 2;
     font-size: 1.0rem;
+
+    @media only screen and (max-width: 700px) {
+      font-size: 0.9rem;
+    }
 
     @media only screen and (max-width: 600px) {
       margin-top: 5.5rem;
