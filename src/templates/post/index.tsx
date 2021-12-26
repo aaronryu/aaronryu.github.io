@@ -159,35 +159,35 @@ const makeToc = (toc: TocHeaders, depth: number) => {
 const TableOfContents = ({ toc, depth, currentHeaderUrl }: { toc: TocHeaders, depth: number, currentHeaderUrl: string }) => {
   return (
     <div
-    css={{
-      // 낮은 depth가 더 안쪽으로 들어가도록 모든 ul에 marginLeft를 부여한다.
-      '& ul': {
-        marginLeft: '-1rem', 
-      },
-      // currentHeaderUrl 문자열이 href 속성에 포함된다면 아래 스타일을 부여한다. 
-      // 현재 스크롤에 해당하는 Header를 하이라이트 하기 위함
-      [`& ul > li a[href*="${currentHeaderUrl}"]`]: { 
-        color: 'var(--text0)',
-        fontWeight: '600',
-      },
-      fontSize: '0.9rem',
-      fontWeight: 500,
-      //
-      position: 'fixed',
-      top: 100,
-      right: 0,
-      width: 400,
-      height: 220,
-      margin: '1rem 0',
-      borderLeft: '1px solid var(--hr)',
-      '@media screen and (calc((100vw - 720px) / 2 - 50px))': {
-        display: 'none',
-        '@media screen and (min-width: 1200px)': {
-          display: 'block',
-          fontSize: '14px',
+      css={{
+        // 낮은 depth가 더 안쪽으로 들어가도록 모든 ul에 marginLeft를 부여한다.
+        '& ul': {
+          marginLeft: '-1rem',
         },
-      },
-    }}
+        // currentHeaderUrl 문자열이 href 속성에 포함된다면 아래 스타일을 부여한다. 
+        // 현재 스크롤에 해당하는 Header를 하이라이트 하기 위함
+        [`& ul > li a[href*="${currentHeaderUrl}"]`]: {
+          color: 'var(--text0)',
+          fontWeight: '600',
+        },
+        fontSize: '0.9rem',
+        fontWeight: 500,
+        //
+        position: 'fixed',
+        top: 100,
+        right: 0,
+        width: 400,
+        height: 220,
+        margin: '1rem 0',
+        borderLeft: '1px solid var(--hr)',
+        '@media screen and (calc((100vw - 720px) / 2 - 50px))': {
+          display: 'none',
+          '@media screen and (min-width: 1200px)': {
+            display: 'block',
+            fontSize: '14px',
+          },
+        },
+      }}
     >
       {makeToc(toc, depth)}
     </div>
