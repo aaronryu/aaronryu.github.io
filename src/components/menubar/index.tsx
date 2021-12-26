@@ -14,8 +14,6 @@ const NAV_ITEMS = [
   { to: '/crafts/', label: 'Crafts' },
   { to: '/now/', label: 'Now' },
   { to: '/about/', label: 'About' },
-  { to: '/colophon/', label: 'Colophon' },
-  { to: '/contact/', label: 'Contact' },
 ]
 
 const variants = {
@@ -56,24 +54,20 @@ const variants2 = {
 
 const variants3 = {
   open: {
-    y: 0,
     opacity: 1,
-    transition: {
-      y: { stiffness: 1000, velocity: -100 },
-    },
   },
   closed: {
-    y: 20,
     opacity: 0,
-    transition: {
-      y: { stiffness: 1000 },
-    },
+  },
+  exit: {
+    opacity: 0,
   },
 }
 
 interface Props {
   visible: boolean
   close: () => void
+  smallWidth: boolean
   links: {
     github: string
     facebook: string
@@ -81,13 +75,13 @@ interface Props {
   }
 }
 
-const LeftSideMenuBar = ({ visible, close, links }: Props) => {
+const LeftSideMenuBar = ({ visible, close, smallWidth, links }: Props) => {
   return (
     <AnimatePresence>
       {visible && (
         <motion.div css={styles.container}>
           <motion.div
-            css={styles.profileContainer}
+            css={[styles.profileContainer, (smallWidth && { border: '1px solid var(--brand)' })]}
             variants={variants}
             initial="closed"
             animate={visible ? 'open' : 'closed'}
@@ -96,7 +90,7 @@ const LeftSideMenuBar = ({ visible, close, links }: Props) => {
             <div css={{ padding: "0.5rem 1rem 1rem", textAlign: "center" }}>
               <section css={{ fontSize: "1.4rem", paddingBottom: "0.4rem" }}>Aaron Ryu</section>
               <section css={{ fontSize: "0.9rem" }}>Software Developer</section>
-              <div css={{ margin: '0 auto', padding: '16px 0 0 0', width: 156, display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+              <div css={{ margin: '16px auto 0 auto', width: 156, display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
                 <FontAwesomeIcon css={{ cursor: 'pointer'}} size={"lg"} icon={faGithub} onClick={() => window.open(links.github, '_blank')} />
                 <FontAwesomeIcon css={{ cursor: 'pointer'}} size={"lg"} icon={faFacebook} onClick={() => window.open(links.facebook, '_blank')} />
                 <FontAwesomeIcon css={{ cursor: 'pointer'}} size={"lg"} icon={faTwitter} onClick={() => window.open(links.twitter, '_blank')} />
@@ -104,7 +98,7 @@ const LeftSideMenuBar = ({ visible, close, links }: Props) => {
             </div>
           </motion.div>
           <motion.div
-            css={styles.menuContainer}
+            css={[styles.menuContainer, (smallWidth && { border: '1px solid var(--brand)' })]}
             variants={variants}
             initial="closed"
             animate={visible ? 'open' : 'closed'}
@@ -169,7 +163,7 @@ const styles = {
     position: fixed;
     z-index: 10;
     top: 64px; // 55px;
-    left: 24px; // 15px;
+    left: 12px; // 15px;
     width: 100%;
     max-width: ${SIDEBAR_WIDTH}px;
   `,
@@ -177,7 +171,6 @@ const styles = {
     border-radius: 7px;
     width: 100%;
     max-width: ${SIDEBAR_WIDTH}px;
-    height: 100px;
     background-color: var(--bg);
     // box-shadow: var(--shadow-extra-small);
   `,
@@ -186,7 +179,7 @@ const styles = {
     border-radius: 7px;
     width: 100%;
     max-width: ${SIDEBAR_WIDTH}px;
-    max-height: 500px;
+    max-height: 700px;
     overflow: scroll;
     transition: background-color 0.1s ease-out;
     background-color: var(--bg);
@@ -194,6 +187,7 @@ const styles = {
   `,
   list: css`
     flex: 1;
+    padding: 10px;
   `,
   listItem: css`
     border-bottom: 1px solid var(--hr);

@@ -19,6 +19,14 @@ interface Props {
   children: React.ReactNode
 }
 
+function getWindowDimensions() {
+  const { innerWidth: width, innerHeight: height } = window;
+  return {
+    width,
+    height
+  };
+}
+
 const Layout: React.FunctionComponent<Props> = ({ children }) => {
   const { title, description, author, deployBranch, linkGithub, linkFacebook, linkTwitter } = useSiteMetadata()
   const spy = useRef() as React.MutableRefObject<HTMLDivElement>;
@@ -43,8 +51,25 @@ const Layout: React.FunctionComponent<Props> = ({ children }) => {
     return observer.disconnect
   }, [])
 
-  const [showMenu, setShowMenu] = useState(true)
+  const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions());
+  const wideWidth = windowDimensions.width > 1280;
+  const [showMenu, setShowMenu] = useState(wideWidth)
   
+  useEffect(() => {
+    let mounted = true;
+    window.addEventListener('resize', () => {
+      if (mounted) {
+        const current = getWindowDimensions()
+        setWindowDimensions(current)
+        const showDefaultWhenWide = current.width > 1280
+        setShowMenu(showDefaultWhenWide)
+      }
+    });
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
   const close = () => {
     setShowMenu(false)
   }
@@ -61,7 +86,7 @@ const Layout: React.FunctionComponent<Props> = ({ children }) => {
       <div css={styles.scrollSpy} ref={spy} />
       <div css={styles.wrapper}>
         <Header siteTitle={title} showMenu={showMenu} toggleShowMenu={() => setShowMenu(!showMenu)} />
-        <LeftSideMenuBar visible={showMenu} close={close} links={{ github: linkGithub, facebook: linkFacebook, twitter: linkTwitter }}  />
+        <LeftSideMenuBar visible={showMenu} close={close} smallWidth={!wideWidth} links={{ github: linkGithub, facebook: linkFacebook, twitter: linkTwitter }}  />
         <main css={styles.main}>{children}</main>
         {/* <Footer author={author} /> */}
       </div>
