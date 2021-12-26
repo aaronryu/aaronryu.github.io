@@ -76,7 +76,8 @@ const PostTemplate: React.FunctionComponent<Props> = ({
       />
       <TableOfContents
         toc={toc}
-        currentHeaderUrl={''}
+        depth={4}
+        currentHeaderUrl={'#프리-커밋-훅pre-commit-hook'}
       />
       <Article
         siteUrl={siteUrl}
@@ -98,28 +99,47 @@ const PostTemplate: React.FunctionComponent<Props> = ({
   )
 }
 
-const makeTocHeaderHtml = (each: TocHeader): string => {
+const makeTocHeaderHtml = (each: TocHeader, remainDepth: number) => {
   if (each.items !== undefined) {
-    return `<li><a href='${each.url}'>${each.title}</a></li>` + `<ul>${makeTocHeadersHtml(each.items)}</ul>`;
+    return (
+      <React.Fragment>
+        <li><a href={each.url}>{each.title}</a></li>
+        <ul>{makeTocHeadersHtml(each.items, (remainDepth - 1))}</ul>
+      </React.Fragment>
+    );
   } else {
-    return `<li><a href='${each.url}'>${each.title}</a></li>`;
+    return <li><a href={each.url}>{each.title}</a></li>;
   }
 }
 
-const makeTocHeadersHtml = (items: Array<TocHeader>) => {
-  return items.map((each) => makeTocHeaderHtml(each)).join('')
+const makeTocHeadersHtml = (items: Array<TocHeader>, depth: number) => {
+  return <React.Fragment>{(depth > 0) && items.map((each) => makeTocHeaderHtml(each, depth))}</React.Fragment>
 }
 
-const TableOfContents = ({ toc, currentHeaderUrl }: { toc: TocHeaders, currentHeaderUrl: string }) => {
-  const itemsHtml = `<ul>${makeTocHeadersHtml(toc.items)}</ul>`
+const TableOfContents = ({ toc, depth, currentHeaderUrl }: { toc: TocHeaders, depth: number, currentHeaderUrl: string }) => {
+  const styledItemsHtml = <ul css={{
+    // 낮은 depth가 더 안쪽으로 들어가도록 모든 ul에 marginLeft를 부여한다.
+    '& ul': {
+      marginLeft: '-1rem', 
+    },
+    // currentHeaderUrl 문자열이 href 속성에 포함된다면 아래 스타일을 부여한다. 
+    // 현재 스크롤에 해당하는 Header를 하이라이트 하기 위함
+    [`& ul > li a[href*="${currentHeaderUrl}"]`]: { 
+      fontSize: '15px',
+      color: '#333333',
+      fontWeight: '600',
+    },
+    fontSize: '0.9rem',
+    fontWeight: 500,
+  }}>{makeTocHeadersHtml(toc.items, depth)}</ul>
   return (
     <div
       css={{
         position: 'fixed',
-        top: 300,
-        width: 600,
-        height: 100,
+        top: 100,
         right: 0,
+        width: 400,
+        height: 220,
         backgroundColor: 'grey',
         '@media screen and (calc((100vw - 720px) / 2 - 50px))': {
           display: 'none',
@@ -130,22 +150,7 @@ const TableOfContents = ({ toc, currentHeaderUrl }: { toc: TocHeaders, currentHe
         },
       }}
     >
-      <div
-        dangerouslySetInnerHTML={{ __html: itemsHtml }}
-        css={{
-          // 낮은 depth가 더 안쪽으로 들어가도록 모든 ul에 marginLeft를 부여한다.
-          '& ul': {
-            marginLeft: '20px', 
-          },
-          // currentHeaderUrl 문자열이 href 속성에 포함된다면 아래 스타일을 부여한다. 
-          // 현재 스크롤에 해당하는 Header를 하이라이트 하기 위함
-          [`& ul > li a[href*="${currentHeaderUrl}"]`]: { 
-            fontSize: '15px',
-            color: '#333333',
-            fontWeight: '600',
-          },
-        }}
-      />
+      {styledItemsHtml}
     </div>
   )
 }

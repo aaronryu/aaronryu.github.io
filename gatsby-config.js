@@ -87,6 +87,7 @@ module.exports = {
           {
             resolve: 'gatsby-remark-autolink-headers',
             options: {
+              icon: `<svg height="20" viewBox="0 0 20 20" width="20" fill="var(--text-link)"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6-6-6z"/></svg>`,
               className: 'anchor-header', // 이 class명으로 현재 어떤 헤더의 글에 있는지에 따른 하이라이팅 구현
               maintainCase: false, // 이 부분은 반드시 false로 하자. url이 대소문자를 구분하기 때문에 링크가 작동하지 않을 수 있다.
               removeAccents: true,

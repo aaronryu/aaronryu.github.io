@@ -3,7 +3,6 @@ import { ThemeToggler } from 'gatsby-plugin-dark-mode'
 import { DarkModeButton, DarkModeTheme } from './dark-mode-button'
 import { css } from '@emotion/react'
 import { motion } from 'framer-motion'
-import Logo from './logo'
 
 const styles = {
   header: css({
