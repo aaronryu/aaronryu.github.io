@@ -121,11 +121,16 @@ const styles = {
     padding: 0;
 
     @media only screen and (max-width: 700px) {
-      padding-top: 1rem;
+      padding-top: 4rem;
     }
   `,
   header: css`
     margin: 0 auto;
+    @media only screen and (max-width: 1280px) {
+      margin: 0 auto 0 0;
+      padding: 0 1.2rem;
+    }
+
     padding: 0 1rem;
     max-width: 800px;
   `,
@@ -144,7 +149,7 @@ const styles = {
     font-weight: 500;
 
     @media only screen and (max-width: 700px) {
-      font-size: 1.35rem;
+      font-size: 1.25rem;
     }
   `,
   titleWrapper: css`
@@ -186,7 +191,7 @@ const styles = {
     }
 
     @media only screen and (max-width: 700px) {
-      font-size: 0.9rem;
+      font-size: 0.84rem;
     }
   `,
   deck: css`
@@ -196,11 +201,16 @@ const styles = {
     font-size: 1.0rem;
 
     @media only screen and (max-width: 700px) {
-      font-size: 0.95rem;
+      font-size: 0.86rem;
     }
   `,
   abstract: css`
     margin: 0 auto 0;
+    @media only screen and (max-width: 1280px) {
+      margin: 0 auto 0 0;
+      padding: 0 1.2rem;
+    }
+
     padding: 0 1rem;
     max-width: 750px;
     display: flex;
@@ -211,7 +221,7 @@ const styles = {
     line-height: 1.9;
 
     @media only screen and (max-width: 700px) {
-      font-size: 0.9rem;
+      font-size: 0.84rem;
     }
   `,
   epigraph: css`
@@ -219,6 +229,11 @@ const styles = {
     flex-direction: column;
     align-items: center;
     margin: 0 auto;
+    @media only screen and (max-width: 1280px) {
+      margin: 0 auto;
+      padding: 0 1.2rem;
+    }
+
     padding: 0 1rem 5rem;
     max-width: 650px;
     text-align: center;
@@ -246,6 +261,11 @@ const styles = {
   `,
   meta: css`
     margin: 0 auto;
+    @media only screen and (max-width: 1280px) {
+      margin: 0 auto 0 0;
+      padding: 0 1.2rem;
+    }
+
     padding: 0 1rem 0;
     width: 100%;
     max-width: 800px;
@@ -256,6 +276,11 @@ const styles = {
 
   body: css`
     margin: 2rem auto 0;
+    @media only screen and (max-width: 1280px) {
+      margin: 0 auto 0 0;
+      padding: 0 1.2rem;
+    }
+
     padding: 0 1rem;
     width: 100%;
     max-width: 800px;
@@ -263,11 +288,7 @@ const styles = {
     font-size: 1.0rem;
 
     @media only screen and (max-width: 700px) {
-      font-size: 0.9rem;
-    }
-
-    @media only screen and (max-width: 600px) {
-      margin-top: 5.5rem;
+      font-size: 0.84rem;
     }
 
     p,
@@ -348,6 +369,9 @@ const styles = {
     h4,
     h5 {
       margin: 2.75rem 0 1.602rem 0;
+      @media only screen and (max-width: 700px) {
+        margin: 2rem 0 1rem 0;
+      }
       line-height: 1.6;
       font-weight: 400;
       scroll-margin-top: 5rem;
@@ -356,22 +380,37 @@ const styles = {
     h2 {
       font-size: 1.296rem;
       font-weight: 600;
+      @media only screen and (max-width: 700px) {
+        font-size: 1.196rem;
+      }
     }
 
     h3 {
       font-size: 1.215rem;
+      @media only screen and (max-width: 700px) {
+        font-size: 1.115rem;
+      }
     }
 
     h4 {
       font-size: 1.138rem;
+      @media only screen and (max-width: 700px) {
+        font-size: 1.038rem;
+      }
     }
 
     h5 {
       font-size: 1.067rem;
+      @media only screen and (max-width: 700px) {
+        font-size: 0.967rem;
+      }
     }
 
     small {
       font-size: 0.937rem;
+      @media only screen and (max-width: 700px) {
+        font-size: 0.837rem;
+      }
     }
 
     .gatsby-highlight {
