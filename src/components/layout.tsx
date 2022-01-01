@@ -52,8 +52,7 @@ const Layout: React.FunctionComponent<Props> = ({ children }) => {
   }, [])
 
   const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions());
-  const wideWidth = windowDimensions.width > 1280;
-  const [showMenu, setShowMenu] = useState(wideWidth)
+  const [showMenu, setShowMenu] = useState(windowDimensions.width > 1280)
   
   useEffect(() => {
     let mounted = true;
@@ -86,7 +85,7 @@ const Layout: React.FunctionComponent<Props> = ({ children }) => {
       <div css={styles.scrollSpy} ref={spy} />
       <div css={styles.wrapper}>
         <Header siteTitle={title} showMenu={showMenu} toggleShowMenu={() => setShowMenu(!showMenu)} />
-        <LeftSideMenuBar visible={showMenu} close={close} smallWidth={!wideWidth} links={{ github: linkGithub, facebook: linkFacebook, twitter: linkTwitter }}  />
+        <LeftSideMenuBar visible={showMenu} close={close} currentWidth={windowDimensions.width} links={{ github: linkGithub, facebook: linkFacebook, twitter: linkTwitter }}  />
         <main css={styles.main}>{children}</main>
         {/* <Footer author={author} /> */}
       </div>

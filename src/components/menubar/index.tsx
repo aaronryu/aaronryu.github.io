@@ -67,7 +67,7 @@ const variants3 = {
 interface Props {
   visible: boolean
   close: () => void
-  smallWidth: boolean
+  currentWidth: number
   links: {
     github: string
     facebook: string
@@ -75,13 +75,13 @@ interface Props {
   }
 }
 
-const LeftSideMenuBar = ({ visible, close, smallWidth, links }: Props) => {
+const LeftSideMenuBar = ({ visible, close, currentWidth, links }: Props) => {
   return (
     <AnimatePresence>
       {visible && (
         <motion.div css={styles.container}>
           <motion.div
-            css={[styles.profileContainer, (smallWidth && { border: '1px solid var(--brand)' })]}
+            css={[styles.profileContainer, ((currentWidth < 1278) && { border: '1px solid var(--brand)' })]}
             variants={variants}
             initial="closed"
             animate={visible ? 'open' : 'closed'}
@@ -98,7 +98,7 @@ const LeftSideMenuBar = ({ visible, close, smallWidth, links }: Props) => {
             </div>
           </motion.div>
           <motion.div
-            css={[styles.menuContainer, (smallWidth && { border: '1px solid var(--brand)' })]}
+            css={[styles.menuContainer, ((currentWidth < 1278) && { border: '1px solid var(--brand)' })]}
             variants={variants}
             initial="closed"
             animate={visible ? 'open' : 'closed'}
