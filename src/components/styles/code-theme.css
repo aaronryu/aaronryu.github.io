@@ -281,6 +281,25 @@
   hyphens: none;
 }
 
+@media only screen and (max-width: 700px) {
+  .light code[class*="language-"],
+  .light pre[class*="language-"],
+  .dark code[class*='language-'],
+  .dark pre[class*='language-'] {
+    font-size: 0.8rem;
+  }
+};
+
+
+@media only screen and (max-width: 600px) {
+  .light code[class*="language-"],
+  .light pre[class*="language-"],
+  .dark code[class*='language-'],
+  .dark pre[class*='language-'] {
+    font-size: 0.7rem;
+  }
+};
+
 .dark pre[class*='language-']::-moz-selection,
 .dark pre[class*='language-'] ::-moz-selection,
 .dark code[class*='language-']::-moz-selection,

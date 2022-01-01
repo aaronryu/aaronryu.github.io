@@ -119,14 +119,14 @@ const styles = {
   headerWrapper: css`
     margin: 0 0 1rem 0;
     padding: 0;
-
-    @media only screen and (max-width: 700px) {
-      padding-top: 4rem;
-    }
   `,
   header: css`
     margin: 0 auto;
     @media only screen and (max-width: 1280px) {
+      margin: 0 auto 0 50px;
+      padding: 0 1.2rem;
+    }
+    @media only screen and (max-width: 1024px) {
       margin: 0 auto 0 0;
       padding: 0 1.2rem;
     }
@@ -207,6 +207,10 @@ const styles = {
   abstract: css`
     margin: 0 auto 0;
     @media only screen and (max-width: 1280px) {
+      margin: 0 auto 0 50px;
+      padding: 0 1.2rem;
+    }
+    @media only screen and (max-width: 1024px) {
       margin: 0 auto 0 0;
       padding: 0 1.2rem;
     }
@@ -230,7 +234,11 @@ const styles = {
     align-items: center;
     margin: 0 auto;
     @media only screen and (max-width: 1280px) {
-      margin: 0 auto;
+      margin: 0 auto 0 50px;
+      padding: 0 1.2rem;
+    }
+    @media only screen and (max-width: 1024px) {
+      margin: 0 auto 0 0;
       padding: 0 1.2rem;
     }
 
@@ -262,6 +270,10 @@ const styles = {
   meta: css`
     margin: 0 auto;
     @media only screen and (max-width: 1280px) {
+      margin: 0 auto 0 50px;
+      padding: 0 1.2rem;
+    }
+    @media only screen and (max-width: 1024px) {
       margin: 0 auto 0 0;
       padding: 0 1.2rem;
     }
@@ -277,6 +289,10 @@ const styles = {
   body: css`
     margin: 2rem auto 0;
     @media only screen and (max-width: 1280px) {
+      margin: 0 auto 0 50px;
+      padding: 0 1.2rem;
+    }
+    @media only screen and (max-width: 1024px) {
       margin: 0 auto 0 0;
       padding: 0 1.2rem;
     }
