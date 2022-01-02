@@ -7,13 +7,10 @@ import { faFacebook, faGithub, faTwitter } from "@fortawesome/free-brands-svg-ic
 
 const SIDEBAR_WIDTH = 230
 const NAV_ITEMS = [
-  { to: '/', label: 'Articles' },
-  { to: '/devlog/', label: 'Dev Log' },
-  { to: '/topiclog/', label: 'Topic Log' },
-  { to: '/journal/', label: 'Journal' },
-  { to: '/crafts/', label: 'Crafts' },
-  { to: '/now/', label: 'Now' },
-  { to: '/about/', label: 'About' },
+  { to: '/dev', label: 'Development' },
+  { to: '/topiclog', label: 'Politics' },
+  { to: '/journal', label: 'Economics' },
+  { to: '/about', label: 'About' },
 ]
 
 const variants = {
