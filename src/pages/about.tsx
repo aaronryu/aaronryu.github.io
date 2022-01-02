@@ -1,10 +1,11 @@
 import { css } from "@emotion/react"
+import styled from "@emotion/styled"
 import { graphql } from "gatsby"
 import { MDXRenderer } from "gatsby-plugin-mdx"
 import * as React from "react"
 
-import Layout from '../components/layout'
-import Seo from "../components/seo"
+import Layout, { PlainLayout } from '../components/layout'
+import { companies, Company } from "./resume/experiences"
 
 interface Props {
   data: {
@@ -25,42 +26,111 @@ interface Props {
   }
 }
 
+interface Theory {
+  
+}
+
+const Highlight = styled('a')(() => ({
+  fontSize: '1rem',
+  fontWeight: 'bold',
+  color: 'var(--text-link)',
+}))
+
 const About: React.FunctionComponent<Props> = ({
   data: { mdx },
 }) => {
-  console.log(mdx)
   return (
-    <Layout>
-      <article>
+    <article>
       <div css={styles.headerWrapper}>
         <Abstract text={'asdasdasddas dasadsdadas'} />
       </div>
-      <Body body={mdx.body}/>
+
+      <h1 align="center">Aaron Ryu</h1>
+      <h4 align="center">Software Developer</h4>
+      <h5 align="center">"Cool Heads, Warm Hearts"</h5>
+      <div align="center">aaron.ryu.dev@gmail.com | +82 10 5549 7201</div>
+
+      <div css={styles.body}>
+        <Header category="Specialty">
+          <ul><li><Highlight>Web Development</Highlight>: Front-end &amp; Back-end</li></ul>
+        </Header>
+        <Header category="Skills">
+          <ul>
+            <li><Highlight>Kotlin 1.3</Highlight>, <Highlight>Java 8+ w/ Spring</Highlight></li>
+            <li><Highlight>React.js</Highlight> and <Highlight>Angular.js w/ Typescript</Highlight></li>
+            <li><Highlight>AWS</Highlight></li>
+          </ul>
+        </Header>
+        <Experiences companies={companies} />
+      </div>
     </article>
-    </Layout>
   )
 }
 
+const Experiences: React.FunctionComponent<{ companies: Array<Company> }> = ({ companies }) => (
+  <Header category="Experience">
+    {companies.map(company => (
+      <EachExperience>
+        <div css={styles.eachExperienceHeader}>
+          <a css={css`position: relative; left: -5px`}>
+            <svg height="20" viewBox="0 0 18 18" width="24" fill="var(--text-link)">
+              <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6-6-6z"></path>
+            </svg>
+          </a>
+          <strong css={css`font-size: 1.12rem;`}>{company.name}</strong>
+          <span css={css`margin: 0 10px 0 auto;`}>{company.startDate} ~ {company.endDate ? company.endDate : 'Current'}</span>
+        </div>
+        <ul css={css`position: relative; top: -25px;`}>
+          {company.projects.map(eachProject => (
+            <li css={styles.mainProject}>
+              <div css={styles.mainProjectHeader}>
+                {eachProject.name}
+                <span css={css`margin: 0 10px 0 auto;`}>~ {eachProject.endDate}</span>
+              </div>
+              {eachProject.details.map(eachDetail => (
+                <ul>
+                  <li>{eachDetail.name}</li>
+                  {eachDetail.subDetails && eachDetail.subDetails.length > 0 && (
+                    <ul>
+                      {eachDetail.subDetails.map(eachSubDetail => (
+                        <li>{eachSubDetail}</li>
+                      ))}
+                    </ul>
+                  )}
+                </ul>
+              ))}
+            </li>
+            ))}
+        </ul>
+      </EachExperience>
+    ))}
+  </Header>
+)
+
 const Header: React.FunctionComponent<{
-  category: string
-  headline: string
-  deck?: string
-  date: string
-  dateFormatted: string
-}> = ({ category, headline, deck, date, dateFormatted }) => {
-  return (
-    <header css={styles.header}>
-      {category && <p css={styles.category}>{category}</p>}
-      <section css={styles.meta}>
-      </section>
-      <h2 css={styles.headline}>{headline}</h2>
-      {deck && <section css={styles.deck}>{deck}</section>}
-      <div css={styles.titleWrapper}>
-        <p css={styles.title}>{headline}</p>
-      </div>
-    </header>
-  )
-}
+  category: string,
+  children: React.ReactNode,
+}> = ({ category, children }) => (
+  <React.Fragment>
+    <h2 id={category} css={css`position: relative;`}>
+      <a css={styles.aAnchor}>
+        <svg height="20" viewBox="0 0 20 20" width="20" fill="var(--text-link)">
+            <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6-6-6z"></path>
+        </svg>
+      </a>
+      {category}
+    </h2>
+    {children}
+  </React.Fragment>
+)
+
+const EachExperience: React.FunctionComponent<{
+  children: React.ReactNode,
+}> = ({ children }) => (
+  <div css={styles.eachExperience}>
+    {children}
+  </div>
+)
 
 const Abstract = ({ text }: { text?: string }) => text ? (
   <section css={styles.abstract}>
@@ -74,8 +144,50 @@ const Body = ({ body }: { body: string }) => (
   </div>
 )
 
-
 const styles = {
+  highlight: css`
+    font-size: 1rem;
+    font-weight: bold;
+    color: var(--text-link);
+  `,
+  aAnchor: css`
+    border-bottom: 2px solid var(--text-link);
+    background-position: 0 100%;
+    background-size: auto 3px;
+    background-repeat: repeat-x;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: translateX(-100%);
+    padding-right: 4px;
+  `,
+  eachExperience: css`
+    border: 1px solid var(--text-link);
+    border-radius: 10px;
+    padding: 10px 10px 0 10px;
+    margin: 20px 16px 20px 0;
+  `,
+  eachExperienceHeader: css`
+    display: flex;
+    font-size: 1.115rem;
+    color: var(--text-link);
+    background-color: var(--text-link-background);
+    border-radius: 5px;
+    // border-bottom: 1px solid var(--brand);
+    // padding-bottom: 10px;
+
+    @media only screen and (max-width: 700px) {
+      font-size: 1.015rem;
+    }
+  `,
+  mainProject: css`
+    padding-top: 20px;
+  `,
+  mainProjectHeader: css`
+    display: flex;
+    color: var(--text-link);
+  `,
   headerWrapper: css`
     margin: 0 0 1rem 0;
     padding: 0;
@@ -270,7 +382,6 @@ const styles = {
     p,
     ul,
     ol {
-      margin-bottom: 1.602rem;
       overflow-wrap: break-word;
       word-wrap: break-word;
       word-break: break-all;
@@ -280,7 +391,7 @@ const styles = {
 
     ul,
     ol {
-      padding-left: 1.5rem;
+      padding-left: 2rem;
 
       ul,
       ol {
@@ -292,29 +403,6 @@ const styles = {
       margin-left: 2.1rem;
       margin-right: 0;
       font-size: 0.9rem;
-    }
-
-    a {
-      text-decoration: none;
-
-      &[href] {
-        padding-bottom: 0.07rem;
-        border-bottom: 1px solid var(--text-link);
-        background-position: 0 100%;
-        background-size: auto 3px;
-        background-repeat: repeat-x;
-        color: var(--text-link);
-
-        &:hover {
-          border-color: transparent;
-          background-image: url('/images/underline.svg');
-        }
-
-        .dark &:hover {
-          border-color: transparent;
-          background-image: url('/images/underline-dark.svg');
-        }
-      }
     }
 
     img {
@@ -340,11 +428,8 @@ const styles = {
     }
 
     h1,
-    h2,
-    h3,
-    h4,
-    h5 {
-      margin: 2.75rem 0 1.602rem 0;
+    h2 {
+      margin: 2.3rem 0 0 0;
       @media only screen and (max-width: 700px) {
         margin: 2rem 0 1rem 0;
       }
@@ -356,15 +441,16 @@ const styles = {
     h2 {
       font-size: 1.296rem;
       font-weight: 600;
+      border-bottom: 2px solid var(--text-link);
       @media only screen and (max-width: 700px) {
         font-size: 1.196rem;
       }
     }
 
     h3 {
-      font-size: 1.215rem;
+      font-size: 1.115rem;
       @media only screen and (max-width: 700px) {
-        font-size: 1.115rem;
+        font-size: 1.015rem;
       }
     }
 

@@ -27,7 +27,11 @@ function getWindowDimensions() {
   };
 }
 
-const Layout: React.FunctionComponent<Props> = ({ children }) => {
+const PATHNAME_NOW_SHOW_MENU_DEFAULTLY = [
+  '/about', '/about/',
+  '/404', '/404/',
+]
+const Layout: React.FunctionComponent<Props> = ({ location, children }) => {
   const { title, description, author, deployBranch, linkGithub, linkFacebook, linkTwitter } = useSiteMetadata()
   const spy = useRef() as React.MutableRefObject<HTMLDivElement>;
   const meta: Array<MetaImage | MetaOption> =
@@ -51,8 +55,9 @@ const Layout: React.FunctionComponent<Props> = ({ children }) => {
     return observer.disconnect
   }, [])
 
-  const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions());
-  const [showMenu, setShowMenu] = useState(windowDimensions.width > 1280)
+  const notShowMenuDefaultly = location ? PATHNAME_NOW_SHOW_MENU_DEFAULTLY.includes(location.pathname) : true;
+  const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions())
+  const [showMenu, setShowMenu] = useState(notShowMenuDefaultly ? false : windowDimensions.width > 1280)
   
   useEffect(() => {
     let mounted = true;
@@ -61,7 +66,9 @@ const Layout: React.FunctionComponent<Props> = ({ children }) => {
         const current = getWindowDimensions()
         setWindowDimensions(current)
         const showDefaultWhenWide = current.width > 1280
-        setShowMenu(showDefaultWhenWide)
+        if (!notShowMenuDefaultly) {
+          setShowMenu(showDefaultWhenWide)
+        }
       }
     });
     return () => {
@@ -123,6 +130,7 @@ const styles = {
       --text0: black;
       --text: #2b2836;
       --text-link: #7f5555;
+      --text-link-background: #7f555530;
       --text-auxiliary: #535960;
       --text-placeholder: #868e96;
       --hr: hsla(0, 0%, 0%, 0.1);
@@ -157,6 +165,7 @@ const styles = {
       --text0: white;
       --text: #b6bfc8;
       --text-link: #b79494;
+      --text-link-background: #b7949430;
       --text-auxiliary: #848c94;
       --text-placeholder: #868e9688;
       --hr: #3a3649;
