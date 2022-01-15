@@ -299,9 +299,13 @@ const styles = {
     border-radius: 10px;
     padding: 10px 10px 0 10px;
     margin: 20px 16px 20px 0;
+    @media only screen and (max-width: 700px) {
+      margin: 0;
+    }
   `,
   eachExperienceHeader: css`
     display: flex;
+    flex-wrap: wrap;
     font-size: 1.115rem;
     color: var(--text-link);
     background-color: var(--text-link-background);
@@ -328,6 +332,7 @@ const styles = {
   `,
   mainProjectHeader: css`
     display: flex;
+    flex-wrap: wrap;
     color: var(--text-link);
   `,
 
@@ -339,6 +344,7 @@ const styles = {
   `,
   eachEducationHeader: css`
     display: flex;
+    flex-wrap: wrap;
     font-size: 1rem;
     color: var(--text-link);
     background-color: var(--text-link-background);
@@ -353,6 +359,7 @@ const styles = {
 
   eachPaperHeader: css`
     display: flex;
+    flex-wrap: wrap;
     font-size: 1rem;
     color: var(--text-link);
     margin: 18px 0;
@@ -379,6 +386,7 @@ const styles = {
   `,
   mainStudyHeader: css`
     display: flex;
+    flex-wrap: wrap;
   `,
 
   body: css`
@@ -390,6 +398,7 @@ const styles = {
     font-size: 1.0rem;
 
     @media only screen and (max-width: 700px) {
+      padding: 0;
       font-size: 0.84rem;
     }
 
@@ -406,6 +415,9 @@ const styles = {
     ul,
     ol {
       padding-left: 2rem;
+      @media only screen and (max-width: 700px) {
+        padding-left: 1rem;
+      }
 
       ul,
       ol {
