@@ -1,10 +1,8 @@
 import { css } from "@emotion/react"
 import styled from "@emotion/styled"
 import { graphql } from "gatsby"
-import { MDXRenderer } from "gatsby-plugin-mdx"
 import * as React from "react"
-
-import Layout, { PlainLayout } from '../components/layout'
+import { universities, University } from "./resume/educations"
 import { companies, Company } from "./resume/experiences"
 
 interface Props {
@@ -31,7 +29,6 @@ interface Theory {
 }
 
 const Highlight = styled('a')(() => ({
-  fontSize: '1rem',
   fontWeight: 'bold',
   color: 'var(--text-link)',
 }))
@@ -41,31 +38,46 @@ const About: React.FunctionComponent<Props> = ({
 }) => {
   return (
     <article>
-      <div css={styles.headerWrapper}>
-        <Abstract text={'asdasdasddas dasadsdadas'} />
+      <div css={styles.introduction}>
+        <div css={css`font-size: 1.7em; margin-top: 14px;`}>Aaron Ryu</div>
+        <div css={css`font-size: 1.1em;`}>Software Developer</div>
+        <div css={css`font-size: 0.97em; margin: 16px 0; font-style: italic;`}>"Cool Heads, Warm Hearts"</div>
+        <div css={css`font-size: 0.9em;`}>
+          <div css={css`margin: 4px`}>aaron.ryu.dev@gmail.com | +82 10 5549 7201</div>
+          <div css={css`margin: 4px`}>Seoul, 05328, Republic of Korea</div>
+        </div>
       </div>
-
-      <h1 align="center">Aaron Ryu</h1>
-      <h4 align="center">Software Developer</h4>
-      <h5 align="center">"Cool Heads, Warm Hearts"</h5>
-      <div align="center">aaron.ryu.dev@gmail.com | +82 10 5549 7201</div>
-
       <div css={styles.body}>
-        <Header category="Specialty">
-          <ul><li><Highlight>Web Development</Highlight>: Front-end &amp; Back-end</li></ul>
-        </Header>
-        <Header category="Skills">
-          <ul>
-            <li><Highlight>Kotlin 1.3</Highlight>, <Highlight>Java 8+ w/ Spring</Highlight></li>
-            <li><Highlight>React.js</Highlight> and <Highlight>Angular.js w/ Typescript</Highlight></li>
-            <li><Highlight>AWS</Highlight></li>
-          </ul>
-        </Header>
+        <Specialty list={[
+          <><Highlight>Web Development</Highlight>: Front-end &amp; Back-end</>,
+        ]}/>
+        <Skills list={[
+          <><Highlight>Kotlin 1.3</Highlight>, <Highlight>Java 8+ w/ Spring</Highlight></>,
+          <><Highlight>React.js</Highlight> and <Highlight>Angular.js w/ Typescript</Highlight></>,
+          <><Highlight>AWS</Highlight></>,
+        ]}/>
         <Experiences companies={companies} />
+        <Education universities={universities} />
       </div>
     </article>
   )
 }
+
+const Specialty: React.FunctionComponent<{ list: Array<React.ReactFragment> }> = ({ list }) => (
+  <Header category="Specialty">
+    <ul css={styles.representative}>
+      {list.map(each => <li>{each}</li>)}
+    </ul>
+  </Header>
+)
+
+const Skills: React.FunctionComponent<{ list: Array<React.ReactFragment> }> = ({ list }) => (
+  <Header category="Skills">
+    <ul css={styles.representative}>
+      {list.map(each => <li>{each}</li>)}
+    </ul>
+  </Header>
+)
 
 const Experiences: React.FunctionComponent<{ companies: Array<Company> }> = ({ companies }) => (
   <Header category="Experience">
@@ -80,7 +92,7 @@ const Experiences: React.FunctionComponent<{ companies: Array<Company> }> = ({ c
           <strong css={css`font-size: 1.12rem;`}>{company.name}</strong>
           <span css={css`margin: 0 10px 0 auto;`}>{company.startDate} ~ {company.endDate ? company.endDate : 'Current'}</span>
         </div>
-        <ul css={css`position: relative; top: -25px;`}>
+        <ul css={css`position: relative; top: -25px; margin-bottom: -6px;`}>
           {company.projects.map(eachProject => (
             <li css={styles.mainProject}>
               <div css={styles.mainProjectHeader}>
@@ -103,6 +115,86 @@ const Experiences: React.FunctionComponent<{ companies: Array<Company> }> = ({ c
             ))}
         </ul>
       </EachExperience>
+    ))}
+  </Header>
+)
+
+const Education: React.FunctionComponent<{ universities: Array<University> }> = ({ universities }) => (
+  <Header category="Education">
+    {universities.map(university => (
+      <EachEducation>
+        <div css={styles.eachEducationHeader}>
+          <a css={css`position: relative; left: -5px; top: 1px`}>
+            <svg height="20" viewBox="0 0 18 18" width="24" fill="var(--text-link)">
+              <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6-6-6z"></path>
+            </svg>
+          </a>
+          <span>{university.name}, {university.major} - {university.degree}</span>
+          <span css={css`margin: 0 10px 0 auto;`}>{university.startDate} ~ {university.endDate ? university.endDate : 'Current'}</span>
+        </div>
+        <ul css={css`position: relative; top: -25px; margin-bottom: -6px;`}>
+          {university.projects.map(eachProject => (
+            <li css={styles.mainStudy}>
+              <div css={styles.mainStudyHeader}>
+                {eachProject.name}
+                {/* <span css={css`margin: 0 10px 0 auto;`}>~ {eachProject.endDate}</span> */}
+              </div>
+              {eachProject.details.map(eachDetail => (
+                <ul>
+                  <li>{eachDetail.name}</li>
+                  {eachDetail.subDetails && eachDetail.subDetails.length > 0 && (
+                    <ul>
+                      {eachDetail.subDetails.map(eachSubDetail => (
+                        <li>{eachSubDetail}</li>
+                      ))}
+                    </ul>
+                  )}
+                </ul>
+              ))}
+            </li>
+            ))}
+        </ul>
+      </EachEducation>
+    ))}
+  </Header>
+)
+
+const Theory: React.FunctionComponent<{ papers: Array<Paper> }> = ({ papers }) => (
+  <Header category="Papers &amp; Conferences Attended">
+    {universities.map(university => (
+      <EachEducation>
+        <div css={styles.eachEducationHeader}>
+          <a css={css`position: relative; left: -5px; top: 1px`}>
+            <svg height="20" viewBox="0 0 18 18" width="24" fill="var(--text-link)">
+              <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6-6-6z"></path>
+            </svg>
+          </a>
+          <span>{university.name}, {university.major} - {university.degree}</span>
+          <span css={css`margin: 0 10px 0 auto;`}>{university.startDate} ~ {university.endDate ? university.endDate : 'Current'}</span>
+        </div>
+        <ul css={css`position: relative; top: -25px; margin-bottom: -6px;`}>
+          {university.projects.map(eachProject => (
+            <li css={styles.mainStudy}>
+              <div css={styles.mainStudyHeader}>
+                {eachProject.name}
+                {/* <span css={css`margin: 0 10px 0 auto;`}>~ {eachProject.endDate}</span> */}
+              </div>
+              {eachProject.details.map(eachDetail => (
+                <ul>
+                  <li>{eachDetail.name}</li>
+                  {eachDetail.subDetails && eachDetail.subDetails.length > 0 && (
+                    <ul>
+                      {eachDetail.subDetails.map(eachSubDetail => (
+                        <li>{eachSubDetail}</li>
+                      ))}
+                    </ul>
+                  )}
+                </ul>
+              ))}
+            </li>
+            ))}
+        </ul>
+      </EachEducation>
     ))}
   </Header>
 )
@@ -132,25 +224,33 @@ const EachExperience: React.FunctionComponent<{
   </div>
 )
 
-const Abstract = ({ text }: { text?: string }) => text ? (
-  <section css={styles.abstract}>
-    <p css={styles.abstractText}>{text}</p>
-  </section>
-) : <></>
-
-const Body = ({ body }: { body: string }) => (
-  <div css={styles.body}>
-    <MDXRenderer>{body}</MDXRenderer>
+const EachEducation: React.FunctionComponent<{
+  children: React.ReactNode,
+}> = ({ children }) => (
+  <div css={styles.eachEducation}>
+    {children}
   </div>
 )
 
 const styles = {
+  introduction: css`
+    margin-top: 85px;
+    height: 180px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; // flex-start;
+    text-align: center;
+  `,
+  representative: css`
+    font-size: 1.115rem;
+  `,
   highlight: css`
     font-size: 1rem;
     font-weight: bold;
     color: var(--text-link);
   `,
   aAnchor: css`
+    height: 2.3rem;
     border-bottom: 2px solid var(--text-link);
     background-position: 0 100%;
     background-size: auto 3px;
@@ -192,6 +292,33 @@ const styles = {
     margin: 0 0 1rem 0;
     padding: 0;
   `,
+
+  eachEducation: css`
+    border: 1px solid var(--text-link);
+    border-radius: 10px;
+    padding: 10px 10px 0 10px;
+    margin: 20px 16px 20px 0;
+  `,
+  eachEducationHeader: css`
+    display: flex;
+    font-size: 1rem;
+    color: var(--text-link);
+    background-color: var(--text-link-background);
+    border-radius: 5px;
+    // border-bottom: 1px solid var(--brand);
+    // padding-bottom: 10px;
+
+    @media only screen and (max-width: 700px) {
+      font-size: 0.915rem;
+    }
+  `,
+  mainStudy: css`
+    padding-top: 20px;
+  `,
+  mainStudyHeader: css`
+    display: flex;
+  `,
+
   header: css`
     margin: 0 auto;
     @media only screen and (max-width: 1280px) {
@@ -429,6 +556,7 @@ const styles = {
 
     h1,
     h2 {
+      // margin: 1.6rem 0 0 0;
       margin: 2.3rem 0 0 0;
       @media only screen and (max-width: 700px) {
         margin: 2rem 0 1rem 0;
@@ -441,6 +569,7 @@ const styles = {
     h2 {
       font-size: 1.296rem;
       font-weight: 600;
+      height: 2.3rem;
       border-bottom: 2px solid var(--text-link);
       @media only screen and (max-width: 700px) {
         font-size: 1.196rem;
