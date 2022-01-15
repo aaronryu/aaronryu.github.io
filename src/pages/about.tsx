@@ -4,6 +4,7 @@ import { graphql } from "gatsby"
 import * as React from "react"
 import { universities, University } from "./resume/educations"
 import { companies, Company } from "./resume/experiences"
+import { Paper, papers } from "./resume/papers"
 
 interface Props {
   data: {
@@ -22,10 +23,6 @@ interface Props {
       slug: string
     }
   }
-}
-
-interface Theory {
-  
 }
 
 const Highlight = styled('a')(() => ({
@@ -58,6 +55,7 @@ const About: React.FunctionComponent<Props> = ({
         ]}/>
         <Experiences companies={companies} />
         <Education universities={universities} />
+        <Papers papers={papers}/>
       </div>
     </article>
   )
@@ -89,8 +87,19 @@ const Experiences: React.FunctionComponent<{ companies: Array<Company> }> = ({ c
               <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6-6-6z"></path>
             </svg>
           </a>
-          <strong css={css`font-size: 1.12rem;`}>{company.name}</strong>
-          <span css={css`margin: 0 10px 0 auto;`}>{company.startDate} ~ {company.endDate ? company.endDate : 'Current'}</span>
+          <strong css={css`
+            font-size: 1.12rem;
+            @media only screen and (max-width: 700px) {
+              font-size: 1.015rem;
+            }
+          `}>{company.name}</strong>
+          <span css={css`
+            margin: 0 10px 0 auto;
+            font-size: 1.12rem;
+            @media only screen and (max-width: 700px) {
+              font-size: 1.015rem;
+            }
+          `}>{company.startDate} ~ {company.endDate ? company.endDate : 'Current'}</span>
         </div>
         <ul css={css`position: relative; top: -25px; margin-bottom: -6px;`}>
           {company.projects.map(eachProject => (
@@ -100,7 +109,7 @@ const Experiences: React.FunctionComponent<{ companies: Array<Company> }> = ({ c
                 <span css={css`margin: 0 10px 0 auto;`}>~ {eachProject.endDate}</span>
               </div>
               {eachProject.details.map(eachDetail => (
-                <ul>
+                <ul css={styles.subProject}>
                   <li>{eachDetail.name}</li>
                   {eachDetail.subDetails && eachDetail.subDetails.length > 0 && (
                     <ul>
@@ -159,42 +168,21 @@ const Education: React.FunctionComponent<{ universities: Array<University> }> = 
   </Header>
 )
 
-const Theory: React.FunctionComponent<{ papers: Array<Paper> }> = ({ papers }) => (
+const Papers: React.FunctionComponent<{ papers: Array<Paper> }> = ({ papers }) => (
   <Header category="Papers &amp; Conferences Attended">
-    {universities.map(university => (
-      <EachEducation>
-        <div css={styles.eachEducationHeader}>
-          <a css={css`position: relative; left: -5px; top: 1px`}>
-            <svg height="20" viewBox="0 0 18 18" width="24" fill="var(--text-link)">
-              <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6-6-6z"></path>
-            </svg>
-          </a>
-          <span>{university.name}, {university.major} - {university.degree}</span>
-          <span css={css`margin: 0 10px 0 auto;`}>{university.startDate} ~ {university.endDate ? university.endDate : 'Current'}</span>
-        </div>
-        <ul css={css`position: relative; top: -25px; margin-bottom: -6px;`}>
-          {university.projects.map(eachProject => (
-            <li css={styles.mainStudy}>
-              <div css={styles.mainStudyHeader}>
-                {eachProject.name}
-                {/* <span css={css`margin: 0 10px 0 auto;`}>~ {eachProject.endDate}</span> */}
-              </div>
-              {eachProject.details.map(eachDetail => (
-                <ul>
-                  <li>{eachDetail.name}</li>
-                  {eachDetail.subDetails && eachDetail.subDetails.length > 0 && (
-                    <ul>
-                      {eachDetail.subDetails.map(eachSubDetail => (
-                        <li>{eachSubDetail}</li>
-                      ))}
-                    </ul>
-                  )}
-                </ul>
-              ))}
-            </li>
-            ))}
-        </ul>
-      </EachEducation>
+    {papers.map(paper => (
+      <ul>
+        <li>
+          <div css={styles.eachPaperHeader}>
+            <span>{paper.name}</span>
+            <span css={css`margin: 0 10px 0 auto;`}>{paper.issuedDate}</span>
+          </div>
+          <ul css={css`position: relative; top: -25px; margin-bottom: -20px;`}>
+            <li css={styles.attended}>{paper.attended}</li>
+            <ul css={css`margin-top: -4px; font-size: 0.9rem;`}><li>{paper.author.join(', ')}</li></ul>
+          </ul>
+        </li>
+      </ul>
     ))}
   </Header>
 )
@@ -243,6 +231,9 @@ const styles = {
   `,
   representative: css`
     font-size: 1.115rem;
+    @media only screen and (max-width: 700px) {
+      font-size: 1rem;
+    }
   `,
   highlight: css`
     font-size: 1rem;
@@ -283,14 +274,20 @@ const styles = {
   `,
   mainProject: css`
     padding-top: 20px;
+    font-size: 1rem;
+    @media only screen and (max-width: 700px) {
+      font-size: 0.92rem;
+    }
+  `,
+  subProject: css`
+    font-size: 0.92rem;
+    @media only screen and (max-width: 700px) {
+      font-size: 0.8rem;
+    }
   `,
   mainProjectHeader: css`
     display: flex;
     color: var(--text-link);
-  `,
-  headerWrapper: css`
-    margin: 0 0 1rem 0;
-    padding: 0;
   `,
 
   eachEducation: css`
@@ -312,193 +309,42 @@ const styles = {
       font-size: 0.915rem;
     }
   `,
+
+  eachPaperHeader: css`
+    display: flex;
+    font-size: 1rem;
+    color: var(--text-link);
+    margin: 18px 0;
+
+    @media only screen and (max-width: 700px) {
+      font-size: 0.915rem;
+    }
+  `,
+  attended: css`
+    padding-top: 6px;
+    font-size: 0.9rem;
+    @media only screen and (max-width: 700px) {
+      font-size: 0.84rem;
+    }
+  `,
+
+
   mainStudy: css`
     padding-top: 20px;
+    font-size: 0.92rem;
+    @media only screen and (max-width: 700px) {
+      font-size: 0.8rem;
+    }
   `,
   mainStudyHeader: css`
     display: flex;
   `,
 
-  header: css`
-    margin: 0 auto;
-    @media only screen and (max-width: 1280px) {
-      margin: 0 auto 0 50px;
-      padding: 0 1.2rem;
-    }
-    @media only screen and (max-width: 1024px) {
-      margin: 0 auto 0 0;
-      padding: 0 1.2rem;
-    }
-
-    padding: 0 1rem;
-    max-width: 800px;
-  `,
-  category: css`
-    margin: 0 0 1.1rem 0.15rem;
-    letter-spacing: 0.03rem;
-    font-size: 0.8rem;
-    text-transform: uppercase;
-    color: var(--brand);
-  `,
-  headline: css`
-    margin: 0;
-    padding: 0;
-    line-height: 1.4;
-    font-size: 1.6rem;
-    font-weight: 500;
-
-    @media only screen and (max-width: 700px) {
-      font-size: 1.25rem;
-    }
-  `,
-  titleWrapper: css`
-    position: fixed;
-    z-index: -1;
-    top: 15px;
-    left: 24rem;
-    right: 24rem;
-    text-align: center;
-
-    @media only screen and (max-width: 1100px) {
-      left: 20rem;
-      right: 20rem;
-    }
-
-    @media only screen and (max-width: 1000px) {
-      left: 7rem;
-      right: 7rem;
-    }
-
-    .scrolled-a-bit & {
-      z-index: 12;
-    }
-  `,
-  title: css`
-    margin: 0 auto;
-    text-align: center;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    font-size: 0.9792rem;
-    transition: all 0.15s ease-out;
-    transform: translate3d(0, 0.5rem, 0);
-    opacity: 0;
-
-    .scrolled-a-bit & {
-      opacity: 1;
-      transform: translate3d(0, 0, 0);
-    }
-
-    @media only screen and (max-width: 700px) {
-      font-size: 0.84rem;
-    }
-  `,
-  deck: css`
-    margin: 0.95rem 0 0;
-    padding: 0 0.1rem;
-    line-height: 1.9;
-    font-size: 1.0rem;
-
-    @media only screen and (max-width: 700px) {
-      font-size: 0.86rem;
-    }
-  `,
-  abstract: css`
-    margin: 0 auto 0;
-    @media only screen and (max-width: 1280px) {
-      margin: 0 auto 0 50px;
-      padding: 0 1.2rem;
-    }
-    @media only screen and (max-width: 1024px) {
-      margin: 0 auto 0 0;
-      padding: 0 1.2rem;
-    }
-
-    padding: 0 1rem;
-    max-width: 750px;
-    display: flex;
-    justify-content: center;
-  `,
-  abstractText: css`
-    max-width: 700px;
-    line-height: 1.9;
-
-    @media only screen and (max-width: 700px) {
-      font-size: 0.84rem;
-    }
-  `,
-  epigraph: css`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 0 auto;
-    @media only screen and (max-width: 1280px) {
-      margin: 0 auto 0 50px;
-      padding: 0 1.2rem;
-    }
-    @media only screen and (max-width: 1024px) {
-      margin: 0 auto 0 0;
-      padding: 0 1.2rem;
-    }
-
-    padding: 0 1rem 5rem;
-    max-width: 650px;
-    text-align: center;
-  `,
-  epigraphText: css`
-    max-width: 450px;
-    margin: 0 0 0.5rem 0;
-    line-height: 1.9;
-  `,
-  epigraphAuthor: css`
-    padding-top: 0.3rem;
-    max-width: 500px;
-    display: flex;
-    align-items: center;
-    margin: 0 0.225rem 0 0;
-    letter-spacing: 0.03rem;
-
-    ::before {
-      content: '';
-      margin-right: 0.44rem;
-      width: 13px;
-      height: 1px;
-      background: #777;
-    }
-  `,
-  meta: css`
-    margin: 0 auto;
-    @media only screen and (max-width: 1280px) {
-      margin: 0 auto 0 50px;
-      padding: 0 1.2rem;
-    }
-    @media only screen and (max-width: 1024px) {
-      margin: 0 auto 0 0;
-      padding: 0 1.2rem;
-    }
-
-    padding: 0 1rem 0;
-    width: 100%;
-    max-width: 800px;
-    letter-spacing: 0.02rem;
-    font-size: 0.83rem;
-    color: var(--brand);
-  `,
-
   body: css`
     margin: 2rem auto 0;
-    @media only screen and (max-width: 1280px) {
-      margin: 0 auto 0 50px;
-      padding: 0 1.2rem;
-    }
-    @media only screen and (max-width: 1024px) {
-      margin: 0 auto 0 0;
-      padding: 0 1.2rem;
-    }
-
     padding: 0 1rem;
     width: 100%;
-    max-width: 800px;
+    max-width: 900px;
     line-height: 2;
     font-size: 1.0rem;
 
