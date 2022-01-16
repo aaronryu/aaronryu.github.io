@@ -1,17 +1,58 @@
-import React from "react"
+import React, { useState } from "react"
 import { AnimatePresence, motion } from "framer-motion"
 import { css } from "@emotion/react"
 import { Link } from "gatsby"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faFacebook, faGithub, faTwitter } from "@fortawesome/free-brands-svg-icons"
+import { NestedListIndicator } from "./navigator"
 
 const SIDEBAR_WIDTH = 230
-const NAV_ITEMS = [
-  { to: '/dev', label: 'Development' },
+const NAV_ITEMS: Array<MenuProps> = [
+  { to: '/dev', label: 'Development',
+    submenu: [
+      { to: '/home', label: 'Home' }
+    ]
+  },
   { to: '/topiclog', label: 'Politics' },
   { to: '/journal', label: 'Economics' },
   { to: '/about', label: 'About' },
+  { to: '/homo', label: 'Homo Sapience',
+    submenu: [
+      { to: '/js', label: 'Javascript' },
+      { to: '/css', label: 'CSS' },
+      { to: '/spring', label: 'Spring' },
+    ]
+  },
 ]
+
+const subMenuMotion = {
+  open: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      type: 'tween',
+      duration: 0.25,
+    },
+  },
+  closed: {
+    display: 'none',
+    opacity: 0,
+    y: -35 + 'px',
+    transition: {
+      type: 'tween',
+      duration: 0.25,
+    },
+  },
+  exit: {
+    display: 'none',
+    opacity: 0,
+    y: -35 + 'px',
+    transition: {
+      type: 'tween',
+      duration: 0.25,
+    },
+  },
+}
 
 const variants = {
   open: {
@@ -104,12 +145,13 @@ const LeftSideMenuBar = ({ visible, close, currentWidth, links }: Props) => {
             <div style={{ overflow: 'scroll' }}>
               <motion.div css={styles.list} key="a" variants={variants2}>
                 {NAV_ITEMS.map(item => (
-                  <MenuItem
-                    key={item.to}
-                    to={item.to}
-                    label={item.label}
-                    close={close}
-                  />
+                      <MenuList
+                        key={item.to}
+                        to={item.to}
+                        label={item.label}
+                        submenu={item.submenu}
+                        close={close}
+                      />
                 ))}
               </motion.div>
             </div>
@@ -123,33 +165,54 @@ const LeftSideMenuBar = ({ visible, close, currentWidth, links }: Props) => {
 interface MenuProps {
   to: string
   label: string
-  close: () => void
+  submenu?: Array<MenuProps>
+  close?: () => void
 }
 
-interface SubMenuProps {
-  visible: boolean
-  close: () => void
-}
-
-const MenuItem = ({ to, label, close }: MenuProps) => {
+const MenuList = ({ to, label, submenu }: MenuProps) => {
+  const hasSubNav = submenu && (submenu.length > 0);
+  const [isOpen, setIsOpen] = useState<boolean>(false)
   return (
-    <motion.div
-      css={styles.listItem}
-      key={to + label}
-      variants={variants3}
-      // whileHover={{ scale: 1.1 }}
-      // whileTap={{ scale: 0.95 }}
-      exit={{ opacity: 0 }}
-    >
-      <Link
-        css={styles.listItemLink}
-        to={to}
-        activeClassName="active"
-        onClick={() => setTimeout(close)}
+    <>
+      <motion.div key={label} css={styles.listItem}>
+        {hasSubNav
+          ?
+          <div css={styles.listItemLink} onClick={() => setIsOpen(!isOpen)}>
+            {label} <NestedListIndicator isOpen={isOpen} />
+          </div>
+          :
+          <Link css={styles.listItemLink} to={to} activeClassName="active">
+            {label}
+          </Link>
+        }
+      </motion.div>
+      <SubMenuList isOpen={isOpen} subMenu={submenu} />
+    </>
+  )
+}
+
+const SubMenuList = ({ isOpen, subMenu }: { isOpen: boolean, subMenu?: Array<MenuProps> }) => {
+  const hasSubMenu = subMenu && (subMenu.length > 0);
+  return (
+    hasSubMenu ? (
+      <motion.div
+        animate={isOpen ? "open" : "closed"}
+        variants={{ open: { transition: { staggerChildren: 0.1, delayChildren: 0.01 } } }}
       >
-        {label}
-      </Link>
-    </motion.div>
+        {subMenu.map(eachSubmenu => (
+          <motion.div css={styles.listItem} variants={subMenuMotion}>
+            <Link
+              css={styles.subItemLink}
+              to={eachSubmenu.to}
+              activeClassName="active"
+              onClick={() => setTimeout(close)}
+            >
+              {eachSubmenu.label}
+            </Link>
+          </motion.div>
+        ))}
+      </motion.div>
+    ) : <></>
   )
 }
 
@@ -187,11 +250,40 @@ const styles = {
     padding: 10px;
   `,
   listItem: css`
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
     border-bottom: 1px solid var(--hr);
   `,
   listItemLink: css`
+    display: flex;
+    justify-content: space-between;
+    padding: 1.1rem 1rem 1.1rem 1.1rem;
+    font-size: 0.95rem;
+    color: var(--text-auxiliary);
+    fill: var(--text-auxiliary);
+    transition: all 0.15s ease-out;
+
+    :hover {
+      color: var(--text0);
+      fill: var(--text0);
+      background-color: var(--bg-accents);
+    }
+
+    &.active {
+      text-decoration: underline;
+      color: var(--text);
+      fill: var(--text);
+    }
+  `,
+
+  subItemLink: css`
     display: block;
-    padding: 1.1rem 1.4rem;
+    padding: 1.1rem 1.4rem 1.1rem 2.2rem;
     font-size: 0.95rem;
     color: var(--text-auxiliary);
     transition: all 0.15s ease-out;
