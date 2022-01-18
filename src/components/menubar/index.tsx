@@ -1,58 +1,11 @@
-import React, { useState } from "react"
+import React from "react"
 import { AnimatePresence, motion } from "framer-motion"
 import { css } from "@emotion/react"
-import { Link } from "gatsby"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faFacebook, faGithub, faTwitter } from "@fortawesome/free-brands-svg-icons"
-import { NestedListIndicator } from "./navigator"
+import Navigator from './navigator'
 
 const SIDEBAR_WIDTH = 230
-const NAV_ITEMS: Array<MenuProps> = [
-  { to: '/dev', label: 'Development',
-    submenu: [
-      { to: '/home', label: 'Home' }
-    ]
-  },
-  { to: '/topiclog', label: 'Politics' },
-  { to: '/journal', label: 'Economics' },
-  { to: '/about', label: 'About' },
-  { to: '/homo', label: 'Homo Sapience',
-    submenu: [
-      { to: '/js', label: 'Javascript' },
-      { to: '/css', label: 'CSS' },
-      { to: '/spring', label: 'Spring' },
-    ]
-  },
-]
-
-const subMenuMotion = {
-  open: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      type: 'tween',
-      duration: 0.25,
-    },
-  },
-  closed: {
-    display: 'none',
-    opacity: 0,
-    y: -35 + 'px',
-    transition: {
-      type: 'tween',
-      duration: 0.25,
-    },
-  },
-  exit: {
-    display: 'none',
-    opacity: 0,
-    y: -35 + 'px',
-    transition: {
-      type: 'tween',
-      duration: 0.25,
-    },
-  },
-}
 
 const variants = {
   open: {
@@ -71,40 +24,11 @@ const variants = {
       duration: 0.25,
     },
   },
-  exit: {
-    opacity: 1,
-    x: -SIDEBAR_WIDTH + -35 + 'px',
-    transition: {
-      type: 'tween',
-      duration: 0.25,
-    },
-  },
-}
-
-const variants2 = {
-  open: {
-    transition: { staggerChildren: 0.07, delayChildren: 0 },
-  },
-  closed: {
-    transition: { staggerChildren: 0.05, staggerDirection: -1 },
-  },
-}
-
-const variants3 = {
-  open: {
-    opacity: 1,
-  },
-  closed: {
-    opacity: 0,
-  },
-  exit: {
-    opacity: 0,
-  },
 }
 
 interface Props {
   visible: boolean
-  close: () => void
+  onClose?: () => void
   currentWidth: number
   links: {
     github: string
@@ -113,7 +37,7 @@ interface Props {
   }
 }
 
-const LeftSideMenuBar = ({ visible, close, currentWidth, links }: Props) => {
+const LeftSideMenuBar = ({ visible, onClose, currentWidth, links }: Props) => {
   return (
     <AnimatePresence>
       {visible && (
@@ -142,77 +66,11 @@ const LeftSideMenuBar = ({ visible, close, currentWidth, links }: Props) => {
             animate={visible ? 'open' : 'closed'}
             exit="closed"
           >
-            <div style={{ overflow: 'scroll' }}>
-              <motion.div css={styles.list} key="a" variants={variants2}>
-                {NAV_ITEMS.map(item => (
-                      <MenuList
-                        key={item.to}
-                        to={item.to}
-                        label={item.label}
-                        submenu={item.submenu}
-                        close={close}
-                      />
-                ))}
-              </motion.div>
-            </div>
+            <Navigator onClose={onClose}/>
           </motion.div>
         </motion.div>
       )}
     </AnimatePresence>
-  )
-}
-
-interface MenuProps {
-  to: string
-  label: string
-  submenu?: Array<MenuProps>
-  close?: () => void
-}
-
-const MenuList = ({ to, label, submenu }: MenuProps) => {
-  const hasSubNav = submenu && (submenu.length > 0);
-  const [isOpen, setIsOpen] = useState<boolean>(false)
-  return (
-    <>
-      <motion.div key={label} css={styles.listItem}>
-        {hasSubNav
-          ?
-          <div css={styles.listItemLink} onClick={() => setIsOpen(!isOpen)}>
-            {label} <NestedListIndicator isOpen={isOpen} />
-          </div>
-          :
-          <Link css={styles.listItemLink} to={to} activeClassName="active">
-            {label}
-          </Link>
-        }
-      </motion.div>
-      <SubMenuList isOpen={isOpen} subMenu={submenu} />
-    </>
-  )
-}
-
-const SubMenuList = ({ isOpen, subMenu }: { isOpen: boolean, subMenu?: Array<MenuProps> }) => {
-  const hasSubMenu = subMenu && (subMenu.length > 0);
-  return (
-    hasSubMenu ? (
-      <motion.div
-        animate={isOpen ? "open" : "closed"}
-        variants={{ open: { transition: { staggerChildren: 0.1, delayChildren: 0.01 } } }}
-      >
-        {subMenu.map(eachSubmenu => (
-          <motion.div css={styles.listItem} variants={subMenuMotion}>
-            <Link
-              css={styles.subItemLink}
-              to={eachSubmenu.to}
-              activeClassName="active"
-              onClick={() => setTimeout(close)}
-            >
-              {eachSubmenu.label}
-            </Link>
-          </motion.div>
-        ))}
-      </motion.div>
-    ) : <></>
   )
 }
 
@@ -239,64 +97,11 @@ const styles = {
     border-radius: 7px;
     width: 100%;
     max-width: ${SIDEBAR_WIDTH}px;
-    max-height: 700px;
+    max-height: 600px;
     overflow: scroll;
     transition: background-color 0.1s ease-out;
     background-color: var(--bg);
     // box-shadow: var(--shadow-small);
-  `,
-  list: css`
-    flex: 1;
-    padding: 10px;
-  `,
-  listItem: css`
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-
-    border-bottom: 1px solid var(--hr);
-  `,
-  listItemLink: css`
-    display: flex;
-    justify-content: space-between;
-    padding: 1.1rem 1rem 1.1rem 1.1rem;
-    font-size: 0.95rem;
-    color: var(--text-auxiliary);
-    fill: var(--text-auxiliary);
-    transition: all 0.15s ease-out;
-
-    :hover {
-      color: var(--text0);
-      fill: var(--text0);
-      background-color: var(--bg-accents);
-    }
-
-    &.active {
-      text-decoration: underline;
-      color: var(--text);
-      fill: var(--text);
-    }
-  `,
-
-  subItemLink: css`
-    display: block;
-    padding: 1.1rem 1.4rem 1.1rem 2.2rem;
-    font-size: 0.95rem;
-    color: var(--text-auxiliary);
-    transition: all 0.15s ease-out;
-
-    :hover {
-      color: var(--text0);
-      background-color: var(--bg-accents);
-    }
-
-    &.active {
-      text-decoration: underline;
-      color: var(--text);
-    }
   `,
 }
 

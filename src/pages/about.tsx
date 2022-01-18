@@ -68,7 +68,7 @@ const About: React.FunctionComponent<Props> = ({
 const Specialty: React.FunctionComponent<{ list: Array<React.ReactFragment> }> = ({ list }) => (
   <Header category="Specialty">
     <ul css={styles.representative}>
-      {list.map(each => <li>{each}</li>)}
+      {list.map((each, index) => <li key={index}>{each}</li>)}
     </ul>
   </Header>
 )
@@ -76,7 +76,7 @@ const Specialty: React.FunctionComponent<{ list: Array<React.ReactFragment> }> =
 const Skills: React.FunctionComponent<{ list: Array<React.ReactFragment> }> = ({ list }) => (
   <Header category="Skills">
     <ul css={styles.representative}>
-      {list.map(each => <li>{each}</li>)}
+      {list.map((each, index) => <li key={index}>{each}</li>)}
     </ul>
   </Header>
 )
@@ -84,7 +84,7 @@ const Skills: React.FunctionComponent<{ list: Array<React.ReactFragment> }> = ({
 const Experiences: React.FunctionComponent<{ companies: Array<Company> }> = ({ companies }) => (
   <Header category="Experience">
     {companies.map(company => (
-      <EachExperience>
+      <EachExperience key={company.name}>
         <div css={styles.eachExperienceHeader}>
           <a css={css`position: relative; left: -5px`}>
             <svg height="20" viewBox="0 0 18 18" width="24" fill="var(--text-link)">
@@ -105,20 +105,20 @@ const Experiences: React.FunctionComponent<{ companies: Array<Company> }> = ({ c
             }
           `}>{company.startDate} ~ {company.endDate ? company.endDate : 'Current'}</span>
         </div>
-        <ul css={css`position: relative; top: -25px; margin-bottom: -6px;`}>
+        <ul css={css`position: relative; top: -25px; margin-bottom: -6px;`} key={company.name}>
           {company.projects.map(eachProject => (
-            <li css={styles.mainProject}>
+            <li css={styles.mainProject} key={eachProject.name}>
               <div css={styles.mainProjectHeader}>
                 {eachProject.name}
                 <span css={css`margin: 0 10px 0 auto;`}>~ {eachProject.endDate}</span>
               </div>
               {eachProject.details.map(eachDetail => (
-                <ul css={styles.subProject}>
+                <ul css={styles.subProject} key={eachDetail.name}>
                   <li>{eachDetail.name}</li>
                   {eachDetail.subDetails && eachDetail.subDetails.length > 0 && (
                     <ul>
                       {eachDetail.subDetails.map(eachSubDetail => (
-                        <li>{eachSubDetail}</li>
+                        <li key={eachSubDetail}>{eachSubDetail}</li>
                       ))}
                     </ul>
                   )}
@@ -135,7 +135,7 @@ const Experiences: React.FunctionComponent<{ companies: Array<Company> }> = ({ c
 const Education: React.FunctionComponent<{ universities: Array<University> }> = ({ universities }) => (
   <Header category="Education">
     {universities.map(university => (
-      <EachEducation>
+      <EachEducation key={university.name}>
         <div css={styles.eachEducationHeader}>
           <a css={css`position: relative; left: -5px; top: 1px`}>
             <svg height="20" viewBox="0 0 18 18" width="24" fill="var(--text-link)">
@@ -145,20 +145,20 @@ const Education: React.FunctionComponent<{ universities: Array<University> }> = 
           <span>{university.name}, {university.major} - {university.degree}</span>
           <span css={css`margin: 0 10px 0 auto;`}>{university.startDate} ~ {university.endDate ? university.endDate : 'Current'}</span>
         </div>
-        <ul css={css`position: relative; top: -25px; margin-bottom: -6px;`}>
+        <ul css={css`position: relative; top: -25px; margin-bottom: -6px;`} key={university.name}>
           {university.projects.map(eachProject => (
-            <li css={styles.mainStudy}>
+            <li css={styles.mainStudy} key={eachProject.name}>
               <div css={styles.mainStudyHeader}>
                 {eachProject.name}
                 {/* <span css={css`margin: 0 10px 0 auto;`}>~ {eachProject.endDate}</span> */}
               </div>
               {eachProject.details.map(eachDetail => (
-                <ul>
+                <ul key={eachDetail.name}>
                   <li>{eachDetail.name}</li>
                   {eachDetail.subDetails && eachDetail.subDetails.length > 0 && (
                     <ul>
                       {eachDetail.subDetails.map(eachSubDetail => (
-                        <li>{eachSubDetail}</li>
+                        <li key={eachSubDetail}>{eachSubDetail}</li>
                       ))}
                     </ul>
                   )}
@@ -175,7 +175,7 @@ const Education: React.FunctionComponent<{ universities: Array<University> }> = 
 const Papers: React.FunctionComponent<{ papers: Array<Paper> }> = ({ papers }) => (
   <Header category="Papers &amp; Conferences Attended">
     {papers.map(paper => (
-      <ul>
+      <ul key={paper.name}>
         <li>
           <div css={styles.eachPaperHeader}>
             <span>{paper.name}</span>
@@ -194,7 +194,7 @@ const Papers: React.FunctionComponent<{ papers: Array<Paper> }> = ({ papers }) =
 const Patents: React.FunctionComponent<{ patents: Array<Patent> }> = ({ patents }) => (
   <Header category="Patents">
     {patents.map(patent => (
-      <ul>
+      <ul key={patent.name}>
         <li>
           <div css={styles.eachPaperHeader}>
             <span>{patent.name}</span>
@@ -213,14 +213,14 @@ const Patents: React.FunctionComponent<{ patents: Array<Patent> }> = ({ patents 
 const Extracurricular: React.FunctionComponent<{ activities: Array<Activity> }> = ({ activities }) => (
   <Header category="Extracurricular activities">
     {activities.map(activity => (
-      <ul>
+      <ul key={activity.name}>
         <li>
           <div css={styles.eachPaperHeader}>
             <span>{activity.name}</span>
             <span css={css`margin: 0 10px 0 auto;`}>{activity.startDate} ~ {activity.endDate ? activity.endDate : 'Current'}</span>
           </div>
           <ul css={css`position: relative; top: -25px; margin-bottom: -20px;`}>
-            {activity.details.map(eachDetail => <li css={styles.attended}>{eachDetail}</li>)}
+            {activity.details.map(eachDetail => <li css={styles.attended} key={eachDetail}>{eachDetail}</li>)}
           </ul>
         </li>
       </ul>
@@ -246,17 +246,17 @@ const Header: React.FunctionComponent<{
 )
 
 const EachExperience: React.FunctionComponent<{
-  children: React.ReactNode,
-}> = ({ children }) => (
-  <div css={styles.eachExperience}>
+  children: React.ReactNode, props?: any
+}> = ({ children, props }) => (
+  <div css={styles.eachExperience} {...props}>
     {children}
   </div>
 )
 
 const EachEducation: React.FunctionComponent<{
-  children: React.ReactNode,
-}> = ({ children }) => (
-  <div css={styles.eachEducation}>
+  children: React.ReactNode, props?: any
+}> = ({ children, props }) => (
+  <div css={styles.eachEducation} {...props}>
     {children}
   </div>
 )
