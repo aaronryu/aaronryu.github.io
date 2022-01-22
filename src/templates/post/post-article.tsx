@@ -113,6 +113,10 @@ const styles = {
       margin: 0 auto 0 0;
       padding: 0 1.2rem;
     }
+    @media only screen and (max-width: 970px) {
+      margin: 0 auto;
+      padding: 0 1.2rem;
+    }
 
     padding: 0 1rem;
     max-width: 800px;
@@ -190,11 +194,15 @@ const styles = {
   abstract: css`
     margin: 0 auto 0;
     @media only screen and (max-width: 1280px) {
-      margin: 0 auto 0 50px;
+      margin: 0 auto 0 74px;
       padding: 0 1.2rem;
     }
     @media only screen and (max-width: 1024px) {
-      margin: 0 auto 0 0;
+      margin: 0 24px 0 24px;
+      padding: 0 1.2rem;
+    }
+    @media only screen and (max-width: 970px) {
+      margin: 0 auto;
       padding: 0 1.2rem;
     }
 
@@ -217,15 +225,20 @@ const styles = {
     align-items: center;
     margin: 0 auto;
     @media only screen and (max-width: 1280px) {
-      margin: 0 auto 0 50px;
-      padding: 0 1.2rem;
+      margin: 0 auto 0 116px;
     }
     @media only screen and (max-width: 1024px) {
-      margin: 0 auto 0 0;
-      padding: 0 1.2rem;
+      margin: 0 74px 0 74px;
+    }
+    @media only screen and (max-width: 970px) {
+      margin: 0 auto;
+    }
+    @media only screen and (max-width: 700px) {
+      padding: 0 0.9rem 1.8rem;
+      font-size: 0.84rem;
     }
 
-    padding: 0 1rem 5rem;
+    padding: 0 1rem 2rem;
     max-width: 650px;
     text-align: center;
   `,
@@ -260,6 +273,10 @@ const styles = {
       margin: 0 auto 0 0;
       padding: 0 1.2rem;
     }
+    @media only screen and (max-width: 970px) {
+      margin: 0 auto;
+      padding: 0 1.2rem;
+    }
 
     padding: 0 1rem 0;
     width: 100%;
@@ -277,6 +294,10 @@ const styles = {
     }
     @media only screen and (max-width: 1024px) {
       margin: 0 auto 0 0;
+      padding: 0 1.2rem;
+    }
+    @media only screen and (max-width: 970px) {
+      margin: 0 auto;
       padding: 0 1.2rem;
     }
 

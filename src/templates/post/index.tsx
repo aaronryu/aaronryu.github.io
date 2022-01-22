@@ -180,7 +180,9 @@ const TableOfContents = ({ toc, depth, currentHeaderUrl }: { toc: TocHeaders, de
           fontSize: '0.65rem',
           lineHeight: '1rem',
         },
-
+        '@media only screen and (max-width: 970px)': {
+          display: 'none',
+        },
         borderLeft: '1px solid var(--hr)',
       }}
     >
