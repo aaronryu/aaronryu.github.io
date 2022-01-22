@@ -58,19 +58,22 @@ export interface Menu {
 }
 
 export interface MenuProps extends Menu {
+  current: string
   onClose?: () => void
 }
 
 interface Props {
+  current: string
   onClose?: () => void
 }
 
-const Navigator = ({ onClose }: Props) => {
+const Navigator = ({ current, onClose }: Props) => {
   return (
     <div style={{ overflow: 'scroll' }}>
       <motion.div css={styles.list} key={'navigator'}>
         {NAV_ITEMS.map(item => (
               <MenuNavigator
+                current={current}
                 key={item.label}
                 to={item.to}
                 label={item.label}
@@ -83,9 +86,10 @@ const Navigator = ({ onClose }: Props) => {
   )
 }
 
-const MenuNavigator = ({ to, label, subMenu, onClose }: MenuProps) => {
+const MenuNavigator = ({ current, to, label, subMenu, onClose }: MenuProps) => {
   const hasSubMenu = isNonEmpty(subMenu);
-  const [isOpenSubMenu, setOpenSubMenu] = useState<boolean>(false)
+  const isOpenedSubMenu: boolean = hasSubMenu && !!(subMenu!.find(eachSubMenu => current.startsWith(eachSubMenu.to)))
+  const [isOpenSubMenu, setOpenSubMenu] = useState<boolean>(isOpenedSubMenu)
   return (
     <>
       <motion.div css={styles.listItem} key={label}>
@@ -100,12 +104,12 @@ const MenuNavigator = ({ to, label, subMenu, onClose }: MenuProps) => {
           </Link>
         }
       </motion.div>
-      <SubMenuNavigator isOpen={isOpenSubMenu} subMenu={subMenu} />
+      <SubMenuNavigator current={current} isOpen={isOpenSubMenu} subMenu={subMenu} onClose={onClose} />
     </>
   )
 }
 
-const SubMenuNavigator = ({ isOpen, subMenu, onClose }: { isOpen: boolean, subMenu?: Array<MenuProps>, onClose?: () => void }) => {
+const SubMenuNavigator = ({ current, isOpen, subMenu, onClose }: { current: string, isOpen: boolean, subMenu?: Array<Menu>, onClose?: () => void }) => {
   const hasSubMenu = isNonEmpty(subMenu);
   return (
     hasSubMenu ? (
@@ -113,22 +117,26 @@ const SubMenuNavigator = ({ isOpen, subMenu, onClose }: { isOpen: boolean, subMe
         animate={isOpen ? "open" : "closed"}
         variants={{ open: { transition: { staggerChildren: 0.1, delayChildren: 0.01 } } }}
       >
-        {subMenu!.map(eachSubmenu => (
-          <motion.div css={styles.listItem} variants={subMenuDisplay} key={eachSubmenu.label}>
-            <Link
-              css={[styles.listItemLink, styles.subItemIndent]}
-              to={eachSubmenu.to}
-              activeClassName="active"
-              onClick={() => onClose && onClose()}
-            >
-              {eachSubmenu.label}
-            </Link>
-          </motion.div>
-        ))}
+        {subMenu!.map(eachSubMenu =>
+          <SubMenu eachSubMenu={eachSubMenu} onClose={onClose} key={eachSubMenu.label} />
+        )}
       </motion.div>
     ) : <></>
   )
 }
+
+const SubMenu = ({ eachSubMenu, onClose }: { eachSubMenu: Menu, onClose?: () => void }) => (
+  <motion.div css={styles.listItem} variants={subMenuDisplay} key={eachSubMenu.label}>
+    <Link
+      css={[styles.listItemLink, styles.subItemIndent]}
+      to={eachSubMenu.to}
+      activeClassName="active"
+      onClick={() => onClose && onClose()}
+    >
+      {eachSubMenu.label}
+    </Link>
+  </motion.div>
+)
 
 const Path = (props: any) => (
   <motion.path

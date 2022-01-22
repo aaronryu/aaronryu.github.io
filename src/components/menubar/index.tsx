@@ -27,6 +27,7 @@ const variants = {
 }
 
 interface Props {
+  location: string
   visible: boolean
   onClose?: () => void
   currentWidth: number
@@ -37,7 +38,7 @@ interface Props {
   }
 }
 
-const LeftSideMenuBar = ({ visible, onClose, currentWidth, links }: Props) => {
+const LeftSideMenuBar = ({ location, visible, onClose, currentWidth, links }: Props) => {
   return (
     <AnimatePresence>
       {visible && (
@@ -66,7 +67,7 @@ const LeftSideMenuBar = ({ visible, onClose, currentWidth, links }: Props) => {
             animate={visible ? 'open' : 'closed'}
             exit="closed"
           >
-            <Navigator onClose={onClose}/>
+            <Navigator current={location} onClose={onClose}/>
           </motion.div>
         </motion.div>
       )}

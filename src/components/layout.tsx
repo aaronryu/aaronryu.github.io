@@ -55,7 +55,7 @@ const Layout: React.FunctionComponent<Props> = ({ location, children }) => {
     return observer.disconnect
   }, [])
 
-  const notShowMenuDefaultly = location ? PATHNAME_NOW_SHOW_MENU_DEFAULTLY.includes(location.pathname) : true;
+  const notShowMenuDefaultly = location ? !!(PATHNAME_NOW_SHOW_MENU_DEFAULTLY.find(each => location.pathname.startsWith(each))) : true;
   const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions())
   const [showMenu, setShowMenu] = useState(notShowMenuDefaultly ? false : windowDimensions.width > 1280)
   
@@ -92,7 +92,7 @@ const Layout: React.FunctionComponent<Props> = ({ location, children }) => {
       <div css={styles.scrollSpy} ref={spy} />
       <div css={styles.wrapper}>
         <Header siteTitle={title} showMenu={showMenu} toggleShowMenu={() => setShowMenu(!showMenu)} />
-        <LeftSideMenuBar visible={showMenu} close={close} currentWidth={windowDimensions.width} links={{ github: linkGithub, facebook: linkFacebook, twitter: linkTwitter }}  />
+        <LeftSideMenuBar location={location.pathname} visible={showMenu} onClose={close} currentWidth={windowDimensions.width} links={{ github: linkGithub, facebook: linkFacebook, twitter: linkTwitter }}  />
         <main css={styles.main}>{children}</main>
         {/* <Footer author={author} /> */}
       </div>
