@@ -135,26 +135,24 @@ const PostTemplate: React.FunctionComponent<Props> = ({
   )
 }
 
-const makeTocHeaderHtml = (each: TocHeader, remainDepth: number) => {
-  if (each.items !== undefined) {
-    return (
+const makeTocHeaderHtml = (each: TocHeader, remainDepth: number) => 
+  (each.items !== undefined)
+    ? (
       <React.Fragment key={each.title}>
         <li><a href={each.url}>{each.title}</a></li>
         <ul>{makeTocHeadersHtml(each.items, (remainDepth - 1))}</ul>
       </React.Fragment>
-    );
-  } else {
-    return <li key={each.title}><a href={each.url}>{each.title}</a></li>;
-  }
-}
+    )
+    : <li key={each.title}><a href={each.url}>{each.title}</a></li>
 
 const makeTocHeadersHtml = (items: Array<TocHeader>, depth: number) => {
   return <React.Fragment key={depth}>{(depth > 0) && items.map((each) => makeTocHeaderHtml(each, depth))}</React.Fragment>
 }
 
-const makeToc = (toc: TocHeaders, depth: number) => {
-  return <ul>{makeTocHeadersHtml(toc.items, depth)}</ul>
-}
+const makeToc = (toc: TocHeaders, depth: number) => 
+  (toc.items !== undefined)
+    ? <ul>{makeTocHeadersHtml(toc.items, depth)}</ul>
+    : <></>
 
 const TableOfContents = ({ toc, depth, currentHeaderUrl }: { toc: TocHeaders, depth: number, currentHeaderUrl: string }) => {
   return (

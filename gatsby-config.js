@@ -110,12 +110,5 @@ module.exports = {
         path: `${__dirname}/blog`,
       },
     },
-    {
-      resolve: 'gatsby-source-filesystem',
-      options: {
-        name: 'page',
-        path: `${__dirname}/page`,
-      },
-    },
   ],
 }
