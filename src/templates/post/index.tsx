@@ -6,15 +6,6 @@ import Article, { GatsbyImageSharpFluidWithWebp } from './post-article'
 import PostSeo from './post-seo'
 import { useScroll } from './scroll'
 
-export interface PostPreview {
-  slug: string
-  title: string
-  category: string
-  date: string
-  dateFormatted: string
-  deck?: string
-}
-
 export interface TocHeaders {
   items: Array<TocHeader>
 }
@@ -30,12 +21,12 @@ interface Props {
       frontmatter: {
         title: string /* 제목에 해당합니다. */
         slug: string /* example-post */
-        category: string /* Javascript (todo - 이거 nested 로 확장하고 싶음) */
+        category: string /* js */
+        categoryName: string /* Javascript */
         author: string /* Aaron Ryu */
         date: string /* 2021-10-28 */
         dateFormatted: string
         updateDate: string /* 2021-10-28 */
-        imageAlt?: string /* example.jpg name */
         image: { /* ./example.jpg */
           childImageSharp: {
             fluid: GatsbyImageSharpFluidWithWebp
@@ -116,9 +107,7 @@ const PostTemplate: React.FunctionComponent<Props> = ({
         currentHeaderUrl={currentHeaderUrl}
       />
       <Article
-        siteUrl={siteUrl}
-        slug={frontmatter.slug}
-        category={frontmatter.category}
+        category={frontmatter.categoryName}
         headline={frontmatter.title}
         deck={frontmatter.deck}
         abstract={frontmatter.abstract}
@@ -126,9 +115,6 @@ const PostTemplate: React.FunctionComponent<Props> = ({
         epigraphAuthor={frontmatter.epigraphAuthor}
         date={frontmatter.date}
         dateFormatted={frontmatter.dateFormatted}
-        image={frontmatter.image}
-        imageAlt={frontmatter.imageAlt}
-        toc={toc}
         body={body}
       />
     </div>
@@ -221,12 +207,12 @@ export const query = graphql`
       frontmatter {
         slug
         category
+        categoryName
         title
         author
         date
         dateFormatted: date(formatString: "MMM D, YYYY hh:mmA")
         updateDate
-        imageAlt
         image {
           childImageSharp {
             fluid(quality: 80, maxWidth: 1540) {

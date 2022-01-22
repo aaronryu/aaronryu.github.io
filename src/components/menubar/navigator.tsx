@@ -99,7 +99,7 @@ const MenuNavigator = ({ current, to, label, subMenu, onClose }: MenuProps) => {
             {label} <NestedListIndicator isOpen={isOpenSubMenu} />
           </div>
           :
-          <Link css={styles.listItemLink} to={to} activeClassName="active" onClick={() => onClose && onClose()}>
+          <Link css={[styles.listItemLink, (current.startsWith(to) && styles.currentHighlight)]} to={to} onClick={() => onClose && onClose()}>
             {label}
           </Link>
         }
@@ -118,19 +118,18 @@ const SubMenuNavigator = ({ current, isOpen, subMenu, onClose }: { current: stri
         variants={{ open: { transition: { staggerChildren: 0.1, delayChildren: 0.01 } } }}
       >
         {subMenu!.map(eachSubMenu =>
-          <SubMenu eachSubMenu={eachSubMenu} onClose={onClose} key={eachSubMenu.label} />
+          <SubMenu isCurrent={current.startsWith(eachSubMenu.to)} eachSubMenu={eachSubMenu} onClose={onClose} key={eachSubMenu.label} />
         )}
       </motion.div>
     ) : <></>
   )
 }
 
-const SubMenu = ({ eachSubMenu, onClose }: { eachSubMenu: Menu, onClose?: () => void }) => (
+const SubMenu = ({ isCurrent, eachSubMenu, onClose }: { isCurrent: boolean, eachSubMenu: Menu, onClose?: () => void }) => (
   <motion.div css={styles.listItem} variants={subMenuDisplay} key={eachSubMenu.label}>
     <Link
-      css={[styles.listItemLink, styles.subItemIndent]}
+      css={[styles.listItemLink, styles.subItemIndent, (isCurrent && styles.currentHighlight)]}
       to={eachSubMenu.to}
-      activeClassName="active"
       onClick={() => onClose && onClose()}
     >
       {eachSubMenu.label}
@@ -198,17 +197,16 @@ const styles = {
       fill: var(--text0);
       background-color: var(--bg-accents);
     }
-
-    &.active {
-      text-decoration: underline;
-      color: var(--text);
-      fill: var(--text);
-    }
   `,
-
   subItemIndent: css`
     display: block;
     padding: 1.1rem 1.4rem 1.1rem 2.2rem;
+  `,
+  currentHighlight: css`
+    -webkit-text-decoration: underline;
+    text-decoration: underline;
+    color: var(--text);
+    fill: var(--text);
   `,
 }
 

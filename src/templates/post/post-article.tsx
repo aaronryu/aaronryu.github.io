@@ -1,7 +1,6 @@
 import React from 'react'
 import { css } from '@emotion/react'
 import { MDXRenderer } from 'gatsby-plugin-mdx'
-import { TocHeaders } from '.'
 
 export interface GatsbyImageSharpFluidWithWebp {
   aspectRatio: number
@@ -14,40 +13,24 @@ export interface GatsbyImageSharpFluidWithWebp {
 }
 
 export interface ArticleProps {
-  siteUrl: string
-  slug: string
   category: string
   headline: string
-  toc: TocHeaders
   body: string
   date: string
   dateFormatted: string
-  image: {
-    childImageSharp: {
-      fluid: GatsbyImageSharpFluidWithWebp
-    }
-  }
   deck?: string
   abstract?: string
   epigraph?: string
   epigraphAuthor?: string
-  imageAlt?: string
-  hideHeroImage?: boolean
 }
 
 const Article: React.FunctionComponent<ArticleProps> = ({
-  siteUrl,
-  slug,
   category,
   headline,
   deck,
   abstract,
   epigraph,
   epigraphAuthor,
-  image,
-  imageAlt,
-  hideHeroImage,
-  toc,
   body,
   date,
   dateFormatted,
