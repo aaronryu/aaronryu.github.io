@@ -1,8 +1,30 @@
+const { menus } = require("./src/components/menubar/menulist.js");
+
 exports.createPages = async ({ actions, graphql, reporter }) => {
   // console.log(actions)
   // console.log(graphql)
   // console.log(reporter)
   const { createPage } = actions
+
+  menus.forEach(menu => {
+    if (menu.subMenu) {
+      menu.subMenu.forEach(subMenu => {
+        createPage({
+          path: subMenu.to,
+          component: subMenu.component
+            ? `${__dirname}/${subMenu.component}`
+            : `${__dirname}/src/templates/archive/index.tsx`
+        })
+      })
+    } else {
+      createPage({
+        path: menu.to,
+        component: menu.component
+          ? `${__dirname}/${menu.component}`
+          : `${__dirname}/src/templates/archive/index.tsx`
+      })
+    }
+  })
 
   const [ filePostedEdged, contentfulData ] = await Promise.all([
     getFilePostedData(graphql, reporter),

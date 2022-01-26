@@ -1,6 +1,5 @@
 import { css } from "@emotion/react"
 import styled from "@emotion/styled"
-import { graphql } from "gatsby"
 import * as React from "react"
 import { universities, University } from "./resume/educations"
 import { companies, Company } from "./resume/experiences"
@@ -8,33 +7,12 @@ import { activities, Activity } from "./resume/extracurricular"
 import { Paper, papers } from "./resume/papers"
 import { Patent, patents } from "./resume/patents"
 
-interface Props {
-  data: {
-    mdx: {
-      id: string
-      frontmatter: {
-        slug: string /* example-post */
-        title: string /* 제목에 해당합니다. */
-        author: string /* Aaron Ryu */
-        date: string /* 2021-10-28 */
-        dateFormatted: string
-        updateDate: string /* 2021-10-28 */
-        abstract?: string /* (2) 그 다음 작은 폰트로 */
-      }
-      body: string
-      slug: string
-    }
-  }
-}
-
 const Highlight = styled('a')(() => ({
   fontWeight: 'bold',
   color: 'var(--text-link)',
 }))
 
-const About: React.FunctionComponent<Props> = ({
-  data: { mdx },
-}) => {
+const About: React.FunctionComponent = () => {
   return (
     <article>
       <div css={styles.introduction}>
@@ -538,24 +516,5 @@ const styles = {
     max-width: 650px;
   `,
 }
-
-export const query = graphql`
-  query {
-    mdx(slug: { eq: "about-test/" }) {
-      id
-      frontmatter {
-        title
-        slug
-        author
-        date
-        dateFormatted: date(formatString: "MMM D, YYYY hh:mmA")
-        updateDate
-        abstract
-      }
-      body
-      slug
-    }
-  }
-`
 
 export default About

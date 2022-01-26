@@ -16,6 +16,7 @@ import { Global } from "@emotion/react"
 import LeftSideMenuBar from "./menubar"
 
 interface Props {
+  location: any
   children: React.ReactNode
 }
 
