@@ -1,220 +1,278 @@
 import { css } from "@emotion/react"
 import styled from "@emotion/styled"
 import * as React from "react"
-import { universities, University } from "../../pages/about/resume/educations"
-import { companies, Company } from "../../pages/about/resume/experiences"
-import { activities, Activity } from "../../pages/about/resume/extracurricular"
-import { Paper, papers } from "../../pages/about/resume/papers"
-import { Patent, patents } from "../../pages/about/resume/patents"
 
 const Highlight = styled('a')(() => ({
   fontWeight: 'bold',
   color: 'var(--text-link)',
 }))
 
+interface Article {
+  title: string,
+  link: string,
+}
+
+interface CategoryArticle {
+  category: Array<string>
+  articles: Array<Article>
+  count: number
+  subCategories?: Array<CategoryArticle>
+}
+
+const categories: Array<CategoryArticle> = [
+  {
+    category: [ 'Frontend', 'Javascript' ], // 메뉴리스트에서 보여지는것은 대/중분류
+    articles: [
+      { title: 'Javascript 엔진 개요 및 실행 과정으로 살펴보는 Hoisting 과 Closure', link: '/js/hosting' },
+      { title: '[React] useState 와 useEffect 의 사용', link: '/js/usestate-and-useeffect' },
+    ],
+    count: 12,
+    subCategories: [
+      {
+        category: [ 'Engine', 'React' ],
+        articles: [
+          { title: 'Javascript 엔진 개요 및 실행 과정으로 살펴보는 Hoisting 과 Closure', link: '/js/hosting' },
+          { title: '[React] useState 와 useEffect 의 사용', link: '/js/usestate-and-useeffect' },
+        ],
+        count: 6,
+        subCategories: [
+          {
+            category: [ 'Typescript', 'Semantic' ],
+            articles: [
+              { title: 'Javascript 엔진 개요 및 실행 과정으로 살펴보는 Hoisting 과 Closure', link: '/js/hosting' },
+              { title: '[React] useState 와 useEffect 의 사용', link: '/js/usestate-and-useeffect' },
+            ],
+            count: 2,
+          },
+          {
+            category: [ 'Typescript', 'Algorithm' ],
+            articles: [
+              { title: 'Javascript 엔진 개요 및 실행 과정으로 살펴보는 Hoisting 과 Closure', link: '/js/hosting' },
+              { title: '[React] useState 와 useEffect 의 사용', link: '/js/usestate-and-useeffect' },
+            ],
+            count: 2,
+          },
+        ]
+      },
+      {
+        category: [ 'Code Styles', 'Styling' ],
+        articles: [
+          { title: 'Javascript 엔진 개요 및 실행 과정으로 살펴보는 Hoisting 과 Closure', link: '/js/hosting' },
+          { title: '[React] useState 와 useEffect 의 사용', link: '/js/usestate-and-useeffect' },
+        ],
+        count: 4,
+        subCategories: [
+          {
+            category: [ 'SASS', 'Logic' ],
+            articles: [
+              { title: 'Javascript 엔진 개요 및 실행 과정으로 살펴보는 Hoisting 과 Closure', link: '/js/hosting' },
+              { title: '[React] useState 와 useEffect 의 사용', link: '/js/usestate-and-useeffect' },
+            ],
+            count: 2,
+          },
+        ]
+      },
+    ]
+  },
+  {
+    category: [ 'Frontend', 'Javascript' ], // 메뉴리스트에서 보여지는것은 대/중분류
+    articles: [
+      { title: 'Javascript 엔진 개요 및 실행 과정으로 살펴보는 Hoisting 과 Closure', link: '/js/hosting' },
+      { title: '[React] useState 와 useEffect 의 사용', link: '/js/usestate-and-useeffect' },
+    ],
+    count: 2,
+  },
+  {
+    category: [ 'Frontend', 'Javascript' ], // 메뉴리스트에서 보여지는것은 대/중분류
+    articles: [
+      { title: 'Javascript 엔진 개요 및 실행 과정으로 살펴보는 Hoisting 과 Closure', link: '/js/hosting' },
+      { title: '[React] useState 와 useEffect 의 사용', link: '/js/usestate-and-useeffect' },
+    ],
+    count: 6,
+    subCategories: [
+      {
+        category: [ 'Engine', 'React' ],
+        articles: [
+          { title: 'Javascript 엔진 개요 및 실행 과정으로 살펴보는 Hoisting 과 Closure', link: '/js/hosting' },
+          { title: '[React] useState 와 useEffect 의 사용', link: '/js/usestate-and-useeffect' },
+        ],
+        count: 4,
+        subCategories: [
+          {
+            category: [ 'Typescript', 'Semantic' ],
+            articles: [
+              { title: 'Javascript 엔진 개요 및 실행 과정으로 살펴보는 Hoisting 과 Closure', link: '/js/hosting' },
+              { title: '[React] useState 와 useEffect 의 사용', link: '/js/usestate-and-useeffect' },
+            ],
+            count: 2,
+          },
+        ]
+      },
+    ]
+  }
+]
+
 const ArchiveTemplate: React.FunctionComponent<{}> = ({}) => {
   return (
     <article>
       <div css={styles.body}>
-        <Specialty list={[
-          <><Highlight>Web Development</Highlight>: Front-end &amp; Back-end</>,
-        ]}/>
-        <Skills list={[
-          <><Highlight>Kotlin 1.3</Highlight>, <Highlight>Java 8+ w/ Spring</Highlight></>,
-          <><Highlight>React.js</Highlight> and <Highlight>Angular.js w/ Typescript</Highlight></>,
-          <><Highlight>AWS</Highlight></>,
-        ]}/>
-        <Experiences companies={companies} />
-        <Education universities={universities} />
-        <Papers papers={papers}/>
-        <Patents patents={patents}/>
-        <Extracurricular activities={activities} />
+        <CategoryArticles categories={categories} />
       </div>
     </article>
   )
 }
 
-const Specialty: React.FunctionComponent<{ list: Array<React.ReactFragment> }> = ({ list }) => (
-  <Header category="Specialty">
-    <ul css={styles.representative}>
-      {list.map((each, index) => <li key={index}>{each}</li>)}
-    </ul>
-  </Header>
-)
-
-const Skills: React.FunctionComponent<{ list: Array<React.ReactFragment> }> = ({ list }) => (
-  <Header category="Skills">
-    <ul css={styles.representative}>
-      {list.map((each, index) => <li key={index}>{each}</li>)}
-    </ul>
-  </Header>
-)
-
-const Experiences: React.FunctionComponent<{ companies: Array<Company> }> = ({ companies }) => (
-  <Header category="Experience">
-    {companies.map(company => (
-      <EachExperience key={company.name}>
-        <div css={styles.eachExperienceHeader}>
-          <a css={css`position: relative; left: -5px`}>
-            <svg height="20" viewBox="0 0 18 18" width="24" fill="var(--text-link)">
-              <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6-6-6z"></path>
-            </svg>
-          </a>
-          <strong css={css`
-            font-size: 1.12rem;
-            @media only screen and (max-width: 700px) {
-              font-size: 1.015rem;
-            }
-          `}>{company.name}</strong>
-          <span css={css`
-            margin: 0 10px 0 auto;
-            font-size: 1.12rem;
-            @media only screen and (max-width: 700px) {
-              font-size: 1.015rem;
-            }
-          `}>{company.startDate} ~ {company.endDate ? company.endDate : 'Current'}</span>
-        </div>
-        <ul css={css`position: relative; top: -25px; margin-bottom: -6px;`} key={company.name}>
-          {company.projects.map(eachProject => (
-            <li css={styles.mainProject} key={eachProject.name}>
-              <div css={styles.mainProjectHeader}>
-                {eachProject.name}
-                <span css={css`margin: 0 10px 0 auto;`}>~ {eachProject.endDate}</span>
-              </div>
-              {eachProject.details.map(eachDetail => (
-                <ul css={styles.subProject} key={eachDetail.name}>
-                  <li>{eachDetail.name}</li>
-                  {eachDetail.subDetails && eachDetail.subDetails.length > 0 && (
-                    <ul>
-                      {eachDetail.subDetails.map(eachSubDetail => (
-                        <li key={eachSubDetail}>{eachSubDetail}</li>
-                      ))}
-                    </ul>
-                  )}
-                </ul>
-              ))}
-            </li>
-            ))}
-        </ul>
-      </EachExperience>
-    ))}
-  </Header>
-)
-
-const Education: React.FunctionComponent<{ universities: Array<University> }> = ({ universities }) => (
-  <Header category="Education">
-    {universities.map(university => (
-      <EachEducation key={university.name}>
-        <div css={styles.eachEducationHeader}>
-          <a css={css`position: relative; left: -5px; top: 1px`}>
-            <svg height="20" viewBox="0 0 18 18" width="24" fill="var(--text-link)">
-              <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6-6-6z"></path>
-            </svg>
-          </a>
-          <span>{university.name}, {university.major} - {university.degree}</span>
-          <span css={css`margin: 0 10px 0 auto;`}>{university.startDate} ~ {university.endDate ? university.endDate : 'Current'}</span>
-        </div>
-        <ul css={css`position: relative; top: -25px; margin-bottom: -6px;`} key={university.name}>
-          {university.projects.map(eachProject => (
-            <li css={styles.mainStudy} key={eachProject.name}>
-              <div css={styles.mainStudyHeader}>
-                {eachProject.name}
-                {/* <span css={css`margin: 0 10px 0 auto;`}>~ {eachProject.endDate}</span> */}
-              </div>
-              {eachProject.details.map(eachDetail => (
-                <ul key={eachDetail.name}>
-                  <li>{eachDetail.name}</li>
-                  {eachDetail.subDetails && eachDetail.subDetails.length > 0 && (
-                    <ul>
-                      {eachDetail.subDetails.map(eachSubDetail => (
-                        <li key={eachSubDetail}>{eachSubDetail}</li>
-                      ))}
-                    </ul>
-                  )}
-                </ul>
-              ))}
-            </li>
-            ))}
-        </ul>
-      </EachEducation>
-    ))}
-  </Header>
-)
-
-const Papers: React.FunctionComponent<{ papers: Array<Paper> }> = ({ papers }) => (
-  <Header category="Papers &amp; Conferences Attended">
-    {papers.map(paper => (
-      <ul key={paper.name}>
-        <li>
-          <div css={styles.eachPaperHeader}>
-            <span>{paper.name}</span>
-            <span css={css`margin: 0 10px 0 auto;`}>{paper.issuedDate}</span>
-          </div>
-          <ul css={css`position: relative; top: -25px; margin-bottom: -20px;`}>
-            <li css={styles.attended}>{paper.attended}</li>
-            <ul css={css`margin-top: -4px; font-size: 0.9rem;`}><li>{paper.author.join(', ')}</li></ul>
-          </ul>
-        </li>
-      </ul>
-    ))}
-  </Header>
-)
-
-const Patents: React.FunctionComponent<{ patents: Array<Patent> }> = ({ patents }) => (
-  <Header category="Patents">
-    {patents.map(patent => (
-      <ul key={patent.name}>
-        <li>
-          <div css={styles.eachPaperHeader}>
-            <span>{patent.name}</span>
-            <span css={css`margin: 0 10px 0 auto;`}>{patent.issuedDate}</span>
-          </div>
-          <ul css={css`position: relative; top: -25px; margin-bottom: -20px;`}>
-            <li css={styles.attended}>{patent.description}</li>
-            <ul css={css`margin-top: -4px; font-size: 0.9rem;`}><li>{patent.author.join(', ')}</li></ul>
-          </ul>
-        </li>
-      </ul>
-    ))}
-  </Header>
-)
-
-const Extracurricular: React.FunctionComponent<{ activities: Array<Activity> }> = ({ activities }) => (
-  <Header category="Extracurricular activities">
-    {activities.map(activity => (
-      <ul key={activity.name}>
-        <li>
-          <div css={styles.eachPaperHeader}>
-            <span>{activity.name}</span>
-            <span css={css`margin: 0 10px 0 auto;`}>{activity.startDate} ~ {activity.endDate ? activity.endDate : 'Current'}</span>
-          </div>
-          <ul css={css`position: relative; top: -25px; margin-bottom: -20px;`}>
-            {activity.details.map(eachDetail => <li css={styles.attended} key={eachDetail}>{eachDetail}</li>)}
-          </ul>
-        </li>
-      </ul>
-    ))}
-  </Header>
-)
-
-const Header: React.FunctionComponent<{
-  category: string,
-  children: React.ReactNode,
-}> = ({ category, children }) => (
+const CategoryArticles: React.FunctionComponent<{ categories: Array<CategoryArticle> }> = ({ categories }) => (
   <React.Fragment>
-    <h2 id={category} css={css`position: relative;`}>
-      <a css={styles.aAnchor}>
-        <svg height="20" viewBox="0 0 20 20" width="20" fill="var(--text-link)">
-            <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6-6-6z"></path>
-        </svg>
-      </a>
-      {category}
-    </h2>
-    {children}
+    {categories.map(each => {
+      const mainCategory = each.category.join(' - ')
+      const hasSubCategory = each.subCategories && (each.subCategories.length > 0);
+      return (
+        <Articles key={mainCategory}>
+          <div css={styles.eachExperienceHeader}>
+            <a css={css`position: relative; left: -5px`}>
+              <svg height="20" viewBox="0 0 18 18" width="24" fill="var(--text-link)">
+                <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6-6-6z"></path>
+              </svg>
+            </a>
+            <strong css={css`
+              font-size: 1.12rem;
+              @media only screen and (max-width: 700px) {
+                font-size: 1.015rem;
+              }
+            `}>{mainCategory}</strong>
+            <span css={css`
+              margin: 0 10px 0 auto;
+              font-size: 1.12rem;
+              @media only screen and (max-width: 700px) {
+                font-size: 1.015rem;
+              }
+            `}>{each.count}</span>
+          </div>
+          
+          <ul css={css`position: relative; top: -12px; margin-bottom: -6px;
+                            
+
+
+          `} key={mainCategory}>
+            {each.articles.map(article => (
+              <li css={styles.mainProject} key={article.title}>
+                <div css={styles.mainProjectHeader}>
+                  {article.title}
+                </div>
+              </li>
+              ))}
+            {hasSubCategory && (<div css={css`
+              content: "";
+              position: absolute;
+              top: -4px;
+              left: 8px;
+              height: calc(100% + 50px);
+              width: 2px;
+              background-color: var(--text-link);
+            `} />)}
+
+          </ul>
+
+          {hasSubCategory && (
+            <React.Fragment>
+              
+
+              {each.subCategories!.map((eachSub, index) => {
+              const subCategory = eachSub.category.join(' - ')
+              return (
+
+                  
+                  <SubArticles key={subCategory}>
+                    {(index < (each.subCategories!.length - 1)) && <div css={css`
+                      content: "";
+                      position: absolute;
+                      top: 29px;
+                      left: 7px;
+                      height: calc(100% + 13px);
+                      width: 2px;
+                      background-color: var(--text-link);
+                    `} />}
+                    <div css={css`
+                      display: flex;
+                      flex-direction: row;
+                    `}>
+                      <div css={css`
+                        display: flex;
+                        flex-direction: row;
+                        position: relative;
+                        align-items: center;
+                        right: 6px;
+                      `}>
+                        <div css={css`
+                          border-radius: 50%;
+                          height: 8px;
+                          width: 8px;
+                          background-color: var(--text);
+                        `}/>
+                      </div>
+
+                      <div css={styles.eachSubCategoryHeader}>
+                        <strong css={css`
+                          font-size: 1.12rem;
+                          @media only screen and (max-width: 700px) {
+                            font-size: 1.015rem;
+                          }
+                        `}>{subCategory}</strong>
+                        <span css={css`
+                          margin: 0 10px 0 auto;
+                          font-size: 1.12rem;
+                          @media only screen and (max-width: 700px) {
+                            font-size: 1.015rem;
+                          }
+                        `}>{eachSub.count}</span>
+                      </div>
+                    </div>
+                    
+                    <ul css={css`position: relative; top: -12px; margin-bottom: -6px;
+
+                    `} key={subCategory}>
+                      {eachSub.articles.map(article => (
+                        <li css={styles.mainProject} key={article.title}>
+                          <div css={styles.mainProjectHeader}>
+                            {article.title}
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  </SubArticles>
+              )
+            })}
+            </React.Fragment>
+          )}
+
+        </Articles>
+      )
+    })}
   </React.Fragment>
 )
 
-const EachExperience: React.FunctionComponent<{
+const MainCategory: React.FunctionComponent<{
+  categories: Array<string>,
+  children: React.ReactNode,
+}> = ({ categories, children }) => {
+  const stringified = categories.join(' - ')
+  return (
+    <React.Fragment>
+      <h2 id={stringified} css={css`position: relative;`}>
+        <a css={styles.aAnchor}>
+          <svg height="20" viewBox="0 0 20 20" width="20" fill="var(--text-link)">
+              <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6-6-6z"></path>
+          </svg>
+        </a>
+        {stringified}
+      </h2>
+      {children}
+    </React.Fragment>
+  )
+}
+
+const Articles: React.FunctionComponent<{
   children: React.ReactNode, props?: any
 }> = ({ children, props }) => (
   <div css={styles.eachExperience} {...props}>
@@ -222,10 +280,10 @@ const EachExperience: React.FunctionComponent<{
   </div>
 )
 
-const EachEducation: React.FunctionComponent<{
+const SubArticles: React.FunctionComponent<{
   children: React.ReactNode, props?: any
 }> = ({ children, props }) => (
-  <div css={styles.eachEducation} {...props}>
+  <div css={styles.eachSubCategory} {...props}>
     {children}
   </div>
 )
@@ -266,10 +324,10 @@ const styles = {
   eachExperience: css`
     border: 1px solid var(--text-link);
     border-radius: 10px;
-    padding: 10px 10px 0 10px;
-    margin: 20px 16px 20px 0;
+    padding: 10px;
+    margin: 0px 10px 10px;
     @media only screen and (max-width: 700px) {
-      margin: 0;
+      margin: 8px;
     }
   `,
   eachExperienceHeader: css`
@@ -286,8 +344,45 @@ const styles = {
       font-size: 1.015rem;
     }
   `,
+
+  eachSubCategory: css`
+    border: 1px solid var(--text-link);
+    border-radius: 10px;
+    padding: 10px;
+    margin: 10px 0 0 0;
+    @media only screen and (max-width: 700px) {
+      margin: 8px;
+    }
+
+    position: relative;
+    // &::after {
+    //   content: "";
+    //   position: absolute;
+    //   top: -85px;
+    //   left: 7px;
+    //   height: calc(100% - 22px); // 114px;
+    //   width: 2px;
+    //   background-color: var(--text-link);
+    // }
+  `,
+  eachSubCategoryHeader: css`
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    justify-content: space-between;
+    font-size: 1.115rem;
+    color: var(--text-link);
+    border-radius: 5px;
+    border: 1px solid var(--text-link);
+    padding-left: 10px;
+
+    @media only screen and (max-width: 700px) {
+      font-size: 1.015rem;
+    }
+  `,
+
   mainProject: css`
-    padding-top: 20px;
+    // padding-top: 20px;
     font-size: 1rem;
     @media only screen and (max-width: 700px) {
       font-size: 0.92rem;
@@ -304,62 +399,8 @@ const styles = {
     flex-wrap: wrap;
     color: var(--text-link);
   `,
-
-  eachEducation: css`
-    border: 1px solid var(--text-link);
-    border-radius: 10px;
-    padding: 10px 10px 0 10px;
-    margin: 20px 16px 20px 0;
-  `,
-  eachEducationHeader: css`
-    display: flex;
-    flex-wrap: wrap;
-    font-size: 1rem;
-    color: var(--text-link);
-    background-color: var(--text-link-background);
-    border-radius: 5px;
-    // border-bottom: 1px solid var(--brand);
-    // padding-bottom: 10px;
-
-    @media only screen and (max-width: 700px) {
-      font-size: 0.915rem;
-    }
-  `,
-
-  eachPaperHeader: css`
-    display: flex;
-    flex-wrap: wrap;
-    font-size: 1rem;
-    color: var(--text-link);
-    margin: 18px 0;
-
-    @media only screen and (max-width: 700px) {
-      font-size: 0.915rem;
-    }
-  `,
-  attended: css`
-    padding-top: 4px;
-    font-size: 0.9rem;
-    @media only screen and (max-width: 700px) {
-      font-size: 0.84rem;
-    }
-  `,
-
-
-  mainStudy: css`
-    padding-top: 20px;
-    font-size: 0.92rem;
-    @media only screen and (max-width: 700px) {
-      font-size: 0.8rem;
-    }
-  `,
-  mainStudyHeader: css`
-    display: flex;
-    flex-wrap: wrap;
-  `,
-
   body: css`
-    margin: 2rem auto 8rem;
+    margin: 8rem auto 8rem;
     padding: 0 1rem;
     width: 100%;
     max-width: 900px;
@@ -383,9 +424,9 @@ const styles = {
 
     ul,
     ol {
-      padding-left: 2rem;
+      padding-left: 4rem;
       @media only screen and (max-width: 700px) {
-        padding-left: 1rem;
+        padding-left: 3rem;
       }
 
       ul,
