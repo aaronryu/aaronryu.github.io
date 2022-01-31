@@ -24,7 +24,12 @@ export const CategoryLine = styled(`div`)<{ size: 'main' | 'sub' | 'nested' ,top
   })
 )
 
-const MainCategoryArticles: React.FunctionComponent<{ categories: Array<CategoryArticle> }> = ({ categories }) => (
+export const sliceStringWithMax = (str: string, max: number) => 
+  (str.length >= max)
+    ? `${str.slice(0, max)}...`
+    : str
+
+const MainCategoryArticles: React.FunctionComponent<{ maxTitleLength: number, categories: Array<CategoryArticle> }> = ({ maxTitleLength, categories }) => (
   <React.Fragment>
     {categories.map(each => {
       const mainCategory = each.category.join(' - ')
@@ -37,12 +42,12 @@ const MainCategoryArticles: React.FunctionComponent<{ categories: Array<Category
             {each.articles.map(article => (
               <li css={styles.article} key={article.title}>
                 <div css={styles.articleTitle}>
-                  {article.title}
+                  {sliceStringWithMax(article.title, maxTitleLength)}
                 </div>
               </li>
             ))}
           </ul>
-          {hasSubCategory && <SubCategoryArticles categories={each.subCategories!} />}
+          {hasSubCategory && <SubCategoryArticles maxTitleLength={maxTitleLength - 3} categories={each.subCategories!} />}
         </MainCategoryBox>
       )
     })}

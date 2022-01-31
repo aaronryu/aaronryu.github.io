@@ -1,6 +1,8 @@
 import * as React from "react"
 import { css } from "@emotion/react"
 import MainCategoryArticles from "./main-category"
+import { getWindowDimensions } from "../../components/layout"
+import { useEffect, useState } from "react"
 
 export interface Article {
   title: string,
@@ -46,7 +48,7 @@ const categories: Array<CategoryArticle> = [
           {
             category: [ 'Typescript', 'Algorithm' ],
             articles: [
-              { title: 'Javascript 엔진 개요 및 실행 과정으로 살펴보는 Hoisting 과 Closure', link: '/js/hosting' },
+              { title: 'Javascript 엔진 개요 및 실행 과정으로 살펴보는 Hoisting 과 Closure 그리고 삼겹살을 맛있게 먹는방법', link: '/js/hosting' },
               { title: '[React] useState 와 useEffect 의 사용', link: '/js/usestate-and-useeffect' },
             ],
             count: 2,
@@ -56,7 +58,7 @@ const categories: Array<CategoryArticle> = [
       {
         category: [ 'Code Styles', 'Styling' ],
         articles: [
-          { title: 'Javascript 엔진 개요 및 실행 과정으로 살펴보는 Hoisting 과 Closure', link: '/js/hosting' },
+          { title: 'Javascript 엔진 개요 및 실행 과정으로 살펴보는 Hoisting 과 Closure 그리고 삼겹살을 맛있게 먹는방법', link: '/js/hosting' },
           { title: '[React] useState 와 useEffect 의 사용', link: '/js/usestate-and-useeffect' },
         ],
         count: 4,
@@ -64,7 +66,7 @@ const categories: Array<CategoryArticle> = [
           {
             category: [ 'SASS', 'Logic' ],
             articles: [
-              { title: 'Javascript 엔진 개요 및 실행 과정으로 살펴보는 Hoisting 과 Closure', link: '/js/hosting' },
+              { title: 'Javascript 엔진 개요 및 실행 과정으로 살펴보는 Hoisting 과 Closure 그리고 삼겹살을 맛있게 먹는방법', link: '/js/hosting' },
               { title: '[React] useState 와 useEffect 의 사용', link: '/js/usestate-and-useeffect' },
             ],
             count: 2,
@@ -76,7 +78,7 @@ const categories: Array<CategoryArticle> = [
   {
     category: [ 'Frontend', 'Javascript' ], // 메뉴리스트에서 보여지는것은 대/중분류
     articles: [
-      { title: 'Javascript 엔진 개요 및 실행 과정으로 살펴보는 Hoisting 과 Closure', link: '/js/hosting' },
+      { title: 'Javascript 엔진 개요 및 실행 과정으로 살펴보는 Hoisting 과 Closure 그리고 삼겹살을 맛있게 먹는방법', link: '/js/hosting' },
       { title: '[React] useState 와 useEffect 의 사용', link: '/js/usestate-and-useeffect' },
     ],
     count: 2,
@@ -84,7 +86,7 @@ const categories: Array<CategoryArticle> = [
   {
     category: [ 'Frontend', 'Javascript' ], // 메뉴리스트에서 보여지는것은 대/중분류
     articles: [
-      { title: 'Javascript 엔진 개요 및 실행 과정으로 살펴보는 Hoisting 과 Closure', link: '/js/hosting' },
+      { title: 'Javascript 엔진 개요 및 실행 과정으로 살펴보는 Hoisting 과 Closure 그리고 삼겹살을 맛있게 먹는방법', link: '/js/hosting' },
       { title: '[React] useState 와 useEffect 의 사용', link: '/js/usestate-and-useeffect' },
     ],
     count: 6,
@@ -92,7 +94,7 @@ const categories: Array<CategoryArticle> = [
       {
         category: [ 'Engine', 'React' ],
         articles: [
-          { title: 'Javascript 엔진 개요 및 실행 과정으로 살펴보는 Hoisting 과 Closure', link: '/js/hosting' },
+          { title: 'Javascript 엔진 개요 및 실행 과정으로 살펴보는 Hoisting 과 Closure 그리고 삼겹살을 맛있게 먹는방법', link: '/js/hosting' },
           { title: '[React] useState 와 useEffect 의 사용', link: '/js/usestate-and-useeffect' },
         ],
         count: 4,
@@ -100,7 +102,7 @@ const categories: Array<CategoryArticle> = [
           {
             category: [ 'Typescript', 'Semantic' ],
             articles: [
-              { title: 'Javascript 엔진 개요 및 실행 과정으로 살펴보는 Hoisting 과 Closure', link: '/js/hosting' },
+              { title: 'Javascript 엔진 개요 및 실행 과정으로 살펴보는 Hoisting 과 Closure 그리고 삼겹살을 맛있게 먹는방법', link: '/js/hosting' },
               { title: '[React] useState 와 useEffect 의 사용', link: '/js/usestate-and-useeffect' },
             ],
             count: 2,
@@ -111,11 +113,44 @@ const categories: Array<CategoryArticle> = [
   }
 ]
 
+const calculateMaxArticleTitleLength = (width : number) => {
+  if (width <= 500) {
+    return 42
+  } else if (width <= 600) {
+    return 48
+  } else if (width <= 700) {
+    return 57
+  } else if (width <= 800) {
+    return 60
+  } else if (width <= 800) {
+    return 62
+  } else if (width <= 900) {
+    return 64
+  } else {
+    return 80
+  }
+}
+
 const ArchiveTemplate: React.FunctionComponent<{}> = ({}) => {
+  const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions())
+  const [maxArticleTitleLength, setMaxArticleTitleLength] = useState(calculateMaxArticleTitleLength(windowDimensions.width))
+
+  useEffect(() => {
+    let mounted = true;
+    window.addEventListener('resize', () => {
+      if (mounted) {
+        const current = getWindowDimensions()
+        setWindowDimensions(current)
+        setMaxArticleTitleLength(calculateMaxArticleTitleLength(current.width))
+      }
+    });
+    return () => { mounted = false; };
+  }, []);
+
   return (
     <article>
       <div css={styles.body}>
-        <MainCategoryArticles categories={categories} />
+        <MainCategoryArticles maxTitleLength={maxArticleTitleLength} categories={categories} />
       </div>
     </article>
   )
@@ -123,7 +158,7 @@ const ArchiveTemplate: React.FunctionComponent<{}> = ({}) => {
 
 const styles = {
   body: css`
-    margin: 8rem auto 8rem;
+    margin: 4rem auto 2rem;
     padding: 0 1rem;
     width: 100%;
     max-width: 900px;

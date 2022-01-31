@@ -1,9 +1,9 @@
 import { css } from "@emotion/react"
 import * as React from "react"
 import { CategoryArticle } from "."
-import { CategoryLine, styles } from "./main-category"
+import { CategoryLine, sliceStringWithMax, styles } from "./main-category"
 
-const NestedCategoryArticles: React.FunctionComponent<{ categories: Array<CategoryArticle> }> = ({ categories }) => (
+const NestedCategoryArticles: React.FunctionComponent<{ maxTitleLength: number, categories: Array<CategoryArticle> }> = ({ maxTitleLength, categories }) => (
   <React.Fragment>
     {categories.map((each, index) => {
       const subCategory = each.category.join(' - ')
@@ -16,7 +16,7 @@ const NestedCategoryArticles: React.FunctionComponent<{ categories: Array<Catego
             {each.articles.map(article => (
               <li css={[styles.article, css`position: relative; left: 24px;`]} key={article.title}>
                 <div css={styles.articleTitle}>
-                  {article.title}
+                  {sliceStringWithMax(article.title, maxTitleLength)}
                 </div>
               </li>
             ))}

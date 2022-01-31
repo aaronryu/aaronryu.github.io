@@ -20,7 +20,7 @@ interface Props {
   children: React.ReactNode
 }
 
-function getWindowDimensions() {
+export function getWindowDimensions() {
   const { innerWidth: width, innerHeight: height } = window;
   return {
     width,
