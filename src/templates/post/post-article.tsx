@@ -1,6 +1,7 @@
 import React from 'react'
 import { css } from '@emotion/react'
 import { MDXRenderer } from 'gatsby-plugin-mdx'
+import { IGatsbyImageData } from 'gatsby-plugin-image'
 
 export interface GatsbyImageSharpFluidWithWebp {
   aspectRatio: number
@@ -12,6 +13,12 @@ export interface GatsbyImageSharpFluidWithWebp {
   srcWebp: string
 }
 
+export interface ChildImage {
+  childImageSharp: {
+    gatsbyImageData: IGatsbyImageData
+  }
+};
+
 export interface ArticleProps {
   category: string
   headline: string
@@ -22,6 +29,7 @@ export interface ArticleProps {
   abstract?: string
   epigraph?: string
   epigraphAuthor?: string
+  embeddedImagesLocal?: ChildImage
 }
 
 const Article: React.FunctionComponent<ArticleProps> = ({
@@ -34,6 +42,7 @@ const Article: React.FunctionComponent<ArticleProps> = ({
   body,
   date,
   dateFormatted,
+  embeddedImagesLocal,
 }) => (
   <article>
     <div css={styles.headerWrapper}>
@@ -42,7 +51,7 @@ const Article: React.FunctionComponent<ArticleProps> = ({
     </div>
     <Epigraph text={epigraph} author={epigraphAuthor} />
     <Meta date={date} dateFormatted={dateFormatted} />
-    <Body body={body} />
+    <Body localImages={embeddedImagesLocal} body={body} />
     <Footer />
   </article>
 )
@@ -87,9 +96,9 @@ const Meta = ({ date, dateFormatted }: { date: string, dateFormatted: string }) 
   </section>
 )
 
-const Body = ({ body }: { body: string }) => (
+const Body = ({ localImages, body }: { localImages?: ChildImage, body: string }) => (
   <div css={styles.body}>
-    <MDXRenderer>{body}</MDXRenderer>
+    <MDXRenderer localImages={localImages}>{body}</MDXRenderer>
   </div>
 )
 

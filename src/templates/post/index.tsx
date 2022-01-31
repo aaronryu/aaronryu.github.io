@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react'
 import Article, { GatsbyImageSharpFluidWithWebp } from './post-article'
 import PostSeo from './post-seo'
 import { useScroll } from './scroll'
+import { IGatsbyImageData } from 'gatsby-plugin-image'
 
 export interface TocHeaders {
   items: Array<TocHeader>
@@ -30,6 +31,11 @@ interface Props {
         image: { /* ./example.jpg */
           childImageSharp: {
             fluid: GatsbyImageSharpFluidWithWebp
+          }
+        }
+        embeddedImagesLocal: {
+          childImageSharp: {
+            gatsbyImageData: IGatsbyImageData
           }
         }
         /* gatsby-plugin-layout 넣었으니까, heroImage 필요없다. */
@@ -117,6 +123,7 @@ const PostTemplate: React.FunctionComponent<Props> = ({
         date={frontmatter.date}
         dateFormatted={frontmatter.dateFormatted}
         body={body}
+        embeddedImagesLocal={frontmatter.embeddedImagesLocal}
       />
     </div>
   )
@@ -221,6 +228,11 @@ export const query = graphql`
             fluid(quality: 80, maxWidth: 1540) {
               ...GatsbyImageSharpFluid_withWebp
             }
+          }
+        }
+        embeddedImagesLocal {
+          childImageSharp {
+            gatsbyImageData
           }
         }
         deck
