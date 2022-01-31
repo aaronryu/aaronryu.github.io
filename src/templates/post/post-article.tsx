@@ -343,8 +343,9 @@ const styles = {
 
     blockquote {
       margin-left: 2.1rem;
-      margin-right: 0;
+      margin-right: 2.1rem;
       font-size: 0.9rem;
+      font-style: italic;
     }
 
     a {
@@ -376,19 +377,20 @@ const styles = {
 
     hr {
       position: relative;
-      margin: 2.848rem auto 2.848rem;
+      margin: 2rem auto 2rem;
       padding: 0;
       border: none;
-      width: 20px;
-      height: 20px;
+      width: 78%;
+      height: 1px;
       background: none;
 
       &::after {
-        content: '\u2666';
+        content: ' ';
         position: absolute;
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%, -50%);
+        top: 0;
+        width: 100%;
+        height: 1px;
+        background-color: var(--text);
       }
     }
 
@@ -440,6 +442,10 @@ const styles = {
       @media only screen and (max-width: 700px) {
         font-size: 0.837rem;
       }
+    }
+
+    .gatsby-image-wrapper-constrained {
+      display: flex;
     }
 
     .gatsby-highlight {

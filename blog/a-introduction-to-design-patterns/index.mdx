@@ -1,98 +1,122 @@
 ---
-title: "개츠비(Gatsby) 프로젝트에 타입스크립트(TypeScript) 세팅하기"
+title: "1. '디자인 패턴'이란?"
 slug: a-introduction-to-design-patterns
 category: pattern
 categoryName: Design Pattern
-author: Joseph
-date: 2019-10-26T14:05:00+09:00
-updateDate: 2019-10-26T14:05:00+09:00
-deck: 타입스크립트(TypeScript)를 사용할 수 있도록 개츠비(Gatsby) 프로젝트를 설정했다. 바벨(Babel)로 컴파일하도록 했고, 타입 검사, 품질 검사, 형식 자동변환을 위해서 각각 타입스크립트 컴파일러, 이에스린트(ESLint), 프리티어(Prettier)
-abstract: Lock 파일은, 친절하게도, JavaScript 패키지 매니저가 기본적으로 사용하도록 되어있는 데다가, 그 목적이 개발자가 느끼기에는 너무나도 직관적이라, 큰 거부감 없이 받아들이고 사용하게 되는 경향이 있다. 하지만 이런 친절함이나 직관성과는 별개로, 올바르게 사용하고 있는 건지에 대한 확신을 얻기가 어렵다. 이 글은 신경 쓰이는 Lock 파일의 몇몇 포인트를 정리한 것이다.
-epigraph: "나는 누구인가. 그것은 아무도 모른다 너도 모른다"
-epigraphAuthor: "Hemo"
-image: ./ts.jpg
+author: Aaron
+date: 2022-01-31T22:00:00+09:00
+updateDate: 2022-01-31T22:00:00+09:00
+deck: 디자인 패턴은 대학교에서 간단하게만 배웠던것으로 기억한다. 대학원이나 입사 준비시 디자인 패턴은 항상 시험에 나오는 주제였지만, 필자는 실제로 사용해본 경험이 적었기에 왜 이것이 중요한지에 대해서 체감할 일이 없었다. 부트코드와 이론보단 프로젝트를 많이하는 요즘의 시대엔 좀 다르겠지만 필자는 패턴이 왜 쓰이는지 경험적으로 습득한것은 입사하고 나서부터였기 때문이다.
+abstract: 다양한 디자인 패턴을 공부하기에 앞서, 왜 디자인 패턴이 필요한지? 그리고 디자인 패턴을 이해하는데 도움이 될 클래스 다이어그램을 짧게 학습해보도록 한다.
 embeddedImagesLocal:
   - './implements.png'
+  - './extends.png'
+  - './has.png'
+  - './extends2.png'
+  - './extends3.png'
 ---
 
 import { getImage, GatsbyImage } from 'gatsby-plugin-image';
 
-# 디자인 패턴
+## 디자인 패턴
 
-디자인 패턴은 짧게 **"객체지향 패러다임에서 더 좋은 코드란 무엇인가에 대한 고민의 결과"** 입니다.
+디자인 패턴은 짧게 **"객체지향 패러다임에서 더 좋은 코드란 무엇인가에 대한 고민의 결과"** 이다.
 
-- **중복의 최소화**: 한 곳의 수정이 중복된 다른 코드에서의 수정을 동반해선 안됩니다
-- **코드 변경의 용이성**: 코드는 항상 완벽하지 않고, 요구사항은 상시 바뀔 수 있습니다.
-- **재사용성**: 정돈된 코드는 전혀 다른 요구사항 및 비슷한 경우에도 그대로 사용이 가능합니다.
+- **중복의 최소화**: 한 곳의 수정이 중복된 다른 코드에서의 수정을 동반해선 안된다.
+- **코드 변경의 용이성**: 코드는 항상 완벽하지 않고, 요구사항은 상시 바뀔 수 있다.
+- **재사용성**: 정돈된 코드는 전혀 다른 요구사항 및 비슷한 경우에도 그대로 사용이 가능해야한다.
 
-# 너무나도 먼 디자인 패턴
+### 주니어에겐 너무나도 먼 디자인 패턴
 
-우리는 어떻게보면 디자인 패턴을 모르는것이 당연합니다. 
+어떻게보면 큰 프로젝트를 진행해보지 않은 한 디자인 패턴을 모르는건 당연하다.
 
-<GatsbyImage alt='Sam in a destroyed mall' image={getImage(props.localImages[0])} />
+> 코드 한 줄의 변경이 다른 줄의 드라마틱한 변경을 일으킬만한 큰 프로젝트를 만들어본적이 없다.
 
-> 코드 한 줄의 변경이 다른 줄의 변경을 일으킬만한 큰 프로젝트를 만들어본적이 없습니다. 
+교내 팀 프로젝트로 API 서버를 만들어서 유저 폰의 앱으로부터 주변 AP 정보를 받아 파싱하여, LCD 패널이 붙은 라즈베리 파이에게 해당 고객 위치를 전달해주는 재실표시기를 만들었을때도 코드가 단순명료했다. 학생분들이라면 알테지만, 환경 계획 및 구축이 60% 고 개발에 20% 를 사용한 뒤 남은 20% 은 술마시기 여념이 없다.
 
-교내 팀 프로젝트에서 Web Application 으로 API 서버를 만들어서 고객 폰의 앱으로 주변 AP 정보를 파싱하고, LCD 패널이 붙은 라즈베리 파이로 해당 고객 위치에 따른 재실표시기를 만들었을때도 정말 코드가 단순명료했습니다. 학생분들이라면 아시죠 환경 계획 및 구축이 60% 고 개발이 20% 입니다. 남은 20% 은 술마셔야죠. 
+> 팀 프로젝트로 만든 코드는 다신 볼일이 없다. 요구사항 변경을 요청할 교수도 다른 프로젝트에 활용할 일도 없다.
 
-> 팀 프로젝트로 만든 코드는 다신 볼일이 없습니다. 
-요구사항 변경을 요청할 교수도 다른 프로젝트에 활용할 일도 없습니다.
+'디자인 패턴'은 면접을 준비할때면 언제든 반복해서 접하는 주제지만 **결국엔 코드로써 직접 프로젝트를 개발해보며 직접 겪어야한다.** 본 블로그에 정리하는 디자인 패턴 글들은 이해에 주안점을 두고, 까먹지 않도록 복습하기 쉬운 형태로 짧게 게시하려한다. 각 패턴들은 글로 명료하게 설명하려 노력하겠지만 **클래스 다이어그램**에 대한 이해가 있어야, 더 구현에 맞는 이해를 할 수 있다.
 
-팀 프로젝트 발표를 마치고 학점을 받으면 친척동생이 놀러와 롤을 깔때즘 용량문제로 소스코드를 지우는 상황에 이릅니다. 가끔 입사 준비 중 볼일이 있습니다만 예로 학부생 코드는 고쳐쓰는게 아니라했습니다.
+## 클래스 다이어그램 - 화살표
 
-> **결국엔 직접 해보아야 합니다.**
-본 카테고리에선 직접 해보며 조금이나마 짧고 명료하게 정리해놓으려합니다. 
-복습없인 항상 까먹기 일수거든요.
+클래스 다이어그램은 이름 자체가 내포하고있듯 **Class 간의 관계를 표로 간단하게 설명한 것**으로 Class 개념이 존재하는 객체지향 프로그래밍(OOP)에서 프로젝트 구현을 위한 설계도라고 보면 된다. 클래스 다이어그램은 Class, Interface 이 2개의 관계를 설명할 **Implements, Extends, Composition 딱 이 3개의 핵심적인 화살표만 살펴보면 끝**이다. 코드는 java-like psudo code 기반으로 설명한다.
 
-앞으로 본 카테고리에선 여러 디자인 패턴들에 대해서 살펴보려합니다. 각 패턴의 설명은 기본적으로 글을 사용하겠지만 **클래스 다이어그램**을 통해 이해를 도우려고 합니다.
+### implements (구현)
 
-# 클래스 다이어그램 화살표
+<GatsbyImage
+    alt='Implements'
+    image={getImage(props.localImages[0])}
+    style={{ margin: '0 4rem' }}/>
 
-클래스 다이어그램은 이름 자체가 내포하고있듯 Class 간의 관계를 표로 간단하게 설명한 것으로 Class 개념이 존재하는 객체지향 프로그래밍(OOP)에서 프로젝트 구현을 위한 설계도라고 보시면 될 것 같습니다. 클래스 다이어그램 자체로 한 챕터 분량이지만, 디자인 패턴에는 Class, Interface 이 둘만 필요하므로 딱 핵심적인 화살표 세 개만 살펴보겠습니다. 앞으로 Java 기반으로 설명하겠습니다.
+앞선 [객제지향 프로그래밍](/about) 글을 잘 읽었다면, 객체지향 코드는 Class 보다 Interface 를 단위로 구성된다는것을 이미 알고있을것이다. **'어떤 작업을 수행할지'**는 Interface 로 명시한 채, **'어떻게 작업할지'**는 원하는 구현 클래스(Concrete Class) 를 적재적소에 주입하여 실제 작업을 수행한다.
 
-## implements (구현)
-
-![Test](./implements.svg)
-
-![Test Picture](//images.ctfassets.net/47rk6zxu9wsi/DmP4IZx4RpiF9AvC44Bvb/f6c0e157aa176a2b2be330d921633d83/daniel-j-schwarz-MXxo0S4GV_Q-unsplash.jpg)
-
-일반적으로 코드는 인터페이스를 단위로 구성됩니다. 사용하려는 구현 클래스를 코드 내에 지정하지 않고 인터페이스만을 명시하고 그 인터페이스의 위치에 원하는 구현 클래스를 연결(주입)하여 실제 작업을 수행합니다. 앞으로 설명할 모든 디자인 패턴의 주축이 되는 제 1 원칙이니 조금 더 설명드리겠습니다. 
-
-학생분들은 모든 클래스를 사용할때 아래 코드를 사용하실겁니다.
+Class 를 처음 배운 뒤엔 아래와 같이 정의하여 사용한다.
 ``` java
-ConcreteClass class = new ConcreteClass();
+ConcreteClass clazz = new ConcreteClass();
 ```
-우리가 배운 다형성을 활용하면 **인터페이스와 구현 클래스를 나눠서 인터페이스에 우리가 원하는 구현 클래스들을 다음과 같이 동적으로 주입**할 수 있습니다.
+그 다음 Interface 와 다형성을 배우면 **Interface 에 구현 클래스(Concrete Class)를 대입**할 수 있다.
 ``` java
-Interface class = new ConcreteClass();
+Interface clazz = new ConcreteClass();
 ```
+실전에선 유연성을 위해서 구현 클래스가 무엇인지 바로 명시하지 않고, 원하는 구현 클래스를 동적으로 Interface 에 외부에서 주입해주는 방식을 사용한다. 구현 클래스를 주입하여 수행한다는 의미에서 **Dependency Injection** 혹은 코드 자신이 '구현 결정권'을 갖지 않는다는 이유로 이를 **Inversion of Control** 라 부르기도 한다. 이건 매우 깊게, Spring 글에서 따로 다루겠다.
 ``` java
-Interface class = new SuperConcreteClass();
-```
-주입을 직접 Interface 에 하지않고 아래처럼 더 간편하게 함수를 통해 해줄 수 있습니다.
-``` java
-private Interface class;
-public void setClass(Interface class) {
-    this.class = class;
+private Interface clazz;
+public void setClass(Interface clazz) {
+    this.clazz = clazz;
 }
 setClass(new ConcreteClass();
 ```
-사용하려는 구현 클래스가 무엇인지 바로 명시하지 않고 원하는 구현 클래스를 동적으로 Interface 에 외부에서 주입하기 때문에 결정권을 갖지 않는다는 이유로 **Dependency Injection**, 내지는 **Inversion of Control** 이라 부릅니다.
 
-## extends (상속) 
+### extends (상속) 
 
-상속은 클래스의 몇몇 함수에 대해 추가적인 기능이나 다른 로직의 함수로 대체하고 싶을때 사용합니다. 일반적으로 대학교때 객체지향 프로그램의 가장 큰 특성을 상속으로 배우고 Animal 과 같은 상위  클래스와 그를 상속하는 Cat, Dog 같은 하위 개념 클래스를 예제로 배우니 상위, 하위 클래스를 사용할때 상속을 많이 사용합니다. 하지만 상위, 하위 개념은 앞서 설명드린 implements(구현)에 해당합니다. 상위 개념을 Interface 로 두고 상위 개념에 해당하는 함수들을 하위 개념 Class 에서 명시하는것입니다. 
+<GatsbyImage
+    alt='Extends'
+    image={getImage(props.localImages[1])}
+    style={{ margin: '0 4rem' }}/>
 
-반면 extends(상속)은 extends 가 의미하는대로 단순 확장에 해당합니다. Cat 중에서 줄무늬가 있는 Cat이 있을때 StripeCat 은 Cat 의 줄무늬를 제외한 모든 함수와 변수는 동일합니다.
+상속은 Class 의 몇몇 함수에 대해 추가적인 기능을 확장하거나, 다른 로직의 함수로 대체할때 사용한다. 라떼는 상속을 Animal '부모 클래스'에 Cat, Dog 과 같은 '자식 클래스'로 배웠었는데, 이와 같은 **상위-하위 개념은 앞서 배운 Implements 가 적절**하고, **상속은 단순 기능/정의 확장에만 사용**한다. 즉, 잘못배웠던 셈.
 
-## composite (구성, 합성)
+Cat 중에서 줄무늬가 있는 Cat 을 StripeCat 으로 정의할때, Cat 의 줄무늬를 제외한 모든 함수와 변수는 동일하다.
 
-특정 클래스가 특정 클래스를 내부 변수로 갖고있는것을 뜻합니다. 구성은 단순히 갖고있다는 의미인데 왜 패턴에서 중요하게 쓰일까요. extend 가 interface 와 composite 의 조합으로 표현될 수 있기 때문입니다.
+### composite (구성, 합성)
 
+<GatsbyImage
+    alt='Has-A'
+    image={getImage(props.localImages[2])}
+    style={{ margin: '0 4rem' }}/>
 
-CatClass 가 줄무늬를 갖는것을 상속을 통해 Sprite 함수 및 변수를 넣어주지 않고, "종" 이라는 하나의 상위 클래스를 두고 "줄무늬종" 임을 하위 클래스로 명시해준다면 상위 개념인 "종"에 그 하위에 무슨 "종"이든 다 넣을 수 있는 확장성을 갖게됩니다. 바로 위 extends(상속)과 비교해보십시오. **좌측에 SpriteCatClass 가 갖고있던 Sprite 정보가 우측 클래스로 이동했습니다.** **Inversion of Control** 의 의미가 조금 짐작되시는지요.
+Class 의 기능/정의 확장에 상속만 있는것은 아니다. 구성도 있다.
 
+- **상속**: 본래의 Class 를 **확장**하여 -> 새 Class 정의
+- **구성**: 본래의 Class 를 **가져다가 변수로 사용**하는 -> 새 Class 정의
 
-CatClass 가 줄무늬뿐만 아니라 두 눈이 오드아이라고 설정해봅시다. 이 또한 상위-하위 개념인 interface 와 has 를 통해 EyesClass 에 OddEyesClass 를 명시하는것이 좋겠지요. 아까 제 1 원칙 **"구현이 아닌 인터페이스에 맞춰 프로그래밍 한다."** 다음에 제 2 원칙 **"상속대신 구성과 인터페이스를 사용한다"** 가 되겠습니다.
+왜 [객제지향 프로그래밍](/about)에선 **상속(extends)보다 구성(composite)을 사용**하라고 할까? 다시 한번 복습하자면
 
-이제 이 세 개의 화살표(구현, 상속, 구성)와 두 개의 원칙으로 디자인 패턴들을 살펴보겠습니다.
+- **상속(extends)은 '경직된 확장성'을 갖지만,**
+- **interface 구현(implements)과 구성(composite)의 조합은 '개방적 확장성'을 갖기 때문이다.**
+
+위 구성 예시 그림을 아래와 같이 interface(implements)를 추가했더니, **Cat 종**을 더 잘 표현할 수 있게 되었다.
+
+<GatsbyImage
+    alt='Has-A and Implements'
+    image={getImage(props.localImages[3])}
+    style={{ margin: '0 4rem' }}/>
+
+상위 개념인 '종' 하위에 '줄무늬 종', '검은 종' 등을 다 처리할 수 있는 확장성을 갖게되었다. 바로 직전 상속(extends) 예시와 비교해보면, **자식 클래스였던 SpriteCatClass 가 갖고있던 Sprite 정보가 Cat 클래스 밖인 SpriteClass 로 이동**되었다. 왜 **Inversion of Control** 라고 부르는지 알 수 있는 대목이다.
+
+<GatsbyImage
+    alt='Openess, when we use Has-A and Implements'
+    image={getImage(props.localImages[4])}
+    style={{ margin: '0 4rem' }}/>
+
+Cat 이 '줄무늬 종'뿐만 아니라 '오드아이' 눈을 갖는다 가정해보자. 이 또한 interface(implements) 와 composite 을 통해 EyesClass 에 OddEyesClass 를 명시함으로써 Cat 은 이제 '종'과 '눈'에 확장성을 갖게 되었다. 
+
+이로써 앞서 배운 [객제지향 프로그래밍](/about)의 제 1 원칙 **"'주입': 구현이 아닌 인터페이스에 맞춰 프로그래밍 한다."**와 제 2 원칙 **"상속 대신 구성과 인터페이스를 사용한다"** 을 다시 한번 되새김질 할 수 있었다.
+
+이제부턴 2 개의 원칙과 3 개의 화살표(구현, 상속, 구성)로 디자인 패턴들을 살펴보자.
+
+------
+1. https://martinfowler.com/articles/injection.html
+2. http://www.nextree.co.kr/p11247/
+3. http://www.nextree.co.kr/p6753/
