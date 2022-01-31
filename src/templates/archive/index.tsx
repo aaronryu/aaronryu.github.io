@@ -131,7 +131,7 @@ const MainCategoryLine = styled(`div`)(() => ({
   position: 'absolute',
   top: '-4px',
   left: '14px',
-  height: 'calc(100% + 50px)',
+  height: 'calc(100% + 29px)',
   width: '2px',
   backgroundColor: 'var(--text-link)'
 }))
@@ -165,8 +165,8 @@ const SubCategoryLine = styled(`div`)(() => ({
   content: '""',
   position: 'absolute',
   top: '-23px',
-  left: '3px',
-  height: 'calc(100% + 80px)',
+  left: '14px',
+  height: 'calc(100% + 48px)',
   width: '2px',
   backgroundColor: 'var(--text-link)'
 }))
@@ -227,7 +227,7 @@ const MainCategoryBox: React.FunctionComponent<{
 const SubCategoryBox: React.FunctionComponent<{
   children: React.ReactNode, props?: any
 }> = ({ children, props }) => (
-  <div css={[styles.categoryBox, css`margin: 10px 0 0 0;`]} {...props}>
+  <div {...props}>
     {children}
   </div>
 )
@@ -238,8 +238,8 @@ const SubCategoryDot = () => (
     flex-direction: row;
     position: relative;
     align-items: center;
-    // right: 6px;
   `}>
+    <div css={css`width: 11px;`} />
     <div css={css`
       border-radius: 50%;
       height: 8px;
@@ -248,7 +248,7 @@ const SubCategoryDot = () => (
     `}/>
     <div css={css`
       height: 2px;
-      width: 14px;
+      width: 18px;
       background-color: var(--text-link);
     `}/>
   </div>
@@ -306,15 +306,16 @@ const styles = {
     margin-bottom: -6px;
   `,
   article: css`
-    font-size: 1rem;
+    font-weight: 100;
+    font-size: 0.96rem;
     @media only screen and (max-width: 700px) {
-      font-size: 0.92rem;
+      font-size: 0.90rem;
     }
   `,
   articleTitle: css`
     display: flex;
     flex-wrap: wrap;
-    color: var(--text-link);
+    color: var(--text);
   `,
   body: css`
     margin: 8rem auto 8rem;
