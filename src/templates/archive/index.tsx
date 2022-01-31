@@ -25,6 +25,9 @@ const categories: Array<CategoryArticle> = [
     articles: [
       { title: 'Javascript 엔진 개요 및 실행 과정으로 살펴보는 Hoisting 과 Closure', link: '/js/hosting' },
       { title: '[React] useState 와 useEffect 의 사용', link: '/js/usestate-and-useeffect' },
+      { title: '[React] useState 와 useEffect 의 사용', link: '/js/usestate-and-useeffect' },
+      { title: '[React] useState 와 useEffect 의 사용', link: '/js/usestate-and-useeffect' },
+      { title: '[React] useState 와 useEffect 의 사용', link: '/js/usestate-and-useeffect' },
     ],
     count: 12,
     subCategories: [
@@ -32,6 +35,7 @@ const categories: Array<CategoryArticle> = [
         category: [ 'Engine', 'React' ],
         articles: [
           { title: 'Javascript 엔진 개요 및 실행 과정으로 살펴보는 Hoisting 과 Closure', link: '/js/hosting' },
+          { title: '[React] useState 와 useEffect 의 사용', link: '/js/usestate-and-useeffect' },
           { title: '[React] useState 와 useEffect 의 사용', link: '/js/usestate-and-useeffect' },
         ],
         count: 6,
@@ -116,256 +120,164 @@ const ArchiveTemplate: React.FunctionComponent<{}> = ({}) => {
   return (
     <article>
       <div css={styles.body}>
-        <CategoryArticles categories={categories} />
+        <MainCategoryArticles categories={categories} />
       </div>
     </article>
   )
 }
 
-const CategoryArticles: React.FunctionComponent<{ categories: Array<CategoryArticle> }> = ({ categories }) => (
+const MainCategoryLine = styled(`div`)(() => ({
+  content: '""',
+  position: 'absolute',
+  top: '-4px',
+  left: '14px',
+  height: 'calc(100% + 50px)',
+  width: '2px',
+  backgroundColor: 'var(--text-link)'
+}))
+
+const MainCategoryArticles: React.FunctionComponent<{ categories: Array<CategoryArticle> }> = ({ categories }) => (
   <React.Fragment>
     {categories.map(each => {
       const mainCategory = each.category.join(' - ')
-      const hasSubCategory = each.subCategories && (each.subCategories.length > 0);
+      const hasSubCategory = each.subCategories && (each.subCategories.length > 0)
       return (
-        <Articles key={mainCategory}>
-          <div css={styles.eachExperienceHeader}>
-            <a css={css`position: relative; left: -5px`}>
-              <svg height="20" viewBox="0 0 18 18" width="24" fill="var(--text-link)">
-                <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6-6-6z"></path>
-              </svg>
-            </a>
-            <strong css={css`
-              font-size: 1.12rem;
-              @media only screen and (max-width: 700px) {
-                font-size: 1.015rem;
-              }
-            `}>{mainCategory}</strong>
-            <span css={css`
-              margin: 0 10px 0 auto;
-              font-size: 1.12rem;
-              @media only screen and (max-width: 700px) {
-                font-size: 1.015rem;
-              }
-            `}>{each.count}</span>
-          </div>
-          
-          <ul css={css`position: relative; top: -12px; margin-bottom: -6px;
-                            
-
-
-          `} key={mainCategory}>
+        <MainCategoryBox key={mainCategory}>
+          <MainCategoryTitle category={mainCategory} articleCount={each.count} />
+          <ul css={styles.articles} key={mainCategory}>
+            {hasSubCategory && <MainCategoryLine />}
             {each.articles.map(article => (
-              <li css={styles.mainProject} key={article.title}>
-                <div css={styles.mainProjectHeader}>
+              <li css={styles.article} key={article.title}>
+                <div css={styles.articleTitle}>
                   {article.title}
                 </div>
               </li>
-              ))}
-            {hasSubCategory && (<div css={css`
-              content: "";
-              position: absolute;
-              top: -4px;
-              left: 8px;
-              height: calc(100% + 50px);
-              width: 2px;
-              background-color: var(--text-link);
-            `} />)}
-
+            ))}
           </ul>
-
-          {hasSubCategory && (
-            <React.Fragment>
-              
-
-              {each.subCategories!.map((eachSub, index) => {
-              const subCategory = eachSub.category.join(' - ')
-              return (
-
-                  
-                  <SubArticles key={subCategory}>
-                    {(index < (each.subCategories!.length - 1)) && <div css={css`
-                      content: "";
-                      position: absolute;
-                      top: 29px;
-                      left: 7px;
-                      height: calc(100% + 13px);
-                      width: 2px;
-                      background-color: var(--text-link);
-                    `} />}
-                    <div css={css`
-                      display: flex;
-                      flex-direction: row;
-                    `}>
-                      <div css={css`
-                        display: flex;
-                        flex-direction: row;
-                        position: relative;
-                        align-items: center;
-                        right: 6px;
-                      `}>
-                        <div css={css`
-                          border-radius: 50%;
-                          height: 8px;
-                          width: 8px;
-                          background-color: var(--text);
-                        `}/>
-                      </div>
-
-                      <div css={styles.eachSubCategoryHeader}>
-                        <strong css={css`
-                          font-size: 1.12rem;
-                          @media only screen and (max-width: 700px) {
-                            font-size: 1.015rem;
-                          }
-                        `}>{subCategory}</strong>
-                        <span css={css`
-                          margin: 0 10px 0 auto;
-                          font-size: 1.12rem;
-                          @media only screen and (max-width: 700px) {
-                            font-size: 1.015rem;
-                          }
-                        `}>{eachSub.count}</span>
-                      </div>
-                    </div>
-                    
-                    <ul css={css`position: relative; top: -12px; margin-bottom: -6px;
-
-                    `} key={subCategory}>
-                      {eachSub.articles.map(article => (
-                        <li css={styles.mainProject} key={article.title}>
-                          <div css={styles.mainProjectHeader}>
-                            {article.title}
-                          </div>
-                        </li>
-                      ))}
-                    </ul>
-                  </SubArticles>
-              )
-            })}
-            </React.Fragment>
-          )}
-
-        </Articles>
+          {hasSubCategory && <SubCategoryArticles categories={each.subCategories!} />}
+        </MainCategoryBox>
       )
     })}
   </React.Fragment>
 )
 
-const MainCategory: React.FunctionComponent<{
-  categories: Array<string>,
-  children: React.ReactNode,
-}> = ({ categories, children }) => {
-  const stringified = categories.join(' - ')
+const SubCategoryLine = styled(`div`)(() => ({
+  content: '""',
+  position: 'absolute',
+  top: '-23px',
+  left: '3px',
+  height: 'calc(100% + 80px)',
+  width: '2px',
+  backgroundColor: 'var(--text-link)'
+}))
+
+const SubCategoryArticles: React.FunctionComponent<{ categories: Array<CategoryArticle> }> = ({ categories }) => (
+  <React.Fragment>
+    {categories.map((each, index) => {
+      const subCategory = each.category.join(' - ')
+      const notLastSubCategory = index < (categories.length - 1)
+      return (
+        <SubCategoryBox key={subCategory}>
+          <SubCategoryTitle category={subCategory} articleCount={each.count} />
+          <ul css={styles.articles} key={subCategory}>
+            {notLastSubCategory && <SubCategoryLine />}
+            {each.articles.map(article => (
+              <li css={styles.article} key={article.title}>
+                <div css={styles.articleTitle}>
+                  {article.title}
+                </div>
+              </li>
+            ))}
+          </ul>
+        </SubCategoryBox>
+      )
+    })}
+  </React.Fragment>
+)
+
+const ChevronRight = () => (
+  <a css={css`position: relative; left: -5px`}>
+    <svg height="20" viewBox="0 0 18 18" width="24" fill="var(--text-link)">
+      <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6-6-6z"></path>
+    </svg>
+  </a>
+)
+
+const MainCategoryTitle: React.FunctionComponent<{
+  category: string,
+  articleCount: number,
+}> = ({ category, articleCount }) => {
   return (
-    <React.Fragment>
-      <h2 id={stringified} css={css`position: relative;`}>
-        <a css={styles.aAnchor}>
-          <svg height="20" viewBox="0 0 20 20" width="20" fill="var(--text-link)">
-              <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6-6-6z"></path>
-          </svg>
-        </a>
-        {stringified}
-      </h2>
-      {children}
-    </React.Fragment>
+    <div css={[styles.categoryHeader, css`background-color: var(--text-link-background);`]}>
+      <ChevronRight />
+      <strong css={styles.categoryTitle}>{category}</strong>
+      <span css={[styles.categoryTitle, css`margin: 0 10px 0 auto;`]}>{articleCount}</span>
+    </div>
   )
 }
 
-const Articles: React.FunctionComponent<{
+const MainCategoryBox: React.FunctionComponent<{
   children: React.ReactNode, props?: any
 }> = ({ children, props }) => (
-  <div css={styles.eachExperience} {...props}>
+  <div css={[styles.categoryBox, css`margin: 0px 10px 10px;`]} {...props}>
     {children}
   </div>
 )
 
-const SubArticles: React.FunctionComponent<{
+const SubCategoryBox: React.FunctionComponent<{
   children: React.ReactNode, props?: any
 }> = ({ children, props }) => (
-  <div css={styles.eachSubCategory} {...props}>
+  <div css={[styles.categoryBox, css`margin: 10px 0 0 0;`]} {...props}>
     {children}
+  </div>
+)
+
+const SubCategoryDot = () => (
+  <div css={css`
+    display: flex;
+    flex-direction: row;
+    position: relative;
+    align-items: center;
+    // right: 6px;
+  `}>
+    <div css={css`
+      border-radius: 50%;
+      height: 8px;
+      width: 8px;
+      background-color: var(--text-link);
+    `}/>
+    <div css={css`
+      height: 2px;
+      width: 14px;
+      background-color: var(--text-link);
+    `}/>
+  </div>
+)
+
+const SubCategoryTitle: React.FunctionComponent<{
+  category: string,
+  articleCount: number,
+}> = ({ category, articleCount }) => (
+  <div css={styles.subCategoryHeader}>
+    <SubCategoryDot />
+    <div css={[styles.categoryHeader, css`border: 1px solid var(--text-link); padding-left: 10px;`]}>
+      <strong css={styles.categoryTitle}>{category}</strong>
+      <span css={[styles.categoryTitle, css`margin: 0 10px 0 auto;`]}>{articleCount}</span>
+    </div>
   </div>
 )
 
 const styles = {
-  introduction: css`
-    margin-top: 85px;
-    height: 180px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between; // flex-start;
-    text-align: center;
-  `,
-  representative: css`
-    font-size: 1.115rem;
-    @media only screen and (max-width: 700px) {
-      font-size: 1rem;
-    }
-  `,
-  highlight: css`
-    font-size: 1rem;
-    font-weight: bold;
-    color: var(--text-link);
-  `,
-  aAnchor: css`
-    height: 2.3rem;
-    border-bottom: 2px solid var(--text-link);
-    background-position: 0 100%;
-    background-size: auto 3px;
-    background-repeat: repeat-x;
-
-    position: absolute;
-    top: 0;
-    left: 0;
-    transform: translateX(-100%);
-    padding-right: 4px;
-  `,
-  eachExperience: css`
+  categoryBox: css`
     border: 1px solid var(--text-link);
     border-radius: 10px;
     padding: 10px;
-    margin: 0px 10px 10px;
+    
     @media only screen and (max-width: 700px) {
       margin: 8px;
     }
   `,
-  eachExperienceHeader: css`
-    display: flex;
-    flex-wrap: wrap;
-    font-size: 1.115rem;
-    color: var(--text-link);
-    background-color: var(--text-link-background);
-    border-radius: 5px;
-    // border-bottom: 1px solid var(--brand);
-    // padding-bottom: 10px;
-
-    @media only screen and (max-width: 700px) {
-      font-size: 1.015rem;
-    }
-  `,
-
-  eachSubCategory: css`
-    border: 1px solid var(--text-link);
-    border-radius: 10px;
-    padding: 10px;
-    margin: 10px 0 0 0;
-    @media only screen and (max-width: 700px) {
-      margin: 8px;
-    }
-
-    position: relative;
-    // &::after {
-    //   content: "";
-    //   position: absolute;
-    //   top: -85px;
-    //   left: 7px;
-    //   height: calc(100% - 22px); // 114px;
-    //   width: 2px;
-    //   background-color: var(--text-link);
-    // }
-  `,
-  eachSubCategoryHeader: css`
+  categoryHeader: css`
     display: flex;
     flex-wrap: wrap;
     width: 100%;
@@ -373,28 +285,33 @@ const styles = {
     font-size: 1.115rem;
     color: var(--text-link);
     border-radius: 5px;
-    border: 1px solid var(--text-link);
-    padding-left: 10px;
 
     @media only screen and (max-width: 700px) {
       font-size: 1.015rem;
     }
   `,
-
-  mainProject: css`
-    // padding-top: 20px;
+  subCategoryHeader: css`
+    display: flex;
+    flex-direction: row;
+  `,
+  categoryTitle: css`
+    font-size: 1.12rem;
+    @media only screen and (max-width: 700px) {
+      font-size: 1.015rem;
+    }
+  `,
+  articles: css`
+    position: relative;
+    top: -12px;
+    margin-bottom: -6px;
+  `,
+  article: css`
     font-size: 1rem;
     @media only screen and (max-width: 700px) {
       font-size: 0.92rem;
     }
   `,
-  subProject: css`
-    font-size: 0.92rem;
-    @media only screen and (max-width: 700px) {
-      font-size: 0.8rem;
-    }
-  `,
-  mainProjectHeader: css`
+  articleTitle: css`
     display: flex;
     flex-wrap: wrap;
     color: var(--text-link);
@@ -542,10 +459,6 @@ const styles = {
         'Nimbus Mono L', 'Courier New', 'Courier', monospace;
       color: var(--text-auxiliary);
     }
-  `,
-  footer: css`
-    margin: 5rem auto 0;
-    max-width: 650px;
   `,
 }
 
