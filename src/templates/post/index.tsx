@@ -45,7 +45,7 @@ interface Props {
   }
 }
 
-const HEADER_OFFSET_Y = 76
+const HEADER_OFFSET_Y = 81
 const PostTemplate: React.FunctionComponent<Props> = ({
   data: { mdx },
 }) => {
@@ -62,6 +62,7 @@ const PostTemplate: React.FunctionComponent<Props> = ({
     const headerElements: NodeListOf<Element> = document.querySelectorAll('.anchor-header')
     for (const elem of Array.from(headerElements)) {
       const { top } = elem.getBoundingClientRect()
+      console.log(currentOffsetY)
       const elemTop = top + currentOffsetY
       const isLast = elem === headerElements[headerElements.length - 1]
       if (currentOffsetY < elemTop - HEADER_OFFSET_Y) {
