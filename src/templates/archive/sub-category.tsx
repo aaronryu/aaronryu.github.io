@@ -1,37 +1,30 @@
 import { css } from "@emotion/react"
-import styled from "@emotion/styled"
 import * as React from "react"
 import { CategoryArticle } from "."
-import { styles } from "./main-category"
-
-const SubCategoryLine = styled(`div`)(() => ({
-  content: '""',
-  position: 'absolute',
-  top: '-23px',
-  left: '14px',
-  height: 'calc(100% + 48px)',
-  width: '2px',
-  backgroundColor: 'var(--text-link)'
-}))
+import { CategoryLine, styles } from "./main-category"
+import NestedCategoryArticles from "./nested-category"
 
 const SubCategoryArticles: React.FunctionComponent<{ categories: Array<CategoryArticle> }> = ({ categories }) => (
   <React.Fragment>
     {categories.map((each, index) => {
       const subCategory = each.category.join(' - ')
       const notLastSubCategory = index < (categories.length - 1)
+      const hasNestedCategory = each.subCategories && (each.subCategories.length > 0)
       return (
         <SubCategoryBox key={subCategory}>
           <SubCategoryTitle category={subCategory} articleCount={each.count} />
           <ul css={styles.articles} key={subCategory}>
-            {notLastSubCategory && <SubCategoryLine />}
+            {hasNestedCategory && <CategoryLine size="nested" top={-4} left={55} plusHeight={25} />}
+            {notLastSubCategory && <CategoryLine size="sub" top={-23} left={14} plusHeight={260} />}
             {each.articles.map(article => (
-              <li css={[styles.article, css`position: relative; left: 26px;`]} key={article.title}>
+              <li css={[styles.article, css`position: relative; left: 40px;`]} key={article.title}>
                 <div css={styles.articleTitle}>
                   {article.title}
                 </div>
               </li>
             ))}
           </ul>
+          {hasNestedCategory && <NestedCategoryArticles categories={each.subCategories!} />}
         </SubCategoryBox>
       )
     })}

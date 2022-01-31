@@ -4,15 +4,25 @@ import * as React from "react"
 import { CategoryArticle } from "."
 import SubCategoryArticles from "./sub-category"
 
-const MainCategoryLine = styled(`div`)(() => ({
-  content: '""',
-  position: 'absolute',
-  top: '-4px',
-  left: '14px',
-  height: 'calc(100% + 29px)',
-  width: '2px',
-  backgroundColor: 'var(--text-link)'
-}))
+export const CategoryLine = styled(`div`)<{ size: 'main' | 'sub' | 'nested' ,top: number, left: number, plusHeight: number }>(
+  ({ size, top, left, plusHeight: minusHeight }) => ({
+    content: '""',
+    position: 'absolute',
+    top: `${top}px`,
+    left: `${left}px`,
+    height: `calc(100% + ${minusHeight}px)`,
+    width: '2px',
+    backgroundColor: 'var(--text-link)',
+    '@media only screen and (max-width: 700px)': {
+      top: `${top + (size === 'nested' ? 2 : (size === 'sub' ? 5 : 2))}px`,
+      height: `calc(100% + ${minusHeight - (size === 'nested' ? 2 : (size === 'sub' ? 20 : 6))}px)`,
+    },
+    '@media only screen and (max-width: 600px)': {
+      top: `${top + (size === 'nested' ? 4 : (size === 'sub' ? 7 : 3))}px`,
+      height: `calc(100% + ${minusHeight - (size === 'nested' ? 4 : (size === 'sub' ? 38 : 6))}px)`,
+    },
+  })
+)
 
 const MainCategoryArticles: React.FunctionComponent<{ categories: Array<CategoryArticle> }> = ({ categories }) => (
   <React.Fragment>
@@ -23,7 +33,7 @@ const MainCategoryArticles: React.FunctionComponent<{ categories: Array<Category
         <MainCategoryBox key={mainCategory}>
           <MainCategoryTitle category={mainCategory} articleCount={each.count} />
           <ul css={styles.articles} key={mainCategory}>
-            {hasSubCategory && <MainCategoryLine />}
+            {hasSubCategory && <CategoryLine size="main" top={-4} left={14} plusHeight={30} />}
             {each.articles.map(article => (
               <li css={styles.article} key={article.title}>
                 <div css={styles.articleTitle}>
@@ -92,6 +102,7 @@ export const styles = {
     }
   `,
   categoryTitle: css`
+    min-width: fit-content;
     font-size: 1.12rem;
     @media only screen and (max-width: 700px) {
       font-size: 1.015rem;
@@ -101,10 +112,28 @@ export const styles = {
     display: flex;
     flex-direction: row;
   `,
+  nestedCategoryHeader: css`
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 1.115rem;
+    color: var(--text-link);
+    border-radius: 5px;
+
+    @media only screen and (max-width: 700px) {
+      font-size: 1.015rem;
+    }
+  `,
   articles: css`
     position: relative;
     top: -12px;
     margin-bottom: -6px;
+  `,
+  nestedArticles: css`
+    position: relative;
+    top: -8px;
+    margin-bottom: 6px;
   `,
   article: css`
     font-weight: 100;
@@ -115,7 +144,6 @@ export const styles = {
   `,
   articleTitle: css`
     display: flex;
-    flex-wrap: wrap;
     color: var(--text);
   `,
 }
