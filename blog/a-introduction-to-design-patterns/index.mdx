@@ -4,8 +4,8 @@ slug: a-introduction-to-design-patterns
 category: pattern
 categoryName: Design Pattern
 author: Aaron
-date: 2022-01-31T22:00:00+09:00
-updateDate: 2022-01-31T22:00:00+09:00
+date: 2019-02-21T03:17:48
+updateDate: 2019-02-21T03:17:48
 deck: 디자인 패턴은 대학교에서 간단하게만 배웠던것으로 기억한다. 대학원이나 입사 준비시 디자인 패턴은 항상 시험에 나오는 주제였지만, 필자는 실제로 사용해본 경험이 적었기에 왜 이것이 중요한지에 대해서 체감할 일이 없었다. 부트코드와 이론보단 프로젝트를 많이하는 요즘의 시대엔 좀 다르겠지만 필자는 패턴이 왜 쓰이는지 경험적으로 습득한것은 입사하고 나서부터였기 때문이다.
 abstract: 다양한 디자인 패턴을 공부하기에 앞서, 왜 디자인 패턴이 필요한지? 그리고 디자인 패턴을 이해하는데 도움이 될 클래스 다이어그램을 짧게 학습해보도록 한다.
 embeddedImagesLocal:
@@ -20,7 +20,7 @@ import { getImage, GatsbyImage } from 'gatsby-plugin-image';
 
 ## 디자인 패턴
 
-디자인 패턴은 짧게 **"객체지향 패러다임에서 더 좋은 코드란 무엇인가에 대한 고민의 결과"** 이다.
+디자인 패턴은 짧게 **'객체지향 패러다임에서 더 좋은 코드란 무엇인가에 대한 고민의 결과'** 이다.
 
 - **중복의 최소화**: 한 곳의 수정이 중복된 다른 코드에서의 수정을 동반해선 안된다.
 - **코드 변경의 용이성**: 코드는 항상 완벽하지 않고, 요구사항은 상시 바뀔 수 있다.
@@ -49,7 +49,7 @@ import { getImage, GatsbyImage } from 'gatsby-plugin-image';
     image={getImage(props.localImages[0])}
     style={{ margin: '0 4rem' }}/>
 
-앞선 [객제지향 프로그래밍](/about) 글을 잘 읽었다면, 객체지향 코드는 Class 보다 Interface 를 단위로 구성된다는것을 이미 알고있을것이다. **'어떤 작업을 수행할지'**는 Interface 로 명시한 채, **'어떻게 작업할지'**는 원하는 구현 클래스(Concrete Class) 를 적재적소에 주입하여 실제 작업을 수행한다.
+앞선 [객제지향 프로그래밍](/pattern/two-principles-on-oop) 글을 잘 읽었다면, 객체지향 코드는 Class 보다 Interface 를 단위로 구성된다는것을 이미 알고있을것이다. **'어떤 작업을 수행할지'**는 Interface 로 명시한 채, **'어떻게 작업할지'**는 원하는 구현 클래스(Concrete Class) 를 적재적소에 주입하여 실제 작업을 수행한다.
 
 Class 를 처음 배운 뒤엔 아래와 같이 정의하여 사용한다.
 ``` java
@@ -91,7 +91,7 @@ Class 의 기능/정의 확장에 상속만 있는것은 아니다. 구성도 �
 - **상속**: 본래의 Class 를 **확장**하여 -> 새 Class 정의
 - **구성**: 본래의 Class 를 **가져다가 변수로 사용**하는 -> 새 Class 정의
 
-왜 [객제지향 프로그래밍](/about)에선 **상속(extends)보다 구성(composite)을 사용**하라고 할까? 다시 한번 복습하자면
+왜 [객제지향 프로그래밍](/pattern/two-principles-on-oop)에선 **상속(extends)보다 구성(composite)을 사용**하라고 할까? 다시 한번 복습하자면
 
 - **상속(extends)은 '경직된 확장성'을 갖지만,**
 - **interface 구현(implements)과 구성(composite)의 조합은 '개방적 확장성'을 갖기 때문이다.**
@@ -112,11 +112,11 @@ Class 의 기능/정의 확장에 상속만 있는것은 아니다. 구성도 �
 
 Cat 이 '줄무늬 종'뿐만 아니라 '오드아이' 눈을 갖는다 가정해보자. 이 또한 interface(implements) 와 composite 을 통해 EyesClass 에 OddEyesClass 를 명시함으로써 Cat 은 이제 '종'과 '눈'에 확장성을 갖게 되었다. 
 
-이로써 앞서 배운 [객제지향 프로그래밍](/about)의 제 1 원칙 **"'주입': 구현이 아닌 인터페이스에 맞춰 프로그래밍 한다."**와 제 2 원칙 **"상속 대신 구성과 인터페이스를 사용한다"** 을 다시 한번 되새김질 할 수 있었다.
+이로써 앞서 배운 [객제지향 프로그래밍](/pattern/two-principles-on-oop)의 제 1 원칙 **"'클래스-상속'보다 '인터페이스-구성'을 사용하라"**와 제 2 원칙 **"'구현 클래스'보다 '인터페이스'로 구성하라"**와 을 다시 한번 되새김질 할 수 있었다.
 
 이제부턴 2 개의 원칙과 3 개의 화살표(구현, 상속, 구성)로 디자인 패턴들을 살펴보자.
 
-------
+---
 1. https://martinfowler.com/articles/injection.html
 2. http://www.nextree.co.kr/p11247/
 3. http://www.nextree.co.kr/p6753/
