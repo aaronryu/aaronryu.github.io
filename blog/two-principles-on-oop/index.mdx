@@ -19,16 +19,16 @@ abstract: 학교에서 OOP 를 처음 배울때 접하는 '상속'이라는 것�
 - **부모 클래스 + 부모 함수**
 ``` Java
 class Duck
- { swim(), display(), fly(), quack() }
+	{ swim(), display(), fly(), quack() }
 ```
 
 - **부모 클래스 + 부모 함수 확장 = 자식 클래스**
 ``` Java
 class RedHeadDuck extends Duck 
- { swim(), display(), fly(), quack() }
+	{ swim(), display(), fly(), quack() }
 
 class RubberDuck extends Duck 
- { swim(), display(), fly(){ null }, quack() }
+	{ swim(), display(), fly(){ null }, quack() }
 ```
 
 상속을 사용하면 부모 Duck 클래스에 있는 모든 함수들을 자식 Duck 클래스들이 모두 갖게된다. 문제점은 부모에게 상속을 받으면 재산과 빚을 같이 받는것처럼 **자식 Duck 클래스는 의지와 상관없이 갖고싶지 않은 모든 부모 함수들을 가진채 확장해야한다**는 점이다. 개발에 있어 불필요한 제약을 갖게되는 것이다.
@@ -46,12 +46,12 @@ interface Quackable { quack() }
 - **'행위 단위' 인터페이스 조합 및 구현 = 구현 클래스**
 ``` Java
 class RedHeadDuck implements Flyable, Quackable {
-  fly() { ... }
-  quack() { ... }
+	fly() { ... }
+	quack() { ... }
 }
 
 class RubberDuck implements Quackable {
-  quack() { ... }
+	quack() { ... }
 }
 ```
 
@@ -76,17 +76,17 @@ class QuiteQuackable implements Quackable { quack() { ... } }
 - **'행위 단위' 클래스 조합 = 구현 클래스**
 ``` Java
 class RedHeadDuck {
-  interface Flyable = new SuperFlyable();
-  interface Quackable = new ShoutQuackable();
-  doFly() { Flyable.fly() }
-  doQuack(){ Quackable.quack() }
+	interface Flyable = new SuperFlyable();
+	interface Quackable = new ShoutQuackable();
+	doFly() { Flyable.fly() }
+	doQuack(){ Quackable.quack() }
 }
 
 class RubberDuck {
-  interface Flyable = new NotFlyable();
-  interface Quackable = new QuiteQuackable();
-  doFly(){ Flyable.fly() }
-  doQuack(){ Quackable.quack() }
+	interface Flyable = new NotFlyable();
+	interface Quackable = new QuiteQuackable();
+	doFly(){ Flyable.fly() }
+	doQuack(){ Quackable.quack() }
 }
 ```
 
@@ -107,20 +107,20 @@ class RubberDuck {
 - **지양: '구현 클래스'로 구성**
 ``` Java
 class RedHeadDuck {
-  class SuperFlyable; <--
-  class ShoutQuackable; <--
-  doFly() { SuperFlyable.fly() }
-  doQuack(){ ShoutQuackable.quack() }
+	class SuperFlyable; <--
+	class ShoutQuackable; <--
+	doFly() { SuperFlyable.fly() }
+	doQuack(){ ShoutQuackable.quack() }
 }
 ```
 
 - **지향: '인터페이스'로 구성 - 언제든 '구현 클래스'를 바꿔낄 수 있다**
 ``` Java
 class RedHeadDuck {
-  interface Flyable = new SuperFlyable(); <--
-  interface Quackable = new ShoutQuackable(); <--
-  doFly() { Flyable.fly() }
-  doQuack(){ Quackable.quack() }
+	interface Flyable = new SuperFlyable(); <--
+	interface Quackable = new ShoutQuackable(); <--
+	doFly() { Flyable.fly() }
+	doQuack(){ Quackable.quack() }
 }
 ```
 
