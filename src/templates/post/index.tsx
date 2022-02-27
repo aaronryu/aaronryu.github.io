@@ -23,7 +23,7 @@ interface Props {
         title: string /* 제목에 해당합니다. */
         slug: string /* example-post */
         category: string /* js */
-        categoryName: string /* Javascript */
+        categoryNames: Array<string> /* Javascript */
         author: string /* Aaron Ryu */
         date: string /* 2021-10-28 */
         dateFormatted: string
@@ -114,7 +114,7 @@ const PostTemplate: React.FunctionComponent<Props> = ({
         currentHeaderUrl={currentHeaderUrl}
       />
       <Article
-        category={frontmatter.categoryName}
+        categories={frontmatter.categoryNames}
         headline={frontmatter.title}
         deck={frontmatter.deck}
         abstract={frontmatter.abstract}
@@ -217,7 +217,7 @@ export const query = graphql`
       frontmatter {
         slug
         category
-        categoryName
+        categoryNames
         title
         author
         date

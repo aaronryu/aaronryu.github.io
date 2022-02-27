@@ -20,7 +20,7 @@ export interface ChildImage {
 };
 
 export interface ArticleProps {
-  category: string
+  categories: Array<string>
   headline: string
   body: string
   date: string
@@ -33,7 +33,7 @@ export interface ArticleProps {
 }
 
 const Article: React.FunctionComponent<ArticleProps> = ({
-  category,
+  categories,
   headline,
   deck,
   abstract,
@@ -46,7 +46,7 @@ const Article: React.FunctionComponent<ArticleProps> = ({
 }) => (
   <article>
     <div css={styles.headerWrapper}>
-      <Header category={category} headline={headline} deck={deck}  date={date} dateFormatted={dateFormatted} />
+      <Header categories={categories} headline={headline} deck={deck}  date={date} dateFormatted={dateFormatted} />
       <Abstract text={abstract} />
     </div>
     <Epigraph text={epigraph} author={epigraphAuthor} />
@@ -57,15 +57,15 @@ const Article: React.FunctionComponent<ArticleProps> = ({
 )
 
 const Header: React.FunctionComponent<{
-  category: string
+  categories: Array<string>
   headline: string
   deck?: string
   date: string
   dateFormatted: string
-}> = ({ category, headline, deck, date, dateFormatted }) => {
+}> = ({ categories, headline, deck, date, dateFormatted }) => {
   return (
     <header css={styles.header}>
-      {category && <p css={styles.category}>{category}</p>}
+      {categories && (categories.length > 0) && <p css={styles.category}>{categories.join(' / ')}</p>}
       <section css={styles.meta}>
       </section>
       <h2 css={styles.headline}>{headline}</h2>

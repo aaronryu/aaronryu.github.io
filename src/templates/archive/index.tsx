@@ -3,6 +3,7 @@ import { css } from "@emotion/react"
 import MainCategoryArticles from "./main-category"
 import { getWindowDimensions } from "../../components/layout"
 import { useEffect, useState } from "react"
+import { graphql } from "gatsby"
 
 export interface Article {
   title: string,
@@ -14,6 +15,30 @@ export interface CategoryArticle {
   articles: Array<Article>
   count: number
   subCategories?: Array<CategoryArticle>
+}
+
+interface Node {
+  node: {
+    childMdx: NodeArticle
+  }
+}
+
+interface NodeArticle {
+  id: string 
+  slug: string
+  frontmatter: {
+    title: string /* 제목에 해당합니다. */
+    category: string /* js */
+    categoryNames: Array<string> /* Javascript */
+    date: string /* MMMM D, YYYY */
+  }
+}
+interface Props {
+  data: {
+    allFile: {
+      edges: Array<Node>
+    }
+  }
 }
 
 const categories: Array<CategoryArticle> = [
@@ -113,6 +138,59 @@ const categories: Array<CategoryArticle> = [
   }
 ]
 
+const sortingCategorizing = (edges: Array<Node>) => {
+  const categoryMap = {}
+  edges.forEach(edge => {
+    const categories = edge.node.childMdx.frontmatter.categoryNames
+    const totalCategories = categories.length
+    const article = edge.node.childMdx
+    // console.log(Object.keys(categoryMap))
+    searchAndAppendCategory(0, categories, categoryMap, article)
+  })
+  // console.log(JSON.stringify(categoryMap))
+
+  return categoryMap
+}
+
+const searchAndAppendCategory = (index: number, categories: Array<string>, categoryMap: any, article: NodeArticle) => {
+  const totalCategory = categories.length
+  const currentCategory = categories[index]
+
+  let done = false;
+  for (let writtenCategory of Object.keys(categoryMap)) {
+    const writtenCategoryMap = categoryMap[writtenCategory]
+    if (writtenCategory === currentCategory) {
+      // * 존재
+      if ((index + 1) < totalCategory) {
+        searchAndAppendCategory(index + 1, categories, writtenCategoryMap.sub, article)
+        done = true
+      } else {
+        writtenCategoryMap.link = `/${article.frontmatter.category}`
+        writtenCategoryMap.list.push(article)
+        return
+      }
+    }
+  }
+  if (!done) {
+    // * 비존재
+    if ((index + 1) < totalCategory) {
+      categoryMap[currentCategory] = createNewCategory()
+      categoryMap[currentCategory].link = `/${article.frontmatter.category}`
+      categoryMap[currentCategory].list.push(article)
+      searchAndAppendCategory(index + 1, categories, categoryMap[currentCategory].sub, article)
+    } else {
+      categoryMap[currentCategory] = createNewCategory()
+      categoryMap[currentCategory].link = `/${article.frontmatter.category}`
+      categoryMap[currentCategory].list.push(article)
+      return
+    }
+  }
+}
+
+const createNewCategory = () => {
+  return { link: '/', sub: {}, list: [] }
+}
+
 const calculateMaxArticleTitleLength = (width : number) => {
   if (width <= 500) {
     return 42
@@ -131,7 +209,9 @@ const calculateMaxArticleTitleLength = (width : number) => {
   }
 }
 
-const ArchiveTemplate: React.FunctionComponent<{}> = ({}) => {
+const ArchiveTemplate: React.FunctionComponent<Props> = ({ data: { allFile: { edges } }}) => {
+  console.log(edges)
+  console.log(sortingCategorizing(edges))
   const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions())
   const [maxArticleTitleLength, setMaxArticleTitleLength] = useState(calculateMaxArticleTitleLength(windowDimensions.width))
 
@@ -302,5 +382,33 @@ const styles = {
     }
   `,
 }
+
+
+export const query = graphql`
+  query($nodeCategory: String!, $nodePath: String!) {
+    allFile(
+      filter: {
+        sourceInstanceName: { eq: $nodeCategory }
+        extension: { eq: "mdx" }
+        childMdx: { frontmatter: { category: { eq: $nodePath } } }
+      }
+    ) {
+      edges {
+        node {
+          childMdx {
+            id
+            slug
+            frontmatter {
+              date(formatString: "MMMM D, YYYY")
+              title
+              category
+              categoryNames
+            }
+          }
+        }
+      }
+    }
+  }
+`
 
 export default ArchiveTemplate
