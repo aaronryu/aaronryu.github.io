@@ -6,12 +6,17 @@ import { useEffect, useState } from "react"
 import { graphql } from "gatsby"
 
 export interface Article {
+  id: string,
+  categoryNames: Array<string>,
+  date: string,
+  
   title: string,
   link: string,
 }
 
 export interface CategoryArticle {
-  category: Array<string>
+  category: string
+  path: string
   articles: Array<Article>
   count: number
   subCategories?: Array<CategoryArticle>
@@ -43,56 +48,62 @@ interface Props {
 
 const categories: Array<CategoryArticle> = [
   {
-    category: [ 'Frontend', 'Javascript' ], // 메뉴리스트에서 보여지는것은 대/중분류
+    category: 'Frontend - Javascript', // 메뉴리스트에서 보여지는것은 대/중분류
+    path: '/js',
     articles: [
-      { title: 'Javascript 엔진 개요 및 실행 과정으로 살펴보는 Hoisting 과 Closure', link: '/js/hosting' },
-      { title: '[React] useState 와 useEffect 의 사용', link: '/js/usestate-and-useeffect' },
-      { title: '[React] useState 와 useEffect 의 사용', link: '/js/usestate-and-useeffect' },
-      { title: '[React] useState 와 useEffect 의 사용', link: '/js/usestate-and-useeffect' },
-      { title: '[React] useState 와 useEffect 의 사용', link: '/js/usestate-and-useeffect' },
+      { id: '123-2345-4567', categoryNames: [ 'Teset', 'Hello' ], date: 'Octorber 26, 2021', title: 'Javascript 엔진 개요 및 실행 과정으로 살펴보는 Hoisting 과 Closure', link: '/js/hosting' },
+      { id: '123-2345-4567', categoryNames: [ 'Teset', 'Hello' ], date: 'Octorber 26, 2021', title: '[React] useState 와 useEffect 의 사용', link: '/js/usestate-and-useeffect' },
+      { id: '123-2345-4567', categoryNames: [ 'Teset', 'Hello' ], date: 'Octorber 26, 2021', title: '[React] useState 와 useEffect 의 사용', link: '/js/usestate-and-useeffect' },
+      { id: '123-2345-4567', categoryNames: [ 'Teset', 'Hello' ], date: 'Octorber 26, 2021', title: '[React] useState 와 useEffect 의 사용', link: '/js/usestate-and-useeffect' },
+      { id: '123-2345-4567', categoryNames: [ 'Teset', 'Hello' ], date: 'Octorber 26, 2021', title: '[React] useState 와 useEffect 의 사용', link: '/js/usestate-and-useeffect' },
     ],
     count: 12,
     subCategories: [
       {
-        category: [ 'Engine', 'React' ],
+        category: 'Engine - React',
+        path: '/js',
         articles: [
-          { title: 'Javascript 엔진 개요 및 실행 과정으로 살펴보는 Hoisting 과 Closure', link: '/js/hosting' },
-          { title: '[React] useState 와 useEffect 의 사용', link: '/js/usestate-and-useeffect' },
-          { title: '[React] useState 와 useEffect 의 사용', link: '/js/usestate-and-useeffect' },
+          { id: '123-2345-4567', categoryNames: [ 'Teset', 'Hello' ], date: 'Octorber 26, 2021', title: 'Javascript 엔진 개요 및 실행 과정으로 살펴보는 Hoisting 과 Closure', link: '/js/hosting' },
+          { id: '123-2345-4567', categoryNames: [ 'Teset', 'Hello' ], date: 'Octorber 26, 2021', title: '[React] useState 와 useEffect 의 사용', link: '/js/usestate-and-useeffect' },
+          { id: '123-2345-4567', categoryNames: [ 'Teset', 'Hello' ], date: 'Octorber 26, 2021', title: '[React] useState 와 useEffect 의 사용', link: '/js/usestate-and-useeffect' },
         ],
         count: 6,
         subCategories: [
           {
-            category: [ 'Typescript', 'Semantic' ],
+            category: 'Typescript - Semantic',
+            path: '/js',
             articles: [
-              { title: 'Javascript 엔진 개요 및 실행 과정으로 살펴보는 Hoisting 과 Closure', link: '/js/hosting' },
-              { title: '[React] useState 와 useEffect 의 사용', link: '/js/usestate-and-useeffect' },
+              { id: '123-2345-4567', categoryNames: [ 'Teset', 'Hello' ], date: 'Octorber 26, 2021', title: 'Javascript 엔진 개요 및 실행 과정으로 살펴보는 Hoisting 과 Closure', link: '/js/hosting' },
+              { id: '123-2345-4567', categoryNames: [ 'Teset', 'Hello' ], date: 'Octorber 26, 2021', title: '[React] useState 와 useEffect 의 사용', link: '/js/usestate-and-useeffect' },
             ],
             count: 2,
           },
           {
-            category: [ 'Typescript', 'Algorithm' ],
+            category: 'Typescript - Semantic',
+            path: '/js',
             articles: [
-              { title: 'Javascript 엔진 개요 및 실행 과정으로 살펴보는 Hoisting 과 Closure 그리고 삼겹살을 맛있게 먹는방법', link: '/js/hosting' },
-              { title: '[React] useState 와 useEffect 의 사용', link: '/js/usestate-and-useeffect' },
+              { id: '123-2345-4567', categoryNames: [ 'Teset', 'Hello' ], date: 'Octorber 26, 2021', title: 'Javascript 엔진 개요 및 실행 과정으로 살펴보는 Hoisting 과 Closure 그리고 삼겹살을 맛있게 먹는방법', link: '/js/hosting' },
+              { id: '123-2345-4567', categoryNames: [ 'Teset', 'Hello' ], date: 'Octorber 26, 2021', title: '[React] useState 와 useEffect 의 사용', link: '/js/usestate-and-useeffect' },
             ],
             count: 2,
           },
         ]
       },
       {
-        category: [ 'Code Styles', 'Styling' ],
+        category: 'Code Styles - Styling',
+        path: '/js',
         articles: [
-          { title: 'Javascript 엔진 개요 및 실행 과정으로 살펴보는 Hoisting 과 Closure 그리고 삼겹살을 맛있게 먹는방법', link: '/js/hosting' },
-          { title: '[React] useState 와 useEffect 의 사용', link: '/js/usestate-and-useeffect' },
+          { id: '123-2345-4567', categoryNames: [ 'Teset', 'Hello' ], date: 'Octorber 26, 2021', title: 'Javascript 엔진 개요 및 실행 과정으로 살펴보는 Hoisting 과 Closure 그리고 삼겹살을 맛있게 먹는방법', link: '/js/hosting' },
+          { id: '123-2345-4567', categoryNames: [ 'Teset', 'Hello' ], date: 'Octorber 26, 2021', title: '[React] useState 와 useEffect 의 사용', link: '/js/usestate-and-useeffect' },
         ],
         count: 4,
         subCategories: [
           {
-            category: [ 'SASS', 'Logic' ],
+            category: 'SASS - Logic',
+            path: '/js',
             articles: [
-              { title: 'Javascript 엔진 개요 및 실행 과정으로 살펴보는 Hoisting 과 Closure 그리고 삼겹살을 맛있게 먹는방법', link: '/js/hosting' },
-              { title: '[React] useState 와 useEffect 의 사용', link: '/js/usestate-and-useeffect' },
+              { id: '123-2345-4567', categoryNames: [ 'Teset', 'Hello' ], date: 'Octorber 26, 2021', title: 'Javascript 엔진 개요 및 실행 과정으로 살펴보는 Hoisting 과 Closure 그리고 삼겹살을 맛있게 먹는방법', link: '/js/hosting' },
+              { id: '123-2345-4567', categoryNames: [ 'Teset', 'Hello' ], date: 'Octorber 26, 2021', title: '[React] useState 와 useEffect 의 사용', link: '/js/usestate-and-useeffect' },
             ],
             count: 2,
           },
@@ -101,34 +112,38 @@ const categories: Array<CategoryArticle> = [
     ]
   },
   {
-    category: [ 'Frontend', 'Javascript' ], // 메뉴리스트에서 보여지는것은 대/중분류
+    category: 'Frontend - Javascript', // 메뉴리스트에서 보여지는것은 대/중분류
+    path: '/js',
     articles: [
-      { title: 'Javascript 엔진 개요 및 실행 과정으로 살펴보는 Hoisting 과 Closure 그리고 삼겹살을 맛있게 먹는방법', link: '/js/hosting' },
-      { title: '[React] useState 와 useEffect 의 사용', link: '/js/usestate-and-useeffect' },
+      { id: '123-2345-4567', categoryNames: [ 'Teset', 'Hello' ], date: 'Octorber 26, 2021', title: 'Javascript 엔진 개요 및 실행 과정으로 살펴보는 Hoisting 과 Closure 그리고 삼겹살을 맛있게 먹는방법', link: '/js/hosting' },
+      { id: '123-2345-4567', categoryNames: [ 'Teset', 'Hello' ], date: 'Octorber 26, 2021', title: '[React] useState 와 useEffect 의 사용', link: '/js/usestate-and-useeffect' },
     ],
     count: 2,
   },
   {
-    category: [ 'Frontend', 'Javascript' ], // 메뉴리스트에서 보여지는것은 대/중분류
+    category: 'Frontend - Javascript', // 메뉴리스트에서 보여지는것은 대/중분류
+    path: '/js',
     articles: [
-      { title: 'Javascript 엔진 개요 및 실행 과정으로 살펴보는 Hoisting 과 Closure 그리고 삼겹살을 맛있게 먹는방법', link: '/js/hosting' },
-      { title: '[React] useState 와 useEffect 의 사용', link: '/js/usestate-and-useeffect' },
+      { id: '123-2345-4567', categoryNames: [ 'Teset', 'Hello' ], date: 'Octorber 26, 2021', title: 'Javascript 엔진 개요 및 실행 과정으로 살펴보는 Hoisting 과 Closure 그리고 삼겹살을 맛있게 먹는방법', link: '/js/hosting' },
+      { id: '123-2345-4567', categoryNames: [ 'Teset', 'Hello' ], date: 'Octorber 26, 2021', title: '[React] useState 와 useEffect 의 사용', link: '/js/usestate-and-useeffect' },
     ],
     count: 6,
     subCategories: [
       {
-        category: [ 'Engine', 'React' ],
+        category: 'Engine - React',
+        path: '/js',
         articles: [
-          { title: 'Javascript 엔진 개요 및 실행 과정으로 살펴보는 Hoisting 과 Closure 그리고 삼겹살을 맛있게 먹는방법', link: '/js/hosting' },
-          { title: '[React] useState 와 useEffect 의 사용', link: '/js/usestate-and-useeffect' },
+          { id: '123-2345-4567', categoryNames: [ 'Teset', 'Hello' ], date: 'Octorber 26, 2021', title: 'Javascript 엔진 개요 및 실행 과정으로 살펴보는 Hoisting 과 Closure 그리고 삼겹살을 맛있게 먹는방법', link: '/js/hosting' },
+          { id: '123-2345-4567', categoryNames: [ 'Teset', 'Hello' ], date: 'Octorber 26, 2021', title: '[React] useState 와 useEffect 의 사용', link: '/js/usestate-and-useeffect' },
         ],
         count: 4,
         subCategories: [
           {
-            category: [ 'Typescript', 'Semantic' ],
+            category: 'Typescript - Semantic',
+            path: '/js',
             articles: [
-              { title: 'Javascript 엔진 개요 및 실행 과정으로 살펴보는 Hoisting 과 Closure 그리고 삼겹살을 맛있게 먹는방법', link: '/js/hosting' },
-              { title: '[React] useState 와 useEffect 의 사용', link: '/js/usestate-and-useeffect' },
+              { id: '123-2345-4567', categoryNames: [ 'Teset', 'Hello' ], date: 'Octorber 26, 2021', title: 'Javascript 엔진 개요 및 실행 과정으로 살펴보는 Hoisting 과 Closure 그리고 삼겹살을 맛있게 먹는방법', link: '/js/hosting' },
+              { id: '123-2345-4567', categoryNames: [ 'Teset', 'Hello' ], date: 'Octorber 26, 2021', title: '[React] useState 와 useEffect 의 사용', link: '/js/usestate-and-useeffect' },
             ],
             count: 2,
           },
@@ -139,7 +154,8 @@ const categories: Array<CategoryArticle> = [
 ]
 
 const sortingCategorizing = (edges: Array<Node>) => {
-  const categoryMap = {}
+  // const categoryMap = {}
+  const categoryMap: Array<CategoryArticle> = []
   edges.forEach(edge => {
     const categories = edge.node.childMdx.frontmatter.categoryNames
     const totalCategories = categories.length
@@ -152,21 +168,35 @@ const sortingCategorizing = (edges: Array<Node>) => {
   return categoryMap
 }
 
-const searchAndAppendCategory = (index: number, categories: Array<string>, categoryMap: any, article: NodeArticle) => {
+const convertNodeArticleToSimpleArticle = (nodeArticle: NodeArticle): Article => {
+  return {
+    id: nodeArticle.id,
+    categoryNames: nodeArticle.frontmatter.categoryNames,
+    date: nodeArticle.frontmatter.date,
+    
+    title: nodeArticle.frontmatter.title,
+    link: nodeArticle.slug,
+  }
+}
+
+// CategoryArticle
+const searchAndAppendCategory = (index: number, categories: Array<string>, categoryMap: Array<CategoryArticle>, article: NodeArticle) => {
   const totalCategory = categories.length
   const currentCategory = categories[index]
 
   let done = false;
-  for (let writtenCategory of Object.keys(categoryMap)) {
-    const writtenCategoryMap = categoryMap[writtenCategory]
-    if (writtenCategory === currentCategory) {
+  for (let writtenCategoryMap of categoryMap) {
+    // const writtenCategoryMap = categoryMap[writtenCategory]
+    if (writtenCategoryMap.category === currentCategory) {
       // * 존재
       if ((index + 1) < totalCategory) {
-        searchAndAppendCategory(index + 1, categories, writtenCategoryMap.sub, article)
+        if (!writtenCategoryMap.subCategories) { writtenCategoryMap.subCategories = [] }
+        searchAndAppendCategory(index + 1, categories, writtenCategoryMap.subCategories, article)
         done = true
       } else {
-        writtenCategoryMap.link = `/${article.frontmatter.category}`
-        writtenCategoryMap.list.push(article)
+        writtenCategoryMap.path = `/${article.frontmatter.category}`
+        writtenCategoryMap.articles.push(convertNodeArticleToSimpleArticle(article))
+        writtenCategoryMap.count += 1
         return
       }
     }
@@ -174,21 +204,37 @@ const searchAndAppendCategory = (index: number, categories: Array<string>, categ
   if (!done) {
     // * 비존재
     if ((index + 1) < totalCategory) {
-      categoryMap[currentCategory] = createNewCategory()
-      categoryMap[currentCategory].link = `/${article.frontmatter.category}`
-      categoryMap[currentCategory].list.push(article)
-      searchAndAppendCategory(index + 1, categories, categoryMap[currentCategory].sub, article)
+      const created = {
+        category: currentCategory,
+        path: `/${article.frontmatter.category}`,
+        articles: [],
+        count: 1,
+        subCategories: [],
+      }
+      categoryMap.push(created)
+      searchAndAppendCategory(index + 1, categories, created.subCategories, article)
     } else {
-      categoryMap[currentCategory] = createNewCategory()
-      categoryMap[currentCategory].link = `/${article.frontmatter.category}`
-      categoryMap[currentCategory].list.push(article)
+      const created = {
+        category: currentCategory,
+        path: `/${article.frontmatter.category}`,
+        articles: [convertNodeArticleToSimpleArticle(article)],
+        count: 1,
+        subCategories: [],
+      }
+      categoryMap.push(created)
       return
     }
   }
 }
 
 const createNewCategory = () => {
-  return { link: '/', sub: {}, list: [] }
+  return {
+    category: '',
+    path: '',
+    articles: [],
+    count: 0,
+    subCategories: [],
+  }
 }
 
 const calculateMaxArticleTitleLength = (width : number) => {
@@ -209,9 +255,414 @@ const calculateMaxArticleTitleLength = (width : number) => {
   }
 }
 
+const testEdges = [
+  {
+    "node": {
+      "childMdx": {
+        "id": "80269d71-d67b-59ba-a033-d4d157e91b8d",
+        "slug": "two-principles-on-oop/",
+        "frontmatter": {
+          "date": "December 30, 2018",
+          "title": "0. 객체지향 프로그래밍에서의 제 1, 2 원칙",
+          "category": "pattern",
+          "categoryNames": [
+            "Design Pattern"
+          ]
+        }
+      }
+    }
+  },
+  {
+    "node": {
+      "childMdx": {
+        "id": "02e0add3-3895-55ee-97c8-e8ed76ac925e",
+        "slug": "refer-copy-post/",
+        "frontmatter": {
+          "date": "October 26, 2019",
+          "title": "개츠비(Gatsby) 1-1",
+          "category": "js",
+          "categoryNames": [
+            "Gatsby",
+          ]
+        }
+      }
+    }
+  },
+  {
+    "node": {
+      "childMdx": {
+        "id": "02e0add3-3895-55ee-97c8-e8ed76ac925e",
+        "slug": "refer-copy-post/",
+        "frontmatter": {
+          "date": "October 26, 2019",
+          "title": "개츠비(Gatsby) 1-2",
+          "category": "js",
+          "categoryNames": [
+            "Gatsby",
+          ]
+        }
+      }
+    }
+  },
+  {
+    "node": {
+      "childMdx": {
+        "id": "02e0add3-3895-55ee-97c8-e8ed76ac925e",
+        "slug": "refer-copy-post/",
+        "frontmatter": {
+          "date": "October 26, 2019",
+          "title": "개츠비(Gatsby) 1---1-1",
+          "category": "js",
+          "categoryNames": [
+            "Gatsby",
+            "Setup"
+          ]
+        }
+      }
+    }
+  },
+  {
+    "node": {
+      "childMdx": {
+        "id": "02e0add3-3895-55ee-97c8-e8ed76ac925e",
+        "slug": "refer-copy-post/",
+        "frontmatter": {
+          "date": "October 26, 2019",
+          "title": "개츠비(Gatsby) 1---1-2",
+          "category": "js",
+          "categoryNames": [
+            "Gatsby",
+            "Setup"
+          ]
+        }
+      }
+    }
+  },
+  {
+    "node": {
+      "childMdx": {
+        "id": "02e0add3-3895-55ee-97c8-e8ed76ac925e",
+        "slug": "refer-copy-post/",
+        "frontmatter": {
+          "date": "October 26, 2019",
+          "title": "개츠비(Gatsby) 1---1-3",
+          "category": "js",
+          "categoryNames": [
+            "Gatsby",
+            "Setup"
+          ]
+        }
+      }
+    }
+  },
+  {
+    "node": {
+      "childMdx": {
+        "id": "02e0add3-3895-55ee-97c8-e8ed76ac925e",
+        "slug": "refer-copy-post/",
+        "frontmatter": {
+          "date": "October 26, 2019",
+          "title": "개츠비(Gatsby) 1------1-1",
+          "category": "js",
+          "categoryNames": [
+            "Gatsby",
+            "Setup",
+            "Int",
+          ]
+        }
+      }
+    }
+  },
+  {
+    "node": {
+      "childMdx": {
+        "id": "02e0add3-3895-55ee-97c8-e8ed76ac925e",
+        "slug": "refer-copy-post/",
+        "frontmatter": {
+          "date": "October 26, 2019",
+          "title": "개츠비(Gatsby) 1------1-2",
+          "category": "js",
+          "categoryNames": [
+            "Gatsby",
+            "Setup",
+            "Int",
+          ]
+        }
+      }
+    }
+  },
+  {
+    "node": {
+      "childMdx": {
+        "id": "02e0add3-3895-55ee-97c8-e8ed76ac925e",
+        "slug": "refer-copy-post/",
+        "frontmatter": {
+          "date": "October 26, 2019",
+          "title": "개츠비(Gatsby) 1------1-3",
+          "category": "js",
+          "categoryNames": [
+            "Gatsby",
+            "Setup",
+            "Int",
+          ]
+        }
+      }
+    }
+  },
+  {
+    "node": {
+      "childMdx": {
+        "id": "02e0add3-3895-55ee-97c8-e8ed76ac925e",
+        "slug": "refer-copy-post/",
+        "frontmatter": {
+          "date": "October 26, 2019",
+          "title": "개츠비(Gatsby) 1------1-3",
+          "category": "js",
+          "categoryNames": [
+            "Gatsby",
+            "Setup",
+            "Int",
+          ]
+        }
+      }
+    }
+  },
+  {
+    "node": {
+      "childMdx": {
+        "id": "02e0add3-3895-55ee-97c8-e8ed76ac925e",
+        "slug": "refer-copy-post/",
+        "frontmatter": {
+          "date": "October 26, 2019",
+          "title": "개츠비(Gatsby) 1------1-3",
+          "category": "js",
+          "categoryNames": [
+            "Gatsby",
+            "Setup",
+            "Int",
+          ]
+        }
+      }
+    }
+  },
+  {
+    "node": {
+      "childMdx": {
+        "id": "02e0add3-3895-55ee-97c8-e8ed76ac925e",
+        "slug": "refer-copy-post/",
+        "frontmatter": {
+          "date": "October 26, 2019",
+          "title": "개츠비(Gatsby) 1------1-3",
+          "category": "js",
+          "categoryNames": [
+            "Gatsby",
+            "Setup",
+            "Int",
+          ]
+        }
+      }
+    }
+  },
+  {
+    "node": {
+      "childMdx": {
+        "id": "02e0add3-3895-55ee-97c8-e8ed76ac925e",
+        "slug": "refer-copy-post/",
+        "frontmatter": {
+          "date": "October 26, 2019",
+          "title": "개츠비(Gatsby) 1------1-3",
+          "category": "js",
+          "categoryNames": [
+            "Gatsby",
+            "Setup",
+            "Int",
+          ]
+        }
+      }
+    }
+  },
+  {
+    "node": {
+      "childMdx": {
+        "id": "02e0add3-3895-55ee-97c8-e8ed76ac925e",
+        "slug": "refer-copy-post/",
+        "frontmatter": {
+          "date": "October 26, 2019",
+          "title": "개츠비(Gatsby) 1------1-3",
+          "category": "js",
+          "categoryNames": [
+            "Gatsby",
+            "Setup",
+            "Int",
+          ]
+        }
+      }
+    }
+  },
+  {
+    "node": {
+      "childMdx": {
+        "id": "02e0add3-3895-55ee-97c8-e8ed76ac925e",
+        "slug": "refer-copy-post/",
+        "frontmatter": {
+          "date": "October 26, 2019",
+          "title": "개츠비(Gatsby) 1------2-1",
+          "category": "js",
+          "categoryNames": [
+            "Gatsby",
+            "Setup",
+            "Long",
+          ]
+        }
+      }
+    }
+  },
+  {
+    "node": {
+      "childMdx": {
+        "id": "02e0add3-3895-55ee-97c8-e8ed76ac925e",
+        "slug": "refer-copy-post/",
+        "frontmatter": {
+          "date": "October 26, 2019",
+          "title": "개츠비(Gatsby) 1------2-1",
+          "category": "js",
+          "categoryNames": [
+            "Gatsby",
+            "Setup",
+            "Long",
+          ]
+        }
+      }
+    }
+  },
+  {
+    "node": {
+      "childMdx": {
+        "id": "02e0add3-3895-55ee-97c8-e8ed76ac925e",
+        "slug": "refer-copy-post/",
+        "frontmatter": {
+          "date": "October 26, 2019",
+          "title": "개츠비(Gatsby) 1------2-1",
+          "category": "js",
+          "categoryNames": [
+            "Gatsby",
+            "Setup",
+            "Long",
+          ]
+        }
+      }
+    }
+  },
+  {
+    "node": {
+      "childMdx": {
+        "id": "02e0add3-3895-55ee-97c8-e8ed76ac925e",
+        "slug": "refer-copy-post/",
+        "frontmatter": {
+          "date": "October 26, 2019",
+          "title": "개츠비(Gatsby) 1------2-1",
+          "category": "js",
+          "categoryNames": [
+            "Gatsby",
+            "Setup",
+            "Home",
+          ]
+        }
+      }
+    }
+  },
+  {
+    "node": {
+      "childMdx": {
+        "id": "02e0add3-3895-55ee-97c8-e8ed76ac925e",
+        "slug": "refer-copy-post/",
+        "frontmatter": {
+          "date": "October 26, 2019",
+          "title": "개츠비(Gatsby) 1---2-1",
+          "category": "js",
+          "categoryNames": [
+            "Gatsby",
+            "Steak"
+          ]
+        }
+      }
+    }
+  },
+  {
+    "node": {
+      "childMdx": {
+        "id": "02e0add3-3895-55ee-97c8-e8ed76ac925e",
+        "slug": "refer-copy-post/",
+        "frontmatter": {
+          "date": "October 26, 2019",
+          "title": "개츠비(Gatsby) 1---2-2",
+          "category": "js",
+          "categoryNames": [
+            "Gatsby",
+            "Steak"
+          ]
+        }
+      }
+    }
+  },
+  {
+    "node": {
+      "childMdx": {
+        "id": "02e0add3-3895-55ee-97c8-e8ed76ac925e",
+        "slug": "refer-copy-post/",
+        "frontmatter": {
+          "date": "October 26, 2019",
+          "title": "개츠비(Gatsby) 1---2-3",
+          "category": "js",
+          "categoryNames": [
+            "Gatsby",
+            "Steak"
+          ]
+        }
+      }
+    }
+  },
+  {
+    "node": {
+      "childMdx": {
+        "id": "c8ea7f44-0c56-576e-a8d6-5c697305bd18",
+        "slug": "factory-method-and-abstract-factory-pattern/",
+        "frontmatter": {
+          "date": "February 22, 2019",
+          "title": "2. 팩토리 '메소드' 패턴 & '추상' 팩토리 패턴",
+          "category": "pattern",
+          "categoryNames": [
+            "Design Pattern"
+          ]
+        }
+      }
+    }
+  },
+  {
+    "node": {
+      "childMdx": {
+        "id": "6f2e6361-ae0f-5198-9cef-a3f6e7934e64",
+        "slug": "a-introduction-to-design-patterns/",
+        "frontmatter": {
+          "date": "February 21, 2019",
+          "title": "1. '디자인 패턴'이란?",
+          "category": "pattern",
+          "categoryNames": [
+            "Design Pattern",
+            "Sibal"
+          ]
+        }
+      }
+    }
+  }
+]
+
 const ArchiveTemplate: React.FunctionComponent<Props> = ({ data: { allFile: { edges } }}) => {
-  console.log(edges)
-  console.log(sortingCategorizing(edges))
+  
+  const categorized = sortingCategorizing(testEdges)
+  console.log(categorized)
+
+
   const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions())
   const [maxArticleTitleLength, setMaxArticleTitleLength] = useState(calculateMaxArticleTitleLength(windowDimensions.width))
 
@@ -230,7 +681,8 @@ const ArchiveTemplate: React.FunctionComponent<Props> = ({ data: { allFile: { ed
   return (
     <article>
       <div css={styles.body}>
-        <MainCategoryArticles maxTitleLength={maxArticleTitleLength} categories={categories} />
+        {/* <MainCategoryArticles maxTitleLength={maxArticleTitleLength} categories={categories} /> */}
+        <MainCategoryArticles maxTitleLength={maxArticleTitleLength} categories={categorized} />
       </div>
     </article>
   )

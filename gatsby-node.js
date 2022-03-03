@@ -54,11 +54,77 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
           "slug": "refer-copy-post/",
           "frontmatter": {
             "date": "October 26, 2019",
-            "title": "개츠비(Gatsby) 프로젝트에 타입스크립트(TypeScript) 세팅하기",
+            "title": "개츠비(Gatsby) 1-1",
+            "category": "js",
+            "categoryNames": [
+              "Gatsby",
+            ]
+          }
+        }
+      }
+    },
+    {
+      "node": {
+        "childMdx": {
+          "id": "02e0add3-3895-55ee-97c8-e8ed76ac925e",
+          "slug": "refer-copy-post/",
+          "frontmatter": {
+            "date": "October 26, 2019",
+            "title": "개츠비(Gatsby) 1-2",
+            "category": "js",
+            "categoryNames": [
+              "Gatsby",
+            ]
+          }
+        }
+      }
+    },
+    {
+      "node": {
+        "childMdx": {
+          "id": "02e0add3-3895-55ee-97c8-e8ed76ac925e",
+          "slug": "refer-copy-post/",
+          "frontmatter": {
+            "date": "October 26, 2019",
+            "title": "개츠비(Gatsby) 1---1-1",
             "category": "js",
             "categoryNames": [
               "Gatsby",
               "Setup"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "node": {
+        "childMdx": {
+          "id": "02e0add3-3895-55ee-97c8-e8ed76ac925e",
+          "slug": "refer-copy-post/",
+          "frontmatter": {
+            "date": "October 26, 2019",
+            "title": "개츠비(Gatsby) 1---1-2",
+            "category": "js",
+            "categoryNames": [
+              "Gatsby",
+              "Setup"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "node": {
+        "childMdx": {
+          "id": "02e0add3-3895-55ee-97c8-e8ed76ac925e",
+          "slug": "refer-copy-post/",
+          "frontmatter": {
+            "date": "October 26, 2019",
+            "title": "개츠비(Gatsby) 1---2-1",
+            "category": "js",
+            "categoryNames": [
+              "Gatsby",
+              "Steak"
             ]
           }
         }
@@ -163,7 +229,7 @@ const makeMenus = (categorized, createPage) => {
       createPage({
         path: menu.to,
         component: menu.component,
-        context: subMenu.context
+        context: menu.context
       })
 
 
@@ -220,7 +286,7 @@ const searchAndAppendCategory = (index, categories, categoryMap, article) => {
 }
 
 const createNewCategory = () => {
-  return { link: '/', sub: {}, list: [] }
+  return { path: '/', sub: {}, list: [] }
 }
 
 async function getFilePostedData(graphql, reporter) {

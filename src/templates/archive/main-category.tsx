@@ -15,11 +15,11 @@ export const CategoryLine = styled(`div`)<{ size: 'main' | 'sub' | 'nested' ,top
     backgroundColor: 'var(--text-link)',
     '@media only screen and (max-width: 700px)': {
       top: `${top + (size === 'nested' ? 2 : (size === 'sub' ? 5 : 2))}px`,
-      height: `calc(100% + ${minusHeight - (size === 'nested' ? 2 : (size === 'sub' ? 20 : 6))}px)`,
+      height: `calc(100% + ${minusHeight - (size === 'nested' ? 2 : (size === 'sub' ? 36 : 6))}px)`,
     },
     '@media only screen and (max-width: 600px)': {
       top: `${top + (size === 'nested' ? 4 : (size === 'sub' ? 7 : 3))}px`,
-      height: `calc(100% + ${minusHeight - (size === 'nested' ? 4 : (size === 'sub' ? 38 : 6))}px)`,
+      height: `calc(100% + ${minusHeight - (size === 'nested' ? 4 : (size === 'sub' ? 77 : 6))}px)`,
     },
   })
 )
@@ -32,7 +32,7 @@ export const sliceStringWithMax = (str: string, max: number) =>
 const MainCategoryArticles: React.FunctionComponent<{ maxTitleLength: number, categories: Array<CategoryArticle> }> = ({ maxTitleLength, categories }) => (
   <React.Fragment>
     {categories.map(each => {
-      const mainCategory = each.category.join(' - ')
+      const mainCategory = each.category // .join(' - ')
       const hasSubCategory = each.subCategories && (each.subCategories.length > 0)
       return (
         <MainCategoryBox key={mainCategory}>

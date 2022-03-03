@@ -7,15 +7,25 @@ import NestedCategoryArticles from "./nested-category"
 const SubCategoryArticles: React.FunctionComponent<{ maxTitleLength: number, categories: Array<CategoryArticle> }> = ({ maxTitleLength, categories }) => (
   <React.Fragment>
     {categories.map((each, index) => {
-      const subCategory = each.category.join(' - ')
+      const subCategory = each.category // .join(' - ')
       const notLastSubCategory = index < (categories.length - 1)
       const hasNestedCategory = each.subCategories && (each.subCategories.length > 0)
+      let nestedHeightCorrection = 0;
+      if (each.subCategories) {
+        const numOfSubCategories = each.subCategories.length
+        const numOfSubArticles = each.subCategories.map(eachSubCategory =>
+          eachSubCategory.articles.length
+        ).reduce((accumulator, curr) => accumulator + curr, 0)
+        console.log(`${numOfSubCategories} ${numOfSubArticles}`)
+        nestedHeightCorrection += numOfSubCategories * 36
+        nestedHeightCorrection += numOfSubArticles * 31
+      }
       return (
         <SubCategoryBox key={subCategory}>
           <SubCategoryTitle category={subCategory} articleCount={each.count} />
           <ul css={styles.articles} key={subCategory}>
             {hasNestedCategory && <CategoryLine size="nested" top={-4} left={55} plusHeight={25} />}
-            {notLastSubCategory && <CategoryLine size="sub" top={-23} left={14} plusHeight={260} />}
+            {notLastSubCategory && <CategoryLine size="sub" top={-23} left={14} plusHeight={(66 + nestedHeightCorrection)} />}
             {each.articles.map(article => (
               <li css={[styles.article, css`position: relative; left: 40px;`]} key={article.title}>
                 <div css={styles.articleTitle}>
