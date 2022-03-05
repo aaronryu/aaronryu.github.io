@@ -3,7 +3,7 @@ import { AnimatePresence, motion } from "framer-motion"
 import { css } from "@emotion/react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faFacebook, faGithub, faTwitter } from "@fortawesome/free-brands-svg-icons"
-import Navigator from './navigator'
+import Navigator, { Menu } from './navigator'
 
 const SIDEBAR_WIDTH = 230
 
@@ -28,6 +28,7 @@ const variants = {
 
 interface Props {
   location: string
+  menu: Array<Menu>
   visible: boolean
   onClose?: () => void
   currentWidth: number
@@ -38,7 +39,7 @@ interface Props {
   }
 }
 
-const LeftSideMenuBar = ({ location, visible, onClose, currentWidth, links }: Props) => {
+const LeftSideMenuBar = ({ location, menu, visible, onClose, currentWidth, links }: Props) => {
   return (
     <AnimatePresence>
       {visible && (
@@ -67,7 +68,7 @@ const LeftSideMenuBar = ({ location, visible, onClose, currentWidth, links }: Pr
             animate={visible ? 'open' : 'closed'}
             exit="closed"
           >
-            <Navigator current={location} onClose={onClose}/>
+            <Navigator current={location} menu={menu} onClose={onClose}/>
           </motion.div>
         </motion.div>
       )}

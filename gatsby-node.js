@@ -26,150 +26,15 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
   //   }
   // })
 
-  const [ filePostedEdged, contentfulData ] = await Promise.all([
-    getFilePostedData(graphql, reporter),
+  const [ developPostedEdged, contentfulData ] = await Promise.all([
+    getFilePostedData('development', graphql, reporter),
     getContentfulData(graphql, reporter),
   ])
-  const testEdges = [
-    {
-      "node": {
-        "childMdx": {
-          "id": "80269d71-d67b-59ba-a033-d4d157e91b8d",
-          "slug": "two-principles-on-oop/",
-          "frontmatter": {
-            "date": "December 30, 2018",
-            "title": "0. 객체지향 프로그래밍에서의 제 1, 2 원칙",
-            "category": "pattern",
-            "categoryNames": [
-              "Design Pattern"
-            ]
-          }
-        }
-      }
-    },
-    {
-      "node": {
-        "childMdx": {
-          "id": "02e0add3-3895-55ee-97c8-e8ed76ac925e",
-          "slug": "refer-copy-post/",
-          "frontmatter": {
-            "date": "October 26, 2019",
-            "title": "개츠비(Gatsby) 1-1",
-            "category": "js",
-            "categoryNames": [
-              "Gatsby",
-            ]
-          }
-        }
-      }
-    },
-    {
-      "node": {
-        "childMdx": {
-          "id": "02e0add3-3895-55ee-97c8-e8ed76ac925e",
-          "slug": "refer-copy-post/",
-          "frontmatter": {
-            "date": "October 26, 2019",
-            "title": "개츠비(Gatsby) 1-2",
-            "category": "js",
-            "categoryNames": [
-              "Gatsby",
-            ]
-          }
-        }
-      }
-    },
-    {
-      "node": {
-        "childMdx": {
-          "id": "02e0add3-3895-55ee-97c8-e8ed76ac925e",
-          "slug": "refer-copy-post/",
-          "frontmatter": {
-            "date": "October 26, 2019",
-            "title": "개츠비(Gatsby) 1---1-1",
-            "category": "js",
-            "categoryNames": [
-              "Gatsby",
-              "Setup"
-            ]
-          }
-        }
-      }
-    },
-    {
-      "node": {
-        "childMdx": {
-          "id": "02e0add3-3895-55ee-97c8-e8ed76ac925e",
-          "slug": "refer-copy-post/",
-          "frontmatter": {
-            "date": "October 26, 2019",
-            "title": "개츠비(Gatsby) 1---1-2",
-            "category": "js",
-            "categoryNames": [
-              "Gatsby",
-              "Setup"
-            ]
-          }
-        }
-      }
-    },
-    {
-      "node": {
-        "childMdx": {
-          "id": "02e0add3-3895-55ee-97c8-e8ed76ac925e",
-          "slug": "refer-copy-post/",
-          "frontmatter": {
-            "date": "October 26, 2019",
-            "title": "개츠비(Gatsby) 1---2-1",
-            "category": "js",
-            "categoryNames": [
-              "Gatsby",
-              "Steak"
-            ]
-          }
-        }
-      }
-    },
-    {
-      "node": {
-        "childMdx": {
-          "id": "c8ea7f44-0c56-576e-a8d6-5c697305bd18",
-          "slug": "factory-method-and-abstract-factory-pattern/",
-          "frontmatter": {
-            "date": "February 22, 2019",
-            "title": "2. 팩토리 '메소드' 패턴 & '추상' 팩토리 패턴",
-            "category": "pattern",
-            "categoryNames": [
-              "Design Pattern"
-            ]
-          }
-        }
-      }
-    },
-    {
-      "node": {
-        "childMdx": {
-          "id": "6f2e6361-ae0f-5198-9cef-a3f6e7934e64",
-          "slug": "a-introduction-to-design-patterns/",
-          "frontmatter": {
-            "date": "February 21, 2019",
-            "title": "1. '디자인 패턴'이란?",
-            "category": "pattern",
-            "categoryNames": [
-              "Design Pattern",
-              "Sibal"
-            ]
-          }
-        }
-      }
-    }
-  ]
-  const categorized = sortingCategorizing(testEdges)
-  makeMenus(categorized, createPage)
+  
+  const categorizedDevelop = sortingCategorizing(developPostedEdged)
+  const developMenu = makeMenus({ to: '/development', label: 'Development' }, categorizedDevelop, createPage)
 
-  // sortingCategorizing(filePostedEdged)
-
-  filePostedEdged.forEach(edge => {
+  developPostedEdged.forEach(edge => {
     createPage({
       path: edge.node.childMdx.frontmatter.category
         ? `${edge.node.childMdx.frontmatter.category}/${edge.node.childMdx.slug}`
@@ -177,6 +42,7 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
       component: `${__dirname}/src/templates/post/index.tsx`,
       context: {
         slug: edge.node.childMdx.slug,
+        // menu: developMenu
       }
     })
   })
@@ -192,12 +58,7 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
   })
 }
 
-const makeMenus = (categorized, createPage) => {
-
-
-
-
-  const developmentMenu = { to: '/development', label: 'Development' }
+const makeMenus = (menu, categorized, createPage) => {
   const subMenus = []
   for (let categoryName of Object.keys(categorized)) {
     const category = categorized[categoryName]
@@ -211,10 +72,10 @@ const makeMenus = (categorized, createPage) => {
       }
     })
   }
-  developmentMenu.subMenu = subMenus
+  menu.subMenu = subMenus
 
   const mlist = []
-  mlist.push(developmentMenu)
+  mlist.push(menu)
 
   mlist.forEach(menu => {
     if (menu.subMenu) {
@@ -235,6 +96,8 @@ const makeMenus = (categorized, createPage) => {
 
     }
   })
+  console.log(mlist)
+  return mlist
 }
 
 const sortingCategorizing = (edges) => {
@@ -243,10 +106,8 @@ const sortingCategorizing = (edges) => {
     const categories = edge.node.childMdx.frontmatter.categoryNames
     const totalCategories = categories.length
     const article = edge.node.childMdx
-    // console.log(Object.keys(categoryMap))
     searchAndAppendCategory(0, categories, categoryMap, article)
   })
-  // console.log(JSON.stringify(categoryMap))
   return categoryMap
 }
 
@@ -289,12 +150,12 @@ const createNewCategory = () => {
   return { path: '/', sub: {}, list: [] }
 }
 
-async function getFilePostedData(graphql, reporter) {
+async function getFilePostedData(node, graphql, reporter) {
   const postsResult = await graphql(`
     query {
       allFile(
         filter: {
-          sourceInstanceName: { eq: "blog" }
+          sourceInstanceName: { eq: "${node}" }
           extension: { eq: "mdx" }
         }
       ) {
@@ -307,6 +168,7 @@ async function getFilePostedData(graphql, reporter) {
                 date(formatString: "MMMM D, YYYY")
                 title
                 category
+                categoryNames
               }
             }
           }

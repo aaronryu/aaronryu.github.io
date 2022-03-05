@@ -64,14 +64,15 @@ export interface MenuProps extends Menu {
 
 interface Props {
   current: string
+  menu: Array<Menu>
   onClose?: () => void
 }
 
-const Navigator = ({ current, onClose }: Props) => {
+const Navigator = ({ current, menu, onClose }: Props) => {
   return (
     <div style={{ overflow: 'scroll' }}>
       <motion.div css={styles.list} key={'navigator'}>
-        {NAV_ITEMS.map(item => (
+        {menu.map(item => (
               <MenuNavigator
                 current={current}
                 key={item.label}

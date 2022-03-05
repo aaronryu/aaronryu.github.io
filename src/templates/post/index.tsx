@@ -6,7 +6,7 @@ import Article, { GatsbyImageSharpFluidWithWebp } from './post-article'
 import PostSeo from './post-seo'
 import { useScroll } from './scroll'
 import { IGatsbyImageData } from 'gatsby-plugin-image'
-
+import Layout from '../../components/layout'
 export interface TocHeaders {
   items: Array<TocHeader>
 }
@@ -16,6 +16,8 @@ export interface TocHeader {
 }
 
 interface Props {
+  location: string
+  pageContext: any
   data: {
     mdx: {
       id: string
@@ -53,7 +55,7 @@ interface Props {
 
 const HEADER_OFFSET_Y = 81
 const PostTemplate: React.FunctionComponent<Props> = ({
-  data: { mdx },
+  location, data: { mdx }, pageContext
 }) => {
   const { id, frontmatter, toc, body, slug } = mdx
   const { author, siteUrl } = useSiteMetadata()
@@ -98,33 +100,35 @@ const PostTemplate: React.FunctionComponent<Props> = ({
 
   return (
     <div css={styles.container}>
-      <PostSeo
-        // type
-        {...{ imageSrc, siteUrl, author }}
-        slug={frontmatter.slug}
-        title={frontmatter.title}
-        deck={frontmatter.deck}
-        abstract={frontmatter.abstract}
-        date={frontmatter.date}
-        updateDate={frontmatter.updateDate}
-      />
-      <TableOfContents
-        toc={toc}
-        depth={4}
-        currentHeaderUrl={currentHeaderUrl}
-      />
-      <Article
-        categories={frontmatter.categoryNames}
-        headline={frontmatter.title}
-        deck={frontmatter.deck}
-        abstract={frontmatter.abstract}
-        epigraph={frontmatter.epigraph}
-        epigraphAuthor={frontmatter.epigraphAuthor}
-        date={frontmatter.date}
-        dateFormatted={frontmatter.dateFormatted}
-        body={body}
-        embeddedImagesLocal={frontmatter.embeddedImagesLocal}
-      />
+      
+        <PostSeo
+          // type
+          {...{ imageSrc, siteUrl, author }}
+          slug={frontmatter.slug}
+          title={frontmatter.title}
+          deck={frontmatter.deck}
+          abstract={frontmatter.abstract}
+          date={frontmatter.date}
+          updateDate={frontmatter.updateDate}
+        />
+        <TableOfContents
+          toc={toc}
+          depth={4}
+          currentHeaderUrl={currentHeaderUrl}
+        />
+        <Article
+          categories={frontmatter.categoryNames}
+          headline={frontmatter.title}
+          deck={frontmatter.deck}
+          abstract={frontmatter.abstract}
+          epigraph={frontmatter.epigraph}
+          epigraphAuthor={frontmatter.epigraphAuthor}
+          date={frontmatter.date}
+          dateFormatted={frontmatter.dateFormatted}
+          body={body}
+          embeddedImagesLocal={frontmatter.embeddedImagesLocal}
+        />
+      
     </div>
   )
 }
