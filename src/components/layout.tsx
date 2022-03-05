@@ -16,6 +16,7 @@ import { Global } from "@emotion/react"
 import LeftSideMenuBar from "./menubar"
 import { Menu } from "./menubar/navigator"
 import { graphql, useStaticQuery } from "gatsby"
+import { log } from "../utils/logger"
 
 interface Props {
   location: any
@@ -66,7 +67,7 @@ const Layout: React.FunctionComponent<Props> = ({ location, children }) => {
 
 
   const menu = developMenu
-  console.log(menu)
+  // console.log(menu)
   const { title, description, author, deployBranch, linkGithub, linkFacebook, linkTwitter } = useSiteMetadata()
   const spy = useRef() as React.MutableRefObject<HTMLDivElement>;
   const meta: Array<MetaImage | MetaOption> =
@@ -156,15 +157,15 @@ const makeMenus = (menu, categorized) => {
   const mlist = []
   mlist.push(menu)
 
-  console.log(mlist)
+  // console.log(mlist)
   return mlist
 }
 
 const sortingCategorizing = (edges) => {
   const categoryMap = {}
-  console.log(edges)
+  // log(() => console.log(edges))
   edges.forEach(edge => {
-    console.log(edge)
+    // console.log(edge)
     const categories = edge.node.childMdx.frontmatter.categoryNames
     const totalCategories = categories.length
     const article = edge.node.childMdx
