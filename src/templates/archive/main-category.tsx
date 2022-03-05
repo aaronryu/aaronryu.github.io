@@ -1,5 +1,6 @@
 import { css } from "@emotion/react"
 import styled from "@emotion/styled"
+import { Link } from "gatsby"
 import * as React from "react"
 import { CategoryArticle } from "."
 import SubCategoryArticles from "./sub-category"
@@ -41,9 +42,9 @@ const MainCategoryArticles: React.FunctionComponent<{ maxTitleLength: number, ca
             {hasSubCategory && <CategoryLine size="main" top={-4} left={14} plusHeight={30} />}
             {each.articles.map(article => (
               <li css={styles.article} key={article.title}>
-                <div css={styles.articleTitle}>
+                <Link css={styles.articleTitle} to={article.link}>
                   {sliceStringWithMax(article.title, maxTitleLength)}
-                </div>
+                </Link>
               </li>
             ))}
           </ul>

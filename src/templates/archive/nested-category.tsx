@@ -1,4 +1,5 @@
 import { css } from "@emotion/react"
+import { Link } from "gatsby"
 import * as React from "react"
 import { CategoryArticle } from "."
 import { CategoryLine, sliceStringWithMax, styles } from "./main-category"
@@ -15,9 +16,9 @@ const NestedCategoryArticles: React.FunctionComponent<{ maxTitleLength: number, 
             {notLastNestedCategory && <CategoryLine size="nested" top={-21} left={21} plusHeight={44} />}
             {each.articles.map(article => (
               <li css={[styles.article, css`position: relative; left: 24px;`]} key={article.title}>
-                <div css={styles.articleTitle}>
+                <Link css={styles.articleTitle} to={article.link}>
                   {sliceStringWithMax(article.title, maxTitleLength)}
-                </div>
+                </Link>
               </li>
             ))}
           </ul>

@@ -112,7 +112,9 @@ const Layout: React.FunctionComponent<Props> = ({ location, children }) => {
   }, []);
 
   const close = () => {
-    setShowMenu(false)
+    if (windowDimensions.width <= 1280) {
+      setShowMenu(false)
+    }
   }
 
   return (
