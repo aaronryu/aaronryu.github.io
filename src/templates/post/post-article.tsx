@@ -2,6 +2,7 @@ import React from 'react'
 import { css } from '@emotion/react'
 import { MDXRenderer } from 'gatsby-plugin-mdx'
 import { IGatsbyImageData } from 'gatsby-plugin-image'
+import { Link } from 'gatsby'
 
 export interface GatsbyImageSharpFluidWithWebp {
   aspectRatio: number
@@ -30,6 +31,8 @@ export interface ArticleProps {
   epigraph?: string
   epigraphAuthor?: string
   embeddedImagesLocal?: ChildImage
+  articleUrl: string
+  categoryUrl: string
 }
 
 const Article: React.FunctionComponent<ArticleProps> = ({
@@ -43,10 +46,20 @@ const Article: React.FunctionComponent<ArticleProps> = ({
   date,
   dateFormatted,
   embeddedImagesLocal,
+  articleUrl,
+  categoryUrl,
 }) => (
   <article>
     <div css={styles.headerWrapper}>
-      <Header categories={categories} headline={headline} deck={deck}  date={date} dateFormatted={dateFormatted} />
+      <Header
+        categories={categories}
+        headline={headline}
+        deck={deck}
+        date={date}
+        dateFormatted={dateFormatted}
+        articleUrl={articleUrl}
+        categoryUrl={categoryUrl}
+      />
       <Abstract text={abstract} />
     </div>
     <Epigraph text={epigraph} author={epigraphAuthor} />
@@ -56,19 +69,32 @@ const Article: React.FunctionComponent<ArticleProps> = ({
   </article>
 )
 
-const Header: React.FunctionComponent<{
+export const Header: React.FunctionComponent<{
   categories: Array<string>
   headline: string
   deck?: string
   date: string
   dateFormatted: string
-}> = ({ categories, headline, deck, date, dateFormatted }) => {
+  articleUrl: string
+  categoryUrl: string
+  summerized?: boolean
+}> = ({ categories, headline, deck, date, dateFormatted, articleUrl, categoryUrl, summerized }) => {
+  console.log(articleUrl)
   return (
-    <header css={styles.header}>
-      {categories && (categories.length > 0) && <p css={styles.category}>{categories.join(' / ')}</p>}
-      <section css={styles.meta}>
-      </section>
-      <h2 css={styles.headline}>{headline}</h2>
+    <header css={[styles.header, (!summerized && styles.headerSizer)]}>
+      {categories && (categories.length > 0) && (
+        <p css={styles.category}>
+          <Link to={categoryUrl}>{categories.join(' / ')}</Link>
+          <time dateTime={date}>{dateFormatted} KST</time>
+        </p>
+      )}
+      
+      <h2 css={styles.headline}>
+        <Link to={articleUrl}>
+          {headline}
+        </Link>
+      </h2>
+      
       {deck && <section css={styles.deck}>{deck}</section>}
       <div css={styles.titleWrapper}>
         <p css={styles.title}>{headline}</p>
@@ -77,33 +103,33 @@ const Header: React.FunctionComponent<{
   )
 }
 
-const Abstract = ({ text }: { text?: string }) => text ? (
-  <section css={styles.abstract}>
+export const Abstract = ({ text, summerized }: { text?: string, summerized?: boolean }) => text ? (
+  <section css={[styles.abstract, (!summerized && styles.abstractSizer)]}>
     <p css={styles.abstractText}>{text}</p>
   </section>
 ) : <></>
 
-const Epigraph = ({ text, author }: { text?: string; author?: string }) => text && author ? (
-  <section css={styles.epigraph}>
+export const Epigraph = ({ text, author, summerized }: { text?: string; author?: string, summerized?: boolean }) => text && author ? (
+  <section css={[styles.epigraph, (!summerized && styles.epigraphSizer)]}>
     <p css={styles.epigraphText}>{text}</p>
     {author && <p css={styles.epigraphAuthor}>{author}</p>}
   </section>
 ) : <></>
 
-const Meta = ({ date, dateFormatted }: { date: string, dateFormatted: string }) => (
-  <section css={styles.meta}>
+export const Meta = ({ date, dateFormatted, summerized }: { date: string, dateFormatted: string, summerized?: boolean }) => (
+  <section css={[styles.meta, (!summerized && styles.metaSizer)]}>
     <time dateTime={date}>{dateFormatted} KST</time>
   </section>
 )
 
-const Body = ({ localImages, body }: { localImages?: ChildImage, body: string }) => (
-  <div css={styles.body}>
+export const Body = ({ localImages, body, summerized }: { localImages?: ChildImage, body: string, summerized?: boolean }) => (
+  <div css={[styles.body, (!summerized && styles.bodySizer)]}>
     <MDXRenderer localImages={localImages}>{body}</MDXRenderer>
   </div>
 )
 
 // todo - 출처 표기랑 기존에 있던 CC 포맷 넣으면 좋을거같음. 그거 이쁨. 그리고 Buy me a coffee & DISQUS 도 넣을것
-const Footer = () => (
+export const Footer = ({ summerized }: { summerized?: boolean }) => (
   <footer css={styles.footer}></footer>
 )
 
@@ -114,6 +140,11 @@ const styles = {
   `,
   header: css`
     margin: 0 auto;
+
+    padding: 0 1rem;
+    max-width: 800px;
+  `,
+  headerSizer: css`
     @media only screen and (max-width: 1280px) {
       margin: 0 auto 0 50px;
       padding: 0 1.2rem;
@@ -126,11 +157,11 @@ const styles = {
       margin: 0 auto;
       padding: 0 1.2rem;
     }
-
-    padding: 0 1rem;
-    max-width: 800px;
   `,
   category: css`
+    display: flex;
+    justify-content: space-between;
+
     margin: 0 0 1.1rem 0.15rem;
     letter-spacing: 0.03rem;
     font-size: 0.8rem;
@@ -202,6 +233,13 @@ const styles = {
   `,
   abstract: css`
     margin: 0 auto 0;
+
+    padding: 0 1rem;
+    max-width: 750px;
+    display: flex;
+    justify-content: center;
+  `,
+  abstractSizer: css`
     @media only screen and (max-width: 1280px) {
       margin: 0 auto 0 74px;
       padding: 0 1.2rem;
@@ -214,11 +252,6 @@ const styles = {
       margin: 0 auto;
       padding: 0 1.2rem;
     }
-
-    padding: 0 1rem;
-    max-width: 750px;
-    display: flex;
-    justify-content: center;
   `,
   abstractText: css`
     max-width: 700px;
@@ -233,6 +266,16 @@ const styles = {
     flex-direction: column;
     align-items: center;
     margin: 0 auto;
+    @media only screen and (max-width: 700px) {
+      padding: 0 0.9rem 1.8rem;
+      font-size: 0.84rem;
+    }
+
+    padding: 0 1rem 2rem;
+    max-width: 650px;
+    text-align: center;
+  `,
+  epigraphSizer: css`
     @media only screen and (max-width: 1280px) {
       margin: 0 auto 0 116px;
     }
@@ -242,14 +285,6 @@ const styles = {
     @media only screen and (max-width: 970px) {
       margin: 0 auto;
     }
-    @media only screen and (max-width: 700px) {
-      padding: 0 0.9rem 1.8rem;
-      font-size: 0.84rem;
-    }
-
-    padding: 0 1rem 2rem;
-    max-width: 650px;
-    text-align: center;
   `,
   epigraphText: css`
     max-width: 450px;
@@ -274,18 +309,6 @@ const styles = {
   `,
   meta: css`
     margin: 0 auto;
-    @media only screen and (max-width: 1280px) {
-      margin: 0 auto 0 50px;
-      padding: 0 1.2rem;
-    }
-    @media only screen and (max-width: 1024px) {
-      margin: 0 auto 0 0;
-      padding: 0 1.2rem;
-    }
-    @media only screen and (max-width: 970px) {
-      margin: 0 auto;
-      padding: 0 1.2rem;
-    }
 
     padding: 0 1rem 0;
     width: 100%;
@@ -294,9 +317,7 @@ const styles = {
     font-size: 0.83rem;
     color: var(--brand);
   `,
-
-  body: css`
-    margin: 2rem auto 0;
+  metaSizer: css`
     @media only screen and (max-width: 1280px) {
       margin: 0 auto 0 50px;
       padding: 0 1.2rem;
@@ -309,6 +330,23 @@ const styles = {
       margin: 0 auto;
       padding: 0 1.2rem;
     }
+  `,
+  bodySizer: css`
+    @media only screen and (max-width: 1280px) {
+      margin: 0 auto 0 50px;
+      padding: 0 1.2rem;
+    }
+    @media only screen and (max-width: 1024px) {
+      margin: 0 auto 0 0;
+      padding: 0 1.2rem;
+    }
+    @media only screen and (max-width: 970px) {
+      margin: 0 auto;
+      padding: 0 1.2rem;
+    }
+  `,
+  body: css`
+    margin: 2rem auto 0;
 
     padding: 0 1rem;
     width: 100%;

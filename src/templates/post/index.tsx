@@ -15,41 +15,41 @@ export interface TocHeader {
   url: string, title: string, items?: Array<TocHeader>
 }
 
+export interface NodeDetail {
+  id: string
+  frontmatter: {
+    title: string /* 제목에 해당합니다. */
+    category: string /* js */
+    categoryNames: Array<string> /* Javascript */
+    author: string /* Aaron Ryu */
+    date: string /* 2021-10-28 */
+    dateFormatted: string
+    updateDate: string /* 2021-10-28 */
+    image: { /* ./example.jpg */
+      childImageSharp: {
+        fluid: GatsbyImageSharpFluidWithWebp
+      }
+    }
+    embeddedImagesLocal: {
+      childImageSharp: {
+        gatsbyImageData: IGatsbyImageData
+      }
+    }
+    /* gatsby-plugin-layout 넣었으니까, heroImage 필요없다. */
+    deck?: string /* (1) 가장 위에 뜸 */
+    abstract?: string /* (2) 그 다음 작은 폰트로 */
+    epigraph?: string /* (3) 더 작은 폰트로 */
+    epigraphAuthor?: string /* (3) 위인 */
+  }
+  toc: TocHeaders
+  body: string
+  slug: string
+}
 interface Props {
   location: string
   pageContext: any
   data: {
-    mdx: {
-      id: string
-      frontmatter: {
-        title: string /* 제목에 해당합니다. */
-        slug: string /* example-post */
-        category: string /* js */
-        categoryNames: Array<string> /* Javascript */
-        author: string /* Aaron Ryu */
-        date: string /* 2021-10-28 */
-        dateFormatted: string
-        updateDate: string /* 2021-10-28 */
-        image: { /* ./example.jpg */
-          childImageSharp: {
-            fluid: GatsbyImageSharpFluidWithWebp
-          }
-        }
-        embeddedImagesLocal: {
-          childImageSharp: {
-            gatsbyImageData: IGatsbyImageData
-          }
-        }
-        /* gatsby-plugin-layout 넣었으니까, heroImage 필요없다. */
-        deck?: string /* (1) 가장 위에 뜸 */
-        abstract?: string /* (2) 그 다음 작은 폰트로 */
-        epigraph?: string /* (3) 더 작은 폰트로 */
-        epigraphAuthor?: string /* (3) 위인 */
-      }
-      toc: TocHeaders
-      body: string
-      slug: string
-    }
+    mdx: NodeDetail
   }
 }
 
@@ -104,7 +104,7 @@ const PostTemplate: React.FunctionComponent<Props> = ({
         <PostSeo
           // type
           {...{ imageSrc, siteUrl, author }}
-          slug={frontmatter.slug}
+          slug={slug}
           title={frontmatter.title}
           deck={frontmatter.deck}
           abstract={frontmatter.abstract}
@@ -127,6 +127,8 @@ const PostTemplate: React.FunctionComponent<Props> = ({
           dateFormatted={frontmatter.dateFormatted}
           body={body}
           embeddedImagesLocal={frontmatter.embeddedImagesLocal}
+          articleUrl={`/${frontmatter.category}/${slug}`}
+          categoryUrl={`/${frontmatter.category}`}
         />
       
     </div>
@@ -215,7 +217,6 @@ export const query = graphql`
     mdx(slug: { eq: $slug }) {
       id
       frontmatter {
-        slug
         category
         categoryNames
         title

@@ -31,6 +31,10 @@ export function getWindowDimensions() {
   };
 }
 
+const MAIN = [
+  '/',
+]
+
 const PATHNAME_NOW_SHOW_MENU_DEFAULTLY = [
   '/about', '/about/',
   '/404', '/404/',
@@ -65,6 +69,8 @@ const Layout: React.FunctionComponent<Props> = ({ location, children }) => {
   const categorizedDevelop = sortingCategorizing(home.allFile.edges)
   const developMenu = makeMenus({ to: '/development', label: 'Development' }, categorizedDevelop)
 
+  const isMain = !!(MAIN.find(each => location.pathname.startsWith(each)))
+  const isNotArticle = !!(PATHNAME_NOW_SHOW_MENU_DEFAULTLY.find(each => location.pathname.startsWith(each)))
 
   const menu = developMenu
   // console.log(menu)
@@ -77,21 +83,25 @@ const Layout: React.FunctionComponent<Props> = ({ location, children }) => {
   
   // Layout 에서 공통적으로 제목에 해당하는 스크롤
   useEffect(() => {
-    const observer = new window.IntersectionObserver(
-      ([entry]) => {
-        if (!entry.intersectionRatio) {
-          document.body.classList.add('scrolled-a-bit')
-        } else {
-          document.body.classList.remove('scrolled-a-bit')
-        }
-      },
-      { rootMargin: '0px' }
-    )
-    observer.observe(spy.current)
-    return observer.disconnect
+    if (isMain || isNotArticle) {
+      document.body.classList.remove('scrolled-a-bit')
+    } else {
+      const observer = new window.IntersectionObserver(
+        ([entry]) => {
+          if (!entry.intersectionRatio) {
+            document.body.classList.add('scrolled-a-bit')
+          } else {
+            document.body.classList.remove('scrolled-a-bit')
+          }
+        },
+        { rootMargin: '0px' }
+      )
+      observer.observe(spy.current)
+      return observer.disconnect 
+    }
   }, [])
 
-  const notShowMenuDefaultly = location ? !!(PATHNAME_NOW_SHOW_MENU_DEFAULTLY.find(each => location.pathname.startsWith(each))) : true;
+  const notShowMenuDefaultly = location ? isNotArticle : true;
   const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions())
   const [showMenu, setShowMenu] = useState(notShowMenuDefaultly ? false : windowDimensions.width > 1280)
   

@@ -4,11 +4,13 @@ import PostSeo from "../templates/post/post-seo"
 import ArticleSummerized from "../templates/post/post-summerized"
 import useSiteMetadata from '../hooks/use-sitemetadata'
 import { log } from "../utils/logger"
+import Seo, { MetaImage, MetaOption } from "../components/seo"
+import { NodeDetail } from "../templates/post"
 
 interface Props {
   data: {
     allFile: {
-      edges: Array<Node>
+      edges: Array<{ node: { childMdx: NodeDetail } }>
     }
   }
 }
@@ -16,33 +18,38 @@ interface Props {
 const IndexPage: React.FunctionComponent<Props> = ({ data: { allFile: { edges } }}) => {
   log(() => console.log(edges))
   
-  const { author, siteUrl } = useSiteMetadata()
+  const { description, deployBranch } = useSiteMetadata()
+  const meta: Array<MetaImage | MetaOption> =
+    [{ property: 'og:image', content: '/images/cover-todo-change.png' }]
+  if (deployBranch !== 'master')
+    meta.push({ name: 'robots', content: 'noindex,nofollow' })
   
   return (
     <div css={styles.container}>
-
-        {/* <PostSeo
-          // type
-          {...{ imageSrc, siteUrl, author }}
-          slug={frontmatter.slug}
-          title={frontmatter.title}
-          deck={frontmatter.deck}
-          abstract={frontmatter.abstract}
-          date={frontmatter.date}
-          updateDate={frontmatter.updateDate}
-        />
-        <ArticleSummerized
-          categories={frontmatter.categoryNames}
-          headline={frontmatter.title}
-          deck={frontmatter.deck}
-          abstract={frontmatter.abstract}
-          epigraph={frontmatter.epigraph}
-          epigraphAuthor={frontmatter.epigraphAuthor}
-          date={frontmatter.date}
-          dateFormatted={frontmatter.dateFormatted}
-          body={body}
-          embeddedImagesLocal={frontmatter.embeddedImagesLocal}
-        /> */}
+      <Seo
+        lang="en"
+        title=""
+        meta={meta}
+        description={description}
+      />
+      {edges.map(({ node: { childMdx: node } }) => {
+        log(() => console.log(node))
+        return (
+          <ArticleSummerized
+            key={node.frontmatter.title}
+            categories={node.frontmatter.categoryNames}
+            headline={node.frontmatter.title}
+            deck={node.frontmatter.deck}
+            abstract={node.frontmatter.abstract}
+            epigraph={node.frontmatter.epigraph}
+            epigraphAuthor={node.frontmatter.epigraphAuthor}
+            date={node.frontmatter.date}
+            dateFormatted={node.frontmatter.dateFormatted}
+            articleUrl={`/${node.frontmatter.category}/${node.slug}`}
+            categoryUrl={`/${node.frontmatter.category}`}
+          />
+        )
+      })}
     </div>
   )
 }
@@ -64,13 +71,34 @@ export const query = graphql`
         node {
           childMdx {
             id
-            slug
             frontmatter {
-              date(formatString: "MMMM D, YYYY")
-              title
               category
               categoryNames
+              title
+              author
+              date
+              dateFormatted: date(formatString: "MMM D, YYYY hh:mmA")
+              updateDate
+              image {
+                childImageSharp {
+                  fluid(quality: 80, maxWidth: 1540) {
+                    ...GatsbyImageSharpFluid_withWebp
+                  }
+                }
+              }
+              embeddedImagesLocal {
+                childImageSharp {
+                  gatsbyImageData
+                }
+              }
+              deck
+              abstract
+              epigraph
+              epigraphAuthor
             }
+            toc: tableOfContents
+            body
+            slug
           }
         }
       }
