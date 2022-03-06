@@ -41,6 +41,8 @@ const PATHNAME_NOW_SHOW_MENU_DEFAULTLY = [
 ]
 const Layout: React.FunctionComponent<Props> = ({ location, children }) => {
 
+  const menu: Array<Menu> = []
+
   const home = useStaticQuery(graphql`
   query {
     allFile(
@@ -72,7 +74,8 @@ const Layout: React.FunctionComponent<Props> = ({ location, children }) => {
   const isMain = !!(MAIN.find(each => location.pathname.startsWith(each)))
   const isNotArticle = !!(PATHNAME_NOW_SHOW_MENU_DEFAULTLY.find(each => location.pathname.startsWith(each)))
 
-  const menu = developMenu
+  menu.push(...developMenu)
+  menu.push({ to: '/about', label: 'About' })
   // console.log(menu)
   const { title, description, author, deployBranch, linkGithub, linkFacebook, linkTwitter } = useSiteMetadata()
   const spy = useRef() as React.MutableRefObject<HTMLDivElement>;
