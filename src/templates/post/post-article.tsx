@@ -85,7 +85,7 @@ export const Header: React.FunctionComponent<{
       {categories && (categories.length > 0) && (
         <p css={styles.category}>
           <Link to={categoryUrl}>{categories.join(' / ')}</Link>
-          <time dateTime={date}>{dateFormatted} KST</time>
+          {summerized && <time dateTime={date}>{dateFormatted} KST</time>}
         </p>
       )}
       
