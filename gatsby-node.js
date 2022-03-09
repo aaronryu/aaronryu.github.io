@@ -1,4 +1,4 @@
-const { menus } = require("./src/components/menubar/menulist.js");
+
 
 exports.createPages = async ({ actions, graphql, reporter }) => {
   // console.log(actions)

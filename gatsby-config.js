@@ -1,11 +1,25 @@
+const { sources } = require('./node-sources')
+
 require('dotenv').config({
   path: `.env.${process.env.NODE_ENV}`,
-});
+})
+
+const createGatsbySourceFilesystem = () =>
+  sources.map(eachSource => {
+    return {
+      resolve: 'gatsby-source-filesystem',
+      options: {
+        name: eachSource.name,
+        path: eachSource.path, // `${__dirname}/blog/development`,
+      },
+    }
+  })
 
 module.exports = {
   siteMetadata: {
     title: 'Crucian Carp',
-    description: 'This website is for posting articles about software engineering, politics and economy',
+    description:
+      'This website is for posting articles about software engineering, politics and economy',
     author: '@aaronryu',
     deployBranch: process.env.NOW_GITHUB_COMMIT_REF,
     linkGithub: 'https://github.com/aaronryu',
@@ -15,7 +29,7 @@ module.exports = {
   plugins: [
     'gatsby-plugin-dark-mode',
     {
-      resolve: "gatsby-source-contentful",
+      resolve: 'gatsby-source-contentful',
       options: {
         accessToken: process.env.CONTENTFUL_ACCESS_TOKEN,
         spaceId: process.env.CONTENTFUL_SPACE_ID,
@@ -103,12 +117,13 @@ module.exports = {
         // plugins: [{ resolve: 'gatsby-remark-images' }],
       },
     },
-    {
-      resolve: 'gatsby-source-filesystem',
-      options: {
-        name: 'development',
-        path: `${__dirname}/blog/development`,
-      },
-    },
+    ...createGatsbySourceFilesystem()
+    // {
+    //   resolve: 'gatsby-source-filesystem',
+    //   options: {
+    //     name: 'development',
+    //     path: `${__dirname}/blog/development`,
+    //   },
+    // },
   ],
 }
