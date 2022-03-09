@@ -96,7 +96,6 @@ const makeMenus = (menu, categorized, createPage) => {
 
     }
   })
-  console.log(mlist)
   return mlist
 }
 

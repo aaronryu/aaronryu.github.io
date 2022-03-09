@@ -1,5 +1,7 @@
 import { graphql, useStaticQuery } from 'gatsby'
 import { IGatsbyImageData } from 'gatsby-plugin-image'
+import { TocHeaders } from '../templates/post/table-of-contents'
+
 export interface GatsbyImageSharpFluidWithWebp {
   aspectRatio: number
   base64: string
@@ -8,14 +10,6 @@ export interface GatsbyImageSharpFluidWithWebp {
   srcSet: string
   srcSetWebp: string
   srcWebp: string
-}
-
-export interface TocHeaders {
-  items: Array<TocHeader>
-}
-
-export interface TocHeader {
-  url: string, title: string, items?: Array<TocHeader>
 }
 
 export interface NodeResult {
