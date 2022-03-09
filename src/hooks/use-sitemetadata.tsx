@@ -4,6 +4,7 @@ export interface SiteMetadata {
   title: string
   description: string
   author: string
+  siteUrl: string
   deployBranch: string
   linkGithub: string
   linkFacebook: string
@@ -18,6 +19,7 @@ const UseSiteMetadata = (): SiteMetadata => {
           title
           description
           author
+          siteUrl
           deployBranch
           linkGithub
           linkFacebook

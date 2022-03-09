@@ -2,49 +2,11 @@ import { graphql } from 'gatsby'
 import { css } from '@emotion/react'
 import useSiteMetadata from '../../hooks/use-sitemetadata'
 import React, { useEffect, useState } from 'react'
-import Article, { GatsbyImageSharpFluidWithWebp } from './post-article'
+import Article from './post-article'
 import PostSeo from './post-seo'
 import { useScroll } from './scroll'
-import { IGatsbyImageData } from 'gatsby-plugin-image'
-import Layout from '../../components/layout'
-export interface TocHeaders {
-  items: Array<TocHeader>
-}
+import { NodeDetail } from '../../hooks/use-nodes-details'
 
-export interface TocHeader {
-  url: string, title: string, items?: Array<TocHeader>
-}
-
-export interface NodeDetail {
-  id: string
-  frontmatter: {
-    title: string /* 제목에 해당합니다. */
-    category: string /* js */
-    categoryNames: Array<string> /* Javascript */
-    author: string /* Aaron Ryu */
-    date: string /* 2021-10-28 */
-    dateFormatted: string
-    updateDate: string /* 2021-10-28 */
-    image: { /* ./example.jpg */
-      childImageSharp: {
-        fluid: GatsbyImageSharpFluidWithWebp
-      }
-    }
-    embeddedImagesLocal: {
-      childImageSharp: {
-        gatsbyImageData: IGatsbyImageData
-      }
-    }
-    /* gatsby-plugin-layout 넣었으니까, heroImage 필요없다. */
-    deck?: string /* (1) 가장 위에 뜸 */
-    abstract?: string /* (2) 그 다음 작은 폰트로 */
-    epigraph?: string /* (3) 더 작은 폰트로 */
-    epigraphAuthor?: string /* (3) 위인 */
-  }
-  toc: TocHeaders
-  body: string
-  slug: string
-}
 interface Props {
   location: string
   pageContext: any
@@ -58,6 +20,9 @@ const PostTemplate: React.FunctionComponent<Props> = ({
   location, data: { mdx }, pageContext
 }) => {
   const { id, frontmatter, toc, body, slug } = mdx
+  const categoryUrl = `/${frontmatter.category}`
+  const articleUrl = `${categoryUrl}/${slug}`
+
   const { author, siteUrl } = useSiteMetadata()
   const imageSrc = frontmatter.image
     ? frontmatter.image.childImageSharp.fluid.srcWebp
@@ -100,11 +65,10 @@ const PostTemplate: React.FunctionComponent<Props> = ({
 
   return (
     <div css={styles.container}>
-      
         <PostSeo
           // type
           {...{ imageSrc, siteUrl, author }}
-          slug={slug}
+          articleUrl={articleUrl}
           title={frontmatter.title}
           deck={frontmatter.deck}
           abstract={frontmatter.abstract}
@@ -127,8 +91,8 @@ const PostTemplate: React.FunctionComponent<Props> = ({
           dateFormatted={frontmatter.dateFormatted}
           body={body}
           embeddedImagesLocal={frontmatter.embeddedImagesLocal}
-          articleUrl={`/${frontmatter.category}/${slug}`}
-          categoryUrl={`/${frontmatter.category}`}
+          articleUrl={articleUrl}
+          categoryUrl={categoryUrl}
         />
       
     </div>
@@ -216,14 +180,17 @@ export const query = graphql`
   query($slug: String!) {
     mdx(slug: { eq: $slug }) {
       id
+      slug
+      toc: tableOfContents
+      body
       frontmatter {
+        title
         category
         categoryNames
-        title
-        author
-        date
+        date(formatString: "MMMM D, YYYY")
         dateFormatted: date(formatString: "MMM D, YYYY hh:mmA")
         updateDate
+        author
         image {
           childImageSharp {
             fluid(quality: 80, maxWidth: 1540) {
@@ -241,9 +208,6 @@ export const query = graphql`
         epigraph
         epigraphAuthor
       }
-      toc: tableOfContents
-      body
-      slug
     }
   }
 `

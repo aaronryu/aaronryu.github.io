@@ -21,6 +21,7 @@ module.exports = {
     description:
       'This website is for posting articles about software engineering, politics and economy',
     author: '@aaronryu',
+    siteUrl: 'https://aaronryu.github.io/',
     deployBranch: process.env.NOW_GITHUB_COMMIT_REF,
     linkGithub: 'https://github.com/aaronryu',
     linkFacebook: 'https://www.facebook.com/chungmo.ryu',

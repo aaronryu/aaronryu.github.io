@@ -1,23 +1,11 @@
 import { css } from "@emotion/react"
-import { graphql } from "gatsby"
-import PostSeo from "../templates/post/post-seo"
 import ArticleSummerized from "../templates/post/post-summerized"
 import useSiteMetadata from '../hooks/use-sitemetadata'
-import { log } from "../utils/logger"
 import Seo, { MetaImage, MetaOption } from "../components/seo"
-import { NodeDetail } from "../templates/post"
+import UseNodeDetails, { NodeDetail } from "../hooks/use-nodes-details"
 
-interface Props {
-  data: {
-    allFile: {
-      edges: Array<{ node: { childMdx: NodeDetail } }>
-    }
-  }
-}
-
-const IndexPage: React.FunctionComponent<Props> = ({ data: { allFile: { edges } }}) => {
-  log(() => console.log(edges))
-  
+const IndexPage: React.FunctionComponent = () => {
+  const nodeDetails: Array<NodeDetail> = UseNodeDetails()
   const { description, deployBranch } = useSiteMetadata()
   const meta: Array<MetaImage | MetaOption> =
     [{ property: 'og:image', content: '/images/cover-todo-change.png' }]
@@ -32,8 +20,9 @@ const IndexPage: React.FunctionComponent<Props> = ({ data: { allFile: { edges } 
         meta={meta}
         description={description}
       />
-      {edges.map(({ node: { childMdx: node } }) => {
-        log(() => console.log(node))
+      {nodeDetails.map((node) => {
+        const categoryUrl = `/${node.frontmatter.category}`
+        const articleUrl = `${categoryUrl}/${node.slug}`
         return (
           <ArticleSummerized
             key={node.frontmatter.title}
@@ -45,8 +34,8 @@ const IndexPage: React.FunctionComponent<Props> = ({ data: { allFile: { edges } 
             epigraphAuthor={node.frontmatter.epigraphAuthor}
             date={node.frontmatter.date}
             dateFormatted={node.frontmatter.dateFormatted}
-            articleUrl={`/${node.frontmatter.category}/${node.slug}`}
-            categoryUrl={`/${node.frontmatter.category}`}
+            articleUrl={articleUrl}
+            categoryUrl={categoryUrl}
           />
         )
       })}
@@ -59,51 +48,5 @@ const styles = {
     margin-top: 4rem;
   `,
 }
-
-export const query = graphql`
-  query {
-    allFile(
-      filter: { extension: { eq: "mdx" } },
-      limit: 10,
-      sort: { fields: [childMdx___frontmatter___date], order: DESC }
-    ) {
-      edges {
-        node {
-          childMdx {
-            id
-            frontmatter {
-              category
-              categoryNames
-              title
-              author
-              date
-              dateFormatted: date(formatString: "MMM D, YYYY hh:mmA")
-              updateDate
-              image {
-                childImageSharp {
-                  fluid(quality: 80, maxWidth: 1540) {
-                    ...GatsbyImageSharpFluid_withWebp
-                  }
-                }
-              }
-              embeddedImagesLocal {
-                childImageSharp {
-                  gatsbyImageData
-                }
-              }
-              deck
-              abstract
-              epigraph
-              epigraphAuthor
-            }
-            toc: tableOfContents
-            body
-            slug
-          }
-        }
-      }
-    }
-  }
-`
 
 export default IndexPage

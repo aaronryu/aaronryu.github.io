@@ -9,7 +9,7 @@ export type ArticleSchemaType =
 
 interface SeoProps {
   type?: ArticleSchemaType
-  slug: string
+  articleUrl: string
   siteUrl: string
   author: string
   title: string
@@ -31,7 +31,7 @@ const PostSeo: React.FunctionComponent<SeoProps> = ({
   updateDate,
   deck,
   abstract,
-  slug,
+  articleUrl,
 }) => (
   <>
     <Seo
@@ -64,7 +64,7 @@ const PostSeo: React.FunctionComponent<SeoProps> = ({
         "description": "${deck || abstract}",
         "mainEntityOfPage": {
           "@type": "WebPage",
-          "@id": "${siteUrl}/${slug}"
+          "@id": "${siteUrl}/${articleUrl}"
         }
       }
   `}</script>

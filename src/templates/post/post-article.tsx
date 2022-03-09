@@ -4,16 +4,6 @@ import { MDXRenderer } from 'gatsby-plugin-mdx'
 import { IGatsbyImageData } from 'gatsby-plugin-image'
 import { Link } from 'gatsby'
 
-export interface GatsbyImageSharpFluidWithWebp {
-  aspectRatio: number
-  base64: string
-  sizes: string
-  src: string
-  srcSet: string
-  srcSetWebp: string
-  srcWebp: string
-}
-
 export interface ChildImage {
   childImageSharp: {
     gatsbyImageData: IGatsbyImageData
@@ -79,7 +69,6 @@ export const Header: React.FunctionComponent<{
   categoryUrl: string
   summerized?: boolean
 }> = ({ categories, headline, deck, date, dateFormatted, articleUrl, categoryUrl, summerized }) => {
-  console.log(articleUrl)
   return (
     <header css={[styles.header, (!summerized && styles.headerSizer)]}>
       {categories && (categories.length > 0) && (
