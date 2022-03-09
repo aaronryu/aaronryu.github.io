@@ -15,8 +15,9 @@ import Seo, { MetaImage, MetaOption } from "./seo"
 import { Global } from "@emotion/react"
 import LeftSideMenuBar from "./menubar"
 import { Menu } from "./menubar/navigator"
-import { graphql, useStaticQuery } from "gatsby"
-import { log } from "../utils/logger"
+import UseNodeDetails, { NodeDetail } from "../hooks/use-nodes-details"
+import { CategorizedNodes, categorizeNodes } from "../utils/categorizer"
+import { makeMenus } from "../utils/menu"
 
 interface Props {
   location: any
@@ -43,32 +44,8 @@ const Layout: React.FunctionComponent<Props> = ({ location, children }) => {
 
   const menu: Array<Menu> = []
 
-  const home = useStaticQuery(graphql`
-  query {
-    allFile(
-      filter: {
-        sourceInstanceName: { eq: "development" }
-        extension: { eq: "mdx" }
-      }
-    ) {
-      edges {
-        node {
-          childMdx {
-            id
-            slug
-            frontmatter {
-              date(formatString: "MMMM D, YYYY")
-              title
-              category
-              categoryNames
-            }
-          }
-        }
-      }
-    }
-  }
-  `)
-  const categorizedDevelop = sortingCategorizing(home.allFile.edges)
+  const home: Array<NodeDetail> = UseNodeDetails()
+  const categorizedDevelop: Map<string, CategorizedNodes> = categorizeNodes(home)
   const developMenu = makeMenus({ to: '/development', label: 'Development' }, categorizedDevelop)
 
   const isMain = !!(MAIN.find(each => location.pathname.startsWith(each)))
@@ -149,81 +126,6 @@ const Layout: React.FunctionComponent<Props> = ({ location, children }) => {
       </div>
     </>
   )
-}
-
-const makeMenus = (menu, categorized) => {
-  const subMenus = []
-  for (let categoryName of Object.keys(categorized)) {
-    const category = categorized[categoryName]
-    subMenus.push({
-      to: `/${category.path}`,
-      label: categoryName,
-      component: `${__dirname}/src/templates/archive/index.tsx`,
-      context: {
-        nodeCategory: 'development',
-        nodePath: category.path
-      }
-    })
-  }
-  menu.subMenu = subMenus
-
-  const mlist = []
-  mlist.push(menu)
-
-  // console.log(mlist)
-  return mlist
-}
-
-const sortingCategorizing = (edges) => {
-  const categoryMap = {}
-  // log(() => console.log(edges))
-  edges.forEach(edge => {
-    // console.log(edge)
-    const categories = edge.node.childMdx.frontmatter.categoryNames
-    const totalCategories = categories.length
-    const article = edge.node.childMdx
-    searchAndAppendCategory(0, categories, categoryMap, article)
-  })
-  return categoryMap
-}
-
-const searchAndAppendCategory = (index, categories, categoryMap, article) => {
-  const totalCategory = categories.length
-  const currentCategory = categories[index]
-
-  let done = false;
-  for (let writtenCategory of Object.keys(categoryMap)) {
-    const writtenCategoryMap = categoryMap[writtenCategory]
-    if (writtenCategory === currentCategory) {
-      // * 존재
-      if ((index + 1) < totalCategory) {
-        searchAndAppendCategory(index + 1, categories, writtenCategoryMap.sub, article)
-        done = true
-      } else {
-        writtenCategoryMap.path = article.frontmatter.category
-        writtenCategoryMap.list.push(article)
-        return
-      }
-    }
-  }
-  if (!done) {
-    // * 비존재
-    if ((index + 1) < totalCategory) {
-      categoryMap[currentCategory] = createNewCategory()
-      categoryMap[currentCategory].path = article.frontmatter.category
-      categoryMap[currentCategory].list.push(article)
-      searchAndAppendCategory(index + 1, categories, categoryMap[currentCategory].sub, article)
-    } else {
-      categoryMap[currentCategory] = createNewCategory()
-      categoryMap[currentCategory].path = article.frontmatter.category
-      categoryMap[currentCategory].list.push(article)
-      return
-    }
-  }
-}
-
-const createNewCategory = () => {
-  return { path: '/', sub: {}, list: [] }
 }
 
 const styles = {
