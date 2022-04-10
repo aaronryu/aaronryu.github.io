@@ -78,8 +78,8 @@ export const Header: React.FunctionComponent<{
         <div css={summerized && styles.summerizedTitleImage}>
           <GatsbyImage
             loading="eager"
-            style={{ height: 300 }}
-            imgStyle={{ height: 300, borderRadius: 2 }}
+            style={{ aspectRatio: '3.6' }}
+            imgStyle={{ aspectRatio: '3.6', borderRadius: 2 }}
             alt={imageAlt ?? ''}
             image={image.childImageSharp.gatsbyImageData}
           />
@@ -139,8 +139,8 @@ export const Footer = ({ summerized }: { summerized?: boolean }) => (
 
 const styles = {
   summerizedTitleImage: css`
-    margin-right: -1.4rem;
-    margin-left: -1.4rem;
+    margin-right: -1rem;
+    margin-left: -1rem;
   `,
   headerWrapper: css`
     margin: 0 0 1rem 0;
