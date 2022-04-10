@@ -8,10 +8,13 @@ import { useEffect, useRef, useState } from "react"
 
 const IndexPage: React.FunctionComponent = () => {
   const MAX_SUMMERY_QUERY_SIZE = 20
-  const PAGE_SIZE = 1
+  const PAGE_SIZE = 4
   const [limit, setLimit] = useState(PAGE_SIZE)
 
   const nodeDetails: Array<NodeDetail> = UseNodeDetails(undefined, MAX_SUMMERY_QUERY_SIZE)
+  const totalCount = nodeDetails.length
+  const allReceived = totalCount <= limit
+
   const { description, deployBranch } = useSiteMetadata()
   const meta: Array<MetaImage | MetaOption> =
     [{ property: 'og:image', content: '/images/cover-todo-change.png' }]
@@ -61,7 +64,9 @@ const IndexPage: React.FunctionComponent = () => {
           />
         )
       })}
-      <div css={styles.pageButton} onClick={() => expandPagination()}>Retrieve more</div>
+      {!allReceived && (
+        <div css={styles.pageButton} onClick={() => expandPagination()}>Retrieve more</div>
+      )}
       <div ref={paginationAutoScroll} />
     </div>
   )
