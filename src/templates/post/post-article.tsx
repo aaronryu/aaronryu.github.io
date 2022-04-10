@@ -8,6 +8,7 @@ import Comment from "../../components/comment"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCreativeCommons } from '@fortawesome/free-brands-svg-icons'
 import { IconProp } from '@fortawesome/fontawesome-svg-core'
+import useSiteMetadata from '../../hooks/use-sitemetadata'
 
 export interface ArticleProps {
   categories: Array<string>
@@ -60,7 +61,7 @@ const Article: React.FunctionComponent<ArticleProps> = ({
     <Epigraph text={epigraph} author={epigraphAuthor} />
     <Meta date={date} dateFormatted={dateFormatted} />
     <Body localImages={embeddedImagesLocal} body={body} />
-    <ArticleFooter />
+    <ArticleFooter title={headline} url={articleUrl} user={'Aaron'} postedOn={dateFormatted} />
   </article>
 )
 
@@ -136,27 +137,28 @@ export const Body = ({ localImages, body, summerized }: { localImages?: ChildIma
   </div>
 )
 
-// todo - 출처 표기랑 기존에 있던 CC 포맷 넣으면 좋을거같음. 그거 이쁨. 그리고 Buy me a coffee & DISQUS 도 넣을것
-export const ArticleFooter = ({ summerized }: { summerized?: boolean }) => (
+export const ArticleFooter = ({ title, url, user, postedOn, summerized }: { title: string, url: string, user: string, postedOn: string, summerized?: boolean }) => (
   <footer css={[styles.body, (!summerized && styles.bodySizer)]}>
-    <CreativeCommonsCard title={'[Title] Getting Started with Icarus'} url={'http://ppoffice.github.io/hello'} user={'Aaron'} postedOn={'2020-04-01'} />
+    <CreativeCommonsCard title={title} url={url} user={user} postedOn={postedOn} />
     <Comment />
   </footer>
 )
 
-export const CreativeCommonsCard = ({ title, url, user, postedOn }: { title: string, url: string, user: string, postedOn: string,  }) => (
-  <div css={styles.tester} style={{ padding: '1.2rem', backgroundColor: 'var(--text-link-background)', lineHeight: 1.2, position: 'relative', overflow: 'hidden', marginBottom: '1.5rem', borderRadius: '4px' }}>
+export const CreativeCommonsCard = ({ title, url, user, postedOn }: { title: string, url: string, user: string, postedOn: string }) => {
+  const { siteUrl } = useSiteMetadata()
+  return (
+    <div css={styles.createCommonBox}>
       <div style={{ marginBottom: '20px' }}>
         {title}
         <div style={{ marginTop: '4px' }}>
           <a href={url} style={{ fontSize: '0.9rem' }}>
-          {url}
+          {`${siteUrl}${url}`}
           </a>
         </div>
       </div>
 
       <div style={{ display: 'flex' }}>
-        <div style={{ marginRight: '24px' }}>
+        <div style={{ marginRight: '20px' }}>
           <div style={{ fontSize: '0.84rem' }}>Author</div>
           <div>{user}</div>
         </div>
@@ -166,23 +168,31 @@ export const CreativeCommonsCard = ({ title, url, user, postedOn }: { title: str
         </div>
         <div style={{ marginRight: '20px' }}>
           <div style={{ fontSize: '0.84rem' }}>Licensed under</div>
-          <div style={{ cursor: 'pointer' }}>
+          <div style={{ cursor: 'pointer' }} onClick={() => window.open('https://creativecommons.org/licenses/by-nc-sa/4.0/', '_blank')} >
             <FontAwesomeIcon icon={faCreativeCommons as IconProp} size={"lg"} style={{ marginRight: '4px' }} />
             CC BY-NC-SA 4.0
           </div>
         </div>
       </div>
-      <div css={styles.homomo}>
+      <div css={styles.createCommonOpacityIcon}>
         <FontAwesomeIcon icon={faCreativeCommons as IconProp} style={{ fontSize: '14em' }} />
       </div>
     </div>
-)
+  )
+}
 
 const styles = {
-  tester: css`
+  createCommonBox: css`
     z-index: 1;
+    padding: 1.2rem;
+    background-color: var(--text-link-background);
+    line-height: 1.2;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+    border-radius: 4px;
   `,
-  homomo: css`
+  createCommonOpacityIcon: css`
     display: inline-block;
     position: absolute;
     z-index: -1;

@@ -4,6 +4,7 @@ import { css } from "@emotion/react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faFacebook, faGithub, faTwitter } from "@fortawesome/free-brands-svg-icons"
 import Navigator, { Menu } from './navigator'
+import { IconProp } from "@fortawesome/fontawesome-svg-core"
 
 const SIDEBAR_WIDTH = 230
 
@@ -55,9 +56,9 @@ const LeftSideMenuBar = ({ location, menu, visible, onClose, currentWidth, links
               <section css={{ fontSize: "1.4rem", paddingBottom: "0.4rem" }}>Aaron Ryu</section>
               <section css={{ fontSize: "0.9rem" }}>Software Developer</section>
               <div css={{ margin: '16px auto 0 auto', width: 156, display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-                <FontAwesomeIcon css={{ cursor: 'pointer'}} size={"lg"} icon={faGithub} onClick={() => window.open(links.github, '_blank')} />
-                <FontAwesomeIcon css={{ cursor: 'pointer'}} size={"lg"} icon={faFacebook} onClick={() => window.open(links.facebook, '_blank')} />
-                <FontAwesomeIcon css={{ cursor: 'pointer'}} size={"lg"} icon={faTwitter} onClick={() => window.open(links.twitter, '_blank')} />
+                <FontAwesomeIcon css={{ cursor: 'pointer'}} size={"lg"} icon={faGithub as IconProp} onClick={() => window.open(links.github, '_blank')} />
+                <FontAwesomeIcon css={{ cursor: 'pointer'}} size={"lg"} icon={faFacebook as IconProp} onClick={() => window.open(links.facebook, '_blank')} />
+                <FontAwesomeIcon css={{ cursor: 'pointer'}} size={"lg"} icon={faTwitter as IconProp} onClick={() => window.open(links.twitter, '_blank')} />
               </div>
             </div>
           </motion.div>
