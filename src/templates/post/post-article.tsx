@@ -5,6 +5,9 @@ import { GatsbyImage } from 'gatsby-plugin-image'
 import { Link } from 'gatsby'
 import { ChildImage, ChildImageWithUrl } from '../../hooks/use-nodes-details'
 import Comment from "../../components/comment"
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCreativeCommons } from '@fortawesome/free-brands-svg-icons'
+import { IconProp } from '@fortawesome/fontawesome-svg-core'
 
 export interface ArticleProps {
   categories: Array<string>
@@ -135,12 +138,58 @@ export const Body = ({ localImages, body, summerized }: { localImages?: ChildIma
 
 // todo - 출처 표기랑 기존에 있던 CC 포맷 넣으면 좋을거같음. 그거 이쁨. 그리고 Buy me a coffee & DISQUS 도 넣을것
 export const ArticleFooter = ({ summerized }: { summerized?: boolean }) => (
-  <footer>
+  <footer css={[styles.body, (!summerized && styles.bodySizer)]}>
+    <CreativeCommonsCard title={'[Title] Getting Started with Icarus'} url={'http://ppoffice.github.io/hello'} user={'Aaron'} postedOn={'2020-04-01'} />
     <Comment />
   </footer>
 )
 
+export const CreativeCommonsCard = ({ title, url, user, postedOn }: { title: string, url: string, user: string, postedOn: string,  }) => (
+  <div css={styles.tester} style={{ padding: '1.2rem', backgroundColor: 'var(--text-link-background)', lineHeight: 1.2, position: 'relative', overflow: 'hidden', marginBottom: '1.5rem', borderRadius: '4px' }}>
+      <div style={{ marginBottom: '20px' }}>
+        {title}
+        <div style={{ marginTop: '4px' }}>
+          <a href={url} style={{ fontSize: '0.9rem' }}>
+          {url}
+          </a>
+        </div>
+      </div>
+
+      <div style={{ display: 'flex' }}>
+        <div style={{ marginRight: '24px' }}>
+          <div style={{ fontSize: '0.84rem' }}>Author</div>
+          <div>{user}</div>
+        </div>
+        <div style={{ marginRight: '20px' }}>
+          <div style={{ fontSize: '0.84rem' }}>Posted on</div>
+          <div>{postedOn}</div>
+        </div>
+        <div style={{ marginRight: '20px' }}>
+          <div style={{ fontSize: '0.84rem' }}>Licensed under</div>
+          <div style={{ cursor: 'pointer' }}>
+            <FontAwesomeIcon icon={faCreativeCommons as IconProp} size={"lg"} style={{ marginRight: '4px' }} />
+            CC BY-NC-SA 4.0
+          </div>
+        </div>
+      </div>
+      <div css={styles.homomo}>
+        <FontAwesomeIcon icon={faCreativeCommons as IconProp} style={{ fontSize: '14em' }} />
+      </div>
+    </div>
+)
+
 const styles = {
+  tester: css`
+    z-index: 1;
+  `,
+  homomo: css`
+    display: inline-block;
+    position: absolute;
+    z-index: -1;
+    right: -3rem;
+    top: -3.5rem;
+    opacity: 0.1;
+  `,
   summerizedTitleImage: css`
     margin-right: -1rem;
     margin-left: -1rem;

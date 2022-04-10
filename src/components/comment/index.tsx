@@ -33,24 +33,8 @@ const Comment: React.FunctionComponent = () => {
 const styles = {
   global: css`
     .utterances {
-      // sizer
-      @media only screen and (max-width: 1280px) {
-        margin: 0 auto 2rem 50px;
-        padding: 0 1.2rem;
-      }
-      @media only screen and (max-width: 1024px) {
-        margin: 0 auto 2rem 0;
-        padding: 0 1.2rem;
-      }
-      @media only screen and (max-width: 970px) {
-        margin: 0 auto 2rem;
-        padding: 0 1.2rem;
-      }
-
-      // width
-      position: relative;
-      box-sizing: border-box;
-      max-width: 800px;
+      max-width: 830px;
+      margin-bottom: 1.5rem;
     }
   `,
 }
