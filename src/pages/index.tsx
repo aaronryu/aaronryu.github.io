@@ -31,7 +31,9 @@ const IndexPage: React.FunctionComponent = () => {
   }
 
   useEffect(() => {
-    scrollToBottom()
+    if (limit > PAGE_SIZE) {
+      scrollToBottom()
+    }
   }, [limit]);
 
   return (
