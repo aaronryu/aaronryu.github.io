@@ -52,14 +52,12 @@ const ArticleSummerized: React.FunctionComponent<ArticleSummerizedProps> = ({
   </article>
 )
 
-
 export const ReadMoreButton = ({ link }: { link: string }) => 
   <div style={{ display: 'block', position: 'relative', height: '2.6em' }}>
     <Link to={link} css={styles.button}>
         Read more
     </Link>
   </div>
-    
 
 const styles = {
   wrapper: css`
@@ -69,20 +67,6 @@ const styles = {
     border-radius: 4px;
     
     max-width: 800px;
-  `,
-  headerSizer: css`
-    @media only screen and (max-width: 1280px) {
-      margin: 0 auto 0 50px;
-      padding: 0 1.2rem;
-    }
-    @media only screen and (max-width: 1024px) {
-      margin: 0 auto 0 0;
-      padding: 0 1.2rem;
-    }
-    @media only screen and (max-width: 970px) {
-      margin: 0 auto;
-      padding: 0 1.2rem;
-    }
   `,
   button: css`
     position: absolute;
