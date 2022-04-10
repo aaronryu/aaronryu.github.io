@@ -1,14 +1,9 @@
 import React from 'react'
 import { css } from '@emotion/react'
 import { MDXRenderer } from 'gatsby-plugin-mdx'
-import { IGatsbyImageData } from 'gatsby-plugin-image'
+import { GatsbyImage } from 'gatsby-plugin-image'
 import { Link } from 'gatsby'
-
-export interface ChildImage {
-  childImageSharp: {
-    gatsbyImageData: IGatsbyImageData
-  }
-};
+import { ChildImage, ChildImageWithUrl } from '../../hooks/use-nodes-details'
 
 export interface ArticleProps {
   categories: Array<string>
@@ -23,6 +18,8 @@ export interface ArticleProps {
   embeddedImagesLocal?: ChildImage
   articleUrl: string
   categoryUrl: string
+  imageAlt?: string
+  image?: ChildImageWithUrl
 }
 
 const Article: React.FunctionComponent<ArticleProps> = ({
@@ -38,6 +35,8 @@ const Article: React.FunctionComponent<ArticleProps> = ({
   embeddedImagesLocal,
   articleUrl,
   categoryUrl,
+  imageAlt,
+  image,
 }) => (
   <article>
     <div css={styles.headerWrapper}>
@@ -49,6 +48,8 @@ const Article: React.FunctionComponent<ArticleProps> = ({
         dateFormatted={dateFormatted}
         articleUrl={articleUrl}
         categoryUrl={categoryUrl}
+        imageAlt={imageAlt}
+        image={image}
       />
       <Abstract text={abstract} />
     </div>
@@ -68,22 +69,36 @@ export const Header: React.FunctionComponent<{
   articleUrl: string
   categoryUrl: string
   summerized?: boolean
-}> = ({ categories, headline, deck, date, dateFormatted, articleUrl, categoryUrl, summerized }) => {
+  imageAlt?: string
+  image?: ChildImageWithUrl
+}> = ({ categories, headline, deck, date, dateFormatted, articleUrl, categoryUrl, summerized, imageAlt, image }) => {
   return (
     <header css={[styles.header, (!summerized && styles.headerSizer)]}>
+      {image && (
+        <div css={summerized && styles.summerizedTitleImage}>
+          <GatsbyImage
+            loading="eager"
+            style={{ height: 300 }}
+            imgStyle={{ height: 300, borderRadius: 2 }}
+            alt={imageAlt ?? ''}
+            image={image.childImageSharp.gatsbyImageData}
+          />
+        </div>
+      )}
+
       {categories && (categories.length > 0) && (
-        <p css={styles.category}>
+        <p css={[styles.category, styles.summerizedPadding]}>
           <Link to={categoryUrl}>{categories.join(' / ')}</Link>
           {summerized && <time dateTime={date}>{dateFormatted} KST</time>}
         </p>
       )}
-      
+
       <h2 css={styles.headline}>
         <Link to={articleUrl}>
           {headline}
         </Link>
       </h2>
-      
+
       {deck && <section css={styles.deck}>{deck}</section>}
       <div css={styles.titleWrapper}>
         <p css={styles.title}>{headline}</p>
@@ -123,6 +138,10 @@ export const Footer = ({ summerized }: { summerized?: boolean }) => (
 )
 
 const styles = {
+  summerizedTitleImage: css`
+    margin-right: -1.4rem;
+    margin-left: -1.4rem;
+  `,
   headerWrapper: css`
     margin: 0 0 1rem 0;
     padding: 0;
@@ -156,6 +175,9 @@ const styles = {
     font-size: 0.8rem;
     text-transform: uppercase;
     color: var(--brand);
+  `,
+  summerizedPadding: css`
+    padding-top: 1.4rem;
   `,
   headline: css`
     margin: 0;

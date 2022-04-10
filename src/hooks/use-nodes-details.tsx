@@ -12,6 +12,19 @@ export interface GatsbyImageSharpFluidWithWebp {
   srcWebp: string
 }
 
+export interface ChildImage {
+  childImageSharp: {
+    gatsbyImageData: IGatsbyImageData
+  }
+};
+
+export interface ChildImageWithUrl {
+  childImageSharp: {
+    gatsbyImageData: IGatsbyImageData
+    fluid: GatsbyImageSharpFluidWithWebp
+  }
+};
+
 export interface NodeResult {
   allFile: {
     edges: Array<{ node: Node }>
@@ -32,16 +45,9 @@ export interface NodeDetail {
     date: string /* 2021-10-28 */
     dateFormatted: string
     updateDate: string /* 2021-10-28 */
-    image: { /* ./example.jpg */
-      childImageSharp: {
-        fluid: GatsbyImageSharpFluidWithWebp
-      }
-    }
-    embeddedImagesLocal: {
-      childImageSharp: {
-        gatsbyImageData: IGatsbyImageData
-      }
-    }
+    imageAlt?: string
+    image?: ChildImageWithUrl /* ./example.jpg */
+    embeddedImagesLocal: ChildImage
     /* gatsby-plugin-layout 넣었으니까, heroImage 필요없다. */
     deck?: string /* (1) 가장 위에 뜸 */
     abstract?: string /* (2) 그 다음 작은 폰트로 */
@@ -76,8 +82,10 @@ const UseNodeDetails = (source?: string, limit?: number): Array<NodeDetail> => {
                 dateFormatted: date(formatString: "MMM D, YYYY hh:mmA")
                 updateDate
                 author
+                imageAlt
                 image {
                   childImageSharp {
+                    gatsbyImageData
                     fluid(quality: 80, maxWidth: 1540) {
                       ...GatsbyImageSharpFluid_withWebp
                     }

@@ -36,6 +36,8 @@ const IndexPage: React.FunctionComponent = () => {
             dateFormatted={node.frontmatter.dateFormatted}
             articleUrl={articleUrl}
             categoryUrl={categoryUrl}
+            imageAlt={node.frontmatter.imageAlt}
+            image={node.frontmatter.image}
           />
         )
       })}

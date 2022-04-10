@@ -36,7 +36,6 @@ const PostTemplate: React.FunctionComponent<Props> = ({
     const headerElements: NodeListOf<Element> = document.querySelectorAll('.anchor-header')
     for (const elem of Array.from(headerElements)) {
       const { top } = elem.getBoundingClientRect()
-      console.log(currentOffsetY)
       const elemTop = top + currentOffsetY
       const isLast = elem === headerElements[headerElements.length - 1]
       if (currentOffsetY < elemTop - HEADER_OFFSET_Y) {
@@ -94,6 +93,8 @@ const PostTemplate: React.FunctionComponent<Props> = ({
           embeddedImagesLocal={frontmatter.embeddedImagesLocal}
           articleUrl={articleUrl}
           categoryUrl={categoryUrl}
+          imageAlt={frontmatter.imageAlt}
+          image={frontmatter.image}
         />
     </div>
   )
@@ -120,8 +121,10 @@ export const query = graphql`
         dateFormatted: date(formatString: "MMM D, YYYY hh:mmA")
         updateDate
         author
+        imageAlt
         image {
           childImageSharp {
+            gatsbyImageData
             fluid(quality: 80, maxWidth: 1540) {
               ...GatsbyImageSharpFluid_withWebp
             }

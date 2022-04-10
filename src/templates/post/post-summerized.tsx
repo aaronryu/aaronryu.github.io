@@ -1,24 +1,7 @@
 import React from 'react'
 import { css } from '@emotion/react'
-import { MDXRenderer } from 'gatsby-plugin-mdx'
-import { IGatsbyImageData } from 'gatsby-plugin-image'
 import { Abstract, Epigraph, Header, Meta } from './post-article'
-
-export interface GatsbyImageSharpFluidWithWebp {
-  aspectRatio: number
-  base64: string
-  sizes: string
-  src: string
-  srcSet: string
-  srcSetWebp: string
-  srcWebp: string
-}
-
-export interface ChildImage {
-  childImageSharp: {
-    gatsbyImageData: IGatsbyImageData
-  }
-};
+import { ChildImageWithUrl } from '../../hooks/use-nodes-details'
 
 export interface ArticleSummerizedProps {
   categories: Array<string>
@@ -31,6 +14,8 @@ export interface ArticleSummerizedProps {
   epigraphAuthor?: string
   articleUrl: string
   categoryUrl: string
+  imageAlt?: string
+  image?: ChildImageWithUrl
 }
 
 const ArticleSummerized: React.FunctionComponent<ArticleSummerizedProps> = ({
@@ -44,6 +29,8 @@ const ArticleSummerized: React.FunctionComponent<ArticleSummerizedProps> = ({
   dateFormatted,
   articleUrl,
   categoryUrl,
+  imageAlt,
+  image,
 }) => (
   <article css={styles.wrapper}>
     <Header
@@ -54,6 +41,8 @@ const ArticleSummerized: React.FunctionComponent<ArticleSummerizedProps> = ({
       dateFormatted={dateFormatted}
       articleUrl={articleUrl}
       categoryUrl={categoryUrl}
+      imageAlt={imageAlt}
+      image={image}
       summerized
     />
     <Abstract text={abstract} summerized />
@@ -65,8 +54,7 @@ const styles = {
   wrapper: css`
     border: 1.5px solid var(--text-link);
     margin: 0 auto 2rem;
-    border-radius: 10px;
-    padding: 1.4rem 0 0.4rem 0.4rem;
+    border-radius: 4px;
     
     max-width: calc(800px + 1rem);
   `,

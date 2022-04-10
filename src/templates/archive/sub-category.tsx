@@ -17,7 +17,6 @@ const SubCategoryArticles: React.FunctionComponent<{ maxTitleLength: number, cat
         const numOfSubArticles = each.subCategories.map(eachSubCategory =>
           eachSubCategory.articles.length
         ).reduce((accumulator, curr) => accumulator + curr, 0)
-        console.log(`${numOfSubCategories} ${numOfSubArticles}`)
         nestedHeightCorrection += numOfSubCategories * 36
         nestedHeightCorrection += numOfSubArticles * 31
       }
