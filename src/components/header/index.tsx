@@ -96,7 +96,7 @@ const Header = ({ siteTitle, showMenu, toggleShowMenu }: { siteTitle: string, sh
               <Switch showMenu={showMenu} toggleShowMenu={toggleShowMenu} />
             </div>
             <div css={styles.brand}>
-              <Link to="/" onClick={close}>
+              <Link to="/">
                 {siteTitle}
               </Link>
             </div>

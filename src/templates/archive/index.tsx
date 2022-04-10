@@ -74,6 +74,7 @@ const convertNodeArticleToSimpleArticle = (nodeArticle: NodeArticle): Article =>
 
 // CategoryArticle
 const searchAndAppendCategory = (index: number, categories: Array<string>, categoryMap: Array<CategoryArticle>, article: NodeArticle) => {
+  console.log(categories)
   const totalCategory = categories.length
   const currentCategory = categories[index]
 

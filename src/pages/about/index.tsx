@@ -1,11 +1,11 @@
 import { css } from "@emotion/react"
 import styled from "@emotion/styled"
 import * as React from "react"
-import { universities, University } from "./resume/educations"
-import { companies, Company } from "./resume/experiences"
-import { activities, Activity } from "./resume/extracurricular"
-import { Paper, papers } from "./resume/papers"
-import { Patent, patents } from "./resume/patents"
+import { universities, University } from "../../templates/resume/educations"
+import { companies, Company } from "../../templates/resume/experiences"
+import { activities, Activity } from "../../templates/resume/extracurricular"
+import { Paper, papers } from "../../templates/resume/papers"
+import { Patent, patents } from "../../templates/resume/patents"
 
 const Highlight = styled('a')(() => ({
   fontWeight: 'bold',
