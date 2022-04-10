@@ -1,0 +1,5 @@
+{
+    "componentChunkName": "component---src-templates-archive-index-tsx",
+    "path": "/js",
+    "result": {"data":{"allFile":{"edges":[{"node":{"childMdx":{"id":"c36ae364-1ecf-5e83-956e-5f60ea32fcc3","slug":"refer-copy-post/","frontmatter":{"date":"October 26, 2019","title":"개츠비(Gatsby) 프로젝트에 타입스크립트(TypeScript) 세팅하기","category":"js","categoryNames":["Gatsby","Setup"]}}}}]}},"pageContext":{"nodeCategory":"development","nodePath":"js"}},
+    "staticQueryHashes": ["167127140","63159454","920437704"]}

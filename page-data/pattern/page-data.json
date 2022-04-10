@@ -1,0 +1,5 @@
+{
+    "componentChunkName": "component---src-templates-archive-index-tsx",
+    "path": "/pattern",
+    "result": {"data":{"allFile":{"edges":[{"node":{"childMdx":{"id":"63a7dfae-9d1d-5e94-88ac-20be8cbd5043","slug":"factory-method-and-abstract-factory-pattern/","frontmatter":{"date":"February 22, 2019","title":"2. 팩토리 '메소드' 패턴 & '추상' 팩토리 패턴","category":"pattern","categoryNames":["Design Pattern"]}}}},{"node":{"childMdx":{"id":"e39c731d-afc8-52ce-bb2e-9389683a7ccb","slug":"two-principles-on-oop/","frontmatter":{"date":"December 30, 2018","title":"0. 객체지향 프로그래밍에서의 제 1, 2 원칙","category":"pattern","categoryNames":["Design Pattern"]}}}},{"node":{"childMdx":{"id":"68602a86-9089-5056-9caa-c7732e8f2782","slug":"a-introduction-to-design-patterns/","frontmatter":{"date":"February 21, 2019","title":"1. '디자인 패턴'이란?","category":"pattern","categoryNames":["Design Pattern"]}}}}]}},"pageContext":{"nodeCategory":"development","nodePath":"pattern"}},
+    "staticQueryHashes": ["167127140","63159454","920437704"]}
