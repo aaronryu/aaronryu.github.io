@@ -4,6 +4,7 @@ import { MDXRenderer } from 'gatsby-plugin-mdx'
 import { GatsbyImage } from 'gatsby-plugin-image'
 import { Link } from 'gatsby'
 import { ChildImage, ChildImageWithUrl } from '../../hooks/use-nodes-details'
+import Comment from "../../components/comment"
 
 export interface ArticleProps {
   categories: Array<string>
@@ -56,7 +57,7 @@ const Article: React.FunctionComponent<ArticleProps> = ({
     <Epigraph text={epigraph} author={epigraphAuthor} />
     <Meta date={date} dateFormatted={dateFormatted} />
     <Body localImages={embeddedImagesLocal} body={body} />
-    <Footer />
+    <ArticleFooter />
   </article>
 )
 
@@ -133,8 +134,10 @@ export const Body = ({ localImages, body, summerized }: { localImages?: ChildIma
 )
 
 // todo - 출처 표기랑 기존에 있던 CC 포맷 넣으면 좋을거같음. 그거 이쁨. 그리고 Buy me a coffee & DISQUS 도 넣을것
-export const Footer = ({ summerized }: { summerized?: boolean }) => (
-  <footer css={styles.footer}></footer>
+export const ArticleFooter = ({ summerized }: { summerized?: boolean }) => (
+  <footer>
+    <Comment />
+  </footer>
 )
 
 const styles = {
@@ -526,10 +529,6 @@ const styles = {
         'Nimbus Mono L', 'Courier New', 'Courier', monospace;
       color: var(--text-auxiliary);
     }
-  `,
-  footer: css`
-    margin: 5rem auto 0;
-    max-width: 650px;
   `,
 }
 
