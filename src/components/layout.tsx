@@ -18,6 +18,7 @@ import { Menu } from "./menubar/navigator"
 import UseNodeDetails, { NodeDetail } from "../hooks/use-nodes-details"
 import { CategorizedNodes, categorizeNodes } from "../utils/categorizer"
 import { makeMenus } from "../utils/menu"
+import HeaderTitleSpy from "./header-title-spy"
 
 interface Props {
   location: any
@@ -47,40 +48,19 @@ const Layout: React.FunctionComponent<Props> = ({ location, children }) => {
   const home: Array<NodeDetail> = UseNodeDetails()
   const categorizedDevelop: Map<string, CategorizedNodes> = categorizeNodes(home)
   const developMenu = makeMenus({ to: '/development', label: 'Development' }, categorizedDevelop)
-
-  const isMain = !!(MAIN.find(each => location.pathname.startsWith(each)))
+  
+  const isMain = !!MAIN.find(each => location.pathname === each)
   const isNotArticle = !!(PATHNAME_NOW_SHOW_MENU_DEFAULTLY.find(each => location.pathname.startsWith(each)))
 
   menu.push(...developMenu)
   menu.push({ to: '/about', label: 'About' })
   // console.log(menu)
   const { title, description, author, deployBranch, linkGithub, linkFacebook, linkTwitter } = useSiteMetadata()
-  const spy = useRef() as React.MutableRefObject<HTMLDivElement>;
   const meta: Array<MetaImage | MetaOption> =
     [{ property: 'og:image', content: '/images/cover-todo-change.png' }]
   if (deployBranch !== 'master')
     meta.push({ name: 'robots', content: 'noindex,nofollow' })
   
-  // Layout 에서 공통적으로 제목에 해당하는 스크롤
-  useEffect(() => {
-    if (isMain || isNotArticle) {
-      document.body.classList.remove('scrolled-a-bit')
-    } else {
-      const observer = new window.IntersectionObserver(
-        ([entry]) => {
-          if (!entry.intersectionRatio) {
-            document.body.classList.add('scrolled-a-bit')
-          } else {
-            document.body.classList.remove('scrolled-a-bit')
-          }
-        },
-        { rootMargin: '0px' }
-      )
-      observer.observe(spy.current)
-      return observer.disconnect 
-    }
-  }, [])
-
   const notShowMenuDefaultly = location ? isNotArticle : true;
   const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions())
   const [showMenu, setShowMenu] = useState(notShowMenuDefaultly ? false : windowDimensions.width > 1280)
@@ -117,7 +97,7 @@ const Layout: React.FunctionComponent<Props> = ({ location, children }) => {
         description={description}
       />
       <Global styles={styles.global} />
-      <div css={styles.scrollSpy} ref={spy} />
+      <HeaderTitleSpy active={!(isMain || isNotArticle)} pathname={location.pathname} />
       <div css={styles.wrapper}>
         <Header siteTitle={title} showMenu={showMenu} toggleShowMenu={() => setShowMenu(!showMenu)} />
         <LeftSideMenuBar location={location.pathname} menu={menu} visible={showMenu} onClose={close} currentWidth={windowDimensions.width} links={{ github: linkGithub, facebook: linkFacebook, twitter: linkTwitter }}  />
@@ -218,7 +198,6 @@ const styles = {
     z-index: -999;
     top: 0;
     width: 1px;
-    height: 210px;
   `,
   wrapper: css`
     display: flex;

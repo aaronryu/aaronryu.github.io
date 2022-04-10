@@ -37,7 +37,7 @@ const TableOfContents: React.FunctionComponent<Props> = ({ toc, depth, currentHe
   return (
     <div
       css={{
-        'ul:first-child': {
+        'ul:first-of-type': {
           marginLeft: '-0.8rem',
         },
         // 낮은 depth가 더 안쪽으로 들어가도록 모든 ul에 marginLeft를 부여한다.
@@ -63,7 +63,7 @@ const TableOfContents: React.FunctionComponent<Props> = ({ toc, depth, currentHe
         },
         '@media only screen and (max-width: 1024px)': {
           margin: '1rem 1rem 1rem calc(800px - 10px)',
-          'ul:first-child': {
+          'ul:first-of-type': {
             marginLeft: '-1rem',
           },
           // 낮은 depth가 더 안쪽으로 들어가도록 모든 ul에 marginLeft를 부여한다.
