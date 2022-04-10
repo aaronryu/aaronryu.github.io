@@ -1,0 +1,153 @@
+---
+title: "2. 팩토리 '메소드' 패턴 & '추상' 팩토리 패턴"
+category: pattern
+categoryNames: [ 'Design Pattern' ]
+author: Aaron
+date: 2019-02-22 02:33:46
+updateDate: 
+deck: 개발을 하다보면 '상태에 따라 다른 플로우'를 처리해야할때가 있다. 단순히 예/아니오 같은 단일 상태라면 if 문을 사용하도록, 다중 상태라면 if-else 혹은 switch 를 사용하면 된다. 하지만 '다른 플로우'에 해당하는 로직이 복잡하다면, if-else 사이에 100줄이 넘는 코드가 들어가게 된다. 과연 재사용성이 높다고 할 수 있는가? 코드를 읽기 난해할뿐 아니라 100줄 사이에 반복되는 로직도 분명히 있을것이다. '다른 로직'과 '공통 로직'을 나누고 '다른 로직'에 해당하는 부분은 상태에 따라 다른 구현체를 반환하거나, 구현체를 만들어주는것에 해당하는 패턴이 필요하다.
+abstract: 상태에 따른 구현체를 반환하는것, 구현체 반환하는 주체가 함수이기에 이를 팩토리 메소드라 부르며 해당 패턴을 '팩토리 메소드 패턴'이라고 부른다. 팩토리 메소드에게 '팩토리'를 뺏어서 메소드는 그냥 단순 구현체를 반환하도록, 상황에 따른 구현은 추상 팩토리 인터페이스에게 위임한것이 '추상 팩토리 패턴'이라고 부른다. 상황에 따른 구현(팩토리)을 메소드가 하면 팩토리 "메소드" 패턴, 인터페이스가 하면 "추상" 팩토리 패턴인것이다.
+---
+
+## '팩토리'란 무엇인가?
+
+팩토리란, 단순하게 자판기를 생각하면 된다. '음료수' 자판기에선 '음료수'가 나올테고, '과자' 자판기에선 '과자'가 나온다. 자판기(VendingMachine)와 상품(Product)은 모두 Interface 로 정의되어있기 때문에 '상품(Product)'을 음료수로 구현하면 '자판기(VendingMachine)'는 음료수 자판기로 구현하면 된다.
+
+- Interface: '자판기'와 '상품'
+``` Java
+	VendingMachine machine;
+    Product product;
+```
+
+- Class: '음료수 자판기'와 '음료수'
+``` Java
+	VendingMachine machine = new BeverageVendingMachine();
+    Product product = machine.get();
+```
+
+팩토리는 위와 같이 **<u>상황에 따라 구현</u>**하는것을 뜻한다.
+
+### '팩토리 메소드'란 무엇인가?
+
+팩토리 메소드는 말 그대로 **<u>상황에 따라 구현</u>**하는 팩토리의 역할을 하는 메소드이다. 어떤 Product 이냐에 따라 Product 구현체를 반환하는 함수로 위의 예시에선 `machine.get()`에 해당한다.
+
+## 팩토리 메소드 패턴
+
+팩토리 메소드 패턴은 인터페이스 내 정의되어있는 '팩토리 메소드'를 **<u>상황에 따른 구현 객체</u>**를 반환하도록 상황에 맞춰 '구현 팩토리 메소드'들을 만드는 것이다. 이를 사용함으로써 얻는 이득은 무엇일지 살펴보자.
+
+- **지양: 상태에 따른 상품 반환 - 상태의 내부화**
+	- 상태 관리의 유지보수성이 떨어진다.
+	- 상태 관리의 중복성이 증가한다.
+		- 본 예제에선 `get` 함수만 사용하지만, 함수가 많아짐에 따라 if-else 문은 반복될것이다.
+``` Java
+class VendingMachine {
+	public Product get(String type) {
+		if (type == "beverage") {
+			return new Beverage();
+		} else if (type == "snack") {
+			return new Snack();
+		}
+	}
+}
+```
+
+``` Java
+	VendingMachine machine = new VendingMachine();
+	Product product = machine.get('beverage');
+```
+
+- **지향: 상태에 따른 상품 반환 - 상태의 외부화(Dependency Inversion)**
+	- 상태 관리의 중앙화(유지보수성, 중복성 해결)
+``` Java
+interface VendingMachine {
+	public Product get()
+}
+
+class BeverageVendingMachine implements VendingMachine {
+	public Product get() {
+		return new Beverage();
+	}
+}
+
+class SnackVendingMachine implements VendingMachine {
+	public Product get() {
+		return new Snack();
+	}
+}
+```
+
+``` Java
+	VendingMachine machine = new BeverageVendingMachine();
+    Product product = machine.get();
+```
+
+VendingMachine 인터페이스 내 팩토리 메서드를 상황에 맞게 어떤 구현체를 반환할지 구현하면 된다. 더 이상 사용하지 않는 상황의 구현 클래스는 단순히 삭제하면 되고, 추가 상황에 따른 처리가 필요하면 클래스만 만들면된다.
+
+## 추상 팩토리 패턴
+
+그런데, 음료수의 종류가 점점 더 다양해진다고 가정하자. 팩토리 메서드 패턴을 사용한다면 다음과 같이 매번 클래스가 생성될텐데 이대로 괜찮을까? 아무리 많은 종류의 음료수가 생겨나도 결국 음료수(Beverage)라는 분류는 바뀌지 않는다. 단지 내용물들이 바뀔 뿐이다.
+
+``` Java
+interface VendingMachine {
+	public Product get()
+}
+
+class FruitBeverageVendingMachine implements VendingMachine {
+	public Product get() {
+		return new FruitBeverage();
+	}
+}
+
+class SparklingBeverageVendingMachine implements VendingMachine {
+	public Product get() {
+		return new SparklingBeverage();
+	}
+}
+
+class TeaBeverageVendingMachine implements VendingMachine {
+	public Product get() {
+		return new TeaBeverage();
+	}
+}
+
+...
+```
+
+FruitBeverage, SparklingBeverage, TeaBeverage 모두 음료수라는 분류 안에 포함되고 실제로 3 개의 내부 클래스 로직들은 소폭의 차이만 있을뿐 대다수는 같을것이다. `Beverage` 라는 음료수 클래스를 만들면 그 안에 들어가는 재료들만 바꿔주면 될것이다. 그렇게 다음과 같이 `...Beverage` 클래스가 양산되는 본 중복성을 해결하게된다.
+
+``` Java
+interface VendingMachine {
+	Maker maker;
+	public Product get() {
+		return new Beverage(maker);
+	}
+}
+
+class FruitBeverageVendingMachine implements VendingMachine {
+	Maker maker = new FruitBeverageMaker();
+}
+
+class SparklingBeverageVendingMachine implements VendingMachine {
+	Maker maker = new SparklingBeverageMaker();
+}
+
+class TeaBeverageVendingMachine implements VendingMachine {
+	Maker maker = new TeaBeverageMaker();
+}
+
+...
+```
+
+'팩토리 메서드 패턴'은 **팩토리 "메서드"가 <u>상황에 따른 구현 객체</u>를 반환**한다면, '추상 팩토리 패턴'은 **메소드는 범주 객체를 단순히 반환할뿐, <u>상황에 따른 상세 구현</u>은 "추상" 팩토리 인터페이스에 위임**한것이다.
+
+- '팩토리 메소드 패턴'은 상황에 따라 1, 2, 3 구현 객체를 반환하고
+- '추상 팩토리 패턴'은 A Category 범주 객체를 반환하고,
+	- 상황에 따른 구현을 '추상 팩토리 인터페이스'에게 위임한것이다.
+		- 메소드는 객체를 기계적으로 반환할 뿐, 무엇을 반환하는지 알 필요가 없다.
+		- 팩토리 메소드 패턴에서 **상황에 따른 생성/반환** 역할을 또 Dependency Inversion 한 셈이다.
+
+그렇다면 `...Beverage` 클래스가 양산되는것과 `...BeverageMaker` 클래스가 양산되는것은 사실상 동일한 것 아닌가? 맞다 동일하다. 그런데 왜 굳이 **상황에 따른 구현**의 책임을 추상 팩토리 인터페이스에게 위임한것인가? 
+
+> VendingMachine 은 제품을 제공하는 역할만 갖고, 제품 생산에 대한 책임은 BeverageMaker 가 나눠 갖기 위함이다.
+
+---

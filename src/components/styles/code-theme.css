@@ -1,0 +1,431 @@
+.light code,
+.light pre {
+  color: #393A34;
+  font-family: 'Fira Code', 'Consolas', 'Menlo', 'Monaco', 'Andale Mono WT', 'Andale Mono', 'Lucida Console', 'Lucida Sans Typewriter', 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', 'Liberation Mono', 'Nimbus Mono L', 'Courier New', 'Courier', monospace;
+  font-size: 0.9rem;
+  line-height: 1.7;
+}
+
+.light code[class*="language-"],
+.light pre[class*="language-"] {
+  font-family: 'Fira Code', 'Consolas', 'Menlo', 'Monaco', 'Andale Mono WT', 'Andale Mono', 'Lucida Console', 'Lucida Sans Typewriter', 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', 'Liberation Mono', 'Nimbus Mono L', 'Courier New', 'Courier', monospace;
+  font-size: 0.9rem;
+  line-height: 1.7;
+  direction:ltr;
+  text-align:left;
+  white-space:pre;
+  word-spacing:normal;
+  word-break:break-all;
+  -moz-tab-size:4;
+  -o-tab-size:4;
+  tab-size:4;
+  -webkit-hyphens:none;
+  -ms-hyphens:none;
+  hyphens:none;
+  background:#fefefe;
+  color:#499fbc;
+}
+.light pre[class*="language-"]::-moz-selection,
+.light pre[class*="language-"] ::-moz-selection,
+.light code[class*="language-"]::-moz-selection,
+.light code[class*="language-"] ::-moz-selection {
+  text-shadow: none;
+  background:#fefefe;
+}
+.light pre[class*="language-"]::selection,
+.light pre[class*="language-"] ::selection,
+.light code[class*="language-"]::selection,
+.light code[class*="language-"] ::selection {
+  text-shadow:none;
+  background:#fefefe;
+}
+.light pre[class*="language-"] {
+  margin: 0;
+  padding: 1em;
+  overflow:auto;
+}
+.light :not(pre) > code[class*="language-"] {
+  padding: 0.1em;
+  border-radius:.3em;
+}
+.light .token.comment,
+.light .token.prolog,
+.light .token.doctype,
+.light .token.cdata {
+  color:#c2c1b7;
+}
+.light .token.punctuation {
+  color:#c2c1b7;
+}
+.light .token.namespace {
+  opacity:.7;
+}
+.light .token.tag,
+.light .token.operator,
+.light .token.number{color:#2f7289}.token.property,
+.light .token.function{color:#b7a21a}.token.tag-id,
+.light .token.selector,
+.light .token.atrule-id{color:#84740b}code.language-javascript,
+.light .token.attr-name{color:#b7a21a}code.language-css,
+.light code.language-scss,
+.light .token.boolean,
+.light .token.string,
+.light .token.entity,
+.light .token.url,
+.light .language-css .token.string,
+.light .language-scss .token.string,
+.light .style .token.string,
+.light .token.attr-value,
+.light .token.keyword,
+.light .token.control,
+.light .token.directive,
+.light .token.unit,
+.light .token.statement,
+.light .token.regex,
+.light .token.atrule{color:#3e91ac}.token.placeholder,
+.light .token.variable{color:#7dc2d9}.token.deleted{text-decoration:line-through}.token.inserted{border-bottom:1px dotted #84740b;text-decoration:none}.token.italic{font-style:italic}.token.important,
+.light .token.bold{font-weight:bold}
+.light .token.important{color:#b7a21a}
+.light .token.entity{cursor:help}
+.light pre>code.highlight{outline:0.4em solid #b7a21a;outline-offset:.4em}
+.light .line-numbers .line-numbers-rows{border-right-color:#f4f3f1}
+.light .line-numbers-rows>span:before{color:#d5d4cd}
+.light .line-highlight{background:rgba(132,116,11,0.2);background:-webkit-gradient(linear, left top, right top, color-stop(70%, rgba(132,116,11,0.2)), to(rgba(132,116,11,0)));background:linear-gradient(to right, rgba(132,116,11,0.2) 70%, rgba(132,116,11,0))}
+
+/*# sourceMappingURL=prism-base2tone-lake-light.css.map */
+/**
+ * VS theme by Andrew Lock (https://andrewlock.net)
+ * Inspired by Visual Studio syntax coloring
+ */
+
+.light code[class*="language-"],
+.light pre[class*="language-"] {
+    color: #393A34;
+    font-family: 'Fira Code', 'Consolas', 'Menlo', 'Monaco', 'Andale Mono WT', 'Andale Mono', 'Lucida Console', 'Lucida Sans Typewriter', 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', 'Liberation Mono', 'Nimbus Mono L', 'Courier New', 'Courier', monospace;
+    direction: ltr;
+    text-align: left;
+    white-space: pre;
+    word-spacing: normal;
+    word-break:break-all;
+    font-size: 0.9rem;
+    line-height: 1.7;
+
+    -moz-tab-size: 4;
+    -o-tab-size: 4;
+    tab-size: 4;
+
+    -webkit-hyphens: none;
+    -moz-hyphens: none;
+    -ms-hyphens: none;
+    hyphens: none;
+}
+
+.light pre[class*="language-"]::-moz-selection,
+.light pre[class*="language-"] ::-moz-selection,
+.light code[class*="language-"]::-moz-selection,
+.light code[class*="language-"] ::-moz-selection {
+    background: #C1DEF1;
+}
+
+.light pre[class*="language-"]::selection,
+.light pre[class*="language-"] ::selection,
+.light code[class*="language-"]::selection,
+.light code[class*="language-"] ::selection {
+    background: #C1DEF1;
+}
+
+/* Code blocks */
+.light pre[class*="language-"] {
+    overflow: auto;
+    border: 1px solid #e9ecef;
+    border-radius: 4px;
+    background-color: #fefefe;
+}
+
+/* Inline code */
+.light :not(pre) > code[class*="language-"] {
+    padding: .2em;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    background:#fefefe;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+}
+
+.light .token.comment,
+.light .token.prolog,
+.light .token.doctype,
+.light .token.cdata {
+    color: #008000; font-style: italic;
+}
+
+.light .token.namespace {
+    opacity: .7;
+}
+
+.light .token.string {
+    color: #A31515;
+}
+
+.light .token.punctuation,
+.light .token.operator {
+    color: #393A34; /* no highlight */
+}
+
+.light .token.url,
+.light .token.symbol,
+.light .token.number,
+.light .token.boolean,
+.light .token.variable,
+.light .token.constant,
+.light .token.inserted {
+    color: #36acaa;
+}
+
+.light .token.atrule,
+.light .token.keyword,
+.light .token.attr-value,
+.light .language-autohotkey .token.selector,
+.light .language-json .token.boolean,
+.light .language-json .token.number,
+.light code[class*="language-css"]{
+    color: #0000ff;
+}
+
+.light .token.function {
+    color: #393A34;
+    font-style: italic;
+}
+.light .token.deleted,
+.light .language-autohotkey .token.tag {
+    color: #9a050f;
+}
+
+.light .token.selector,
+.light .language-autohotkey .token.keyword {
+    color: #00009f;
+}
+
+.light .token.important,
+.light .token.bold {
+    font-weight: bold;
+}
+
+.light .token.italic {
+    font-style: italic;
+}
+
+.light .token.class-name,
+.light .language-json .token.property {
+    color: #2B91AF;
+}
+
+.light .token.tag,
+.light .token.selector {
+    color: #800000;
+}
+
+.light .token.attr-name,
+.light .token.property,
+.light .token.regex,
+.light .token.entity {
+    color: #ff0000;
+}
+
+.light .token.directive.tag  .tag {
+    background: #ffff00;
+    color: #393A34;
+}
+
+/* overrides color-values for the Line Numbers plugin
+ * http://prismjs.com/plugins/line-numbers/
+ */
+.light .line-numbers .line-numbers-rows {
+  border-right-color: #a5a5a5;
+}
+
+.light .line-numbers-rows > span:before {
+  color: #2B91AF;
+}
+
+/* overrides color-values for the Line Highlight plugin
+* http://prismjs.com/plugins/line-highlight/
+*/
+.light .line-highlight {
+  background: rgba(193, 222, 241, 0.2);
+  background: -webkit-linear-gradient(left, rgba(193, 222, 241, 0.2) 70%, rgba(221, 222, 241, 0));
+  background: linear-gradient(to right, rgba(193, 222, 241, 0.2) 70%, rgba(221, 222, 241, 0));
+}
+
+/* Dark Theme */
+
+.dark code[class*='language-'],
+.dark pre[class*='language-'] {
+  color: #d6deeb;
+  font-size: 0.9rem;
+  font-family: 'Fira Code', 'Consolas', 'Menlo', 'Monaco', 'Andale Mono WT', 'Andale Mono', 'Lucida Console', 'Lucida Sans Typewriter', 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', 'Liberation Mono', 'Nimbus Mono L', 'Courier New', 'Courier', monospace;
+  text-align: left;
+  white-space: pre;
+  word-spacing: normal;
+  word-break: normal;
+  word-wrap: normal;
+  line-height: 1.7;
+
+  -moz-tab-size: 4;
+  -o-tab-size: 4;
+  tab-size: 4;
+
+  -webkit-hyphens: none;
+  -moz-hyphens: none;
+  -ms-hyphens: none;
+  hyphens: none;
+}
+
+@media only screen and (max-width: 700px) {
+  .light code[class*="language-"],
+  .light pre[class*="language-"],
+  .dark code[class*='language-'],
+  .dark pre[class*='language-'] {
+    font-size: 0.8rem;
+  }
+};
+
+
+@media only screen and (max-width: 600px) {
+  .light code[class*="language-"],
+  .light pre[class*="language-"],
+  .dark code[class*='language-'],
+  .dark pre[class*='language-'] {
+    font-size: 0.7rem;
+  }
+};
+
+.dark pre[class*='language-']::-moz-selection,
+.dark pre[class*='language-'] ::-moz-selection,
+.dark code[class*='language-']::-moz-selection,
+.dark code[class*='language-'] ::-moz-selection {
+  text-shadow: none;
+  background: rgba(29, 59, 83, 0.99);
+}
+
+.dark pre[class*='language-']::selection,
+.dark pre[class*='language-'] ::selection,
+.dark code[class*='language-']::selection,
+.dark code[class*='language-'] ::selection {
+  text-shadow: none;
+  background: rgba(29, 59, 83, 0.99);
+}
+
+@media print {
+  .dark code[class*='language-'],
+  .dark pre[class*='language-'] {
+    text-shadow: none;
+  }
+}
+
+/* Code blocks */
+.dark pre {
+  padding: 1em;
+  margin: 0;
+  overflow: auto;
+}
+
+.dark :not(pre) > code,
+.dark pre {
+  color: white;
+  /* background: #011627; */
+  background: #23212c77;
+}
+
+.dark :not(pre) > code {
+  padding: 0.1em;
+  border-radius: 0.3em;
+  white-space: normal;
+}
+
+.dark .token.comment,
+.dark .token.prolog,
+.dark .token.cdata {
+  color: rgb(99, 119, 119);
+  font-style: italic;
+}
+
+.dark .token.punctuation {
+  color: rgb(199, 146, 234);
+}
+
+.dark .namespace {
+  color: rgb(178, 204, 214);
+}
+
+.dark .token.deleted {
+  color: rgba(239, 83, 80, 0.56);
+  font-style: italic;
+}
+
+.dark .token.symbol,
+.dark .token.property {
+  color: rgb(128, 203, 196);
+}
+
+.dark .token.tag,
+.dark .token.operator,
+.dark .token.keyword {
+  color: rgb(127, 219, 202);
+}
+
+.dark .token.boolean {
+  color: rgb(255, 88, 116);
+}
+
+.dark .token.number {
+  color: rgb(247, 140, 108);
+}
+
+.dark .token.constant,
+.dark .token.function,
+.dark .token.builtin,
+.dark .token.char {
+  color: rgb(130, 170, 255);
+}
+
+.dark .token.selector,
+.dark .token.doctype {
+  color: rgb(199, 146, 234);
+  font-style: italic;
+}
+
+.dark .token.attr-name,
+.dark .token.inserted {
+  color: rgb(173, 219, 103);
+  font-style: italic;
+}
+
+.dark .token.string,
+.dark .token.url,
+.dark .token.entity,
+.dark .language-css .token.string,
+.dark .style .token.string {
+  color: rgb(173, 219, 103);
+}
+
+.dark .token.class-name,
+.dark .token.atrule,
+.dark .token.attr-value {
+  color: rgb(255, 203, 139);
+}
+
+.dark .token.regex,
+.dark .token.important,
+.dark .token.variable {
+  color: rgb(214, 222, 235);
+}
+
+.dark .token.important,
+.dark .token.bold {
+  font-weight: bold;
+}
+
+.dark .token.italic {
+  font-style: italic;
+}
