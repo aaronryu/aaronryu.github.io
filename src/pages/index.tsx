@@ -7,11 +7,10 @@ import { useEffect, useRef, useState } from "react"
 
 
 const IndexPage: React.FunctionComponent = () => {
-  const MAX_SUMMERY_QUERY_SIZE = 20
   const PAGE_SIZE = 4
   const [limit, setLimit] = useState(PAGE_SIZE)
 
-  const nodeDetails: Array<NodeDetail> = UseNodeDetails(undefined, MAX_SUMMERY_QUERY_SIZE)
+  const nodeDetails: Array<NodeDetail> = UseNodeDetails()
   const totalCount = nodeDetails.length
   const allReceived = totalCount <= limit
 
