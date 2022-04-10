@@ -19,6 +19,7 @@ import UseNodeDetails, { NodeDetail } from "../hooks/use-nodes-details"
 import { CategorizedNodes, categorizeNodes } from "../utils/categorizer"
 import { makeMenus } from "../utils/menu"
 import HeaderTitleSpy from "./header-title-spy"
+import Footer from "./footer"
 
 interface Props {
   location: any
@@ -102,7 +103,7 @@ const Layout: React.FunctionComponent<Props> = ({ location, children }) => {
         <Header siteTitle={title} showMenu={showMenu} toggleShowMenu={() => setShowMenu(!showMenu)} />
         <LeftSideMenuBar location={location.pathname} menu={menu} visible={showMenu} onClose={close} currentWidth={windowDimensions.width} links={{ github: linkGithub, facebook: linkFacebook, twitter: linkTwitter }}  />
         <main css={styles.main}>{children}</main>
-        {/* <Footer author={author} /> */}
+        <Footer />
       </div>
     </>
   )
