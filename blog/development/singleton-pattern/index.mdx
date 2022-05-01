@@ -1,0 +1,228 @@
+---
+title: "6. 싱글턴 패턴, 그리고 Race Condition"
+category: pattern
+categoryNames: [ 'Design Pattern', 'Creational' ]
+author: Aaron
+date: 2019-03-02 21:15:18
+updateDate: 
+deck: 코드를 작성하다보면 변수나 메서드를 하나만 정의/생성하여 모든곳에서 공유하고 싶을때가 있다. 이에 두가지 솔루션이 있다. 첫번째는 정적 변수/메서드이고, 두번째는 이번에 배울 싱글턴 '객체'이다.
+abstract: 먼저 JVM 내 Heap 영역과 Static 영역의 차이를 통해 정적 변수/메소드를 배우고, 싱글턴 '객체'는 앞선 정적 변수/메소드와 어떤점에서 다른지를 비교해보며 배울것이다. 그 다음 단일 객체에 너무 많은 요청이 한번에 몰리면 발생하는 Race Condition 과 그에 대한 솔루션도 함께 알아보도록 한다.
+image: ./singleton-comic-1-en-2x.png
+imageAlt: "Singleton Comic"
+embeddedImagesLocal:
+  - './race-condition.png'
+---
+
+import { getImage, GatsbyImage } from 'gatsby-plugin-image';
+
+코드를 작성하다보면 **변수**나 **메서드**를 **단 하나만 생성하여 모든 곳에서 공유**하여 사용할 때가 있다. 클래스 내 정적 변수/메서드를 정의하여 사용하는 방법과 싱글턴 객체를 단 하나만 생성하는 방법이 있다.
+
+# 정적 변수 및 메서드
+
+가장 먼저 객체 초기화 없이 해당 클래스의 정적 변수와 정적 메서드를 사용하는 방법이다. 이는 동적 부분의 Heap 영역이 아닌 Static 영역에 적재함으로써 프로그램 내 모든 스레드들이 단일 변수와 메서드에 접근할 수 있게 함으로써 이뤄진다. Heap 과 Static 영역의 차이는 아래서 이해할 수 있다.
+
+## Java, JVM 메모리
+
+Java 는 JVM 위에서 프로그램을 작동시킨다. JVM 의 M 은 Machine 이 뜻하는대로 작은 OS 에 해당하고 Garbage Collection 과 같은 자체 메모리 관리 체계를 갖고있다. 메모리 영역은 아래 3개로 나눠져있다.
+
+- **변하지 않는 값**을 담는 **<u>Static 영역</u>** (이를 칭하는 용어는 아래 총 3가지)
+  - 변하지 않는 값을 담는다는 의미에서 **Static 영역**이라 부르기도 하고
+  - 객체화 되기 전 Class 그 자체를 담는다는 의미에서 **Class 영역**이라 부르기도 하고 (Class Loading)
+  - 객체화 되기 전 Class 의 함수를 담는다는 의미에서 **Method 영역**이라 부르기도 한다.
+- **변하는 값**을 담는 **<u>Heap 영역</u>**과 **<u>Stack 영역</u>**
+  - **<u>Stack 영역</u>**: 함수 내 '파라미터'나 '로컬변수'와 같이 그 함수 블록 내에만 생존하는 변수들을 저장
+  - **<u>Heap 영역</u>**: 객체들을 저장
+
+객체 생성의 가장 근간이 되는 Class 는 바이트코드 형태로 Static 영역에 적재된다. 그 Class 를 객체화할때마다 그 객체와 객체의 변수, 메서드는 위 클래스 바이트코드를 참조하여 생성된 뒤 Heap 영역에 적재된다. **정적 변수 및 메서드는 객체없이 Class 에 존재하는것이므로 Static 영역에 저장**된다.
+
+Static 영역에 Class 적재 및 객체 생성을 담당하는 것을 **Classloader** 라고 부르는데, 이 로더는 커스텀하게 바꾸지 않았다면 일반적으로 JVM 위에 하나만 존재한다. 이 말은 즉슨 만약 두 개의 클래스로더를 갖게 변경한다면 정적 변수가 각 클래스로더의 Static 영역에 적재된다는 뜻이다.
+
+# 싱글턴 패턴
+
+앞서 배운 정적 변수 및 메서드는 다음과 같이 정리할 수 있으며, 이어 싱글턴과 차이점을 기반으로 이해하면 좋다.
+
+## 정적 변수 및 메서드
+
+- **Static 영역**에 생성되는 **클래스 변수, 메서드**
+- 프로그램의 시작과 동시에 클래스로더 에 의해 바이트코드형태로 **Static 영역** 메모리에 바로 적재
+
+``` Java
+class Calculator {
+  // * Public: Can be initialized from outer
+  public Caculator() {}
+  // * Static: sum(a, b)
+  public static sum(Integer a, Integer a) {
+    return a + b;
+  }
+}
+```
+
+## 싱글턴 변수 및 메소드 = 단일 객체
+
+- **Heap 영역**에 생성되는 **객체 변수, 메서드**
+- 프로그램 실행 도중 필요한 그 시점에 객체로 **Heap 영역**에 적재
+  - 필요한 그 시점에 객체로 적재하는것을 **Lazy Loading** 이라하며, 이것이 사실상 싱글턴 패턴의 존재 의의
+  - 오랜기간 사용되지 않는다면 이후 GC
+
+``` Java
+class Calculator {
+  // * Priavte: Cannot be initialized from outer
+  private Caculator() {}
+  // * Non-Static: sum(a, b)
+  public sum(Integer a, Integer a) {
+    return a + b;
+  }
+
+  // * Singleton: Can be initialized only once using getInstance()
+  private static Calculator uniqueInstance;
+  public static Calculator getInstance() {
+    if (uniqueInstance == null) {
+      uniqueInstance = new Calculator();
+    }
+    return uniqueInstance;
+  }
+}
+```
+
+싱글턴은 이렇게보면 단순한 개념인데, 문제는 객체가 이미 존재하는지 여부를 판단하는 `getInstance()` 함수에 다수의 스레드들이 동시에 접근한다면, 각 스레드들이 객체가 아직 생성되지않았다고 독립적으로 판단하여 여러개의 객체를 생성할 수 있다는 점이다. 즉, 싱글턴 객체가 다수개가 생성/존재할 수 있다는것이다.
+
+이런 치명적인 문제에도 현업에서 사용할때 굳이 이 점을 크게 신경쓰지 않는 이유는 싱글턴 객체가 내부 변수/상태값을 갖고있지 않고 위의 `Caculator` 예시처럼 파라미터를 받아 그에 적절한 처리를 수행하는것이 대부분이기에, 싱글턴 객체임에도 다수개가 생성/존재한다해도 크게 문제될 것이 없기 때문이다.
+
+싱글턴 객체가 자체 상태값을 갖는 경우가 존재한다면 말이 달라진다. 두개의 싱글턴 객체를 각자 다른 스레드들이 바라본다면, 전혀 다른 상태를 보는 끔찍한 상황이 연출된다. 다수가 하나의 자원에 접근하는 상태를 경쟁 상태라 일컬으며, 영어로는 **Race Condition** 이라 부르고, 이에 대한 해결을 위해서는 '자~ 천천히 한명씩 들어오세요'의 **Lock** 을 적용해야한다. 당연히 성능저하는 덤이다.
+
+# Race Condition
+
+Java 의 객체, 변수, 메서드 모두 기본적으로 non-blocking 이기에, 앞에서 언급했듯 다수의 스레드에서 하나의 싱글턴 객체에 동시에 접근할 경우 **각 스레드에서 일관되지 못한 상태를 읽어가는 문제가 발생**한다.
+
+싱글턴 예로 사용됐던 **Caculator 클래스의 getInstance() 함수를 두 개의 스레드에서 동시에 진입했다고 가정**하자. 동시에 `if (uniqueInstance == null)` 구문에 진입했을때 **어느 스레드도 그 다음 라인인 `new Caculator()` 를 수행하지 않았다고 가정한다면 두 스레드 모두 uniqueInstance 가 null 인것으로 판단**한다. 그리고 그 다음 라인에 두 스레드 각각 새 객체를 생성하게 되고, 이렇게 된다면 두 스레드는 하나의 객체 함수가 아닌 각자의 객체 함수를 보게된다. 단순 계산 객체라면 큰 영향은 없겠지만 만약 하나의 상태를 공유하려는 객체라면 두 스레드가 서로 다른 상태를 보고있는 끔찍한 상황이 연출된다.
+
+``` Java
+Thread1: getInstance() 
+  if (uniqueInstance == null) {         // 2019-03-03 00:00:01
+    uniqueInstance = new Calculator();  // 2019-03-03 00:00:03 - Calculator 객체 1 생성 (Thread1)
+```
+
+``` Java
+Thread2: getInstance() 
+  if (uniqueInstance == null) {         // 2019-03-03 00:00:02
+    uniqueInstance = new Calculator();  // 2019-03-03 00:00:04 - Calculator 객체 2 생성 (Thread2)
+```
+
+이를 해결하기 위해 가장 단순하게 생각할 수 있는것은 **함수 단위의 blocking** 이다.
+
+## 함수 단위 Blocking - Synchronized
+
+다수의 스레드가 한 함수에 접근하려 한다면, 하나의 스레드가 해당 함수를 수행하는 동안에는 기다리도록 blocking 하는 기법이다. Java 가 제공하는 **synchronized** 키워드를 사용하면 손쉽게 해당 함수 호출을 blocking 할 수 있다. 이젠 Thread 1 이 해당 함수를 호출하고 끝날때까지 Thread 2 는 해당 함수 호출을 계속 기다려야한다. 이에 두 스레드가 한 함수를 동시에 호출할일은 없어진것으로 보인다.
+
+``` Java
+class Calculator {
+  ...
+
+  public static synchronized Calculator getInstance() {
+    if (uniqueInstance == null) {
+      uniqueInstance = new Calculator();
+    }
+    return uniqueInstance;
+  }
+}
+```
+
+하지만 싱글턴의 `getInstance()` 함수가 위 예시의 로직보다 더 복잡하고 수행시간이 길다면 다른 스레드들은 한 스레드가 해당 `getInstance()` 호출을 완료하는 그 긴 시간동안 멈춰야하는 성능상의 이슈가 있다. 이를 위해 함수 단위의 blocking 이 아닌 함수 내 딱 **그 변수만 집어서 blocking** 하는게 좋을것이다.
+
+## 변수 생성 단위 Blocking - Volatile (DCL)
+
+원래 목적은 **"변수"**의 스레드간 공유이기에, 굳이 함수 단위의 blocking 을 사용하여 변수 외 나머지 긴 로직 수행의 시간까지 손만 빨며 성능 이슈까지 발생시킬 이유는 없다. 똑똑한 프로그래머들의 고민 결과 **"함수"가 아닌 "변수" 단위의 Blocking** 을 고안해내었고 이를 **DCL (Double Checked Locking)**이라고 부른다. 왜 명칭이 Double Checked 인지는 아래 코드를 보면 객체 생성 로직 진입 전과 진입 후 생성하기전에 한번 더 null 여부를 검사하는것으로 미뤄짐작할 수 있다.
+
+- **함수 단위 Blocking - 함수에 synchronized 추가**
+``` Java
+  private static Calculator uniqueInstance;
+  public static synchronized Calculator getInstance() {
+    if (uniqueInstance == null) {
+      uniqueInstance = new Calculator();
+    }
+    return uniqueInstance;
+  }
+```
+
+- **변수 생성 단위 Blocking - 변수에 volatile 추가, 함수 내 해당 변수에 synchronized 추가**
+``` Java
+  private volatile static Calculator uniqueInstance;
+  public static Calculator getInstance() {
+    if (uniqueInstance == null) {
+      synchronized (Calculator.class) {
+        if (uniqueInstance == null) {
+          uniqueInstance = new Calculator();
+        }
+      }
+    }
+    return uniqueInstance;
+  }
+```
+
+기존 함수 Blocking 방식은 `getInstance()` 함수에 synchronized 가 붙어있는 반면, 변수 생성 단위 Blocking 에서는 변수에 volatile 이 추가되었고, 해당 함수 내에선 volatile 클래스를 synchronized 로 지정해준걸 알 수 있다.
+
+### Visibility(가시성) 문제
+
+모든 프로그램 및 스레드는 CPU 을 통해 연산들을 수행하고, 연산을 위한 변수값들은 "메인 메모리"로부터 CPU 바로 옆 "캐시"로 가져와 사용하게 된다. 만약 두 스레드가 각자 다른 CPU (멀티코어 환경) 에서 하나의 싱글턴 객체를 공유한다면 어떤 일이 발생할까? 
+
+<GatsbyImage
+    alt='Race Condition'
+    image={getImage(props.localImages[0])}
+    style={{ margin: '0 4rem' }}/>
+
+두 스레드가 공유하는 하나의 객체는 기본적으로 "메인 메모리"에 적재되어 있다.
+각 스레드가 각 CPU 에서 값을 변경하는 경우
+
+- 1) 먼저 메인 메모리로부터 캐시로 변수값을 가져오고,
+- 2) CPU 가 해당 캐시의 값을 변경하고,
+- 3) 캐시에 변경된 값을 메인 메모리에 작성(동기화)하는 과정을 거치게 된다.
+
+두 스레드가 동시에 변수의 값에 접근할 경우, 첫번째 스레드가 자신이 할당된 CPU 내 캐시의 변수값을 먼저 바꿨음에도 불구하고 아직 메인 메모리에 쓰지 않아 두번째 스레드는 변경된 값을 모른채 자신의 CPU 에서 독립적으로 값 변경을 수행하는 문제가 발생한다. 이 스레드간 변수 동기화 내지는 불일치 문제를 한 스레드의 값 업데이트를 다른 스레드에서는 볼 수 없다는 의미의 **가시성(Visibility) 문제**라고 부른다.
+
+다수 스레드가 하나의 CPU 에서 수행된다고 하더라도 JIT 컴파일러에 의해 어셈블리 레벨 코드 재배열(Reorder)이 발생하여 스레드 간 참조하는 변수값이 달라질 수 있다는 글도 보았던 기억이 난다.
+
+### DCL (Double Checked Locking) - Volatile 의 의미
+
+가시성 문제를 해결하기 위해 "캐시"와 "메인 메모리" 간 **읽은(READ) 값이 일치하도록 강제하는 것이 volatile** 키워드다. 변수에 volatile 키워드를 추가하면 해당 변수는 CPU 에서 "캐시"의 값을 읽을때 동시에 "메인 메모리"의 값을 Read 함을 보장한다. 한 스레드에서 값을 변경한다면 바로 메인 메모리에 적용되고 다른 스레드가 값을 읽을 때 최신의 값을 읽을 수 있게 되는것이다.
+
+하지만 두 스레드가 같은 메인 메모리 값을 가져다가 변경할 경우는 여전히 문제이기에, 값을 쓰는 작업에는 어쩔 수 없이 blocking 을 걸어야한다. **값을 변경(WRITE)하는 함수에 synchronized** 키워드를 통해 Blocking 을 걸어둔다. 이로써 한 스레드가 작성하고있다면 다른 스레드는 기다렸다가 앞 스레드가 작성을 마치면 바로 메인 메모리로부터 값을 읽어서 그 다음 쓰기를 진행하게 되는것이다. 여담으로 Transaction 최고 수준의 격리단계인 Isolation 단계에 해당하는 개념이기도 하다.
+
+## 변수 사용 단위 Blocking - Lazy Holder
+
+정말 이 글을 읽는 독자에게 미안하지만, 애석하게도 변수 생성 단위의 Blocking 으로 단일 생성이 '완벽히' 보장된것은 아니다. 세상에, CPU 캐시까지 고려했는데 무엇을 또 보아야하는것일까. 트랜지스터 레벨이라도 봐야하는 것일까? 아직 한발 남았다.
+
+**DCL 을 통해 객체의 단일 생성 자체는 보장**되었다. 다만 **단일 객체 생성 바로 직후**에 다른 스레드에서 해당 변수를 바로 사용하려 한다면, 아직 완전히 생성되지 못한 불완전 객체를 사용하게 될 수 있다는 문제가 존재한다. 단일 생성을 시작하면 해당 클래스의 `uniqueInstance = new Calculator()` 를 통해 생성자를 수행하게 될텐데, 생성자가 조금이라도 복잡하다면 온전한 객체가 만들어지기 까지는 조금의 시간이 더 걸릴 것이다. 하지만 해당 객체를 접근하는 다른 스레드는 해당 라인 `uniqueInstance = new Calculator()` 을 수행했음을 인지할뿐 객체가 온전히 만들어졌는지는 기다려주지 않는다. 이때 미처 다 온전하게 생성되지 않은 불완전한 객체를 다른 스레드에서 가져다가 사용하게 되는것이다. 이를 **out-of-order write 문제**라고 부른다.
+
+해결은 해당 객체가 **단순히 생성되었다** 여부가 아닌 **완벽히 생성되었다**는걸 보장하면 된다. 이를 보장하는 방식은 더 똑똑한 프로그래머들에 의해 정말 다양하게 제시되었는데, 기발한것들도 있지만 그 중에 가장 이해가 쉬운것은 아래와 같다.
+
+``` Java
+public class Calculator {
+  ...
+  private static class LazyHolder {
+      private static final Calculator UNIQUE_INSTANCE = new Calculator();
+  }
+  public static Calculator getInstance() {
+      return LazyHolder.UNIQUE_INSTANCE;
+  }
+}
+```
+
+static final 로 정의된 `UNIQUE_INSTANCE`는 클래스로더에 의해 프로그램 시작 시 가장 먼저 Static 영역에 바로 적재된다. 정적 변수/메서드의 방식을 결합한것이다. 이를 통해 `getInstance()` 호출되기 이전에 `UNIQUE_INSTANCE = new Calculator()` 가 무조건 수행되어 객체의 존재를 보장할 수 있게 된다.
+
+필자는 C# 을 잠깐 사용해본적이 있는데, 싱글턴 객체를 정의하기위해 클래스를 작성하는 방식을 참조하던차에 왜 아래와 같이 복잡하게 정의하는지 알지 못했었다. 이번 싱글턴 객체를 공부하며, 다중 스레드 환경에서 객체 생성 및 사용에 대한 Blocking 을 보장하기 위했던거구나 이해할 수 있던 계기가 되었다.
+
+``` csharp
+public sealed class Singleton
+{
+    private static readonly Lazy<Singleton> lazy = new Lazy<Singleton>(() => new Singleton());  
+    public static Singleton Instance { get { return lazy.Value; } }
+    private Singleton() {}
+}
+```
+
+사실 싱글턴을 이해하기 위해서는 본 글의 [싱글턴 패턴](/pattern/singleton-pattern/#싱글턴-패턴)만 읽으면 된다. 굳이 Race Condition, Visiblity Issue, DCL, Volatile, LazyHolder 개념까지 머리터지게 알지 않아도된다. 하지만 C# 을 사용하는 유저라면 왜 LazyHolder 문법을 사용하는지 알아야하며, 타 언어 개발에도 상태를 내포하는 클래스의 싱글턴 객체를 생성하는 경우가 아예 없을리란 보장은 없을 것이다.
+
+---
+
+1. https://gampol.tistory.com/entry/Double-checked-locking%EA%B3%BC-Singleton-%ED%8C%A8%ED%84%B4
+2. http://thswave.github.io/java/2015/03/08/java-volatile.html
