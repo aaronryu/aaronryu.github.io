@@ -83,8 +83,8 @@ export const Header: React.FunctionComponent<{
         <div css={summerized && styles.summerizedTitleImage}>
           <GatsbyImage
             loading="eager"
-            style={{ aspectRatio: '3.6' }}
-            imgStyle={{ aspectRatio: '3.6', borderRadius: 2 }}
+            style={{ width: '100%', ...(summerized && {  aspectRatio: '2.6' }) }}
+            imgStyle={{ borderRadius: 2 }}
             alt={imageAlt ?? ''}
             image={image.childImageSharp.gatsbyImageData}
           />
