@@ -1,0 +1,304 @@
+---
+title: "Spring MVC 구조 및 동작 원리와 처리 흐름"
+category: spring
+categoryNames: [ 'Spring' ]
+author: Aaron
+date: 2021-02-14 05:37:38
+updateDate: 
+deck: 처음 웹 개발을 시작하며 접한 Spring 은 정말 손쉽게 웹 어플리케이션 서버(WAS)를 세팅하고 개발할 수 있는 혁신적인 프레임워크였다. 심지어 입사한지 얼마 안된 나도 몇줄의 코드만으로 컨트롤러를 만들 수 있을 정도였으니 Spring 없던 시절의 웹 개발자들에게 경외심이 생기는 정도였다. 하지만 이는 수많은 추상화를 거쳐 편리성을 얻은것이었을뿐 내겐 오히려 웹 서버의 이해와 한동안 가까워지지 못하게되는 암흑기를 만들었다. 그제서야 왜 토비의 Spring 책이 그렇게 두꺼웠는지 이해할 수 있었고, 이후로는 정말 면밀히 공부하여 추상화를 한꺼풀씩 벗겨내며 Spring 의 본질에 더 가까히 갈 수 있었다.
+abstract: Web Server 에서 Web Application Server(WAS) 로의 발전과 Spring 의 등장, 그리고 Servlet 을 필두로 살펴보는 Spring 의 동작 원리 및 클라이언트의 요청에 대한 처리 흐름을 살펴본다. 마지막으로는 Interceptor, Filter 개념을 짧게 짚는다.
+image: ./spring-mvc-abstract.png
+imageAlt: "Spring MVC Abstract"
+embeddedImagesLocal:
+  - './static-web-page-example.png'
+  - './web-server-description.png'
+  - './servlet-container-life-cycle.png'
+  - './web-application-description.png'
+  - './spring-web-application-description-1-init.png'
+  - './spring-web-application-description-2-request.png'
+  - './spring-web-application-description-3-filter-and-interceptor.png'
+  - './order-of-filters-and-interceptors.png'
+  - './summary-order-of-filters-and-interceptors.png'
+---
+
+import { getImage, GatsbyImage } from 'gatsby-plugin-image';
+
+# Web Server (**static 페이지**)
+
+> **서버에 있는 페이지**를 유저들에게 보여줍니다.
+
+웹 초기에는 서버에 정적인 문서(html)를 저장해서 유저가 요청하면 해당 파일을 유저의 브라우저에서 다운받아 보여주는 방식이었다. 예를 들면 특정 서버 `aaron.com` 에 있는 `hello.html` 문서를 보고싶다면 브라우저에 `aaron.com/hello.html` 을 호출하는 형식이다. 대학교에서 교수가 자신의 연구실 서버를 이용해서 강의자료를 배포할때 아래와 같은 페이지를 본 독자들도 있을지 모르겠다.
+
+<GatsbyImage
+    alt='Static Page from Web Server'
+    image={getImage(props.localImages[0])}
+    style={{ margin: '0 8rem' }}/>
+
+이 방식은 서버에서 제공하고자 하는 파일들을 실제 서버 내부에 일일히 적재를 해야했으며, 서버에 존재하지 않는 파일에 접근한다면 `404 Not Found Error` 오류를 반환한다. 이렇게 유저에게 정적인 페이지를 제공하는 서버를 **Web Server**(**웹 서버**)라고 부르며 많이 접해봤을 **Apache, Nginx** 가 이에 해당한다.
+
+## 예) Nginx 의 요청/처리 흐름
+
+**웹 서버**의 예로 **nginx** 에서는 유저 요청을 아래의 과정으로 처리한다.
+
+<GatsbyImage
+    alt='Web Server'
+    image={getImage(props.localImages[1])}/>
+
+- 유저는 **웹 서버**에게 특정 페이지(`index.html`)를 요청
+- **웹 서버**는 `index.html` 검색 후, 있다면 유저에게 반환
+
+# Web Application (**dynamic 페이지**)
+
+> **서버에 없는 페이지**를 유저들에게 **매 요청때마다 동적으로 만들어서** 보여줍니다.
+
+웹 서버가 유저에게 단순한 문서를 공유하는 일방적인 서비스를 제공하는것에서 그치지 않고, 유저와의 인터렉션을 통해 회원가입도 가능하고, 글도 쓸 수 있고, 작성한 글들을 서로 볼 수 있는 등의 양방향의 서비스의 요구사항을 받게된다. 일반적인 어플리케이션처럼 데이터베이스와의 연결도 필요하고, 회원의 상태에 따른 동적 페이지 렌더링을 위한 비동기 API 호출 등이 필요해진것이다. 서버는 이제 더 이상 **서버에 있는 정적 자원만 반환하는것이 아니라** **유저가 요청한 정보에 대응되는 자원(페이지)를 동적으로 만들어서 반환**하게 된다.
+
+웹으로 어플리케이션과 같은 요구사항을 처리하기 위해서는 **웹 서버**와 **여러 언어로 개발된 프로그램**을 연결하여 유저의 요청을 서버를 통해 프로그램으로 전달해야한다. 이렇게 웹 서버와 프로그램 사이를 연결해주는 방식을 **CGI**(**Common Gateway Interface**)라고하며 여러 언어로 개발되어왔고, 그 중 Java 에서는 **Web Server 요청/반환과 Java Application 사이를 연결해주는 Servlet 객체** 개념이 등장하게 된다.
+
+Servlet 은 유저 요청 하나마다 하나씩 생성되기 때문에 **여러 요청에 따른 Servlet 자원 관리**가 필요하다. 이 역할을 하는것이 **Web Container** 이며 Servlet 입장에선 Servlet Container 로 불러지기도 한다.
+
+- 유저의 요청/반환을 관할하는 **Web Server**
+- 여기에 요청에 따른 적합한 Java Application 구동을 위한 Servlet 관리자 **Web Container**를 추가하면
+
+이 둘을 합친것이 **Web Application(웹 어플리케이션)** 이다.
+
+- **Web Application** = **Web Server** + **Web Container**(= Servlet Container)
+  - **Web Container** 는 유저의 요청에 따라 **Servlet 자원에 대한 생명주기를 관리**합니다
+    - **생성(init) -> 처리(service) -> 파기(destory)**
+
+<GatsbyImage
+    alt='Web Server'
+    image={getImage(props.localImages[2])}/>
+
+
+## 예) Tomcat 의 요청/처리 흐름
+
+**웹 어플리케이션**의 예로 **tomcat** 에서는 유저 요청을 아래의 과정으로 처리한다.
+
+<GatsbyImage
+    alt='Web Application'
+    image={getImage(props.localImages[3])}/>
+
+웹 서버 그림과 비교했을때 웹 서버 아래에 추가된것은 모두 웹 컨테이너에 관련된 것이다. Web Container 를 시작으로 아래서 위로 역순으로 살펴보자. 옆에 회색으로 표시한 명칭은 실제 클래스/인터페이스명이다.
+
+- **<u>ServletContext (Web Container)</u>**
+  - Servlet 객체 주기 관리를 위한 웹 컨테이너 (관리라는 의미로 Context)
+  - 모든 요청에 대한 Servlet 생명주기는 이 ServletContext 가 모두 관리
+- **<u>ServletContextListener</u>**
+  - ServletContext 최초 구동시(Listener) 수행할 작업을 정의
+- **<u>web.xml (Deployment Description)</u>**
+  - Deployment Description 이라는 명칭에서 알 수 있듯 웹 컨테이너 구동시 Servlet 을 위한 설정
+    - B) 어떤 ServletContextListener 인터페이스 구현체를 실행할지
+    - A) '어떤 요청'에 '어떤 타입'의 Servlet 객체를 생성할지에 대한 Mapping
+      - 예) `/hello.html` 에 대한 접근은 `HelloServlet` 이 동적 처리
+
+구성을 알았으니, 위 그림에 따라 웹 어플리케이션 구동시 절차를 알아보자.
+
+### 최초 구동시
+
+- tomcat 웹 어플리케이션이 최초 구동시 가장 먼저 <u>웹 컨테이너(ServletContext)</u> 구동
+- B) ServletContext 구동 시 web.xml 에 설정한 <u>ServletContextListener</u> 를 같이 수행
+
+### 요청 처리시
+
+- 유저는 <u>웹 서버</u>에게 특정 페이지(`index.html`)를 요청
+- 웹 서버는 `index.html` 검색 후, 존재하지 않기 때문에 <u>웹 컨테이너(ServletContext)</u>에게 요청을 이관
+- A) <u>ServletContext</u> 는 web.xml 에서 `index.html` 요청에 맞는 타입의 Servlet 를 생성
+  - 생성된 Servlet 은 유저가 요청한 페이지를 동적으로 생성하여 유저에게 반환 후 파기(destory)
+
+# Spring Framework
+
+Java Servlet 을 활용한 웹 어플리케이션 개발이 활성화되면서 여러 디자인 패턴들을 적용하여 Java 웹 개발을 더 쉽게 도와주는 Spring Framework 가 등장하게된다. 초기 웹 어플리케이션이 페이지를 동적으로 렌더링하기 위해 **각 요청마다 Servlet 을 할당**하여 요청을 처리하였다면, Spring 은 **각 요청마다 Servlet 보다 작은 단위인 Bean 을 할당하여** 요청을 처리한다. 이 말은 즉슨 다수의 Servlet 을 두지 않고 단일 Servlet 을 두고(뒤에 얘기하겠지만 이것이 DispatcherServlet), 뒷단에서 다양하고 많은 수의 Bean 를 두어 요청에 따른 적합한 처리를 한다는 뜻이다.
+
+- **Servlet Container** 는 각 URL 요청들을 **Serlvet** 을 단위로 처리
+  - 요청을 처리하는 단위가 **Servlet** 이니 **Servlet Container** 가 Servlet 관리
+- **Spring Container** 는 각 URL 요청들을 **Bean** 을 단위로 처리
+  - 요청을 처리하는 단위가 **Bean** 이니 **Spring(Bean) Container** 가 Bean 관리
+
+**Spring 은 기본적으로 MVC 모델로 Model, View, Controller 세 그룹의 역할로 분리 개발**을 돕는 프레임워크이기에 아무리 디자인 패턴에 대한 지식이 전무한 개발자일지라도 유지보수성, 재사용성이 뛰어난 웹 어플리케이션을 만들 수 있다. 또한 **데이터베이스 접근을 위한 JPA, 트랜잭션, 보안 등 웹 어플리케이션에서 필요로하는 모든것을 Bean 설정으로 제공**하기 때문에 어떤 초보자라도 탄탄한 이해만 바탕이 된다면 웹 어플리케이션을 손쉽게 만들 수 있다. 사실 탄탄한 이해없이도 만들 수 있는것이 Spring 의 장점이다. 이는 즉 주니어/시니어 상관없이 최고의 생산성을 의미한다.
+
+# Spring MVC 개념
+
+Spring MVC 동작 과정을 이해하기 위해선 **MVC** 와 **Front Controller 패턴** (**2-레벨 Controller**) 만 알면된다.
+
+## MVC (Model, View, Controller)
+
+1. 유저가 어떤 페이지를 요청시, 요청에 적합한 **Controller 가 요청을 받아**
+2. 요청 페이지에 필요로 하는 정보인 **Model 을 조회/생성**하고
+3. 조회/생성한 Model 을 통해 **최종 페이지인 View 를 생성**하여 유저에게 **반환**하는 모델
+
+## Front (2-level) Controller 패턴
+
+위 MVC 에서 요청을 받는 부분을 Controller 라고 하였는데
+
+- tomcat 입장에선 요청을 처리하는 Servlet 이 Controller 일것이고
+- Spring 입장에선 요청을 처리하는 Bean 이 Controller 일것이다.
+
+그럼 **2-level Controller** 의 의미는 아래와 같다.
+
+- Front Controller: 모든 유저의 요청을 가장 먼저 맨 앞의 tomcat 의 **단일 Servlet(DispatcherServlet)** 으로 받고
+- Page Controller: 요청 URL 이 무엇인지에 따라 Spring 의 Controller Bean 에 매핑/페이지 생성 및 반환
+
+가장 앞의 **tomcat 단일 Servlet(DispatcherServlet)** 을 '요청을 가장 앞에서 먼저 받는다'는 의미에서 **Front Controller** 라 부르고, 그 뒤에 **Spring Controller Bean** 을 실제 페이지 생성에 사용된다는 의미에서 **Page Controller** 라고 부른다.
+
+# Spring MVC 의 요청/처리 흐름
+
+## 최초 구동시
+
+먼저 **Spring + tomcat** 이 처음 구동될때 어떤 객체들이 생성되어 준비되는지 먼저 살펴보자면, **Web Container** 아래에 **Spring Container** 가 새로 추가된것을 볼 수 있다.
+
+<GatsbyImage
+    alt='Spring Web Application - 1. Init'
+    image={getImage(props.localImages[4])}/>
+
+위 그림과 같이 tomcat 에 Spring 을 연결하기 위해서는 tomcat 설정파일인 web.xml 에 2 가지 설정이 필요하다.
+
+- web.xml (Deployment Description)
+  - B) ServletContextListener 인터페이스 구현체를 통해
+    - 1: <u>ServletContext</u> 만 띄우는것이 아니라 = <u>Front Controller</u>
+      - A) 모든 요청은 Front Controller 에 해당하는 단일 Servlet 객체(DispatcherServlet)가 처리
+    - 2: <u>Root WebApplicationContext</u> 도 동시에(다음에) 띄우게 된다 = <u>Page Controller</u>
+      - Spring 공용 Bean (@Service, @Repository, @Component...) 객체들을 미리 생성해놓기 위함
+
+## 요청 처리시
+
+최초 구동 후 tomcat 은 모든 요청을 단일 DispatcherServlet 으로 받을 준비가 완료되었고, Spring 도 Controller Bean 이 결과를 반환하기 위한 여러 Bean 들이 Root WebApplicationContext 에 준비가 완료된다. 이제 유저가 요청을 보냈을때의 처리를 살펴보자. 조금 복잡해보이지만, 위 [최초 구동시](/spring/spring-mvc-structure-and-security/#%EC%B5%9C%EC%B4%88-%EA%B5%AC%EB%8F%99%EC%8B%9C-1)에서 본 내용에서 조금의 확장만 생긴것이기에 긴장하지 않아도 된다.
+
+<GatsbyImage
+    alt='Spring Web Application - 2. Request'
+    image={getImage(props.localImages[5])}/>
+
+Spring 의 키워드는 IoC, DI 라고 할 수 있는데, 간단하게 설명하자면 기존에는 개발자가 new 를 통해 객체를 직접 생성하고, 직접 주입해줬다면 Spring 인터페이스만 명시한 채 **<u>ApplicationContext(= Spring Container, BeanFactory 상속)</u>** 가 Bean 이라 불리는 객체를 생성하고 개발자 설정에 의해 자동 주입해주는 개념이다. 이렇게 Spring 에서는 기본 단위의 Java 객체를 Bean 으로 부르며 사용한다.
+
+- Spring Container = ApplicationContext
+
+Spring 에서 Bean 은 웹 어플리케이션 관점에서 아래와 같이 크게 **2 개의 타입**으로 구분될 수 있다. 그에 따라 Bean 의 생명주기를 관리하는 **Spring Container 도 2 개**로 나눠진다.
+
+  - 요청이 들어왔을때 적합한 처리를 위해 **요청과 상관없이 모든 Bean 들이 서로 공유하는 공용 Bean**
+    - 예) **@ComponentScan** 으로 등록된 **@Service, @Repository, @Component** 등
+    - 생명주기 관리
+      - <u>Root WebApplicationContext</u> (그림 내 Spring Container 1)
+  - 요청이 들어왔을때 할당되는 Servlet 처럼, **요청이 들어왔을때만 생성하면 되는 Bean**
+    - 예: **@ComponentScan** 으로 등록된 **@Controller, @Interceptor** 등
+    - 생명주기 관리
+      - <u>Servlet WebApplicationContext</u> (그림 내 Spring Container 2)
+
+위 그림을 보면 최초 구동시에 생성된 Spring Container 1 아래에 또 하나의 Spring Container 2 가 생겨난걸 볼 수 있다. 딱히 중요한 내용은 아닌데, parent 와 child 라고 써져있는것은 두 컨테이너 간 계층이 있다는 의미이며, 단순히 child 인 <u>Servlet WebApplicationContext</u> 의 Bean 들은 부모인 <u>Root WebApplicationContext</u> 의 Bean 들을 참조할 수 있지만 그 반대로는 참조할 수 없음을 의미한다.
+
+---
+
+요청 처리는 다음과 같은 흐름으로 진행된다. 위 빨간색 선(요청)과 초록색 선(응답) 흐름에 따라 살펴보자.
+
+1. 유저는 **<u>웹 서버</u>**에게 특정 페이지(`index.html`)를 요청
+2. **웹 서버**는 `index.html` 검색 후, 존재하지 않자 **<u>웹 컨테이너(ServletContext)</u>**에게 요청을 이관
+3. A) ServletContext 는 web.xml 에서 어떤 요청이든 `/` **<u>단일 DispatcherServlet</u>** 을 생성
+4. <u>DispatcherServlet</u> 은 유저가 요청한 페이지에 해당하는 Spring Controller가 있는지 <u>HandlerMapping</u> 을 탐색
+5. DispatcherServlet 은 찾은 <u>Spring Controller Bean</u> 을 <u>HandlerAdapter</u>를 통해 호출
+6. HandlerAdapter 는 <u>HelloController Bean</u> 을 호출
+7. HelloController 는 <u>Root WebApplicationContext</u> 내 Bean 들을 활용하여 <u>DispatcherServlet</u>에 결과 반환
+8. DispatcherServlet 는 Controller 의 결과를 받아 <u>ViewResolver</u> 에서 **<u>결과 페이지(= View)</u>(`index.html`)** 생성
+9. DispatcherServlet 는 **<u>결과 페이지(= View)</u>(`index.html`)**를 유저에게 반환
+
+---
+
+위 과정의 코드레벨에서의 흐름은 [해당 블로그 링크](https://galid1.tistory.com/526)에 잘 정리되어있어 참고하면 좋다.
+
+이렇게 Spring MVC 에서 어떻게 유저의 요청을 받아서 처리하고 반환하는지를 그림으로 알아보았다. 이렇게 상세하게 알아보니 이젠 컨트롤러나 서비스에서 Exception 이 발생하였을때 Spring 로그에 남는 수많은 Stacktrace 속 메서드와 클래스들의(invoke, DispatcherServlet, preHandle, postHandle 등) 의미를 좀 더 이해할 수 있을것이다.
+
+긴 글이었지만 여기서 조금 더 나아가보려고 한다. 바로 Interceptor 와 Filter 이다. 이 둘의 차이점은 단순하게는 Servlet 이 관리하냐 Spring 이 관리하냐이며, 호출의 순서와 시점을 알면 추후에 Spring Security 를 학습/적용할때 큰 무리가 없을것이라 생각한다. 물론 여기까지 오는데 충분히 힘들었다면 다음에 다시 와서라도 꼭 읽어주길 바란다.
+
+# Spring Interceptor 와 Filter 의 차이점
+
+꼭 Spring 이 아니더라도 어떠한 웹 어플리케이션이든 일부 사용자들에게 오픈되어 서비스를 제공하기에 보안이 절대적으로 필요하다. Spring Security 는 기본적으로 로그인과 세션에 관련된 모듈 및 설정들을 손쉽게 사용가능하도록 제공할뿐만 아니라, 따로 개발한 인증 모듈을 적용, 요청 URL 에 따라 다른 보안 처리 등 개발자가 원하는 보안 요소를 Spring Controller 에게 실제 요청이 전달되기 전에 수행되도록 추가할 수 있다. 이때 사용되는것이 **Interceptor** 와 **Filter** 이다.
+
+우리는 앞서 Spring 을 사용한 웹 어플리케이션은 크게 **Tomcat (Web Container)** 와 **Spring (Spring Container)** 의 2개로 구성된다는것을 배웠다. **Interceptor** 와 **Filter** 는 관리주체 및 실행시간이 이 2개의 구성인 **Tomcat** 과 **Spring** 으로 나뉘어진다고 이해하면 된다.
+
+> It's perfectly fine as Filter's are part of Servlet specification. Filters are called by your Server(tomcat). while Interceptors are called by Spring[^2](https://stackoverflow.com/questions/26908910/spring-mvc-execution-order-filter-and-interceptor)
+
+> - **Filter 는 Servlet 스펙의 일부이고 Servlet(Tomcat)에 의해 호출되지만**
+> - **Interceptor 는 Spring 에 의해 호출된다.**
+
+아래는 Interceptor 와 Filter 의 관리주체 및 실행시간을 이해하기 쉽게 표현한 그림이다.
+
+<GatsbyImage
+    alt='Spring Web Application - 3. Filter and Interceptor'
+    image={getImage(props.localImages[6])}/>
+
+## Filter (Tomcat)
+
+- Servlet (J2EE 7 표준)스펙에 정의
+  - 웹 어플리케이션(tomcat) **Deployment Descriptor(web.xml)에 설정**
+    - 이 부분에 대한것도 최신 Spring 에서 설정 가능
+
+
+- **1개**의 함수로 **DispatcherServlet 이전/이후에 호출**
+  - doFilter()
+    - 요청이 DispatcherServlet.service() 에 **진입하기 직전**(init() 후)에 호출
+    - 결과를 DispatcherServlet.service() 가 **반환하는 직후**(destroy() 전)에 호출
+
+
+doFilter 함수가 **요청 진입시 & 결과 반환시, 2번 호출**되기 때문에, **암/복호화같은 요청 전 & 반환 후 두 곳에 전역적으로 처리해야하는 로직에 적합**하다.
+
+## Interceptor (Spring)
+
+- Spring Framework 스펙에 정의
+  - Spring **WebApplicationContext에 설정**
+
+
+-	**3개**의 함수로 **Controller 이전/이후에 호출**
+    - preHandle() = **요청이 Controller 에 진입하기 직전**에 호출
+    - postHandle() = **결과를 Controller 가 반환한 직후**에 호출
+    - afterCompletion() = Controller 결과에 따라 **View 를 생성한 직후**에 호출
+
+
+컨트롤러 **진입 혹은 결과 반환 시점에 디테일하게 처리해야하는 로직에 적합**하다. 예를 들어 특정 URL 로 진입되는 요청에 대해서는 컨트롤러 진입 직전에 해당 URL 에 특화된 정보들을 미리 세션에 설정하여 컨트롤러 내부 로직에서 활용할 수 있게 할 수 있다. 다른 URL 이라면 본 로직을 수행하지 않도록 조건을 추가할 수도 있을것이다.
+
+---
+
+중요한 내용으로, Filter 와 Interceptor 는 관리주체가 다르기 때문에 다음과 같은 상황이 발생할 수 있다.
+
+Filter 는 Spring Container 관리주체가 아니기 때문에 Filter 로직 내부에서 Spring 의 Bean 을 사용하려면 `@Autowired` 같은 빈 주입이 아닌, 먼저 Spring `WebApplicationContext` 객체를 가져와서 그 안에 설정된 Bean 을 하드코딩을 통해 직접 가져와서 사용해야한다.
+
+## 다수 Interceptor 와 Filter 의 호출 순서
+
+Filter 와 Interceptor 는 상황에 따라 여러개를 지정하여 사용할 수 있다. 다수의 Filter 혹은 Interceptor 를 사용시에 Filter 와 Interceptor 각각에 있어서의 호출 순서는 설정해줄 수 있지만 Filter - Interceptor - Filter - Interceptor 와 같이 섞는 형식으로는 불가능하다.
+
+**2개의 Filter** 와 **2개의 Interceptor** 를 사용할때 어떻게 동작하는지 순서를 살펴보기 위해 DispatcherServlet 과 HandlerAdaptor 를 중점적으로 살펴보면 아래와 같다.
+
+<GatsbyImage
+    alt='Spring Filters and Interceptors'
+    image={getImage(props.localImages[7])}/>
+
+
+간략하게 요약하면 아래 그림/흐름과 같다.
+
+<GatsbyImage
+    alt='Spring Filters and Interceptors - Summary'
+    image={getImage(props.localImages[8])}/>
+
+1. doFilter (F1)
+2. doFilter (F2)
+3. preHandler (I1)
+4. preHandler (I2)
+5. <u>Controller 요청 처리</u>
+6. postHandler (I2)
+7. postHandler (I1)
+8. <u>View 렌더링</u>
+9. afterCompletion (I2)
+10. afterCompletion (I1)
+11. doFilter (F2)
+12. doFilter (F1)
+
+웹 서버에서 웹 어플리케이션, 웹 서버와 웹 어플리케이션을 연결하기 위한 CGI 의 예로 Servlet 그리고 Container 를 알아본 뒤에 Spring Container 와 Filter, Interceptor 의 차이 그리고 실행 순서에 대해 알아보았다. Spring 을 공부하시거나 사용하시는 다른 개발자 분들에게 본 글이 도움이 되길 바란다. 참조한 글들도 좋은 글들이니 시간이 되시면 한번씩 훑어보시는걸 추천하며 마무리한다.
+
+---
+
+1. [Spring 동작 원리 #1](https://asfirstalways.tistory.com/334), [#2](https://devpad.tistory.com/24), [#3](https://taes-k.github.io/2020/02/16/servlet-container-spring-container/)
+2. [Tomcat 이 Spring 호출하는 방법](http://www.deroneriksson.com/tutorial-categories/java/spring/introduction-to-the-spring-framework)
+3. [Java Servlet](https://mangkyu.tistory.com/14)
+4. [Web Server, Web Application 차이](https://gmlwjd9405.github.io/2018/10/27/webserver-vs-was.html)
+5. [Spring DispatcherServlet 동작 원리 #1](https://jess-m.tistory.com/15), [#2](https://dynaticy.tistory.com/entry/Spring-MVC-Dispatcher-Servlet-%EB%82%B4%EB%B6%80-%EC%B2%98%EB%A6%AC-%EA%B3%BC%EC%A0%95-%EB%B6%84%EC%84%9D)
+6. [Spring web.xml 설명 #1](https://sphere-sryn.tistory.com/entry/%EC%8A%A4%ED%94%84%EB%A7%81%ED%94%84%EB%A0%88%EC%9E%84%EC%9B%8C%ED%81%AC-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%EC%9D%98-%EA%B0%80%EC%9E%A5-%EA%B8%B0%EB%B3%B8%EC%84%A4%EC%A0%95-%EB%B6%80%EB%B6%84%EC%9D%B8-webxml%EC%97%90-%EB%8C%80%ED%95%98%EC%97%AC-%EC%95%8C%EC%95%84%EB%B3%B4%EC%9E%90), [#2](https://gmlwjd9405.github.io/2018/10/29/web-application-structure.html)
+7. [Spring 2개 타입의 ApplicationContext](https://jaehun2841.github.io/2018/10/21/2018-10-21-spring-context/#web-application-context)
+8. [Servlet Container & Spring Container](https://velog.io/@16616516/%EC%84%9C%EB%B8%94%EB%A6%BF-%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88%EC%99%80-%EC%8A%A4%ED%94%84%EB%A7%81-%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88)
+9. [Spring MVC 코드 기반 동작 원리](https://galid1.tistory.com/526)
