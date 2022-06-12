@@ -1,0 +1,437 @@
+---
+title: "자바스크립트 엔진 실행 과정으로 이해하는 '호이스팅'과 '클로저'"
+category: js
+categoryNames: [ 'Javascript' ]
+author: Aaron
+date: 2019-02-22 02:33:46
+updateDate: 
+deck: 자바스크립트를 처음 접하면, 굉장히 쉬운 사용성에 놀라곤한다. C 언어와 Java 를 접했을때는 매번 컴파일이 필요했는데, 자바스크립트는 지금 이 글을 보고있는 브라우저에 개발자 모드 콘솔창을 켜놓고 바로 코딩이 가능하다는것은 가벼움과 쉬운 사용성을 의미한다. 코드의 실행은 어떻게 자바스크립트 엔진(그 중 V8) 내에서 이뤄지는것인가? 이를 이해한다면 변수와 함수 관계에 해당하는 Hoisting(호이스팅), Closure(클로저) 개념을 단순이 암기가 아닌 원리로 이해할 수 있다.
+abstract: 우리가 작성한 .js 파일의 실행을 담당하는 자바스크립트 엔진이란게 무엇인지 간단하게 살펴보고, 자바스크립트 엔진이 .js 파일을 어떻게 실행하는지를 이해한다. 그 다음 매번 외웠던 '호이스팅'과 '클로저' 개념을 다시 이해해본다.
+---
+
+# 자바스크립트
+
+자바스크립트는 웹 페이지의 세 요소중 하나에 해당한다.
+- **HTML**: 웹 페이지(문서) 포맷을 정의하는 마크업 언어
+- **CSS**: 웹 페이지(문서)의 디자인 요소에 대한 언어
+- **Javascript**: 웹 페이지(문서)와 사용자 사이의 interaction 이벤트에 대한 모든 처리
+
+자바스크립트는 함수 선언 및 호출로 바로 동기적(Synchronous)으로 실행할수도 있고, Callback 을 통해 특정 이벤트 시점에 비동기적(Asynchronous)으로 수행하게 만들수도 있다.
+
+- 하나의 브라우저는 **HTML/CSS 엔진**과 **자바스크립트 엔진**으로 구성된다.
+
+Chrome, Internet Exploerer, Safari 등 다양한 웹 브라우저마다 각자 자신들만의 **HTML, CSS, Javascript 엔진**들을 갖는다. 그 중 대표적인 **자바스크립트 엔진**은 Chrome 에서 사용되는 V8 가 있고, 본 글에서도 V8 에 대해 다룬다. 참고로, 브라우저에서 **자바스크립트 엔진**만을 떼어다 **비동기 이벤트 처리 라이브러리인 libuv** 를 결합해 서버로 만든것이 Node.js 이다. ~~별거없다.~~
+
+## 인터프리트 언어
+
+자바스크립트는 스크립트 언어이며, 이에 인터프리팅을 거치기에 브라우저 콘솔창에서 한줄 한줄의 결과를 바로 볼 수 있는것이다. 여느 스크립트와 같이 하나의 파일로 만들어 배치처럼 실행시킬 수 있는데, 이때는 짧은 컴파일 후 인터프리팅을 거친다. 
+
+- 자바스크립트는 **스크립트 언어**이자 **인터프리트 언어**이다. 다만, [짧은 **컴파일 과정**을 갖는다.](https://dev.to/genta/is-javascript-a-compiled-language-20mf)
+
+자바스크립트는 .js 파일을 실행할때, 가장 먼저 **변수 및 함수 선언들만 스캔하는 JIT(Just-In-Time) 컴파일 과정**을 거친뒤 수행된다. JIT 컴파일은 우리들이 흔히 알고있는 C++, Java 와 같은 컴파일 언어에서 중간코드를 만드는 [**AOT(Ahead-of-Time) 컴파일 과정**과는 다르다.](https://dev.to/deanchalk/comment/8h32) 자바스크립트를 인터프리트 언어라고 배우기에 컴파일 단계가 없다라고 이해할 수 있지만 엄연히 컴파일 과정이 있다. 다만, 컴파일 과정이 있다는 사실만으로 자바스크립트를 컴파일 언어로 부르기엔 [컴파일 언어의 정의와 다르기에](https://gist.github.com/kad3nce/9230211#compiler-theory) 인터프리트 언어라 부르는것이 더 적절하다.
+
+### V8 에서의 JIT 컴파일
+
+여느 프로그래밍 언어의 컴파일과 동일하게 V8 엔진도 ASTs 생성, 바이트코드 변환을 통해 자바스크립트를 컴파일한다. 여기에 반복 변환되는 바이트코드는 굳이 매번 컴파일하면 효율성이 떨어지니, 캐싱하는 자체 V8 컴파일러 솔루션을 갖는다.
+
+- **Ignition**: Parser 로 생성된 ASTs -> 바이트코드로 변환
+- **TurboFan**: 바이트코드 실행 중 반복 수행되는 바이트코드(함수)는 캐싱
+  - 바이트코드 캐싱으로 불필요한 컴파일 시간 감소
+    - 컴파일 시 캐싱해놓은 바이트코드 불러서 참조
+  - 프로파일러를 통한 함수 호출 횟수 저장/추적
+
+ASTs, 바이트코드 캐싱에 대한 과정은 본 글의 취지와 맞지않아 간단하게만 설명하고 넘어가도록 하겠다.
+
+# 자바스크립트 엔진 및 런타임
+
+프로그래밍 언어의 실행에는 실행 가능한 언어로 변형, 메모리 적재, 실행을 관할하는 엔진이 당연히 존재한다. 자바스크립트 엔진이 자바스크립트 실행기에 해당하고, setTimeout 같이 Kernel 을 사용하는 등 풍부한 자바스크립트 경험을 위해 제공되는 Web API 등을 붙이면 그것이 우리가 쓰는 브라우저가 된다.
+
+- **자바스크립트 엔진**은 자바스크립트 실행기이다.
+- **자바스크립트 런타임**은 위 자바스크립트 엔진에 Web API 등을 곁들인...
+
+## 자바스크립트 엔진
+
+자바스크립트 엔진은 [2 개의 메모리 구성요소](https://blog.sessionstack.com/how-does-javascript-actually-work-part-1-b0bacc073cf)로 나뉜다.
+
+- **Heap**: **모든 변수 및 함수를 적재**하는 메모리 영역
+- **Stack(Call Stack)**: **함수 실행 순서에 맞는 포인터 적재**하는 메모리 영역
+
+변수와 함수를 Heap 에 적재하여 함수의 호출 순서를 Stack 에 적재하여 순서대로 싱글 스레드를 통해 실행한다.
+
+여기서 Stack 이 다른 프로그램 언어와 좀 다른것이, 타 프로그램 언어는 함수 매 실행에 따라 Call Stack 에 각 함수들의 로컬 변수, 파라미터 정보들을 다 같이 적재한다. 함수 실행에 필요한 Context 를 모두 담는다하여 Call Stack 에 담기는 각 함수 메모리 영역을 Context Scope 이라 부르기도 한다. **그와 달리 자바스크립트는 Call Stack 에는 함수 실행 순서 포인터만 적재하고, Context Scope 에 해당하는 함수 및 변수는 모두 Heap 에 담는다.** 똑똑한 분들은 눈치채겠지만 이 말은 즉슨 모든 함수의 변수가 Heap 이라는 공간에 구별없이 다 모인다는 뜻이고, 이는 호이스팅과 클로저라는 개념이 발생하는 개념적 시작에 해당한다.
+
+## 자바스크립트 런타임
+
+자바스크립트하면 비동기를 귀에 딱지가 앉도록 듣는데, 싱글 스레드가 도대체 어떻게 비동기를 처리한다는 것일까? '비동기 수행'과 '비동기 결과 적재', 그리고 '그걸 현재 싱글 스레드에 가져오도록' 도와주는 3 가지 요소들이 아래 설명할 자바스크립트 런타임에 포함되어있기 때문이다.
+
+자바스크립트 런타임은 자바스크립트 엔진에 아래 3 개 구성요소가 추가된다.
+
+- **Web APIs**: 자바스크립트에 없는 DOM, ajax, setTimeout 등의 [라이브러리 함수들](https://developer.mozilla.org/ko/docs/Web/API)
+  - 브라우저나 OS 등에서 C++ 처럼 다양한 언어로 구현되어 제공
+- **Callback Queue**: 위 Web APIs 에서 발생한 **콜백 함수**들이 차곡차곡 여기에 적재
+- **Event Loop**: 위 Callback Queue에 적재된 함수를 엔진의 Stack 으로 하나씩 옮겨서 실행되도록 하는 스레드
+
+# 자바스크립트 엔진 실행 과정
+
+자바스크립트 엔진은 'JIT 컴파일 과정'과 '수행 과정' 이렇게 두 개로 나뉘어 코드를 수행한다. 이제 우리가 지금까지 읽고, 학습한 내용들을 토대로 [자바스크립트 코드가 엔진에서 어떻게 수행되는지](https://www.youtube.com/watch?v=QyUFheng6J0&t=435s&ab_channel=HasgeekTV) 볼것이다. 위에서 설명한 용어들을 사용할테니 용어에 대한 이해가 안된다면, 윗 내용들을 다시 이해하고 오자.
+
+## Compilation Phase
+
+Compilation Phase 를 이해가 쉽도록 말하자면 **Heap 에 적재하는 과정**이라 할 수 있겠다. Heap 은 앞서 설명하였듯이 함수 실행에 필요한 내부의 파라미터, 변수, 함수들을 (Stack 에 적재하는 언어와 달리) 자바스크립트 엔진이 적재하는 곳이다. 그렇기에 Heap 에는 함수 Context Scope 가 함수의 정의 개수 만큼 쌓인다고 설명하였다. 그리하여 Compilation Phase 는 함수의 정의 단위로 수행되며, 새로운 함수 호출이 발생하면 그 함수에 맞는 Local Execution Scope 영역을 생성하고, 같은 일을 반복한다.
+
+- **Compilation Phase** 에선 **변수 선언** 및 **함수 선언** 만 **Heap 에 적재**한다.
+
+아래 자바스크립트 파일을 예로 들어 컴파일 과정을 알아보자.
+
+``` Javascript
+var a = 2;
+b = 1;
+
+function f(z) {
+  b = 3;
+  c = 4;
+  var d = 6;
+  e = 1;
+
+  function g() {
+    var e = 0;
+    d = 3 * d;
+    return d;
+  }
+
+  return g();
+  var e;
+}
+
+f(1);
+```
+
+1. 자바스크립트 첫 실행을 위한 main() 함수의 **Global Scope (window) 영역을 Heap 에 생성**한다.
+
+자바스크립트를 실행하면 **가장 첫번째로 실행되는 함수는 main()** 이고, **window 라고 불리우는 Global Scope 를 Heap 에 만들며 시작**한다. window 를 global 변수 정의에 사용했던 기억이 있을것이다. 그게 가능한 이유는 이 자체로 Global Scope 이기 때문에 그렇다. 앞으로 Heap 에 적재되는 Scope 영역은 아래와 같이 표현하겠다.
+
+``` Heap
+# Global Scope (window)
+- 
+- 
+```
+
+그 다음 생성된 **Global Scope (window) 영역 Heap** 에 **변수, 함수 선언들을 적재**한다.
+
+2. `var a` 는 **변수 선언**이므로 **Global Scope (window)** 영역에 `a` 적재
+3. `b = 1` 는 **변수 할당**이므로 Heap(Scope) 에 미적재
+
+``` Heap
+# Global Scope (window)
+- a =                                           <-- var a = 2;
+- 
+```
+
+4. `function f(z)` 는 **함수 선언**이므로 **Global Scope (window)** 영역에 `f` 적재
+    - 함수 적재 시에는 **f 함수의 바이트코드(blob)에 대한 포인터값**을 함께 적재
+
+``` Heap
+# Global Scope (window)
+- a =
+- f = a pointer on f functions bytecode        <-- function f(z) {
+```
+
+자바스크립트를 가장 첫번째로 실행되는 함수인 main() 의 Compilation Phase 는 이렇게 끝이난다. 해당 함수(main())의 Compilation Phase 가 끝나면, 바로 다시 함수의 가장 첫번째 줄로 가서 지금까지 적재한 Scope Heap 을 가지고, Execution Phase 즉 함수 실행을 수행한다.
+
+## Execution Phase
+
+- **Execution Phase** 에선 **Heap 에 적재된 변수에 할당**을 하고 **함수를 실행**한다.
+
+앞선 **Compilation Phase** 에선 **변수, 함수 선언**만 했다면, 이 과정에서는 **변수 할당**이 이뤄진다. 즉 이 말은 이전에 **변수 선언**이 어디에 되어있는지 찾아야하고, 찾은 선언에 할당을 한다는 의미이다. 그렇다면, 만약에 **변수 선언**이 안되어있다면 어떻게 될까?
+
+### Scope Chain
+
+할당하려는 **변수에 대한 선언**이 만약 자신(함수)의 Scope Heap 에서 못찾는다면 아래와 같은 절차를 거친다.
+
+- 자신 함수를 호출한 **부모 함수의 Scope** 에서 찾는다.
+- 그 또한 없다면 **부모의 부모 Scope** 등 계속 자신을 호출한 조부모(?)들을 찾아나선다.
+- 결국 자바스크립트 첫 실행 함수인 main() 의 Global Scope 에 까지 도달하여 찾는다.
+
+**이 과정을 변수 선언 존재여부를 연쇄적으로 Scope 에서 찾는단 의미로 Scope Chain 이라 부른다.** 그렇게 찾아나섰음에도 Global Scope Heap 에까지 존재하지 않는다면, **Global Scope Heap 에 새로운 변수를 선언과 동시에 할당**하게 된다. 결국엔 Global 변수가 되는 셈이다.
+
+---
+
+예시 설명을 계속 이어서 Execution Phase 과정을 설명하자면,
+
+``` Heap
+# Global Scope (window)
+- a =
+- f = a pointer for f functions bytecode
+```
+
+5. `a = 2` 는 **변수 할당**이므로 `a` 변수를 찾아서 대입한다.
+    - **Global Scope (window)** 영역에 변수 `a` 존재
+
+``` Heap
+# Global Scope (window)
+- a = 2                                         <-- var a = 2;
+- f = a pointer for f functions bytecode
+```
+
+6. `b = 1` 는 **변수 할당**이므로 `b` 변수를 찾아서 대입한다.
+    - **Global Scope (window)** 영역에 변수 `b` 미존재하기 떄문에
+      - 새로 `b` 변수 선언과 `1` 할당을 동시에 수행
+
+``` Heap
+# Global Scope (window)
+- a = 2
+- f = a pointer for f functions bytecode
+- b = 1                                         <-- b = 1;
+```
+
+7. `f(1)`는 **함수 호출**이므로 `f()` 선언 여부를 확인하여 수행
+    - **Global Scope (window)** 영역에 함수 `f()` 존재
+      - `f()` 함수 실행을 위해 또 Compilation Phase 및 Execution Phase 이 필요하기에
+        - Heap 에 **새 Local Execution Scope** 영역을 생성한다.
+        - Scope Chain 을 위해 꼭 자신을 호출한 부모 함수 Scope 에 대한 포인터를 갖는다.
+          - `(hidden) A pointer for previous scope`
+
+``` Heap
+# Global Scope (window)
+- a = 2
+- f = a pointer for f functions bytecode
+- b = 1
+
+# Local Execution Scope for f()                 <-- f(1);
++ (hidden) A pointer for previous scope (= Global Scope (window))
+- 
+- 
+```
+
+8. `f(1)` 함수 실행 시 새로이 생성된 **Local Execution Scope**에
+    - 다시 **Compilation Phase** 과정을 통해 변수, 함수 선언을 적재하면 아래와 같이 된다.
+
+``` Heap
+# Global Scope (window)
+- a = 2
+- f = a pointer for f functions bytecode
+- b = 1
+
+# Local Execution Scope for function f()
++ (hidden) a pointer for previous scope (= Global Scope (window))
+- z = 
+- d = 
+- e = 
+```
+
+9. `f(1)` 의 **Execution Phase** 과정을 마치면
+    - 아래와 같이 변수 할당 및 함수 `g()` 에 대한 또 다른 **Local Execution Scope** 가 생성된다.
+
+``` Heap
+# Global Scope (window)
+- a = 2
+- f = a pointer for f functions bytecode
+- b = 3
+
+# Local Execution Scope for function f()
++ (hidden) a pointer for previous scope (= Global Scope (window))
+- z = 1
+- d = 6
+- e = 1
+- c = 4
+
+# Local Execution Scope for function g()
++ (hidden) a pointer for previous scope (= Local Execution Scope for function f())
+- e =
+```
+
+`g()` 함수부터는 독자 본인 혼자 작성해보면서 복습하면 좋을것같다. ~~절대 귀찮아서가 아니다.~~ 
+
+
+# 자바스크립트 변수 특성
+
+사실 자바스크립트 엔진 실행 과정을 배운 이유는 자체를 이해하기 위함도 있었지만, 아래 내용들을 설명하기 위한 빌드업기도 하였다. 자바스크립트 엔진 동작에 따라 자바스크립트만의 몇가지 특성들이 생겼는데, 모두 살펴보자.
+
+## Lexical Scope
+
+프로그래밍 언어는 변수 Scope 가 언제 정의되냐에 따라 Scope 명칭이 다르다. 컴파일 시점이면 **"Static Scope"**, 이는 Lexer, Parser 과정에 정의되는것이기에 **"Lexical Scope"** 라고도 부르고, 런타임 시점이면 **"Dynamic Scope"** 로 부른다. 자바스크립트 실행은 **함수 단위로 컴파일(Compilation Phase) 시점에 변수의 Scope 를 먼저 정의한 뒤에 + 수행(Execution Phase) 절차가 재귀적**으로 이뤄진다. 아래의 예를 보면 함수 `b()`와 변수 `var num = 1;`는 하나의 동일한 `main()` 함수의 Scope 인 **Global Scope (window)**에 정의된다. 그렇기에 함수 `b()`는 언제든지 변수 `var num = 1;`에 접근할 수 있는것이다.
+
+``` Javascript
+var num = 1;
+
+function b() {
+  console.log(num);
+}
+
+b();
+```
+
+위의 예시는 이해하기가 쉬운데, 아래 예시는 단순히 하나의 함수만 추가했을뿐임에도 순간적인 뇌정지가 올 수 있다.
+
+``` Javascript
+var num = 1;
+
+function a() {
+  var num = 10;
+  b();
+}
+
+function b() {
+  console.log(num);
+}
+
+a();
+```
+
+`a()`의 실행 결과는 `10`이 아닌 `1`이다. 이유는 `function b()`가 **"어디에서 호출되었는지" = "런타임"**시점이 중요한것이 아니라 **"어디에서 정의되었는지" = "컴파일(렉시컬)"**시점이 중요함을 상기하면 Global Scope 에 정의된 함수 `b()`는 Global Scope 에 정의된 `var num = 1;`을 바라보게 된다. 일반적으로 보편적 프로그래밍 언어인 런타임을 생각하여, `10`이라고 착각하게 되는것이다.
+
+
+## Variable Shadowing
+
+Lexical Scope 는 자연스럽게, 만약 **같은 명칭의 변수**가 정의되어있다고 하더라도, 가장 가까운 함수의 Scope(`Local Execution Scope for function`)만을 사용할 뿐, 현재 함수를 호출한 이전 함수에 정의되어있는 **같은 명칭의 변수**는 무시된다. 찾는 변수가 가까운 함수 Scope 에 존재한다면 굳이 Scope Chain 을 할 필요가 없고, 이는 가장 가까운 함수 Scope 의 변수 이외의 것들은 알 필요도 없고, 알리도 없다는 의미에서 **Variable Shadowing**라 부른다.
+
+
+## Hoisting: 변수, 함수
+
+**컴파일 단계**에서 **변수, 함수 선언**을 먼저하고, 그 다음 **수행 단계**에서 **변수 할당 및 함수 실행**을 하기에 변수 선언이 변수 할당 시점보다 아래에 위치하거나, 함수 선언부가 함수 호출부보다 아래 위치하더라도 어쨌든 **변수, 함수 선언이 먼저 되었으므로** 오류없이 정상 처리된다. **변수, 함수 선언**이 어디에 되든지 상관없이 다 위로 올라간채로 동작한다. 라는 의미에서 이를 **Hoisting(호이스팅)**이라 부른다.
+
+``` javascript
+console.dir(exampleV)     // output: undefined
+// → '변수 선언'은 되어있는데, 해당 시점에 값 할당은 안되었습니다.
+console.dir(exampleF)     // output: f exampleF(x)
+console.log(exampleF(2))  // output: 2
+
+var exampleV = 1
+function exampleF(x) { return x }
+```
+
+함수를 정의하는 방식은 '함수 선언문'과 '함수 표현식'으로 나뉘는데, 컴파일 과정을 제대로 이해했다면 어떤 정의 방식에 호이스팅이 적용되고, 나머지엔 되지 않는지를 알 수 있다.
+
+``` javascript
+console.dir(functionDeclare)      // output: f functionDeclare(x)
+console.dir(functionExpression)   // output: undefined
+// → '변수 정의'는 되어있는데, 해당 시점에 함수 할당은 안되었습니다.
+
+function functionDeclare(x) { return x }            // 함수 선언문
+var functionExpression = function(x) { return x }   // 함수 표현식
+```
+
+'함수 표현식'의 경우 컴파일 과정에서 `var functionExpression` 변수만 선언하기에, 함수는 undefined 이다.
+
+
+### Block Scope: const, let
+
+앞서 1) Lexical Scope 와 2) Hoisting 은 우리가 보편적으로 생각하는 방식과 다르기에 실수할것들이 많았다.
+
+1. Lexical Scope + Scope Chain = Function-level Scope = 함수 외부에서 선언한 변수 모두에 접근 가능하다.
+``` javascript
+var a = 1
+
+if (true) {
+  var a = 2
+}
+
+console.log(a);   // 2 - window function 에 해당하는 변수 오염 (마치 전역 변수처럼)
+```
+2. Hoisting = 선언(declare)만 호이스팅될 뿐, 할당(assignment)이 되어있지 않다면 undefined 발생한다.
+3. 중복 선언 가능 = var 는 `var hello = 1; var hello = 2;` 중복 선언이 가능하다. 1번, 2번과 본 특성과 조합되면 정말 머리가 너무 아파지게된다.
+
+이 절망적인 세계에서 우리의 뇌를 구출하고자 정금같이 내려온 ES6 변수 키워드가 있으니, const 와 let 이 그 주인공이다. const, let 으로 정의한 변수는 기존에 함수 단위의 Scope 가 아닌 Block Scope 로 정의된다. 이 말은 즉슨
+
+1. Block-level Scope = 블럭 안의 변수에만 접근하여 다른 Scope 의 변수를 오염시키지 않는다.
+``` javascript
+let b = 1
+
+if (true) {
+  let b = 2
+}
+
+console.log(b);   // 1 - let 변수는 if-block 안에서만 유효하다. block 밖 변수를 오염시키지 않는다.
+```
+2. No Hoisting = 선언은 되었으나 할당이 되지 않았다는 의미의 undefined 를 표기하지 않고, `Uncaught ReferenceError: ... is not defined` 선언 자체가 되지 않았음에 대한 오류 발생
+3. 중복 선언 불가능 = 중복 선언을 시도하면 `Uncaught SyntaxError: Identifier ... has already been declared` 오류 발생
+
+const, let 의 등장으로 if, for 문과 같은 block-level({}) 단위 변수 정의/사용이 가능해졌다. 그 어떤것도 오염시키지 않는다.
+
+
+## Garbage Collection
+
+자바스크립트에서 매 새 함수를 호출할때마다 Heap 에 함수 단위의 Context Scope 생성됨이 이젠 머릿속에 박혀있을것이다. Context Scope 는 함수 호출에만 유효하기에, 해당 함수의 호출이 끝난다면 해당 함수의 Scope 는 Heap 에서 제거된다. 이를 메모리 청소의 의미로 Garbage Collection 이라 부른다. 자바스크립트 파일 실행이 모두 끝나면 가장 처음에 호출됐던 `main()` 함수도 끝이나고, 이에 Global Scope(Window) 도 사라지게 된다. 이렇게 **자바스크립트는 단순히 함수(포인터)의 Reachability 를 기반으로 Garbage Collection 를 수행**한다. Swift 라던가 Java 는 Reference Count 전략을 통한 Garbage Collection 를 수행하는것과 달리 단순한 전략을 취함만 알면 된다.
+
+
+## Closure
+
+Java 의 언어에서는 Class 를 통해 변수를 private 으로 선언하여 Encapsulation 을 이뤄낸다. 외부에서 클래스 내 변수에 접근을 금하며, 변수의 변경은 모두 public 으로 노출된 함수를 통해서만 가능하게 한다. 객체지향 프로그래밍(OOP)뿐만 아니라 행동 주도 개발(DDD)의 필수 개념이 Encapsulation 인데, 애석하게도 Javascript 의 Class 는 Java 의 Class 와 달리 Encapsulation 을 지원하지 않는다. 물론 `_` Prefix 가 붙은 변수를 암묵적으로 private 변수로 판단하는 컨벤션이 있었지만, 어쨌든 Object 의 Prototype 을 콘솔로 찍으면 다 보이게되어서 의미가 없다. 또한 최근 자바스크립트에서 클래스 변수 앞에 `#` Prefix 를 붙이면 유사 Private 처럼 동작함을 알았는데, [`#변수명` 으로 변수가 정의되는것](http://www.gisdeveloper.co.kr/?p=11697)이기에, 근본적인 해결책은 아니다.
+
+이때 자바스크립트에서는 Closure 를 사용하면 된다. 함수가 정의되는 Scope 에 따라 해당 함수가 참조할 수 있는 변수가 결정되는 Lexical Scope 를 활용하여, "함수의 정의" 자체를 반환하면 된다. 우선 Encapsulation 을 설명하기 전에 Closure 를 어떻게 정의하는지에 대해 알아보자.
+
+```javascript
+var closureTest = function() {
+
+  return function () {
+    console.log("This is innerFunction.");
+  }
+};
+```
+
+혹은
+
+```javascript
+var closureTest = function() {
+
+  function innerFunction() {
+    console.log("This is innerFunction.");
+  }
+  return innerFunction;
+};
+```
+
+이렇게 정의하는 방식을 Closure 라고 부른다.
+
+Closure 를 사용하는 방식이었던, Encapsulation 은 여기서 우리가 private 로 가두고 싶은 변수를 정의만하면 된다.
+
+```javascript
+var closureTest = function() {
+  var cannotBeAccessedFromOuter = "This is innerFunction.";
+
+  return function () {
+    console.log(cannotBeAccessedFromOuter);
+  }
+};
+
+var closure = closureTest();
+closure();                                      // output: This is innerFunction.
+console.log(closure.cannotBeAccessedFromOuter); // output: undefined
+```
+
+private 변수는 미공개 변수라고도 표현할 수 있다. 위의 예시는 미공개 변수는 고정된 값이었지만, 이를 상태로 정의할 수도 있다. Java 의 객체지향 프로그래밍에 충실한 방식의 코드 작성 기법이다. 또한 추가로 함수를 **하나**가 아닌 **여러개**를 정의해보자. Closure 설명에 정말 수도없이 인용되는 counter 함수를 정의해보자.
+
+```javascript
+var counter = function() {
+  var count = 0;
+
+  return {
+    increase: function() {
+      count += number;
+    },
+    decrease: function() {
+      count -= number;
+    },
+    show: function() {
+      console.log(count);
+    }
+  }
+};
+
+var counterClosure = counter();
+counterClosure.increase();
+counterClosure.show();      // output: 1
+counterClosure.decrease();
+counterClosure.show();      // output: 0
+```
+
+`counterClosure` 안의 `count` private 변수를 변경할 수 있는 방법은 함수를 호출하는 방법밖에 없고, 보기 위해서도 함수를 통해서만 볼 수 있다. `count` 변수는 `increase()`, `decrease()`, `show()` 함수를 통한다면 어디서든지 접근가능하다는 뜻이기도하다. 이 말은 즉슨, `count` 변수의 **Reachability**는 언제든 열려있단 뜻이며, 자바스크립트 엔진이 **Garbage Collection** 를 언제 수행해야할지 전혀 알 수 없다는 뜻이기도하다.
+
+**Closure** 는 이와 같이 **Garbage Collection**되지 않는다는 치명적인 단점을 가지고있다. [**Garbage Collection**되게 하기 위해서는 `countCloure` 변수를 `null` 값을 넣어서 변수와 함수 모두에 대한 Refer 를 제거(Reachability 를 삭제)](https://dkje.github.io/2020/09/18/Closure/)하면 된다.
+
+---
+
+1. [let, const 차이](https://poiemaweb.com/es6-block-scope)
+2. [var, let, const의 차이 ⏤ 변수 선언 및 할당, 호이스팅, 스코프](https://www.howdy-mj.me/javascript/var-let-const/)
+3. [함수의 범위(Scope)](https://www.zerocho.com/category/JavaScript/post/5740531574288ebc5f2ba97e)
+4. [JavaScript VM internals, EventLoop, Async and ScopeChains](https://youtu.be/QyUFheng6J0)
