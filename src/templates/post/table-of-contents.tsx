@@ -46,7 +46,7 @@ const TableOfContents: React.FunctionComponent<Props> = ({ toc, depth, currentHe
         },
         // currentHeaderUrl 문자열이 href 속성에 포함된다면 아래 스타일을 부여한다. 
         // 현재 스크롤에 해당하는 Header를 하이라이트 하기 위함
-        [`& ul > li a[href*="${currentHeaderUrl}"]`]: {
+        [`& ul > li a[href="${currentHeaderUrl}"]`]: {
           color: 'var(--text0)',
           fontWeight: '600',
         },

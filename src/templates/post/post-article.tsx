@@ -434,21 +434,20 @@ const styles = {
     p,
     ul,
     ol {
-      margin-bottom: 1.602rem;
+      // margin-top: 1.6rem;
+      // margin-bottom: 1.6rem;
       overflow-wrap: break-word;
       word-wrap: break-word;
       word-break: break-all;
-      word-break: break-word;
       hyphens: auto;
     }
 
     ul,
     ol {
-      padding-left: 1.5rem;
 
       ul,
       ol {
-        margin-bottom: 0;
+   
       }
     }
 

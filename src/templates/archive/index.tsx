@@ -185,7 +185,6 @@ const styles = {
       overflow-wrap: break-word;
       word-wrap: break-word;
       word-break: break-all;
-      word-break: break-word;
       hyphens: auto;
     }
 
