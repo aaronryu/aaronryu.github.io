@@ -1,8 +1,9 @@
 import { css } from "@emotion/react"
+import styled from "@emotion/styled"
 import { Link } from "gatsby"
 import * as React from "react"
 import { CategoryArticle } from "."
-import { CategoryLine, sliceStringWithMax, styles } from "./main-category"
+import { CategoryLine, CategoryMainConnectedSubLine, CategorySubLine, sliceStringWithMax, styles } from "./main-category"
 import NestedCategoryArticles from "./nested-category"
 
 const SubCategoryArticles: React.FunctionComponent<{ maxTitleLength: number, categories: Array<CategoryArticle> }> = ({ maxTitleLength, categories }) => (
@@ -24,8 +25,8 @@ const SubCategoryArticles: React.FunctionComponent<{ maxTitleLength: number, cat
         <SubCategoryBox key={subCategory}>
           <SubCategoryTitle category={subCategory} articleCount={each.count} />
           <ul css={styles.articles} key={subCategory}>
-            {hasNestedCategory && <CategoryLine size="nested" top={-4} left={55} plusHeight={25} />}
-            {notLastSubCategory && <CategoryLine size="sub" top={-23} left={14} plusHeight={(66 + nestedHeightCorrection)} />}
+            {hasNestedCategory && <CategorySubLine />}
+            {notLastSubCategory && <CategoryMainConnectedSubLine />}
             {each.articles.map(article => (
               <li css={[styles.article, css`position: relative; left: 40px;`]} key={article.title}>
                 <Link css={styles.articleTitle} to={article.link}>
