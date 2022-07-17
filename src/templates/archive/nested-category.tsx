@@ -1,8 +1,38 @@
 import { css } from "@emotion/react"
+import styled from "@emotion/styled"
 import { Link } from "gatsby"
 import * as React from "react"
 import { CategoryArticle } from "."
 import { CategoryLine, sliceStringWithMax, styles } from "./main-category"
+
+const CategoryMainConnectedNestedLine = styled(CategoryLine)({
+  left: `-20px`,
+  top: `-1.1rem`,
+  height: `calc(100% + 1.5rem + 1.5rem)`,
+  // | -1.0rem + 1.3rem | = 2.6rem -> CategoryMainLine
+  '@media only screen and (max-width: 700px)': {
+    top: `-1.0rem`,
+    height: `calc(100% + 1.5rem + 1.3rem)`,
+  },
+  '@media only screen and (max-width: 600px)': {
+    top: `-1.0rem`,
+    height: `calc(100% + 1.5rem + 1.3rem)`,
+  },
+})
+
+const CategorySubConnectedNestedLine = styled(CategoryLine)({
+  left: `21px`,
+  top: `-1.1rem`,
+  height: `calc(100% + 1.5rem + 1.1rem)`,
+  '@media only screen and (max-width: 700px)': {
+    top: `-1.0rem`,
+    height: `calc(100% + 1.5rem + 1.0rem)`,
+  },
+  '@media only screen and (max-width: 600px)': {
+    top: `-1.0rem`,
+    height: `calc(100% + 1.5rem + 1.2rem)`,
+  },
+})
 
 const NestedCategoryArticles: React.FunctionComponent<{ maxTitleLength: number, categories: Array<CategoryArticle> }> = ({ maxTitleLength, categories }) => (
   <React.Fragment>
@@ -13,7 +43,8 @@ const NestedCategoryArticles: React.FunctionComponent<{ maxTitleLength: number, 
         <NestedCategoryBox key={subCategory}>
           <NestedCategoryTitle category={subCategory} articleCount={each.count} />
           <ul css={styles.nestedArticles} key={subCategory}>
-            {notLastNestedCategory && <CategoryLine size="nested" top={-21} left={21} plusHeight={44} />}
+            <CategoryMainConnectedNestedLine />
+            {notLastNestedCategory && <CategorySubConnectedNestedLine />}
             {each.articles.map(article => (
               <li css={[styles.article, css`position: relative; left: 24px;`]} key={article.title}>
                 <Link css={styles.articleTitle} to={article.link}>

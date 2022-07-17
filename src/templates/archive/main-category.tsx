@@ -5,25 +5,26 @@ import * as React from "react"
 import { CategoryArticle } from "."
 import SubCategoryArticles from "./sub-category"
 
-export const CategoryLine = styled(`div`)<{ size: 'main' | 'sub' | 'nested' ,top: number, left: number, plusHeight: number }>(
-  ({ size, top, left, plusHeight: minusHeight }) => ({
-    content: '""',
-    position: 'absolute',
-    top: `${top}px`,
-    left: `${left}px`,
-    height: `calc(100% + ${minusHeight}px)`,
-    width: '2px',
-    backgroundColor: 'var(--text-link)',
-    '@media only screen and (max-width: 700px)': {
-      top: `${top + (size === 'nested' ? 2 : (size === 'sub' ? 5 : 2))}px`,
-      height: `calc(100% + ${minusHeight - (size === 'nested' ? 2 : (size === 'sub' ? 36 : 6))}px)`,
-    },
-    '@media only screen and (max-width: 600px)': {
-      top: `${top + (size === 'nested' ? 4 : (size === 'sub' ? 7 : 3))}px`,
-      height: `calc(100% + ${minusHeight - (size === 'nested' ? 4 : (size === 'sub' ? 77 : 6))}px)`,
-    },
-  })
-)
+export const CategoryLine = styled(`div`)({
+  content: '""',
+  position: 'absolute',
+  width: '2px',
+  backgroundColor: 'var(--text-link)',
+})
+
+const CategoryMainLine = styled(CategoryLine)({
+  left: `14px`,
+  top: `-0.2rem`,
+  height: `calc(100% + 1.5rem + 0.3rem)`,
+  '@media only screen and (max-width: 700px)': {
+    top: `0px`,
+    height: `calc(100% + 1.5rem)`,
+  },
+  '@media only screen and (max-width: 600px)': {
+    top: `0px`,
+    height: `calc(100% + 1.5rem)`,
+  },
+})
 
 export const sliceStringWithMax = (str: string, max: number) => 
   (str.length >= max)
@@ -39,7 +40,7 @@ const MainCategoryArticles: React.FunctionComponent<{ maxTitleLength: number, ca
         <MainCategoryBox key={mainCategory}>
           <MainCategoryTitle category={mainCategory} articleCount={each.count} />
           <ul css={styles.articles} key={mainCategory}>
-            {hasSubCategory && <CategoryLine size="main" top={-4} left={14} plusHeight={30} />}
+            {hasSubCategory && <CategoryMainLine />}
             {each.articles.map(article => (
               <li css={styles.article} key={article.title}>
                 <Link css={styles.articleTitle} to={article.link}>
@@ -133,7 +134,7 @@ export const styles = {
   `,
   articles: css`
     position: relative;
-    top: -12px;
+    top: -0.8rem;
     margin-bottom: -6px;
   `,
   nestedArticles: css`

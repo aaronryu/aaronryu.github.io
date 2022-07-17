@@ -1,9 +1,39 @@
 import { css } from "@emotion/react"
+import styled from "@emotion/styled"
 import { Link } from "gatsby"
 import * as React from "react"
 import { CategoryArticle } from "."
 import { CategoryLine, sliceStringWithMax, styles } from "./main-category"
 import NestedCategoryArticles from "./nested-category"
+
+const CategoryMainConnectedSubLine = styled(CategoryLine)({
+  left: `14px`,
+  top: `-1.5rem`,
+  height: `calc(100% + 1.5rem + 1.5rem)`,
+  // | -1.1rem + 1.2rem | = 2.6rem -> CategoryMainLine
+  '@media only screen and (max-width: 700px)': {
+    top: `-1.1rem`,
+    height: `calc(100% + 1.5rem + 1.2rem)`,
+  },
+  '@media only screen and (max-width: 600px)': {
+    top: `-1.1rem`,
+    height: `calc(100% + 1.5rem + 1.2rem)`,
+  },
+})
+
+const CategorySubLine = styled(CategoryLine)({
+  left: `55px`,
+  top: `-0.2rem`,
+  height: `calc(100% + 1.5rem + 0.0rem)`,
+  '@media only screen and (max-width: 700px)': {
+    top: `-0.1rem`,
+    height: `calc(100% + 1.5rem - 0.1rem)`,
+  },
+  '@media only screen and (max-width: 600px)': {
+    top: `-0.1rem`,
+    height: `calc(100% + 1.5rem + 0.0rem)`,
+  },
+})
 
 const SubCategoryArticles: React.FunctionComponent<{ maxTitleLength: number, categories: Array<CategoryArticle> }> = ({ maxTitleLength, categories }) => (
   <React.Fragment>
@@ -24,8 +54,8 @@ const SubCategoryArticles: React.FunctionComponent<{ maxTitleLength: number, cat
         <SubCategoryBox key={subCategory}>
           <SubCategoryTitle category={subCategory} articleCount={each.count} />
           <ul css={styles.articles} key={subCategory}>
-            {hasNestedCategory && <CategoryLine size="nested" top={-4} left={55} plusHeight={25} />}
-            {notLastSubCategory && <CategoryLine size="sub" top={-23} left={14} plusHeight={(66 + nestedHeightCorrection)} />}
+            {hasNestedCategory && <CategorySubLine />}
+            {notLastSubCategory && <CategoryMainConnectedSubLine />}
             {each.articles.map(article => (
               <li css={[styles.article, css`position: relative; left: 40px;`]} key={article.title}>
                 <Link css={styles.articleTitle} to={article.link}>
