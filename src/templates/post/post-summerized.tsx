@@ -53,7 +53,7 @@ const ArticleSummerized: React.FunctionComponent<ArticleSummerizedProps> = ({
 )
 
 export const ReadMoreButton = ({ link }: { link: string }) => 
-  <div style={{ display: 'block', position: 'relative', height: '2.6em' }}>
+  <div style={{ display: 'block', position: 'relative', height: '4em' }}>
     <Link to={link} css={styles.button}>
         Read more
     </Link>
