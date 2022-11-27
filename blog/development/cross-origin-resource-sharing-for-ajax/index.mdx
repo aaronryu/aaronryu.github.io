@@ -1,0 +1,157 @@
+---
+title: "CORS - Cross-origin AJAX 호출을 위한 SOP 보완 정책"
+category: frontend
+categoryNames: [ 'Frontend' ]
+author: Aaron
+date: 2022-07-18 01:51:23
+updateDate: 
+deck: "필자가 웹 개발을 가장 처음했을때 맞닥뜨렸던 이슈가 CORS 였다. CORS 는 그 자체가 이슈가 아닌 규약으로 개발자에게 해당 요청이 CORS 규약을 따르지 않음을 알려주는것이다. CORS 규약은 웹 브라우저의 보안을 위한 요소이다. 우리는 블로그를 만들때 외부 이미지들을 링크할때가 있다. 이처럼 외부에 있는 단순 자원을 가져오는건 보안의 문제가 되지 않는데, POST 이나 PUT 과 같은 AJAX 호출을 통해 외부에 있는 동적 자원을 가져오는건 서버의 상태를 바꾸게되어 보안의 문제가 된다. 이에 서버 상태 변경(쿠키 헤더 등을 통한 클라이언트 상태 변경도 포함) 관련 호출 시 본 호출이 진짜 개발자가 의도한 호출인지 철저히 검증해야한다. 그렇지 않으면 블로그에서 악의적 스크립트 주입에 의해 외부 도메인에 원치않는 서버 자원을 조작할 수 있는 AJAX 가 호출될 수 있기 때문이다."
+abstract: "웹 브라우저에서 표기할 모든 자원들은 동일 도메인에서 가져오기도 하지만 다양한 자원 활용을 위해 외부 도메인에서 가져오기도 한다. 도메인이 같으면 Same Origin, 다르면 Cross Origin 이라 표기한다. 브라우저는 최소한의 보안을 위해 단순 자원을 가져오는데는 Cross Origin 도 허용하는등 SOP(Same Origin Policy)이라는 정책을 갖고있다. AJAX 호출은 단순 자원이 아니라 외부 도메인 자원을 조작할수도 있는 위험이 존재하기에 SOP 에 의하면 막혀버리게된다. CORS 는 SOP 에 의해 막히는 외부 도메인에 대한 AJAX 를 가능하도록 하는 추가 정책이다."
+# image: ./singleton-comic-1-en-2x.png
+# imageAlt: "Singleton Comic"
+# embeddedImagesLocal:
+#   - './race-condition.png'
+---
+
+# 브라우저의 SOP(Same Origin Policy) 정책
+
+브라우저에서 HTTP 요청은 기본적으로 SOP(Same Origin Policy) 정책을 따른다.
+
+- Origin 이 같다, 다르다는 3개 요소를 기준으로 한다.
+	- Scheme(http) + Host(1.2.3.4) + Port(8080)
+
+Same Origin Policy 라는 명칭때문에 SOP 정책이 무조건 자원을 호출한 도메인과 자원을 제공하는 도메인이 동일해야한다고 오해할 수 있으나, **[보안적으로 문제되지 않을 선에서 아래 케이스에 대해 예외적으로 허용](https://developer.mozilla.org/ko/docs/Web/Security/Same-origin_policy#%EA%B5%90%EC%B0%A8_%EC%B6%9C%EC%B2%98_%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC_%EC%A0%91%EA%B7%BC)**한다. 참고로 Cross-site = Cross-domain = Cross-origin 모두 같은 의미이다.
+
+- Cross-origin **제출하기** : 유저에 의한 <u>의도된</u> 제출
+	- `<form>` 태그로 다른 도메인에 **submit()** 제출 가능
+- Cross-origin **가져오기** : <u>단순 조회</u> = 악의적 요청 불가
+	- `<img>` 태그로 다른 도메인의 **이미지 파일** 가져오기 가능
+	- `<link>` 태그로 다른 도메인의 **CSS** 가져오기 가능
+	- `<script>` 태그로 다른 도메인의 **JavaScript 라이브러리** 가져오기 가능
+	- `<iframe>` 태그도 다른 도메인의 **페이지** 가져오기 가능
+- Cross-origin **요청하기(= AJAX)** : 악의적 요청 가능
+	- **보안 취약성에 의해 CORS(Cross-Origin Resource Sharing) 정책에만 맞으면 조건부 허용**
+
+## AJAX (Asynchronous JavaScript and XML)
+
+AJAX 는 무엇일까? 서버와 통신할때 사용하는 비동기 자바스크립트를 지원하는것으로 흔히 프론트엔드에서 어떤 데이터를 가져오기위해 서버를 호출할때 사용하는 axios, fetch 의 근간이 되는 기술이다. 현재 대부분의 주요 웹 브라우저들은 서버에 데이터를 요청하기 위해 XHR(XmlHttpRequest) 객체를 내장하여 비동기 처리를 한다. W3C 표준이 아니기에 브라우저마다 설계 방식에 차이는 있지만 모두 XHR 객체를 통해 구현했다. 이 XHR 객체를 통해 웹 페이지가 전부 로딩된 후에도 서버에 데이터를 요청하거나 건네받아 페이지 일부분만 갱신할 수 있는것이다.
+
+- **AJAX** = **비동기** HTTP 데이터 전송 = **결과를 "객체"로 반환**받음
+	- HTTP 데이터를 백그라운드에서 전송하고 결과를 받되, 현 페이지에 어떤 영향도 주지않는다
+- **FORM** = **동기** HTTP 데이터 전송 = **결과를 "이동할 새 페이지"로 반환**받아 렌더링한다
+	- HTTP 데이터를 전송하고 결과 페이지를 받아 해당 페이지로 이동시킨다
+
+# CORS 등장 - Cross-origin AJAX 호출을 위해
+
+AJAX 는 어떤 서버든 호출할 수 있기 때문에 동일한 도메인 서버에게 정보를 가져올 수 있고, 다른 도메인으로부터도 정보를 가져올 수 있다. 개발자의 의도에 따른 AJAX 호출만 가능하면 참 좋겠는데, 유저에게 악의적 스크립트 실행을 시켜 다른 도메인 서버에 악의적 AJAX 호출을 실행하게 하는 **CSRF(Cross-site Request Forgery)** 취약성이 있다.
+
+이러한 취약점에 의해 SOP 정책은 AJAX 를 막아야하지만 AJAX 는 W3C 표준이 아님에도 사실상의 비동기 표준으로 사용되기에 CORS 라는 예외 정책을 도입하게된것이다. **CORS 정책은 악의적 AJAX 호출을 방지하기 위해 클라이언트(브라우저)와 서버사이에 본 AJAX 호출이 의도된 호출인지 여부를 서로 교차검증하는 방식**을 마련해준것이다.
+
+CORS 정책만 지키면 AJAX 를 통한 Cross-origin 호출을 허용하겠다는 것이다.
+
+# CORS 정책 검증 절차
+
+**CORS는 브라우저의 구현 스펙에 포함되는 HTTP 필수 정책**으로 SOP 와 동일하게 CORS 정책 통과여부는 브라우저가 판단한다. 브라우저는 서버로부터 **응답 반환을 받기는**하되 **응답 분석 후 CORS 위반이면 그냥 버리는것**이다. 따라서, 브라우저를 통하지 않고 **서버 간 통신을 할 때는 이 정책이 적용되지 않는다.**
+
+- **클라이언트**는 내가 **"어떤 호출을 하겠다"**는것을 헤더에 담아 요청하고
+- **서버**는 **"어떤 호출을 허용한다"**는것을 헤더에 담아 반환한다
+
+브라우저는 아래의 <u>클라이언트 요청 헤더</u>와 <u>서버 반환 헤더</u>를 비교하여 CORS 통과 여부를 판단한다.
+
+- CORS 정책 통과 여부 - 3개 기준 헤더
+    1. 허용된 Origin
+			- **Origin** (클라이언트)
+			- **Access-Control-<u>Allow</u>-Origin** (서버)
+    2. 허용된 Method
+			- **Access-Control-<u>Request</u>-Method** (클라이언트)
+			- **Access-Control-<u>Allow</u>-Method** (서버)
+    3. 허용된 Header
+			- **Access-Control-<u>Request</u>-Headers** (클라이언트)
+			- **Access-Control-<u>Allow</u>-Headers** (서버)
+
+# CORS 요청 종류
+
+브라우저는 AJAX 호출을 두 종류의 조합으로 분류하여 **CORS 정책 검증 절차**를 달리 적용하는데, 이는 문서 정의를 위한 구분으로 보이고, 간단하게는 다음과 같이 이해하면된다.
+
+- 어떤 요청이던지 <u>(1) 허용된 Origin</u> 검사는 필수이다.
+- Method 가 GET, HEAD, POST(일부 Content-type) 가 아닌 경우 <u>(2) 허용된 Header</u> 검사가 필요하다.
+- 비표준 Custom Header 사용 시 <u>(3) 허용된 Header</u> 검사가 필요하다.
+
+구체적인 학습을 위해 두 종류의 조합을 짚고 넘어가자면 아래와 같다.
+
+## Simple/Preflight Request
+
+AJAX 에서 사용하는 HTTP Method 가 단순 조회에 사용되는 GET, HEAD 이라면 **서버를 조작할 수 없는 Method** 이기에 **실제 요청에 대한 반환값을 받고 이에 포함된 헤더를 통해 CORS 검증**을 한다. 하지만 **서버의 상태를 바꾸는 Method(POST, PUT, DELETE)** 이거나 **커스텀 헤더(쿠키 저장 등)가 포함**되어있다면 **실제 요청 전송전에 예비 요청(Method = OPTIONS)을 보내 실제 반환값없이 헤더만 받아 CORS 검증**을 한다. **CORS 검증이 완료되면 그 이후에 실제 요청을 보내서 서버의 상태를 바꾼다.**
+
+### Simple Request
+
+- **Methods: GET, HEAD, POST(조건부)**
+    - **POST** 방식일 경우 **Content-type** 은 아래 셋 중의 하나여야 한다.
+        - application/x-www-form-urlencoded
+        - multipart/form-data
+        - text/plain
+- **Custom Header: X 존재하지 않는 경우**
+
+**서버를 조작할 수 없는** Method 이기에 클라이언트는 **실제 요청**을 보내고 <u>(1) 허용된 Origin</u> 일치여부만 확인한다.
+
+- (1) **Origin** = **Access-Control-<u>Allow</u>-Origin**
+
+### Preflight Request
+
+- **Methods: POST, PUT, DELETE 등 + GET, HEAD**
+- **Custom Header: O 존재하는 경우**
+
+**서버를 조작할 수 있는** Method 이기에 클라이언트는 실제 요청이 아닌 **예비(Preflight) 요청**을 보내고 <u>(1) 허용된 Origin</u>, <u>(2) 허용된 Method</u>, <u>(3) 허용된 Header</u> 일치여부 모두 검사한다.
+
+- (1) **Origin** = **Access-Control-<u>Allow</u>-Origin**
+- (2) **Access-Control-<u>Request</u>-Method** = **Access-Control-<u>Allow</u>-Method**
+- (3) **Access-Control-<u>Request</u>-Headers** = **Access-Control-<u>Allow</u>-Headers**
+
+## Credential
+
+**자격증명**이란 Cookie, Authorization Headers 또는 TLS 클라이언트 인증을 의미한다. 자격증명 정보는 클라이언트가 서버에게 XMLHttpRequest.withCredentials 혹은 Fetch API 생성자 Request() : credentials 옵션을 통해 **"자격증명 모드"**를 활성화하여 요청하면, 서버가 클라이언트에게 **"자격증명 정보 헤더"**에 값들을 담아 전송해준다. 이때 서버는 아래 **"CORS 헤더"**를 통해 클라이언트가 **"자격증명 정보 헤더"**값을 볼 수 있는지 여부를 함께보내고, 브라우저는 해당 **"CORS 헤더"**가 true 면 클라이언트에게 **"자격증명 정보 헤더"** 노출하고, false 혹은 존재하지 않으면(기본값으로 false) **"자격증명 정보 헤더"**를 모두 버리고 클라이언트에게 숨긴다.
+
+- **Access-Control-<u>Allow</u>-Credentials** = true
+
+주의해야할점은 Credential 요청의 경우 CORS 헤더 중 **Access-Control-Allow-Origin** 값이 `*` 이면 안된다. `a.com` 과 같은 구체적인 도메인이 들어가있어야한다.
+
+# 예시로 살펴보기
+
+## Simple Request
+
+a.com 도메인에서 b.com 도메인으로 AJAX 호출 시
+
+- Method 가 (1) GET, HEAD, POST(조건부) 이고, (2) 커스텀 헤더가 **없다면** = **Simple Request**
+	- CORS 정책은 **Origin** 만 검사
+		- (1) **Origin** === **Access-Control-Allow-Origin**
+
+## Preflight Request
+
+a.com 도메인에서 b.com 도메인으로 AJAX 호출 시
+
+- Method 가 (1) GET, HEAD, POST(조건부) 인데, (2) 커스텀 헤더가 **있다면** = **Preflight Request**
+- Method 가 (1) DELETE 이라면 = **Preflight Request**
+	- CORS 정책은 **Origin/Method/Headers** 모두 검사
+		- (1) **Origin** = **Access-Control-Allow-Origin**
+		- (2) **Access-Control-Request-Method** = **Access-Control-Allow-Method**
+		- (3) **Access-Control-Request-Headers** = **Access-Control-Allow-Headers**
+
+# 추가 CORS 관련 반환 HTTP Headers
+
+`Access-Control-Allow-Methods`이나 `Access-Control-Allow-Headers` 등 앞에서 살펴본것과 달리 또 추가적으로 서버가 반환할때 보내는 CORS 관련 헤더 몇개가 있어 설명하고 마치겠다.
+
+## Access-Control-Max-Age
+
+Preflight Request 의 경우 매번 `OPTIONS` 예비 요청을 주고받으면 실제 결과값을 반환받기까지 시간이 소요되므로, 예비 요청에 대한 CORS 반환 헤더값들을 브라우저에 얼마의 시간동안 저장할 수 있는지 서버가 지정해줄 수 있다.
+
+## Access-Control-Expose-Headers
+
+`Access-Control-Allow-Headers` 의 Allow 는 **"클라이언트가 어떤 헤더를 보낼 수 있는지"** 허용 헤더를 서버가 알려주는것이라면, Expose 가 붙은 이 헤더는 **"서버가 보내는 헤더"중에 브라우저가 읽을 수 있는 헤더를 명시**하는것이다.
+
+---
+
+1. [HomoEfficio : Cross Origin Resource Sharing - CORS](https://homoefficio.github.io/2015/07/21/Cross-Origin-Resource-Sharing/)
+2. [MDN : Same-Origin Policy](https://developer.mozilla.org/ko/docs/Web/Security/Same-origin_policy)
+3. [MDN : Cross-Origin Resource Sharing (CORS)](https://developer.mozilla.org/ko/docs/Web/HTTP/CORS)
+4. [MDN : Access-Control-Allow-Credentials](https://developer.mozilla.org/ko/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials)
+5. [Youtube : CORS in 100 Seconds](https://youtu.be/4KHiSt0oLJ0)
