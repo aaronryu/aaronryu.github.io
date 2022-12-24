@@ -9,6 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCreativeCommons } from '@fortawesome/free-brands-svg-icons'
 import { IconProp } from '@fortawesome/fontawesome-svg-core'
 import useSiteMetadata from '../../hooks/use-sitemetadata'
+import styled from '@emotion/styled'
 
 export interface ArticleProps {
   categories: Array<string>
@@ -65,6 +66,12 @@ const Article: React.FunctionComponent<ArticleProps> = ({
   </article>
 )
 
+const CustomGatsbyImage = styled(GatsbyImage)`
+  div:first-child {
+    max-width: 100% !important;
+  }
+`
+
 export const Header: React.FunctionComponent<{
   categories: Array<string>
   headline: string
@@ -80,15 +87,12 @@ export const Header: React.FunctionComponent<{
   return (
     <header css={[styles.header, (!summerized && styles.headerSizer)]}>
       {image && (
-        <div css={summerized && styles.summerizedTitleImage}>
-          <GatsbyImage
-            loading="eager"
-            style={{ width: '100%', ...(summerized && {  aspectRatio: '2.6' }) }}
-            imgStyle={{ borderRadius: 2 }}
-            alt={imageAlt ?? ''}
-            image={image.childImageSharp.gatsbyImageData}
-          />
-        </div>
+        <CustomGatsbyImage
+          imgStyle={{ borderRadius: 2 }}
+          style={{ width: '100%', ...(summerized && {  aspectRatio: '2.6' }) }}
+          alt={imageAlt ?? ''}
+          image={image.childImageSharp.gatsbyImageData}
+        />
       )}
 
       {categories && (categories.length > 0) && (
