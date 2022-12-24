@@ -1,0 +1,82 @@
+---
+title: "자바스크립트 런타임 환경: 크롬 '브라우저'와 Node.js '서버'"
+category: frontend
+categoryNames: [ 'Frontend' ]
+author: Aaron
+date: 2022-07-18 01:51:23
+updateDate: 
+deck: "크롬 브라우저와 Node.js 둘 모두 V8 이라는 유명한 자바스크립트 엔진을 쓴다. 자바스크립트 엔진을 기반으로 구성된 크롬 브라우저와 Node.js 를 자바스크립트 런타임 환경(Javascript Runtime Environment)라 부른다. 간단하게 말하자면, 자바스크립트 언어를 통해 돌아가는 환경이라는 의미이다. 그럼 차이점이 무엇일까? 크롬 브라우저 환경은 렌더에 관련된 DOM 처리나 AXIOS 와 같은 외부 자원 호출 처리, 이미지 처리 등 브라우저에서 유저가 필요로하는 모든 기능을 Web API 로 추가 제공해주고, Node.js 서버 환경에서는 수많은 요청을 받기위해 이벤트 큐, 이벤트 루프(싱글 스레드)와 함께 워커 스레드 구성을 추가 제공한다."
+image: ./browser-and-nodejs.png
+imageAlt: "Difference between browser and nodejs"
+abstract: ""
+# image: ./singleton-comic-1-en-2x.png
+# imageAlt: "Singleton Comic"
+embeddedImagesLocal:
+  - './browser-apis-different-implementation.png'
+  - './browser-javascript-runtime-environment.png'
+  - './node-js-system-diagram.jpeg'
+---
+
+import { getImage, GatsbyImage } from 'gatsby-plugin-image';
+
+# 자바스크립트 엔진
+
+자바스크립트는 처음에 웹 브라우저에서 동적 요소 및 유저 사용성을 위해 등장하였고, 여느 프로그래밍 언어처럼 **자바스크립트도 실행을 위한 인터프리터 엔진을 필요**로한다. 우리는 웹을 여행하기 위해 웹페이지를 출력해줄 브라우저를 사용하고, 브라우저는 웹을 우리의 화면으로 보여주기까지 자체 HTML 과 CSS 렌더 엔진과 **자바스크립트 엔진**을 내장하고 있다. IE, 사파리, 크롬 등 다양한 브라우저는 각각 다른 **자바스크립트 엔진**을 갖는다. 그 중 필자가 주로 사용하는 **크롬 브라우저(프론트엔드)는 V8 자바스크립트 엔진을 사용**하고, 자바스크립트를 서버로 활용하자는 시도로 **V8 자바스크립트 엔진을 사용한 Node.js 서버(백엔드)가 등장**하게 되었다. 이로써 V8 엔진은 프론트엔드 백엔드 어디에서도 사용되는 너무나도 유명한 엔진이 되어버렸다.
+
+# 자바스크립트 런타임 (환경)
+
+같은 V8 자바스크립트 엔진을 사용하는데 하나는 **브라우저(프론트엔드)**에서 쓰이고 또 하나는 **Node.js 서버(백엔드)**에서 사용된다. 브라우저나 Node.js 모두 구동 언어로 자바스크립트를 사용하는 작은 가상머신이라 생각하면 된다. Environment 는 가상머신을 의미하고, Javascript Runtime 은 구동 언어로 자바스크립트를 사용한다는것을 의미한다. 이 둘을 합쳐 우리는 **브라우저**나 **Node.js** 를 **Javascript Runtime Environment** 즉, **자바스크립트 런타임 환경**이라고 부른다. 여담으로 Java 개발자들은 자바 기반 소프트웨어 실행을 위해 JRE 라는걸 설치하는데 이것이 바로 Java 구동을 위한 Java Runtime Environment 의 줄임말이다. JDK(Java Development Kit)은 디버깅을 위해 자바 구동을 위한 JRE 와 자바 개발에 필요한 도구들을 포함한 패키지이다.
+
+앞서 언급했듯 Javascript Runtime Environment 에는 우리가 쉽게 접하는 2가지가 있다.
+
+- **브라우저 (프론트엔드)**
+- **Node.js (백엔드)**
+
+Javascript Runtime Environment 은 크게 두가지로 구성된다. 첫번째는 당연히 **자바스크립트 실행(Javascript Runtime)을 위한 (1) 자바스크립트 엔진**이 있어야하고, 두번째로는 **브라우저나 Node.js 환경을 구성하고 조작할 수 있게 도와주는 (2) API** 가 있다. 우리가 흔히 쓰는 컴퓨터 운영체제(OS)도 API 인데, CPU, 디스크, 메모리, 파일 및 네트워크 I/O 등이라는 자원들을 활용하기 위해 Kernel 이라는 명칭의 API 를 제공해주는것이다.
+
+**브라우저 (프론트엔드)**와 **Node.js (백엔드)** 순서대로 구성상 어떤 공통점과 차이점이 있는지 간략하게만 알아보자.
+
+## 브라우저 (프론트엔드)
+
+1. **엔진** = Javascript Engine (**V8**)
+2. **API** = Browser APIs (**Web APIs**)
+
+<GatsbyImage
+    alt="Browser consist of javascript engine and Web APIs"
+    image={getImage(props.localImages[1])}/>
+
+브라우저는 이렇게 구성되어있다. 브라우저는 웹 페이지와 사용자 사이의 상호 작용(이벤트) 처리를 위해 여러 자원들을 제공한다. 브라우저의 자원에는 **병렬 작업을 수행하기 위한 Worker Thread(Web Worker & Service Worker)**, **데이터 저장을 위한 Cookie 와 Storage(LocalStorage & SessionStorage) 등이 있고**, 이 자원들을 활용하여 우리는 **그림 그리기 및 이미지 처리를 위한 Canvas API**, **외부 3rd Party API 호출(Fetch API)** 이나 간단한 **setTimeout** 등이 있다. MDN 문서를 보면 정말 많은 API 들이 있지만 [핵심적인것들은 대강 아래와 같이 나열](https://www.educative.io/answers/what-are-browser-apis)할 수 있을것같다.
+
+- Fetch API
+- DOM API
+- Web Storage API
+- Canvas API
+- Geolocation API
+
+이 모든것들은 브라우저가 **Web APIs** 로서 제공하고 브라우저마다 조금씩 다른 구현을 갖는다. 그렇기 때문에 **어떤 API 는 특정 브라우저에서 동작하지 않는 경우도 있다.**
+
+<GatsbyImage
+    alt="Browser APIs has different implementation by browser"
+    image={getImage(props.localImages[0])}/>
+
+## Node.js (백엔드)
+
+1. **엔진** = Javascript Engine (**V8**)
+2. **API** = **Node APIs + libuv** (비동기 I/O 라이브러리)
+    - 구성 : **이벤크 큐 & 이벤트 루프 & 워커 스레드**
+        - 비동기(네트워크, 소켓 작업)은 OS 에서 제공하는 **시스템 API** 이용
+        - 파일 I/O은 **Thread Pool** 이용
+          - 파일의 경우 각 OS 별 시스템 API 가 있으나 추상화가 다른 문제로 Thread Pool 사용
+
+<GatsbyImage
+  alt="Node.js system diagram"
+  image={getImage(props.localImages[2])}
+/>
+
+Node.js 는 이렇게 구성되어있다. V8 자바스크립트 엔진은 싱글 스레드로 유명한데, 그렇다면 브라우저와 Node.js 에서의 비동기 처리는 어떻게 하는걸까? V8 자바스크립트 엔진이 싱글 스레드라는 뜻은 자바스크립트 언어를 실행하는데 Stack, Heap, Queue 를 갖고 싱글 스레드로 한줄씩 수행한다는 의미이다. **비동기 처리는 브라우저의 경우엔 Web APIs 를 활용하고, Node.js 의 경우엔 libuv 라는 비동기 라이브러리를 활용하여 처리한다.**
+
+<!-- V8 자바스크립트의 자세한 설명은 본 블로그 글에서 상세하게 설명하므로 참조하면 된다. -->
+
+libuv 는 수많은 유저들의 요청들을 앞단의 Event Queue 로 받아내고, Event Loop 라는 싱글 스레드가 Event Queue 의 요청들을 하나씩 빼네어 뒷단에 있는 Worker Thread Pool 에게 던져서 상세 수행을 요청한다. 그래서 수천수만의 유저 요청이 한데 몰리더라도 Event Queue 에 쌓아두고 매우 빠른 속도로 Event Loop 가 Worker Thread Pool 에 처리를 요청하니 서버로써 역할을 충분히 잘해낼 수 있는것이다.
+
+싱글 스레드(Event Queue & Loop)와 멀티 스레드(Worker Thread Pool)의 아름다운 협업이라고 해야할까. libuv 의 비동기는 Kernel(시스템 API) 을 사용하기 때문에 성능 측면에서도 굉장히 뛰어나 브라우저보다 더 서버에 적합하도록 Javascript 를 활용할 수 있다. Node.js 서버라는 자바스크립트 런타임 환경은 이후로 웹서버계에 가볍고 빠르고 확장성 넓은 아이로 어마하게 널리 사용되고 있다. 이제는 deno 나 bun 이라는 새로운 자바스크립트 런타임 환경의 등장으로 Node.js 는 할아버지 취급을 받을지 지켜봐야할 일이다.
