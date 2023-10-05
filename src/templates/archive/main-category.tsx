@@ -1,9 +1,9 @@
-import { css } from "@emotion/react"
-import styled from "@emotion/styled"
-import { Link } from "gatsby"
-import * as React from "react"
-import { CategoryArticle } from "."
-import SubCategoryArticles from "./sub-category"
+import { css } from '@emotion/react'
+import styled from '@emotion/styled'
+import { Link } from 'gatsby'
+import * as React from 'react'
+import { CategoryArticle } from '.'
+import SubCategoryArticles from './sub-category'
 
 export const CategoryLine = styled(`div`)({
   content: '""',
@@ -84,19 +84,23 @@ export const CategorySubConnectedNestedLine = styled(CategoryLine)({
   },
 })
 
-export const sliceStringWithMax = (str: string, max: number) => 
-  (str.length >= max)
-    ? `${str.slice(0, max)}...`
-    : str
+export const sliceStringWithMax = (str: string, max: number) =>
+  str.length >= max ? `${str.slice(0, max)}...` : str
 
-const MainCategoryArticles: React.FunctionComponent<{ maxTitleLength: number, categories: Array<CategoryArticle> }> = ({ maxTitleLength, categories }) => (
+const MainCategoryArticles: React.FunctionComponent<{
+  maxTitleLength: number
+  categories: Array<CategoryArticle>
+}> = ({ maxTitleLength, categories }) => (
   <React.Fragment>
     {categories.map(each => {
       const mainCategory = each.category // .join(' - ')
-      const hasSubCategory = each.subCategories && (each.subCategories.length > 0)
+      const hasSubCategory = each.subCategories && each.subCategories.length > 0
       return (
         <MainCategoryBox key={mainCategory}>
-          <MainCategoryTitle category={mainCategory} articleCount={each.count} />
+          <MainCategoryTitle
+            category={mainCategory}
+            articleCount={each.count}
+          />
           <ul css={styles.articles} key={mainCategory}>
             {hasSubCategory && <CategoryMainLine />}
             {each.articles.map(article => (
@@ -107,7 +111,12 @@ const MainCategoryArticles: React.FunctionComponent<{ maxTitleLength: number, ca
               </li>
             ))}
           </ul>
-          {hasSubCategory && <SubCategoryArticles maxTitleLength={maxTitleLength - 3} categories={each.subCategories!} />}
+          {hasSubCategory && (
+            <SubCategoryArticles
+              maxTitleLength={maxTitleLength - 3}
+              categories={each.subCategories!}
+            />
+          )}
         </MainCategoryBox>
       )
     })}
@@ -115,7 +124,12 @@ const MainCategoryArticles: React.FunctionComponent<{ maxTitleLength: number, ca
 )
 
 const ChevronRight = () => (
-  <a css={css`position: relative; left: -5px`}>
+  <a
+    css={css`
+      position: relative;
+      left: -5px;
+    `}
+  >
     <svg height="20" viewBox="0 0 18 18" width="24" fill="var(--text-link)">
       <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6-6-6z"></path>
     </svg>
@@ -123,22 +137,47 @@ const ChevronRight = () => (
 )
 
 const MainCategoryTitle: React.FunctionComponent<{
-  category: string,
-  articleCount: number,
+  category: string
+  articleCount: number
 }> = ({ category, articleCount }) => {
   return (
-    <div css={[styles.categoryHeader, css`background-color: var(--text-link-background);`]}>
+    <div
+      css={[
+        styles.categoryHeader,
+        css`
+          background-color: var(--text-link-background);
+        `,
+      ]}
+    >
       <ChevronRight />
       <strong css={styles.categoryTitle}>{category}</strong>
-      <span css={[styles.categoryTitle, css`margin: 0 10px 0 auto;`]}>{articleCount}</span>
+      <span
+        css={[
+          styles.categoryTitle,
+          css`
+            margin: 0 10px 0 auto;
+          `,
+        ]}
+      >
+        {articleCount}
+      </span>
     </div>
   )
 }
 
 const MainCategoryBox: React.FunctionComponent<{
-  children: React.ReactNode, props?: any
+  children: React.ReactNode
+  props?: any
 }> = ({ children, props }) => (
-  <div css={[styles.categoryBox, css`margin: 0px 10px 10px;`]} {...props}>
+  <div
+    css={[
+      styles.categoryBox,
+      css`
+        margin: 0px 10px 10px;
+      `,
+    ]}
+    {...props}
+  >
     {children}
   </div>
 )
@@ -148,7 +187,7 @@ export const styles = {
     border: 1px solid var(--text-link);
     border-radius: 10px;
     padding: 10px;
-    
+
     @media only screen and (max-width: 700px) {
       margin: 8px;
     }
@@ -204,7 +243,7 @@ export const styles = {
     font-weight: 100;
     font-size: 0.96rem;
     @media only screen and (max-width: 700px) {
-      font-size: 0.90rem;
+      font-size: 0.9rem;
     }
   `,
   articleTitle: css`
