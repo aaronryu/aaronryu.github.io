@@ -1,9 +1,18 @@
 {
   "extends": "astro/tsconfigs/strict",
   "compilerOptions": {
-    "baseUrl": ".",
+    // baseUrl(".") + paths("src/*") -> paths("./src/*")
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["./src/*"]
+      // "@pages/*": ["./src/pages/*"],
+      // "@styles/*": ["./src/styles/*"],
+      // "@components/*": ["./src/components/*"]
+      /**
+       * 2026년초 기준 VSC 에서는 자바스크립트와 타입스크립트 설정을 공통의 하나로 묶으려는 시도 중
+       * - 하지만 실제 내부 백엔드 엔진(TS Server) 혹은 Astro 와 같은 자체 언어 서버의 설정은 여전히 전통적 설정 사용 중
+       * - 그래서 이전 버전의 javascript. / typescript.preferences.importModuleSpecifier 를 따르기때문에
+       * - 신규 js/ts.preferences.importModuleSpecifier 를 따르지않았어서 non-relative 가 아닌 shortest 설정이 되어버린것
+       **/
     }
   },
   "include": [".astro/types.d.ts", "**/*"],
