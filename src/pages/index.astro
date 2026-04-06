@@ -1,5 +1,5 @@
 ---
-
+const pageTitle = "My Astro Site";
 ---
 
 <html lang="en">
@@ -10,13 +10,13 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0" />
     <!-- 사용자의 줌을 막기 위해서는 content="user-scaleable=no,maximum-scale=1.0" 웹 접근성에선 안티패턴 -->
     <meta name="generator" content={Astro.generator} />
-    <title>Astro</title>
+    <title>{pageTitle}</title>
   </head>
   <body>
     <a href="/">Home</a>
     <a href="/about">About</a>
     <a href="/blog">Blog</a>
 
-    <h1>My Astro Site</h1>
+    <h1>{pageTitle}</h1>
   </body>
 </html>
