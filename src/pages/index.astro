@@ -1,24 +1,9 @@
 ---
-import Footer from "@/components/Footer.astro";
-import Header from "@/components/Header.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
 
-const pageTitle = "My Astro Site";
+const pageTitle = "Home Page";
 ---
 
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="icon" href="/favicon.ico" />
-    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-    <!-- 사용자의 줌을 막기 위해서는 content="user-scaleable=no,maximum-scale=1.0" 웹 접근성에선 안티패턴 -->
-    <meta name="generator" content={Astro.generator} />
-    <title>{pageTitle}</title>
-  </head>
-  <body>
-    <Header />
-
-    <h1>{pageTitle}</h1>
-    <Footer />
-  </body>
-</html>
+<BaseLayout pageTitle={pageTitle}>
+  <h2>My awesome blog subtitle</h2>
+</BaseLayout>

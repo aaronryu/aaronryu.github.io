@@ -1,30 +1,15 @@
 ---
-import Footer from "@/components/Footer.astro";
-import Header from "@/components/Header.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
 
 const pageTitle = "My Astro Learning Blog";
 ---
 
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="icon" href="/favicon.ico" />
-    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-    <!-- 사용자의 줌을 막기 위해서는 content="user-scaleable=no,maximum-scale=1.0" 웹 접근성에선 안티패턴 -->
-    <meta name="generator" content={Astro.generator} />
-    <title>{pageTitle}</title>
-  </head>
-  <body>
-    <Header />
-
-    <h1>{pageTitle}</h1>
-    <p>This is where I will post about my journey learning Astro.</p>
-    <ul>
-      <li><a href="/posts/post-1">Post 1</a></li>
-      <li><a href="/posts/post-2">Post 2</a></li>
-      <li><a href="/posts/post-3">Post 3</a></li>
-    </ul>
-    <Footer />
-  </body>
-</html>
+<BaseLayout pageTitle={pageTitle}>
+  <h1>{pageTitle}</h1>
+  <p>This is where I will post about my journey learning Astro.</p>
+  <ul>
+    <li><a href="/posts/post-1">Post 1</a></li>
+    <li><a href="/posts/post-2">Post 2</a></li>
+    <li><a href="/posts/post-3">Post 3</a></li>
+  </ul>
+</BaseLayout>
