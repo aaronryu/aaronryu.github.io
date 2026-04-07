@@ -5,7 +5,7 @@ import { getCollection } from "astro:content";
 const pageTitle = "Tag Index";
 // const allPosts = Object.values(import.meta.glob("@/pages/posts/*.md", { eager: true }));
 const allPosts = await getCollection("blog");
-const uniqueTags = [...new Set(allPosts.map((post) => post.data.tags).flat())];
+const uniqueTags = [...new Set(allPosts.map((post) => post.data.category).flat())];
 ---
 
 <BaseLayout pageTitle={pageTitle}>
