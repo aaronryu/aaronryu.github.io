@@ -10,7 +10,7 @@ const identity = {
 };
 const skills = ["HTML", "CSS", "JavaScript", "React", "Astro", "Writing Docs"];
 const happy = true;
-const finished = false;
+const finished = true;
 const goal = 3;
 
 const skillColor = "crimson";
@@ -21,12 +21,12 @@ const textCase = "uppercase";
 <BaseLayout pageTitle={pageTitle}>
   <h2>... and my new Astro site!</h2>
   <p>
-    I am working through Astro's introductory tutorial. This is the second page
-    on my website, and it's the first one I built myself!
+    I am working through Astro's introductory tutorial. This is the second page on my website, and
+    it's the first one I built myself!
   </p>
   <p>
-    This site will update as I complete more of the tutorial, so keep checking
-    back and see how my journey is going!
+    This site will update as I complete more of the tutorial, so keep checking back and see how my
+    journey is going!
   </p>
   <p>Here are a few facts about me:</p>
   <ul>
@@ -48,13 +48,7 @@ const textCase = "uppercase";
   </ul>
   {happy && <p>I am happy to be learning Astro!</p>}
   {finished && <p>I finished this tutorial!</p>}
-  {
-    goal === 3 ? (
-      <p>My goal is to finish in 3 days.</p>
-    ) : (
-      <p>My goal is not 3 days.</p>
-    )
-  }
+  {goal === 3 ? <p>My goal is to finish in 3 days.</p> : <p>My goal is not 3 days.</p>}
   <style is:global define:vars={{ skillColor, fontWeight, textCase }}>
     h1 {
       color: purple;
