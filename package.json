@@ -15,7 +15,9 @@
   "dependencies": {
     "@astrojs/preact": "^5.1.1",
     "@astrojs/rss": "^4.0.18",
+    "@iconify-json/fa6-brands": "^1.2.6",
     "astro": "^6.1.4",
+    "astro-icon": "^1.1.5",
     "preact": "^10.29.1"
   },
   "devDependencies": {

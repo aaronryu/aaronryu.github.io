@@ -2,26 +2,85 @@
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
 import "@/styles/global.css";
+import HeaderScrollSpy from "@/components/HeaderScrollSpy.astro";
 
-const { pageTitle } = Astro.props;
+const AARON = "Aaron Ryu";
+const AARONS_BLOG_TITLE = "The Pessimistic Optimist";
+const AARONS_TWITTER_ACCOUNT = "@aaronryudev";
+const AARONS_BLOG_KEYWORDS =
+  "웹, 백엔드, 스프링, 자바, 프론트엔드, 리액트, 데이터베이스, 네트워크, 인프라, 정치, 사회, 조직, 리더, 경제, 자본, 교육, 학습";
+const AARONS_BLOG_DESCRIPTION =
+  "웹 개발 기술에 대한 쉬운 설명뿐만 아니라 정치, 사회, 리더, 경제 등 인문학에 관련된 저의 생각들을 적어내는 공간입니다";
+
+const {
+  title = AARONS_BLOG_TITLE,
+  author = AARON,
+  keywords = AARONS_BLOG_KEYWORDS,
+  description = AARONS_BLOG_DESCRIPTION,
+  image = "",
+  section,
+  created,
+  updated,
+} = Astro.props;
+const isArticle = title !== AARONS_BLOG_TITLE && !!created;
 ---
 
-<html lang="en">
+<html lang="ko">
   <head>
+    <!-- (0) 커스텀 폰트 사용을 위해 / 성능을 위해 CSS 가 아닌 HTML 로드 -->
+    <link rel="preconnect" href="https://googleapis.com" />
+    <link rel="preconnect" href="https://gstatic.com" crossorigin />
+    <link
+      href="https://googleapis.com/css2?family=Ubuntu:wght@200;300;400;500&display=swap"
+      rel="stylesheet"
+    />
+    <!-- (A) HTML 기본 설정 -->
     <meta charset="utf-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0" />
     <!-- 사용자의 줌을 막기 위해서는 content="user-scaleable=no,maximum-scale=1.0" 웹 접근성에선 안티패턴 -->
     <meta name="generator" content={Astro.generator} />
-    <title>{pageTitle}</title>
+    <!-- (B.1) 기본 페이지 정보 -->
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="author" content={author} />
+    <meta name="keywords" content={keywords} />
+    <!-- (B.2) 소셜 페이지 및 오픈그래프 정보 -->
+    <meta property="og:site_name" content={AARONS_BLOG_TITLE} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content={isArticle ? "article" : "website"} />
+    {
+      isArticle && (
+        <>
+          <meta property="article:section" content={section} />
+          {keywords.split("/").map((each: string) => (
+            <meta property="article:tag" content={each.trim()} />
+          ))}
+          <meta property="article:author" content={author} />
+          {created && <meta property="article:published_time" content={created} />}
+          {updated && <meta property="article:modified_time" content={updated} />}
+        </>
+      )
+    }
+    <meta property="og:url" content="https://aaron.github.io/" />
+    <!-- TODO <meta property="og:image" content="https://aaron.github.io/images/og.png" /> -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content={AARONS_TWITTER_ACCOUNT} />
+    <meta name="twitter:creator" content={AARONS_TWITTER_ACCOUNT} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <!-- TODO <meta name="twitter:image" content="https://aaron.github.io/images/og.png" /> -->
+    <!-- (C.1) SEO 개선을 위한 Canonical 설정 - 원본 페이지 주소 명시 -->
+    <!-- TODO <link rel="canonical" href="https://aaron.github.io/" /> -->
+    <!-- (C.2) SEO 추적을 위한 네이버 및 구글 태그매니저 설정 -->
+    <!-- TODO <meta property="naver-site-verification" content="" /> -->
+    <!-- TODO <script type="text/javascript" async="" src=""></script> -->
   </head>
   <body>
+    {isArticle && <HeaderScrollSpy />}
     <Header />
-    <h1>{pageTitle}</h1>
     <slot />
     <Footer />
-    <script>
-      import "@/scripts/menu.js";
-    </script>
   </body>
 </html>

@@ -1,0 +1,41 @@
+---
+
+---
+
+<div class="scroll-spy" style="height: 210px;"></div>
+
+<script is:inline>
+  // 1. 관찰할 대상 요소 선택 (기존의 spy ref 역할)
+  const spyElement = document.querySelector(".scroll-spy");
+
+  // 2. IntersectionObserver 설정
+  const observer = new IntersectionObserver(
+    ([entry]) => {
+      // 요소가 화면에서 사라지면(교차하지 않으면) 클래스 추가
+      if (!entry.isIntersecting) {
+        document.body.classList.add("scrolled-a-bit");
+      } else {
+        // 요소가 화면에 보이면 클래스 제거
+        document.body.classList.remove("scrolled-a-bit");
+      }
+    },
+    { rootMargin: "0px" },
+  );
+
+  // 3. 관찰 시작
+  if (spyElement) {
+    observer.observe(spyElement);
+  }
+
+  // 4. SPA 가 아니라 페이지가 실제로 Hard Navigation 하기때문에 불필요
+  // observer.disconnect();
+</script>
+
+<style>
+  .scroll-spy {
+    position: absolute;
+    z-index: -1;
+    top: 0;
+    width: 1px;
+  }
+</style>

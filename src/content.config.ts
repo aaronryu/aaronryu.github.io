@@ -20,6 +20,8 @@ const blog = defineCollection({
         alt: z.string(),
       })
       .optional(),
+    keywords: z.string().optional(),
+    description: z.string().optional(),
   }),
 });
 // 단일 `collections` 객체를 내보내 컬렉션을 등록하세요

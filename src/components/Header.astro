@@ -1,22 +1,216 @@
 ---
-import Menu from "@/components/Menu.astro";
-import Navigation from "@/components/Navigation.astro";
 import ThemeIcon from "@/components/ThemeIcon.astro";
+import { Icon } from "astro-icon/components";
+
+const diff = new Date().getTime() - new Date("2017-08-01").getTime();
+const totalYears = diff / (1000 * 60 * 60 * 24 * 365.25);
 ---
 
 <header>
-  <nav>
-    <div>
-      <ThemeIcon />
-      <Menu />
+  <div class="wsj-topbar">
+    <div class="wsj-topbar-links">
+      <Icon name="fa6-brands:linkedin" class="social-icon" />
+      <span> | </span>
+      <Icon name="fa6-brands:facebook" class="social-icon" />
+      <span> | </span>
+      <Icon name="fa6-brands:x-twitter" class="social-icon" />
     </div>
-    <Navigation />
+    <div class="wsj-topbar-right">
+      <a href="?hl=ko">한국어</a>
+      <span> | </span>
+      <a href="?hl=en">English</a>
+      <span> | </span>
+      <a href="?hl=jp">日本語</a>
+      <span></span>
+      <ThemeIcon />
+    </div>
+  </div>
+
+  <div class="wsj-masthead">
+    <div class="wsj-logo"><a href="#">THE PESSIMISTIC OPTIMIST.</a></div>
+    <div class="wsj-author">{totalYears.toFixed(1)}년차 Web Application Developer 웹 개발자</div>
+    <!-- <div class="wsj-actions">
+      <ThemeIcon />
+    </div> -->
+  </div>
+
+  <nav class="wsj-subnav" aria-label="main navigation">
+    <a href="#">Blog</a>
+    <a href="#">Hobby</a>
+    <a href="#">About</a>
+  </nav>
+
+  <nav class="wsj-mainnav" aria-label="sub (blog category) navigation">
+    <a href="#" class="category">Politics<br />정치·사회</a>
+    <a href="#" class="category">Leadership<br />조직·리더</a>
+    <a href="#" class="category">Economy<br />경제·자본</a>
+    <a href="#" class="category">Education<br />교육·학습</a>
+    <a href="#" class="category">Engineering<br />기술·개발</a>
+    <a href="#" class="category">Opinion<br />사유·개인</a>
+    <a href="#" class="category">
+      <svg
+        class="search-icon"
+        viewBox="0 0 16 16"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        style="margin-left:4px;"
+      >
+        <circle cx="6.5" cy="6.5" r="4.5" stroke="currentColor" stroke-width="1.5"></circle>
+        <line
+          x1="10.5"
+          y1="10.5"
+          x2="14"
+          y2="14"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"></line>
+      </svg>
+    </a>
   </nav>
 </header>
 
 <style>
-  div {
+  /* (A) 최상단 검은색 배경의 소셜 링크 및 언어 변환바 */
+  :root {
+    --topbar-height: 2em;
+  }
+
+  .social-icon {
+    color: #ccc;
+    width: 1em;
+    height: 1em;
+  }
+  .wsj-topbar {
+    position: fixed;
+    right: 0;
+    left: 0;
+    z-index: 1;
+    background: #111;
+    padding: 0 1em;
     display: flex;
+    align-items: center;
     justify-content: space-between;
+    height: var(--topbar-height);
+  }
+  .wsj-topbar-links {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .wsj-topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .wsj-topbar-links a,
+  .wsj-topbar-right a,
+  .wsj-topbar-links span,
+  .wsj-topbar-right span {
+    color: #ccc;
+    text-decoration: none;
+    font-size: 13px;
+    letter-spacing: 0.01em;
+  }
+  .wsj-topbar-links a:hover,
+  .wsj-topbar-right a:hover {
+    color: #fff;
+  }
+  /* (B) 블로그 타이틀과 테마버튼이 위치한 상단 헤더 */
+  .wsj-masthead {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: calc(var(--topbar-height) + 1em) 1em 0.4em;
+  }
+  .wsj-logo {
+    font-family: "Times New Roman", Times, serif;
+    font-size: 2.4em;
+    font-weight: 900;
+    line-height: 0.9em;
+    letter-spacing: -0.5px;
+    text-align: center;
+  }
+  .wsj-author {
+    font-size: 0.8em;
+    font-weight: 200;
+    letter-spacing: -0.5px;
+    text-align: center;
+    margin-top: -0.15em;
+  }
+  .wsj-actions {
+    position: absolute;
+    right: 0.6em;
+    bottom: -0.4em;
+  }
+  /* (B.1) 블로그나 취미 그리고 나와 블로그에 대한 설명 */
+  .wsj-subnav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0;
+    padding: 0 0 0.4em;
+    margin-top: -0.5em;
+    border-bottom: 0.5px solid var(--text);
+    flex-wrap: wrap;
+  }
+  .wsj-subnav a {
+    text-decoration: none;
+    font-size: 0.7em;
+    font-weight: 300;
+    padding: 0 0.8em;
+    border-right: 1px solid #ccc;
+  }
+  .wsj-subnav a:last-child {
+    border-right: none;
+  }
+  .wsj-subnav a:hover {
+    color: #000;
+  }
+  /* (C) 카테고리 나열 */
+  .category {
+    text-align: center;
+    line-height: 1.2em;
+  }
+  .wsj-mainnav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2px 0 6px;
+    flex-wrap: wrap;
+    gap: 0;
+  }
+  @media only screen and (max-width: 512px) {
+    .wsj-mainnav {
+      padding-left: 0.2em;
+      padding-right: 0.2em;
+      justify-content: flex-start;
+      flex-wrap: nowrap; /* 줄바꿈 금지 */
+      overflow-x: auto; /* 가로 내용 넘치면 스크롤 생성 */
+      -webkit-overflow-scrolling: touch; /* iOS에서 부드러운 스크롤 */
+      scrollbar-width: none; /* 파이어폭스 스크롤바 숨김 (선택사항) */
+    }
+
+    .wsj-mainnav::-webkit-scrollbar {
+      display: none;
+    }
+  }
+  .wsj-mainnav a {
+    text-decoration: none;
+    font-size: 0.8em;
+    padding: 0.4em 0.8em;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+  .wsj-mainnav a:hover {
+    text-decoration: underline;
+  }
+  .wsj-mainnav .search-icon {
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    vertical-align: middle;
+    cursor: pointer;
   }
 </style>

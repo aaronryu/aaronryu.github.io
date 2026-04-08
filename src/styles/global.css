@@ -1,100 +1,90 @@
-html {
-  background-color: #f1f5f9;
-  font-family: sans-serif;
-}
-
-body {
-  margin: 0 auto;
-  width: 100%;
-  max-width: 80ch;
-  padding: 1rem;
-  line-height: 1.5;
-}
-
-* {
+*,
+*:before,
+*:after {
   box-sizing: border-box;
 }
 
-h1 {
-  margin: 1rem 0;
-  font-size: 2.5rem;
+:root {
+  --brand: #5b748b;
+  --bg0: white;
+  --bg: #f4f7fb;
+  --bg-trans: hsla(214, 47%, 97%, 0.7);
+  --bg-accents: hsl(215, 47%, 85%, 0.2);
+  --bg1: #dee2e6;
+  --bg2: #b6bfc8;
+  --well: #f8f9fa;
+  --card: #ecf1f8;
+  --text0: black;
+  --text: #2b2836;
+  --text-link: #7f5555;
+  --text-link-background: #7f555530;
+  --text-auxiliary: #535960;
+  --text-placeholder: #868e96;
+  --hr: hsla(0, 0%, 0%, 0.1);
+  --shadow: 0 9px 60px 0 rgba(0, 0, 0, 0.12);
+  --shadow-small: 0 5px 10px rgba(0, 0, 0, 0.12);
+  --shadow-medium: 0 8px 30px rgba(0, 0, 0, 0.12);
+  --shadow-large: 0 30px 60px rgba(0, 0, 0, 0.12);
 }
 
-/* nav 스타일 */
-.menu {
-  background-color: #0d0950;
-  border: none;
-  color: #fff;
-  font-size: 1.2rem;
-  font-weight: bold;
-  padding: 5px 10px;
+:root.dark {
+  --brand: #93a7b9;
+  --bg0: black;
+  --bg: #2b2836;
+  --bg-trans: hsla(253, 15%, 18%, 0.7);
+  --bg-accents: hsl(251, 14%, 20%);
+  --bg1: #3a3649;
+  --bg2: #514c66;
+  --well: #23212c;
+  --card: #3a3649;
+  --text0: white;
+  --text: #b6bfc8;
+  --text-link: #b79494;
+  --text-link-background: #b7949430;
+  --text-auxiliary: #848c94;
+  --text-placeholder: #868e9688;
+  --hr: #3a3649;
+  --shadow: 0 9px 60px 0 rgba(0, 0, 0, 0.35);
+  --shadow-extra-small: 0 2px 5px rgba(0, 0, 0, 0.35);
+  --shadow-small: 0 5px 10px rgba(0, 0, 0, 0.35);
+  --shadow-medium: 0 8px 30px rgba(0, 0, 0, 0.35);
+  --shadow-large: 0 30px 60px rgba(0, 0, 0, 0.35);
 }
 
-.nav-links {
-  width: 100%;
-  display: none;
-  margin: 0;
+html {
+  @media only screen and (max-width: 600px) {
+    font-size: 0.9rem;
+  }
 }
 
-.nav-links a {
-  display: block;
-  text-align: center;
-  padding: 10px 0;
+body {
+  font-family:
+    "Ubuntu",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    "Nanum Gothic",
+    Arial,
+    sans-serif;
+  background-color: var(--bg);
+  color: var(--text);
+  line-height: 1.6; /* 가독성을 위해 추가 권장 */
+  transition:
+    background-color 0.3s ease-out,
+    color 0.3s ease-out;
+  margin: 0; /* 기본 마진 제거 확인 */
+}
+
+a {
   text-decoration: none;
-  font-size: 1.2rem;
-  font-weight: bold;
-  text-transform: uppercase;
-  color: #0d0950;
+  color: inherit; /* var(--text)보다 inherit이 관리에 용이할 때가 많습니다 */
 }
 
-.nav-links a:hover,
-.nav-links a:focus {
-  background-color: #ff9776;
-}
-
-:has(.menu[aria-expanded="true"]) .nav-links {
-  display: unset;
-}
-
-@media screen and (min-width: 636px) {
-  .nav-links {
-    margin-left: 5em;
-    display: block;
-    position: static;
-    width: auto;
-    background: none;
-  }
-
-  .nav-links a {
-    display: inline-block;
-    padding: 15px 20px;
-  }
-
-  .menu {
-    display: none;
-  }
-}
-
-/* 다크 테마 스타일 개별 적용 */
-html.dark {
-  background-color: #0d0950;
-  color: #fff;
-}
-
-.dark .menu {
-  background-color: #fff;
-  color: #000;
-}
-
-.dark .nav-links a:hover,
-.dark .nav-links a:focus {
-  color: #0d0950;
-}
-
-.dark .nav-links a {
-  color: #fff;
-}
-
-.dark a {
-  color: #ff9776;
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
 }

@@ -1,10 +1,19 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
 
-const { frontmatter } = Astro.props;
+const { section, frontmatter } = Astro.props;
 ---
 
-<BaseLayout pageTitle={frontmatter.title}>
+<BaseLayout
+  title={frontmatter.title}
+  keywords={frontmatter.keywords}
+  description={frontmatter.description}
+  image={frontmatter.image}
+  section={section}
+  created={frontmatter.created.toISOString()}
+  updated={frontmatter.updated?.toISOString()}
+>
+  <p>{frontmatter.title}</p>
   <p>{frontmatter.created.toLocaleDateString()}</p>
   {frontmatter.updated && <p>{frontmatter.updated.toLocaleDateString()}</p>}
   {frontmatter.image && <img src={frontmatter.image.url} width="300" alt={frontmatter.image.alt} />}
