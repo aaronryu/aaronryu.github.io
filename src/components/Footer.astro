@@ -1,17 +1,267 @@
 ---
-import Social from "@/components/Social.astro";
+import { Icon } from "astro-icon/components";
+
+const diff = new Date().getTime() - new Date("2017-08-01").getTime();
+const totalYears = diff / (1000 * 60 * 60 * 24 * 365.25);
+const currentYear = new Date().getFullYear();
 ---
 
+<footer>
+  <div class="footer-inner">
+    <div class="footer-flex">
+      <!-- Col 1: Brand + Social -->
+      <div class="wsj-masthead">
+        <div class="wsj-logo"><a href="#">THE PESSIMISTIC OPTIMIST.</a></div>
+        <div class="wsj-author">
+          {totalYears.toFixed(1)}년차 Web Application Developer 웹 개발자
+        </div>
+        <div class="social-row">
+          <a href="#" class="social-btn" title="LinkedIn">
+            <Icon name="fa6-brands:linkedin" class="social-icon" />
+          </a>
+          <a href="#" class="social-btn" title="Facebook">
+            <Icon name="fa6-brands:facebook" class="social-icon" />
+          </a>
+          <a href="#" class="social-btn" title="X">
+            <Icon name="fa6-brands:x-twitter" class="social-icon" />
+          </a>
+        </div>
+      </div>
+      <!-- Col 2: Categories -->
+      <div class="col-categories">
+        <ul class="cat-list">
+          <li><a href="#">Politics<br /><span class="cat-sub">정치·사회</span></a></li>
+          <li><a href="#">Leadership<br /><span class="cat-sub">조직·리더</span></a></li>
+          <li><a href="#">Economy<br /><span class="cat-sub">경제·자본</span></a></li>
+          <li><a href="#">Education<br /><span class="cat-sub">교육·학습</span></a></li>
+          <li><a href="#">Engineering<br /><span class="cat-sub">기술·개발</span></a></li>
+          <li><a href="#">Opinion<br /><span class="cat-sub">사유·개인</span></a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2019-{currentYear} Aaron Ryu. All Rights Reserved.</span>
+    <nav class="footer-nav">
+      <a href="#">Blog</a>
+      <a href="#">Hobby</a>
+      <a href="#">About</a>
+    </nav>
+  </div>
+</footer>
+
 <style>
-  footer {
+  /* (B) 블로그 타이틀과 테마버튼이 위치한 상단 헤더 */
+  .wsj-masthead {
     display: flex;
-    gap: 1rem;
-    margin-top: 2rem;
+    flex-direction: column;
+    align-items: start;
+    justify-content: center;
+    position: relative;
+    flex-shrink: 0;
+  }
+  .wsj-logo {
+    font-family: "Times New Roman", Times, serif;
+    font-size: 1.4em;
+    font-weight: 900;
+    line-height: 0.9em;
+    letter-spacing: -0.5px;
+    text-align: start;
+  }
+  .wsj-author {
+    font-size: 0.7em;
+    font-weight: 200;
+    letter-spacing: -0.5px;
+    text-align: center;
+    margin-top: -0.15em;
+  }
+
+  /* ───── FAKE PAGE CONTENT ───── */
+  .fake-page {
+    background: #f5f5f3;
+    padding: 48px 32px 64px;
+    text-align: center;
+    color: #aaa;
+    font-size: 14px;
+    border-bottom: 0.5px solid #ddd;
+  }
+
+  /* ───── FOOTER ───── */
+  footer {
+    background: #2a2a2e;
+    color: #c8c8cc;
+  }
+
+  .footer-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 2em 2em 0em;
+  }
+
+  /* ── 3-column grid (desktop) ── */
+  .footer-flex {
+    display: flex;
+    justify-content: space-between;
+    gap: 2em;
+    padding-bottom: 1.4em;
+    border-bottom: 0.5px solid #484850;
+  }
+
+  /* ── Social ── */
+  .social-row {
+    display: flex;
+    gap: 12px;
+    margin-top: 0.3em;
+  }
+
+  .social-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 0.5px solid #484850;
+    background: transparent;
+    text-decoration: none;
+    transition:
+      border-color 0.15s,
+      background 0.15s;
+  }
+  .social-btn:hover {
+    border-color: #aaa;
+    background: #383840;
+  }
+  .social-btn svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  /* ── Categories ── */
+  .cat-list {
+    padding: 0em;
+    margin: 0em;
+    list-style: none;
+    line-height: 1em;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .cat-list li {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+  .cat-list a {
+    font-size: 0.8em;
+    font-weight: 400;
+    color: #ddd;
+    text-decoration: none;
+  }
+  .cat-list a:hover {
+    color: #fff;
+  }
+  .cat-sub {
+    font-size: 0.7em;
+    color: #666;
+  }
+  a:hover .cat-sub {
+    color: #ddd;
+  }
+
+  /* ── Footer bottom bar ── */
+  .footer-bottom {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 16px 32px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .footer-copy {
+    font-size: 12px;
+    color: #666;
+  }
+  .footer-nav {
+    display: flex;
+    gap: 16px;
+  }
+  .footer-nav a {
+    font-size: 12px;
+    color: #666;
+    text-decoration: none;
+  }
+  .footer-nav a:hover {
+    color: #aaa;
+  }
+
+  /* ───── MOBILE (≤ 600px) ───── */
+  @media (max-width: 600px) {
+    .footer-inner {
+      padding: 1.4em 1.4em 0em;
+    }
+
+    .cat-list {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: #484850;
+      border: 0.5px solid #484850;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .cat-list li {
+      background: #323236;
+      padding: 10px 6px;
+      align-items: center;
+      text-align: center;
+      gap: 2px;
+    }
+    .cat-list a {
+      font-size: 0.9em;
+      font-weight: 500;
+      color: #e8e8ec;
+    }
+    .cat-sub {
+      font-size: 10px;
+    }
+
+    /* social: centered, larger touch targets */
+    .social-row {
+      justify-content: center;
+      gap: 0.9em;
+      margin-bottom: 1em;
+    }
+    .social-btn {
+      width: 40px;
+      height: 40px;
+    }
+
+    /* re-order: social → categories → bottom */
+    .footer-flex {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    /* show Blog/Hobby/About on mobile */
+    .footer-bottom {
+      padding: 14px 20px 20px;
+      flex-direction: column-reverse;
+      align-items: center;
+      gap: 8px;
+      border-top: 0.5px solid #484850;
+    }
+
+    .footer-nav {
+      display: flex;
+    }
+    .footer-copy {
+      font-size: 11px;
+    }
   }
 </style>
-
-<footer>
-  <Social platform="twitter" username="astrodotbuild" />
-  <Social platform="github" username="withastro" />
-  <Social platform="youtube" username="astrodotbuild" />
-</footer>
