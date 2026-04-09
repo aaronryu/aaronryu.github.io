@@ -1,0 +1,64 @@
+---
+import type { MarkdownHeading } from "astro";
+
+const { headings, currentDepth = 1 } = Astro.props;
+---
+
+<ul>
+  {
+    headings
+      .filter((heading: MarkdownHeading) => heading.depth === currentDepth)
+      .map((heading: MarkdownHeading) => {
+        const currentDepthHeadingIndex = headings.findIndex(
+          (each: MarkdownHeading) => each === heading,
+        );
+        const nextDepthHeadingIndex = headings.findIndex(
+          (each: MarkdownHeading, i: number) =>
+            i > currentDepthHeadingIndex && each.depth === currentDepth,
+        );
+        const children = headings.slice(
+          currentDepthHeadingIndex + 1,
+          nextDepthHeadingIndex === -1 ? headings.length : nextDepthHeadingIndex,
+        );
+        return (
+          <li>
+            <a href={`#${heading.slug}`} data-toc-link>
+              {heading.text}
+            </a>
+            {/* 하위 항목이 있다면 depth를 높여서 재귀 호출 */}
+            {children.length > 0 && (
+              <Astro.self headings={children} currentDepth={currentDepth + 1} />
+            )}
+          </li>
+        );
+      })
+  }
+</ul>
+
+<style>
+  ul {
+    padding-left: 1.5em;
+    line-height: 1.7em;
+  }
+  @media only screen and (max-width: 1280px) {
+    ul {
+      padding-left: 1.2em;
+    }
+  }
+  @media only screen and (max-width: 1024px) {
+    ul {
+      padding-left: 1em;
+    }
+  }
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+  a:hover {
+    color: var(--text-link);
+  }
+  a.active {
+    color: var(--text0);
+    font-weight: 600;
+  }
+</style>

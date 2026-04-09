@@ -1,0 +1,96 @@
+---
+import TableOfContentItem from "@/components/TableOfContentItem.astro";
+
+const { headings } = Astro.props;
+---
+
+<nav class="toc">
+  <TableOfContentItem headings={headings} />
+</nav>
+
+<script>
+  const links = document.querySelectorAll("[data-toc-link]");
+  const headings = Array.from(document.querySelectorAll("h1, h2, h3"));
+
+  // 헤더 높이만큼 오차 범위 설정 (내 블로그 헤더 높이에 맞게 조절)
+  const OFFSET = 100;
+
+  function updateToc() {
+    // 1. 현재 화면 상단(OFFSET)보다 위에 있는 제목들만 필터링
+    const passedHeadings = headings.filter((h) => {
+      const rect = h.getBoundingClientRect();
+      return rect.top < OFFSET;
+    });
+
+    // 2. 그중에서 가장 마지막(가장 하단)에 있는 제목이 현재 읽고 있는 섹션
+    const currentHeading =
+      passedHeadings.length > 0 ? passedHeadings[passedHeadings.length - 1] : null;
+
+    if (currentHeading) {
+      const id = currentHeading.getAttribute("id");
+      const newHash = `#${id}`;
+
+      // 1. 목차 스타일 업데이트
+      links.forEach((link) => {
+        link.classList.toggle("active", link.getAttribute("href") === newHash);
+      });
+
+      // 2. URL 해시 업데이트 (현재 해시와 다를 때만 실행하여 성능 최적화)
+      if (window.location.hash !== newHash) {
+        // history.replaceState를 써야 뒤로가기가 꼬이지 않습니다.
+        history.replaceState(null, "", newHash);
+      }
+    } else {
+      // 본문 최상단일 때 해시 제거
+      links.forEach((link) => link.classList.remove("active"));
+      if (window.location.hash) {
+        history.replaceState(null, "", window.location.pathname);
+      }
+    }
+  }
+
+  // 최적화된 스크롤 이벤트 리스너
+  let ticking = false;
+  window.addEventListener(
+    "scroll",
+    () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          updateToc();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    },
+    { passive: true },
+  );
+
+  updateToc();
+</script>
+
+<style>
+  .toc {
+    position: fixed;
+    margin: 1em 1em 1em calc(50vw + 400px - 10px);
+    padding-left: 1em;
+    border-left: 1px solid var(--hr);
+    font-size: 0.7em;
+    font-weight: 400;
+  }
+  @media only screen and (max-width: 1280px) {
+    .toc {
+      margin: 1em 1em 1em calc(800px + 50px - 10px);
+    }
+  }
+  @media only screen and (max-width: 1024px) {
+    .toc {
+      margin: 1em 1em 1em calc(800px - 10px);
+      font-size: 0.65em;
+    }
+  }
+  @media only screen and (max-width: 970px) {
+    .toc {
+      display: none;
+    }
+  }
+</style>

@@ -1,7 +1,8 @@
 ---
+import TableOfContents from "@/components/TableOfContents.astro";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 
-const { section, frontmatter } = Astro.props;
+const { section, frontmatter, headings } = Astro.props;
 ---
 
 <BaseLayout
@@ -13,20 +14,11 @@ const { section, frontmatter } = Astro.props;
   created={frontmatter.created.toISOString()}
   updated={frontmatter.updated?.toISOString()}
 >
+  {headings && <TableOfContents headings={headings} />}
   <p>{frontmatter.title}</p>
   <p>{frontmatter.created.toLocaleDateString()}</p>
   {frontmatter.updated && <p>{frontmatter.updated.toLocaleDateString()}</p>}
   {frontmatter.image && <img src={frontmatter.image.url} width="300" alt={frontmatter.image.alt} />}
-
-  <div class="tags">
-    {
-      frontmatter.category.map((tag: string) => (
-        <p class="tag">
-          <a href={`/tags/${tag}`}>{tag}</a>
-        </p>
-      ))
-    }
-  </div>
   <slot />
 </BaseLayout>
 
