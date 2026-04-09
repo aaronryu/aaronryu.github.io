@@ -15,29 +15,43 @@ const { section, frontmatter, headings } = Astro.props;
   updated={frontmatter.updated?.toISOString()}
 >
   {headings && <TableOfContents headings={headings} />}
-  <p>{frontmatter.title}</p>
-  <p>{frontmatter.created.toLocaleDateString()}</p>
-  {frontmatter.updated && <p>{frontmatter.updated.toLocaleDateString()}</p>}
-  {frontmatter.image && <img src={frontmatter.image.url} width="300" alt={frontmatter.image.alt} />}
-  <slot />
+  <article>
+    <!-- {frontmatter.image && <img />} <CustomGatsbyImage 참조해서 채워넣을것 -->
+    <p>{frontmatter.title}</p>
+    <p>{frontmatter.created.toLocaleDateString()}</p>
+    {frontmatter.updated && <p>{frontmatter.updated.toLocaleDateString()}</p>}
+    {
+      frontmatter.image && (
+        <img src={frontmatter.image.url} width="300" alt={frontmatter.image.alt} />
+      )
+    }
+    <slot />
+  </article>
 </BaseLayout>
 
 <style>
-  a {
-    color: #00539f;
+  article {
+    max-width: 800px;
+    /* 여기에 패딩을 주어 우측 공간을 버릴지 아니면 TOC 에 패딩을 줘서 오른쪽으로 좀 옮길지 고민하다 전자 선택 */
+    padding: 0 1em 0 0;
+    margin: 0 auto;
   }
-
-  .tags {
-    display: flex;
-    flex-wrap: wrap;
+  @media only screen and (max-width: 1280px) {
+    article {
+      margin: 0 auto 0 50px;
+      padding: 0 1.2rem;
+    }
   }
-
-  .tag {
-    margin: 0.25em;
-    border: dotted 1px #a1a1a1;
-    border-radius: 0.5em;
-    padding: 0.5em 1em;
-    font-size: 1.15em;
-    background-color: #f8fcfd;
+  @media only screen and (max-width: 1024px) {
+    article {
+      margin: 0 auto 0 0;
+      padding: 0 1.2rem;
+    }
+  }
+  @media only screen and (max-width: 970px) {
+    article {
+      margin: 0 auto;
+      padding: 0 1.2rem;
+    }
   }
 </style>
