@@ -1,0 +1,107 @@
+---
+const { title } = Astro.props;
+---
+
+<div class="on-scroll-sticky-header">
+  <div class="on-scroll-sticky-header-left">
+    <div class="logo"><a href="/">TPO.</a></div>
+  </div>
+  <div class="on-scroll-sticky-header-middle">
+    <div class="title"><a href="#">{title}</a></div>
+  </div>
+  <div class="on-scroll-sticky-header-right">
+    <div class="logo">TPO.</div>
+  </div>
+</div>
+
+<!-- 최상단 <body> 태그 부모에 있는 .scrolled-a-bit 인지를 시키려면 is:global 추가 필수 -->
+<style is:global>
+  /* (A) 최상단 검은색 배경의 소셜 링크 및 언어 변환바 */
+  .on-scroll-sticky-header {
+    --topbar-height: 3em;
+
+    position: fixed;
+    /* 평소에는 위로 올려서 숨김 */
+    top: -4em;
+    right: 0;
+    left: 0;
+    background: var(--bg-trans);
+    border-bottom: 1px solid color-mix(in srgb, var(--text), transparent 50%);
+    backdrop-filter: blur(0.4em);
+    padding: 0 1em;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    height: var(--topbar-height);
+    /* 스크롤을 내렸을때 부드러운 애니메이션 설정 */
+    transition: top 0.2s ease-in-out;
+    .scrolled-a-bit & {
+      top: 2em;
+    }
+
+    @media only screen and (max-width: 700px) {
+      height: calc(var(--topbar-height) - 1em);
+    }
+  }
+
+  .on-scroll-sticky-header .logo {
+    font-family: "Times New Roman", Times, serif;
+    font-size: 1.6em;
+    font-weight: 900;
+    letter-spacing: -0.5px;
+    text-align: center;
+
+    @media only screen and (max-width: 700px) {
+      font-size: 1.2rem;
+    }
+  }
+
+  .on-scroll-sticky-header .title {
+    font-size: 1.05em;
+    font-weight: 600;
+    padding: 0 0.8em;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    @media only screen and (max-width: 700px) {
+      font-size: 0.82rem;
+    }
+  }
+
+  .on-scroll-sticky-header-right {
+    /* opacity: 0;
+    pointer-events: none; */
+    visibility: hidden;
+    flex-shrink: 0;
+  }
+
+  /*  */
+  /*  */
+  /*  */
+  /*  */
+  .wsj-topbar-links {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .wsj-topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .wsj-topbar-links a,
+  .wsj-topbar-right a,
+  .wsj-topbar-links span,
+  .wsj-topbar-right span {
+    color: #ccc;
+    text-decoration: none;
+    font-size: 13px;
+    letter-spacing: 0.01em;
+  }
+  .wsj-topbar-links a:hover,
+  .wsj-topbar-right a:hover {
+    color: #fff;
+  }
+</style>

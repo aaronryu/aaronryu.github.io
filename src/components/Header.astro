@@ -91,6 +91,10 @@ const totalYears = diff / (1000 * 60 * 60 * 24 * 365.25);
     align-items: center;
     justify-content: space-between;
     height: var(--topbar-height);
+
+    @media (max-width: 700px) {
+      font-size: 0.9em;
+    }
   }
   .wsj-topbar-links {
     display: flex;
@@ -108,7 +112,7 @@ const totalYears = diff / (1000 * 60 * 60 * 24 * 365.25);
   .wsj-topbar-right span {
     color: #ccc;
     text-decoration: none;
-    font-size: 13px;
+    font-size: 0.9em;
     letter-spacing: 0.01em;
   }
   .wsj-topbar-links a:hover,

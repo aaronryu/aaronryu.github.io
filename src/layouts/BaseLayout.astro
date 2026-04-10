@@ -3,6 +3,7 @@ import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
 import "@/styles/global.css";
 import HeaderScrollSpy from "@/components/HeaderScrollSpy.astro";
+import OnScrollStickyHeader from "@/components/OnScrollStickyHeader.astro";
 
 const AARON = "Aaron Ryu";
 const AARONS_BLOG_TITLE = "The Pessimistic Optimist";
@@ -79,6 +80,7 @@ const isArticle = title !== AARONS_BLOG_TITLE && !!created;
   </head>
   <body>
     {isArticle && <HeaderScrollSpy />}
+    {isArticle && <OnScrollStickyHeader title={title} />}
     <Header />
     <slot />
     <Footer />
