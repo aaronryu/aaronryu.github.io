@@ -4,13 +4,29 @@ import { getCollection, render } from "astro:content";
 
 export async function getStaticPaths() {
   const posts = await getCollection("blog");
-  return posts.map((post) => ({
-    params: { path: `${post.filePath?.split("/").slice(1, -1).join("/")}` },
-    props: { post },
-  }));
+  return posts.map((post) => {
+    const relatedPosts = posts
+      .filter(
+        (anotherPost) =>
+          post.id !== anotherPost.id && // 현재 읽고 있는 글은 제외
+          post.data.category.some((element) => anotherPost.data.category.includes(element)),
+      )
+      // 무작위로 최신순으로 정렬
+      .sort(
+        (relatedPost1, relatedPost2) =>
+          new Date(relatedPost2.data.created).getTime() -
+          new Date(relatedPost1.data.created).getTime(),
+      )
+      // 원하는 개수(4개 또는 6개)만큼 자르기
+      .slice(0, 6);
+    return {
+      params: { path: `${post.filePath?.split("/").slice(1, -1).join("/")}` },
+      props: { post, relatedPosts },
+    };
+  });
 }
 
-const { post } = Astro.props;
+const { post, relatedPosts } = Astro.props;
 const { Content, headings } = await render(post);
 ---
 
@@ -18,6 +34,7 @@ const { Content, headings } = await render(post);
   section={post.filePath?.split("/").slice(1, -1)[0]}
   frontmatter={post.data}
   headings={headings}
+  relatedPosts={relatedPosts}
 >
   <Content />
 </MarkdownPostLayout>

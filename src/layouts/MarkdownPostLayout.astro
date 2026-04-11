@@ -5,7 +5,7 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import MarkdownPost from "@/layouts/MarkdownPost.astro";
 import { convert } from "@/libs/date";
 
-const { section, frontmatter, headings } = Astro.props;
+const { section, frontmatter, headings, relatedPosts } = Astro.props;
 ---
 
 <BaseLayout
@@ -42,6 +42,9 @@ const { section, frontmatter, headings } = Astro.props;
       <slot />
     </MarkdownPost>
     <CreativeCommonsCard title={frontmatter.title} created={frontmatter.created} />
+    <div>
+      {relatedPosts}
+    </div>
   </article>
 </BaseLayout>
 
