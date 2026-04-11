@@ -94,6 +94,9 @@ textarea {
 img {
   width: 100%;
   height: auto;
+}
+
+.markdown-content img {
   border-radius: 8px;
 
   html.dark & {

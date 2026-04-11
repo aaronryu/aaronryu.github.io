@@ -4,6 +4,8 @@ category: ["Frontend"]
 created: 2022-11-26 12:30:12
 deck: "쓰로틀링과 디바운싱은 마우스 스크롤 이벤트가 적용되어있는 웹페이지에서 유저가 마우스 스크롤을 하니 수백수천번의 호출이 일어나 브라우저가 메모리 외상을 입는 등의 상황에 대한 해결책이다. 다수 호출로 인한 성능저하를 방지하기 위해서는 호출 수를 줄이면 된다. 호출 수를 줄이는 방법 중 호출간 간격을 두는것이 쓰로틀링(Throttling)이고 다수 호출을 적은수의 호출로 그룹핑하는걸 디바운싱(Debouncing)이라한다."
 image: { url: ./throttling-and-debouncing.png, alt: "Difference between throttling and debouncing" }
+keywords: 쓰로틀링, 디바운싱, Throttling, Debouncing, 프론트엔드 성능 최적화, 자바스크립트 이벤트, 호출 수 제한, 브라우저 과부하 방지
+description: 마우스 스크롤이나 리사이징 등 단기간에 발생하는 다수 이벤트를 제어하여 웹 성능 저하를 막는 쓰로틀링(간격 제어)과 디바운싱(그룹화)의 개념 및 차이점을 설명합니다.
 ---
 
 # 다수 호출로 인한 성능 저하문제
