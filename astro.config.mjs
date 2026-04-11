@@ -1,8 +1,14 @@
 // @ts-check
 import { defineConfig } from "astro/config";
 import preact from "@astrojs/preact";
-
 import icon from "astro-icon";
+import {
+  transformerNotationDiff,
+  transformerNotationHighlight,
+  transformerNotationWordHighlight,
+  transformerNotationFocus,
+  transformerNotationErrorLevel,
+} from "@shikijs/transformers";
 
 // https://astro.build/config
 export default defineConfig({
@@ -13,4 +19,22 @@ export default defineConfig({
   // (B) Vite-specific options
   // vite: { ... },
   integrations: [preact(), icon()],
+  markdown: {
+    shikiConfig: {
+      // 원하는 테마로 변경 (예: 'dracula', 'nord', 'github-dark' 등)
+      theme: "dracula",
+      // 여러 테마 사용 시 (다크/라이트 모드 대응)
+      // themes: {
+      //   light: "github-light",
+      //   dark: "dracula", // "github-dark",
+      // },
+      transformers: [
+        transformerNotationDiff(),
+        transformerNotationHighlight(),
+        transformerNotationWordHighlight(),
+        transformerNotationFocus(),
+        transformerNotationErrorLevel(),
+      ],
+    },
+  },
 });

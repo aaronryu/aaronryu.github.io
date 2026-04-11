@@ -1,4 +1,5 @@
 ---
+import { Image } from "astro:assets";
 import CreativeCommonsCard from "@/components/CreativeCommonsCard.astro";
 import TableOfContents from "@/components/TableOfContents.astro";
 import BaseLayout from "@/layouts/BaseLayout.astro";
@@ -19,13 +20,17 @@ const { section, frontmatter, headings, relatedPosts } = Astro.props;
 >
   {headings && <TableOfContents headings={headings} />}
   <article>
-    <!-- {frontmatter.image && <img />} <CustomGatsbyImage 참조해서 채워넣을것 -->
     <p class="post-category">
       {frontmatter.category.join(" / ")}
     </p>
     <p class="post-headline">
       {frontmatter.title}
     </p>
+    {
+      frontmatter.image && (
+        <Image class="post-image" src={frontmatter.image.url} alt={frontmatter.image.alt} />
+      )
+    }
     {frontmatter.deck && <div class="post-deck">{frontmatter.deck}</div>}
     {frontmatter.abstract && <div class="post-absract">{frontmatter.abstract}</div>}
     <time class="post-datetime" datetime={frontmatter.created.toISOString()}>
@@ -65,6 +70,10 @@ const { section, frontmatter, headings, relatedPosts } = Astro.props;
     @media only screen and (max-width: 970px) {
       margin: 0 auto;
     }
+  }
+
+  .post-image {
+    padding-top: 1.4em;
   }
 
   .post-category {
