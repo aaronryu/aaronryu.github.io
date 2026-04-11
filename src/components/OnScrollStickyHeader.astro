@@ -37,7 +37,7 @@ const { title } = Astro.props;
     transition: top 0.2s ease-in-out;
 
     .scrolled-a-bit & {
-      top: 2em;
+      top: 1.8em;
     }
 
     a {
@@ -80,33 +80,5 @@ const { title } = Astro.props;
     pointer-events: none; */
     visibility: hidden;
     flex-shrink: 0;
-  }
-
-  /*  */
-  /*  */
-  /*  */
-  /*  */
-  .wsj-topbar-links {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-  .wsj-topbar-right {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-  .wsj-topbar-links a,
-  .wsj-topbar-right a,
-  .wsj-topbar-links span,
-  .wsj-topbar-right span {
-    color: #ccc;
-    text-decoration: none;
-    font-size: 13px;
-    letter-spacing: 0.01em;
-  }
-  .wsj-topbar-links a:hover,
-  .wsj-topbar-right a:hover {
-    color: #fff;
   }
 </style>

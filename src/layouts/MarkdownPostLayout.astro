@@ -2,6 +2,7 @@
 import CreativeCommonsCard from "@/components/CreativeCommonsCard.astro";
 import TableOfContents from "@/components/TableOfContents.astro";
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import MarkdownPost from "@/layouts/MarkdownPost.astro";
 import { convert } from "@/libs/date";
 
 const { section, frontmatter, headings } = Astro.props;
@@ -37,7 +38,9 @@ const { section, frontmatter, headings } = Astro.props;
         </time>
       )
     }
-    <slot />
+    <MarkdownPost>
+      <slot />
+    </MarkdownPost>
     <CreativeCommonsCard title={frontmatter.title} created={frontmatter.created} />
   </article>
 </BaseLayout>
@@ -81,13 +84,13 @@ const { section, frontmatter, headings } = Astro.props;
   }
 
   .post-deck {
-    margin: 0.95rem 0 0;
-    padding: 0 0.1rem;
-    line-height: 1.9;
+    margin: 0.95em 0 0;
+    padding: 0 0.1em;
+    line-height: 1.8;
     font-size: 1em;
 
     @media only screen and (max-width: 700px) {
-      font-size: 0.9em;
+      font-size: 0.84em;
     }
   }
 
@@ -97,20 +100,24 @@ const { section, frontmatter, headings } = Astro.props;
     max-width: 750px;
     display: flex;
     justify-content: center;
+    line-height: 1.8;
     font-size: 1em;
-    line-height: 1.9;
 
     @media only screen and (max-width: 700px) {
-      font-size: 0.9em;
+      font-size: 0.84em;
     }
   }
 
   .post-datetime {
     display: block;
-    padding-left: 1rem;
-    letter-spacing: 0.02rem;
-    font-size: 0.83rem;
+    padding-left: 1em;
+    letter-spacing: 0.02em;
+    font-size: 0.83em;
     font-weight: 300;
     color: var(--brand);
+
+    @media only screen and (max-width: 700px) {
+      padding-left: 0.1em;
+    }
   }
 </style>
