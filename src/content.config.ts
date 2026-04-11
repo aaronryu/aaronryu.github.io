@@ -14,7 +14,7 @@ const blog = defineCollection({
       created: z.date(),
       updated: z.date().optional(),
       deck: z.string(),
-      abstract: z.string(),
+      abstract: z.string().optional(),
       image: z
         .object({
           url: image(),

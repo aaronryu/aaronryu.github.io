@@ -91,6 +91,16 @@ textarea {
   color: inherit;
 }
 
+img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+
+  html.dark & {
+    border: 0.5px solid var(--text);
+  }
+}
+
 /* pre */
 .astro-code {
   position: relative;

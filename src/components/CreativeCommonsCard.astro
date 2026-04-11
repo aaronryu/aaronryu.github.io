@@ -55,8 +55,14 @@ const { title, created } = Astro.props;
     line-height: 1.2;
     position: relative;
     overflow: hidden;
-    margin-bottom: 1.5rem;
+    margin-top: 1.5em;
+    margin-bottom: 1.5em;
     border-radius: 0.2em;
+
+    @media (max-width: 700px) {
+      margin-top: 1em;
+      margin-bottom: 1em;
+    }
 
     .information {
       display: flex;
