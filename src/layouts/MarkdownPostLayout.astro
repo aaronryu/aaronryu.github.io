@@ -1,4 +1,5 @@
 ---
+import CreativeCommonsCard from "@/components/CreativeCommonsCard.astro";
 import TableOfContents from "@/components/TableOfContents.astro";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import { convert } from "@/libs/date";
@@ -37,6 +38,7 @@ const { section, frontmatter, headings } = Astro.props;
       )
     }
     <slot />
+    <CreativeCommonsCard title={frontmatter.title} created={frontmatter.created} />
   </article>
 </BaseLayout>
 

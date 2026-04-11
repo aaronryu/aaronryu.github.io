@@ -16,6 +16,7 @@
   --card: #ecf1f8;
   --text0: black;
   --text: #2b2836;
+  /* --text: #454152; */
   --text-link: #7f5555;
   --text-link-background: #7f555530;
   --text-auxiliary: #535960;
@@ -78,7 +79,7 @@ body {
 
 a {
   text-decoration: none;
-  color: inherit; /* var(--text)보다 inherit이 관리에 용이할 때가 많습니다 */
+  color: var(--text-link);
 }
 
 button,

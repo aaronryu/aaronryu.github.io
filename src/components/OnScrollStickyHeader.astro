@@ -35,8 +35,13 @@ const { title } = Astro.props;
     height: var(--topbar-height);
     /* 스크롤을 내렸을때 부드러운 애니메이션 설정 */
     transition: top 0.2s ease-in-out;
+
     .scrolled-a-bit & {
       top: 2em;
+    }
+
+    a {
+      color: var(--text);
     }
 
     @media only screen and (max-width: 700px) {

@@ -1,0 +1,111 @@
+---
+import { Image } from "astro:assets";
+import { convert } from "@/libs/date";
+import { Icon } from "astro-icon/components";
+import License from "@/assets/cc-by-nc-sa.svg";
+
+// 1. 전체 URL (URL 객체)
+// const currentUrl = Astro.url;
+
+// 2. 전체 URL 문자열 (https://example.com)
+// const fullUrlString = Astro.url.href;
+
+// 3. 도메인을 제외한 경로 (예: /blog/post-1)
+// const pathName = Astro.url.pathname;
+
+// const currentUrl = Astro.url.href;
+const currentUrl = new URL(Astro.url.pathname, import.meta.env.SITE).href;
+const { title, created } = Astro.props;
+---
+
+<div class="creative-commons-container">
+  <div class="title">{title}</div>
+  <div class="url"><a href={currentUrl}>{currentUrl}</a></div>
+  <div class="information">
+    <div>
+      <div class="label">Author</div>
+      <div>Aaron</div>
+    </div>
+    <div>
+      <div class="label">Posted on</div>
+      <time class="post-datetime" datetime={created.toISOString()}>
+        {convert(created)}
+      </time>
+    </div>
+    <div>
+      <div class="label">Licensed Under</div>
+      <div class="license">
+        <Icon name="fa6-brands:creative-commons" class="mini-icon" /> CC BY-NC-SA 4.0
+      </div>
+    </div>
+  </div>
+  <div class="creative-commons-image">
+    <Image src={License} alt="CC BY-NC-SA 4.0" />
+  </div>
+  <div class="creative-commons-opacity-icon">
+    <Icon name="fa6-brands:creative-commons" class="representative-icon" />
+  </div>
+</div>
+
+<style>
+  .creative-commons-container {
+    z-index: 1;
+    padding: 1.2rem;
+    background-color: var(--text-link-background);
+    line-height: 1.2;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+    border-radius: 0.2em;
+
+    .information {
+      display: flex;
+      gap: 1.25em;
+      font-size: 0.95em;
+
+      .label {
+        font-size: 0.84em;
+        line-height: 1em;
+      }
+
+      .license {
+        display: flex;
+        align-items: center;
+        gap: 0.1em;
+
+        .mini-icon {
+          font-size: 1em;
+        }
+      }
+    }
+
+    .url {
+      font-size: 0.9em;
+      margin: 0.2em 0 0.8em;
+    }
+
+    .creative-commons-image {
+      position: absolute;
+      margin-right: 0.8em;
+      margin-bottom: 0.6em;
+      /* margin-right: 0.4em;
+      margin-bottom: 0.2em; */
+      right: 0;
+      bottom: 0;
+    }
+  }
+
+  .creative-commons-opacity-icon {
+    display: inline-block;
+    position: absolute;
+    z-index: -1;
+    right: -2em;
+    top: -3.5em;
+    opacity: 0.1;
+  }
+
+  .creative-commons-opacity-icon .representative-icon {
+    width: 16em;
+    height: 16em;
+  }
+</style>

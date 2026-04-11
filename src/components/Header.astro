@@ -9,11 +9,11 @@ const totalYears = diff / (1000 * 60 * 60 * 24 * 365.25);
 <header>
   <div class="wsj-topbar">
     <div class="wsj-topbar-links">
-      <Icon name="fa6-brands:linkedin" class="social-icon" />
+      <a href="#"><Icon name="fa6-brands:linkedin" /></a>
       <span> | </span>
-      <Icon name="fa6-brands:facebook" class="social-icon" />
+      <a href="#"><Icon name="fa6-brands:facebook" /></a>
       <span> | </span>
-      <Icon name="fa6-brands:x-twitter" class="social-icon" />
+      <a href="#"><Icon name="fa6-brands:x-twitter" /></a>
     </div>
     <div class="wsj-topbar-right">
       <a href="?hl=ko">한국어</a>
@@ -75,11 +75,6 @@ const totalYears = diff / (1000 * 60 * 60 * 24 * 365.25);
     --topbar-height: 2em;
   }
 
-  .social-icon {
-    color: #ccc;
-    width: 1em;
-    height: 1em;
-  }
   .wsj-topbar {
     position: fixed;
     right: 0;
@@ -106,9 +101,19 @@ const totalYears = diff / (1000 * 60 * 60 * 24 * 365.25);
     align-items: center;
     gap: 6px;
   }
-  .wsj-topbar-links a,
+  .wsj-topbar-links a {
+    color: #ccc;
+    font-size: 1em;
+    display: inline-flex; /* 또는 flex */
+    align-items: center; /* 수직 가운데 정렬 */
+    justify-content: center; /* 가로 가운데 정렬 (필요시) */
+  }
+  .wsj-topbar-links span {
+    color: #ccc;
+    font-size: 0.9em;
+    letter-spacing: 0.01em;
+  }
   .wsj-topbar-right a,
-  .wsj-topbar-links span,
   .wsj-topbar-right span {
     color: #ccc;
     text-decoration: none;
@@ -127,6 +132,10 @@ const totalYears = diff / (1000 * 60 * 60 * 24 * 365.25);
     justify-content: center;
     position: relative;
     padding: calc(var(--topbar-height) + 1em) 1em 0.4em;
+
+    a {
+      color: var(--text);
+    }
   }
   .wsj-logo {
     font-family: "Times New Roman", Times, serif;
@@ -166,6 +175,7 @@ const totalYears = diff / (1000 * 60 * 60 * 24 * 365.25);
   }
   .wsj-subnav a {
     text-decoration: none;
+    color: var(--text);
     font-size: 0.7em;
     font-weight: 300;
     padding: 0 0.8em;
@@ -175,7 +185,7 @@ const totalYears = diff / (1000 * 60 * 60 * 24 * 365.25);
     border-right: none;
   }
   .wsj-subnav a:hover {
-    color: #000;
+    color: var(--text0);
   }
   /* (C) 카테고리 나열 */
   .category {
@@ -207,13 +217,14 @@ const totalYears = diff / (1000 * 60 * 60 * 24 * 365.25);
   }
   .wsj-mainnav a {
     text-decoration: none;
+    color: var(--text);
     font-size: 0.8em;
     padding: 0.4em 0.8em;
     font-weight: 500;
     white-space: nowrap;
   }
   .wsj-mainnav a:hover {
-    text-decoration: underline;
+    color: var(--text0);
   }
   .wsj-mainnav .search-icon {
     width: 16px;
