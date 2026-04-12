@@ -33,12 +33,12 @@ const { section, frontmatter, headings, relatedPosts } = Astro.props;
     }
     {frontmatter.deck && <div class="post-deck">{frontmatter.deck}</div>}
     {frontmatter.abstract && <div class="post-absract">{frontmatter.abstract}</div>}
-    <time class="post-datetime" datetime={frontmatter.created.toISOString()}>
+    <time class="post-created-time" datetime={frontmatter.created.toISOString()}>
       생성일 : {convert(frontmatter.created)}
     </time>
     {
       frontmatter.updated && (
-        <time class="post-datetime" datetime={frontmatter.updated.toISOString()}>
+        <time class="post-updated-time" datetime={frontmatter.updated.toISOString()}>
           수정일 : {convert(frontmatter.updated)}
         </time>
       )
@@ -120,14 +120,18 @@ const { section, frontmatter, headings, relatedPosts } = Astro.props;
     }
   }
 
-  .post-datetime {
-    display: block;
+  .post-created-time {
     margin-top: 1em;
+    color: var(--brand);
+    font-weight: 300;
+  }
+
+  .post-created-time,
+  .post-updated-time {
+    display: block;
     padding-left: 1em;
     letter-spacing: 0.02em;
     font-size: 0.83em;
-    font-weight: 300;
-    color: var(--brand);
 
     @media only screen and (max-width: 700px) {
       padding-left: 0.1em;
