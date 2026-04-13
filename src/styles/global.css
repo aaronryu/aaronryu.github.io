@@ -116,6 +116,20 @@ img {
   }
 }
 
+:not(pre) > code {
+  padding: 0.2em;
+  padding-top: 1px;
+  padding-bottom: 1px;
+  background: #fefefe;
+  border: 0.5px solid var(--text);
+  border-radius: 4px;
+  vertical-align: 1px;
+
+  .dark & {
+    background: #23212c77;
+  }
+}
+
 /* pre */
 .astro-code {
   position: relative;
