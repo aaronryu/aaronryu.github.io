@@ -130,6 +130,36 @@ img {
   }
 }
 
+.remark-code-title {
+  /* padding: 10px 15px;
+  background-color: #f1f3f5;
+  border-bottom: 1px solid #ccc;
+  border-radius: 5px 5px 0 0;
+  font-size: 14px;
+  font-weight: bold; */
+  padding: 0 1.1em;
+  font-family: monospace;
+  border-radius: 8px 8px 0 0;
+  font-size: 0.8em;
+  background: #282a36;
+  color: #b6bfc8;
+  /* background: var(--text-link-background); */
+  /* color: var(--text-link); */
+  border: 0.5px solid #b6bfc8;
+  border-width: 0 0 0.5px;
+
+  html.dark & {
+    border: 0.5px solid var(--text);
+    border-width: 0.5px 0.5px 0;
+  }
+}
+
+.remark-code-title + pre {
+  margin-top: 0;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
 /* pre */
 .astro-code {
   position: relative;

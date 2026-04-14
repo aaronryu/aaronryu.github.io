@@ -24,6 +24,7 @@
     "@shikijs/transformers": "^4.0.2",
     "prettier": "3.8.1",
     "prettier-plugin-astro": "0.14.1",
-    "prettier-plugin-tailwindcss": "0.7.2"
+    "prettier-plugin-tailwindcss": "0.7.2",
+    "remark-code-titles": "^0.1.2"
   }
 }

@@ -9,6 +9,7 @@ import {
   transformerNotationFocus,
   transformerNotationErrorLevel,
 } from "@shikijs/transformers";
+import remarkCodeTitles from "remark-code-titles";
 
 // https://astro.build/config
 export default defineConfig({
@@ -20,6 +21,8 @@ export default defineConfig({
   // vite: { ... },
   integrations: [preact(), icon()],
   markdown: {
+    // 여기서 먼저 타이틀을 div로 변환
+    remarkPlugins: [remarkCodeTitles],
     shikiConfig: {
       // 원하는 테마로 변경 (예: 'dracula', 'nord', 'github-dark' 등)
       theme: "dracula",
