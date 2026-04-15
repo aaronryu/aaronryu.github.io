@@ -1,0 +1,374 @@
+---
+import Greeting from "@/components/Greetings";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { getCollection, render } from "astro:content";
+
+const posts = await getCollection("blog");
+const recentPosts = posts.map((post) => {
+  const relatedPosts = posts
+    // 생성날짜 기준 최신순으로 정렬
+    .sort(
+      (relatedPost1, relatedPost2) =>
+        new Date(relatedPost2.data.created).getTime() -
+        new Date(relatedPost1.data.created).getTime(),
+    )
+    // 원하는 개수(4개 또는 6개)만큼 자르기
+    .slice(0, 6);
+  return {
+    params: { path: `${post.filePath?.split("/").slice(1, -1).join("/")}` },
+    props: { post, relatedPosts },
+  };
+});
+
+const pageTitle = "Home Page";
+---
+
+<BaseLayout pageTitle={pageTitle}>
+  <main>
+    <div class="tl-wrap">
+      <div class="tl-fade-top"></div>
+      <div class="tl-fade-bottom"></div>
+      <div class="tl-center-line"></div>
+      <div class="tl-scroll" id="tlScroll">
+        <div class="tl-year-marker">
+          <span class="tl-year-label">2021</span>
+        </div>
+        <div class="tl-item right">
+          <div class="tl-dot-wrap">
+            <div class="tl-dot"></div>
+            <div class="tl-year-badge">2021.07</div>
+          </div>
+          <div class="tl-content">
+            <div class="tl-date">2021년 7월 5일</div>
+            <div class="tl-title">베타 버전 출시</div>
+            <div class="tl-desc">
+              초기 사용자 100명을 대상으로 베타 테스트를 진진진진진진진진진행했다.
+            </div>
+          </div>
+        </div>
+        <div class="tl-item left">
+          <div class="tl-dot-wrap">
+            <div class="tl-dot"></div>
+            <div class="tl-year-badge">2021.03</div>
+          </div>
+          <div class="tl-content">
+            <div class="tl-date">2021년 3월 12일</div>
+            <div class="tl-title">첫 번째 프로젝트 시작</div>
+            <div class="tl-desc">
+              프로덕트를 만드는것을 목표점에 도착하는 여행으로 비유를 하자면 프로덕트에 AI 는 여행에
+              KTX 와 같은 대중교통으로 비유할 수 있다 여행 경로는 결국 KTX 나 전철과 버스를 타더라도
+              중간중간 직접 걸어야할 거리가 분명히 존재한다 만약 제대로 걸을 줄 모르는 한 사람이
+              대중교통을 활용한다해도 걷지못하면 목적에 도착할 수 없다 프로덕트를 AI 로 개발하더라도
+            </div>
+          </div>
+        </div>
+        <div class="tl-item right">
+          <div class="tl-dot-wrap">
+            <div class="tl-dot"></div>
+            <div class="tl-year-badge">2021.07</div>
+          </div>
+          <div class="tl-content">
+            <div class="tl-date">2021년 7월 5일</div>
+            <div class="tl-title">베타 버전 출시</div>
+            <div class="tl-desc">
+              초기 사용자 100명을 대상으로 베타 테스트를 진진진진진진진진진행했다.
+            </div>
+          </div>
+        </div>
+        <div class="tl-item left">
+          <div class="tl-dot-wrap">
+            <div class="tl-dot"></div>
+            <div class="tl-year-badge">2021.11</div>
+          </div>
+          <div class="tl-content">
+            <div class="tl-date">2021년 11월 20일</div>
+            <div class="tl-title">팀 확장</div>
+            <div class="tl-desc">개발팀 인원이 3명에서 8명으로 늘었다.</div>
+          </div>
+        </div>
+
+        <div class="tl-year-marker">
+          <span class="tl-year-label">2022</span>
+        </div>
+        <div class="tl-item right">
+          <div class="tl-dot-wrap">
+            <div class="tl-dot"></div>
+            <div class="tl-year-badge">2022.02</div>
+          </div>
+          <div class="tl-content">
+            <div class="tl-date">2022년 2월 14일</div>
+            <div class="tl-title">정식 서비스 론칭</div>
+            <div class="tl-desc">드디어 일반 사용자에게 서비스를 공개했다.</div>
+          </div>
+        </div>
+        <div class="tl-item left">
+          <div class="tl-dot-wrap">
+            <div class="tl-dot"></div>
+            <div class="tl-year-badge">2022.06</div>
+          </div>
+          <div class="tl-content">
+            <div class="tl-date">2022년 6월 1일</div>
+            <div class="tl-title">사용자 1만 명 달성</div>
+            <div class="tl-desc">서비스 론칭 4개월 만에 첫 번째 큰 이정표를 달성했다.</div>
+          </div>
+        </div>
+        <div class="tl-item right">
+          <div class="tl-dot-wrap">
+            <div class="tl-dot"></div>
+            <div class="tl-year-badge">2022.09</div>
+          </div>
+          <div class="tl-content">
+            <div class="tl-date">2022년 9월 15일</div>
+            <div class="tl-title">앱 리뉴얼</div>
+            <div class="tl-desc">UX를 전면 개편하고 다크 모드를 추가했다.</div>
+          </div>
+        </div>
+
+        <div class="tl-year-marker">
+          <span class="tl-year-label">2023</span>
+        </div>
+        <div class="tl-item left">
+          <div class="tl-dot-wrap">
+            <div class="tl-dot"></div>
+            <div class="tl-year-badge">2023.01</div>
+          </div>
+          <div class="tl-content">
+            <div class="tl-date">2023년 1월 9일</div>
+            <div class="tl-title">시리즈 A 투자 유치</div>
+            <div class="tl-desc">50억 원 규모의 투자를 유치하며 성장에 가속이 붙었다.</div>
+          </div>
+        </div>
+        <div class="tl-item right">
+          <div class="tl-dot-wrap">
+            <div class="tl-dot"></div>
+            <div class="tl-year-badge">2023.05</div>
+          </div>
+          <div class="tl-content">
+            <div class="tl-date">2023년 5월 22일</div>
+            <div class="tl-title">해외 진출</div>
+            <div class="tl-desc">일본과 동남아 시장을 타겟으로 글로벌 확장을 시작했다.</div>
+          </div>
+        </div>
+        <div class="tl-item left">
+          <div class="tl-dot-wrap">
+            <div class="tl-dot"></div>
+            <div class="tl-year-badge">2023.10</div>
+          </div>
+          <div class="tl-content">
+            <div class="tl-date">2023년 10월 31일</div>
+            <div class="tl-title">어워드 수상</div>
+            <div class="tl-desc">올해의 스타트업 디자인 부문 최우수상을 수상했다.</div>
+          </div>
+        </div>
+
+        <div class="tl-year-marker">
+          <span class="tl-year-label">2024</span>
+        </div>
+        <div class="tl-item right">
+          <div class="tl-dot-wrap">
+            <div class="tl-dot"></div>
+            <div class="tl-year-badge">2024.03</div>
+          </div>
+          <div class="tl-content">
+            <div class="tl-date">2024년 3월 5일</div>
+            <div class="tl-title">AI 기능 탑재</div>
+            <div class="tl-desc">인공지능 추천 엔진을 핵심 기능으로 통합했다.</div>
+          </div>
+        </div>
+        <div class="tl-item left">
+          <div class="tl-dot-wrap">
+            <div class="tl-dot"></div>
+            <div class="tl-year-badge">2024.08</div>
+          </div>
+          <div class="tl-content">
+            <div class="tl-date">2024년 8월 19일</div>
+            <div class="tl-title">사용자 10만 명 돌파</div>
+            <div class="tl-desc">꾸준한 성장 끝에 사용자 10만 명을 넘어섰다.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</BaseLayout>
+
+<style>
+  main {
+    max-width: 800px;
+    margin: 0 auto;
+
+    @media only screen and (max-width: 1280px) {
+      padding: 0 1.2rem;
+    }
+  }
+  .tl-wrap {
+    position: relative;
+    height: 480px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+  }
+  .tl-scroll {
+    overflow-y: scroll;
+    height: 100%;
+    width: 100%;
+    scrollbar-width: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2em 0 4em 0;
+    @media only screen and (max-width: 700px) {
+      padding: 1em 0 3em 0;
+    }
+    box-sizing: border-box;
+    position: relative;
+    z-index: 2;
+  }
+  .tl-scroll::-webkit-scrollbar {
+    display: none;
+  }
+  .tl-center-line {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 0.5px;
+    background: var(--text);
+    transform: translateX(-50%);
+    z-index: 1;
+  }
+  /*  */
+  .tl-dot-wrap {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    z-index: 3;
+  }
+  .tl-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    /* 앞 요소의 실제 배경은 연하게 */
+    background-color: var(--text-link-background);
+    /* 뒷 요소가 보이지 않게 처리 */
+    backdrop-filter: blur(5px) brightness(1.2);
+    border: 1px solid var(--text-link);
+    flex-shrink: 0;
+  }
+  .tl-year-badge {
+    font-size: 0.5em;
+    font-weight: 400;
+    color: var(--text);
+    /* 앞 요소의 실제 배경은 연하게 */
+    background-color: var(--text-link-background);
+    /* 뒷 요소가 보이지 않게 처리 */
+    backdrop-filter: blur(5px) brightness(1.2);
+    border: 0.5px solid var(--text-link);
+    border-radius: 20px;
+    padding: 0px 6px;
+    white-space: nowrap;
+  }
+  /* Content Type 1: 글 표기 */
+  .tl-item {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    /* max-width: 560px; */
+    max-width: 800px;
+    min-height: 60px;
+    margin: 0.4em 0;
+  }
+  .tl-item.left {
+    flex-direction: row-reverse;
+  }
+  .tl-item.left .tl-content {
+    margin-left: auto;
+    /* margin-right: 0.4em; */
+    text-align: right;
+  }
+  .tl-item.right {
+    flex-direction: row;
+  }
+  .tl-item.right .tl-content {
+    /* margin-left: 0.4em; */
+    text-align: left;
+  }
+  /* Content Type 1 > 내부에 (오른쪽 / 왼쪽)으로 쏠린 글 */
+  .tl-content {
+    max-width: calc(50% - 2.4em);
+    padding: 0.52em 0.7em 0.6em 0.7em;
+    /* background: var(--color-background-secondary); */
+    border: 1px solid var(--text-auxiliary);
+    /* border-radius: 1em; */
+    border-radius: 0.8em;
+  }
+  /* Content Type 1 > 내부에 (오른쪽 / 왼쪽)으로 쏠린 글 > 내부에 들어간 내용들 */
+  .tl-date {
+    font-size: 0.6em;
+    color: var(--text-auxiliary);
+    margin-bottom: 0.2em;
+  }
+  .tl-title {
+    font-size: 0.8em;
+    font-weight: 500;
+    margin-bottom: 3px;
+  }
+  .tl-desc {
+    font-size: 0.75em;
+    line-height: 1.4;
+  }
+  /* Content Type 0: 연도 표기 */
+  .tl-year-marker {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    /* max-width: 560px; */
+    max-width: 800px;
+    margin: 16px 0;
+    z-index: 3;
+  }
+  .tl-year-label {
+    /* 앞 요소의 실제 배경은 연하게 */
+    background-color: var(--bg);
+    /* 뒷 요소가 보이지 않게 처리 */
+    backdrop-filter: blur(5px) brightness(1.2);
+    border: 1px solid var(--text-auxiliary);
+    border-radius: 1.2em;
+    padding: 0.1em 0.9em;
+    font-size: 1em;
+    font-weight: 500;
+    z-index: 4;
+  }
+  .tl-hint {
+    text-align: center;
+    font-size: 12px;
+    color: var(--color-text-tertiary);
+    margin-top: 8px;
+  }
+  .tl-fade-top,
+  .tl-fade-bottom {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 4em;
+    @media only screen and (max-width: 700px) {
+      height: 3em;
+    }
+    z-index: 10;
+    pointer-events: none;
+  }
+  .tl-fade-top {
+    top: 0;
+    background: linear-gradient(to bottom, var(--bg) 30%, transparent);
+  }
+  .tl-fade-bottom {
+    bottom: 0;
+    background: linear-gradient(to top, var(--bg) 30%, transparent);
+  }
+</style>

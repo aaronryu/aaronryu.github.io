@@ -1,11 +1,48 @@
 ---
 import Greeting from "@/components/Greetings";
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import { getCollection, render } from "astro:content";
+
+const posts = await getCollection("blog");
+const recentPosts = posts.map((post) => {
+  const relatedPosts = posts
+    // 생성날짜 기준 최신순으로 정렬
+    .sort(
+      (relatedPost1, relatedPost2) =>
+        new Date(relatedPost2.data.created).getTime() -
+        new Date(relatedPost1.data.created).getTime(),
+    )
+    // 원하는 개수(4개 또는 6개)만큼 자르기
+    .slice(0, 6);
+  return {
+    params: { path: `${post.filePath?.split("/").slice(1, -1).join("/")}` },
+    props: { post, relatedPosts },
+  };
+});
 
 const pageTitle = "Home Page";
 ---
 
 <BaseLayout pageTitle={pageTitle}>
-  <h2>My awesome blog subtitle</h2>
-  <Greeting client:load messages={["Hej", "Hallo", "Hola", "Habari"]} />
+  <main></main>
 </BaseLayout>
+
+<style>
+  main {
+    max-width: 800px;
+    /* 여기에 패딩을 주어 우측 공간을 버릴지 아니면 TOC 에 패딩을 줘서 오른쪽으로 좀 옮길지 고민하다 전자 선택 */
+    padding: 0 1.5em 0 0;
+    margin: 0 auto;
+
+    @media only screen and (max-width: 1280px) {
+      margin: 0 auto 0 50px;
+      padding: 0 1.2rem;
+    }
+    @media only screen and (max-width: 1024px) {
+      margin: 0 auto 0 0;
+    }
+    @media only screen and (max-width: 970px) {
+      margin: 0 auto;
+    }
+  }
+</style>
