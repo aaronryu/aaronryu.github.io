@@ -1,30 +1,50 @@
 ---
-import Greeting from "@/components/Greetings";
 import SectionHeader from "@/components/SectionHeader.astro";
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import type { InferEntrySchema } from "astro:content";
+import type { CollectionEntry } from "astro:content";
 import { getCollection, render } from "astro:content";
 
-const posts = await getCollection("blog");
-const recentPosts = posts.map((post) => {
-  const relatedPosts = posts
-    // 생성날짜 기준 최신순으로 정렬
-    .sort(
-      (relatedPost1, relatedPost2) =>
-        new Date(relatedPost2.data.created).getTime() -
-        new Date(relatedPost1.data.created).getTime(),
-    )
-    // 원하는 개수(4개 또는 6개)만큼 자르기
-    .slice(0, 6);
-  return {
-    params: { path: `${post.filePath?.split("/").slice(1, -1).join("/")}` },
-    props: { post, relatedPosts },
-  };
-});
+const thoughts = await getCollection("thoughts");
+const descendingThoughts = thoughts
+  .sort(
+    (thought1, thought2) =>
+      new Date(thought2.data.created).getTime() - new Date(thought1.data.created).getTime(),
+  )
+  .map((thought: CollectionEntry<"thoughts">) => thought.data);
 
-const pageTitle = "Home Page";
+// { 2026: { 4: [thought1, thought2], ... }, ... }
+interface GroupedThoughts {
+  [year: number]: {
+    [month: number]: Array<InferEntrySchema<"thoughts">>;
+  };
+}
+
+const grouped = groupByYearAndMonth(descendingThoughts);
+function groupByYearAndMonth(thoughts: Array<InferEntrySchema<"thoughts">>) {
+  return thoughts.reduce<GroupedThoughts>((acc, thought) => {
+    const date = new Date(thought.created);
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+
+    if (!acc[year]) acc[year] = {};
+    if (!acc[year][month]) acc[year][month] = [];
+
+    acc[year][month].push(thought);
+    return acc;
+  }, {});
+}
+
+// (A) 년 내림차순 정렬
+const sortedYears = Object.keys(grouped)
+  .map(Number)
+  .sort((a, b) => b - a);
+
+// 전체 아이템 인덱스 — 좌우 교차용
+let itemIndex = 0;
 ---
 
-<BaseLayout pageTitle={pageTitle}>
+<BaseLayout>
   <SectionHeader section={"thoughts"} />
   <main>
     <div class="tl-wrap">
@@ -32,160 +52,71 @@ const pageTitle = "Home Page";
       <div class="tl-fade-bottom"></div>
       <div class="tl-center-line"></div>
       <div class="tl-scroll" id="tlScroll">
-        <div class="tl-year-marker">
-          <span class="tl-year-label">2021</span>
-        </div>
-        <div class="tl-item right">
-          <div class="tl-dot-wrap">
-            <div class="tl-dot"></div>
-            <div class="tl-year-badge">2021.07</div>
-          </div>
-          <div class="tl-content">
-            <div class="tl-date">2021년 7월 5일</div>
-            <div class="tl-title">베타 버전 출시</div>
-            <div class="tl-desc">
-              초기 사용자 100명을 대상으로 베타 테스트를 진진진진진진진진진행했다.
-            </div>
-          </div>
-        </div>
-        <div class="tl-item left">
-          <div class="tl-dot-wrap">
-            <div class="tl-dot"></div>
-            <div class="tl-year-badge">2021.03</div>
-          </div>
-          <div class="tl-content">
-            <div class="tl-date">2021년 3월 12일</div>
-            <div class="tl-title">첫 번째 프로젝트 시작</div>
-            <div class="tl-desc">
-              프로덕트를 만드는것을 목표점에 도착하는 여행으로 비유를 하자면 프로덕트에 AI 는 여행에
-              KTX 와 같은 대중교통으로 비유할 수 있다 여행 경로는 결국 KTX 나 전철과 버스를 타더라도
-            </div>
-          </div>
-        </div>
-        <div class="tl-item right">
-          <div class="tl-dot-wrap">
-            <div class="tl-dot"></div>
-            <div class="tl-year-badge">2021.07</div>
-          </div>
-          <div class="tl-content">
-            <div class="tl-date">2021년 7월 5일</div>
-            <div class="tl-title">베타 버전 출시</div>
-            <div class="tl-desc">
-              초기 사용자 100명을 대상으로 베타 테스트를 진진진진진진진진진행했다.
-            </div>
-          </div>
-        </div>
-        <div class="tl-item left">
-          <div class="tl-dot-wrap">
-            <div class="tl-dot"></div>
-            <div class="tl-year-badge">2021.11</div>
-          </div>
-          <div class="tl-content">
-            <div class="tl-date">2021년 11월 20일</div>
-            <div class="tl-title">팀 확장</div>
-            <div class="tl-desc">개발팀 인원이 3명에서 8명으로 늘었다.</div>
-          </div>
-        </div>
+        {
+          sortedYears.map((year) => {
+            const months = grouped[year];
 
-        <div class="tl-year-marker">
-          <span class="tl-year-label">2022</span>
-        </div>
-        <div class="tl-item right">
-          <div class="tl-dot-wrap">
-            <div class="tl-dot"></div>
-            <div class="tl-year-badge">2022.02</div>
-          </div>
-          <div class="tl-content">
-            <div class="tl-date">2022년 2월 14일</div>
-            <div class="tl-title">정식 서비스 론칭</div>
-            <div class="tl-desc">드디어 일반 사용자에게 서비스를 공개했다.</div>
-          </div>
-        </div>
-        <div class="tl-item left">
-          <div class="tl-dot-wrap">
-            <div class="tl-dot"></div>
-            <div class="tl-year-badge">2022.06</div>
-          </div>
-          <div class="tl-content">
-            <div class="tl-date">2022년 6월 1일</div>
-            <div class="tl-title">사용자 1만 명 달성</div>
-            <div class="tl-desc">서비스 론칭 4개월 만에 첫 번째 큰 이정표를 달성했다.</div>
-          </div>
-        </div>
-        <div class="tl-item right">
-          <div class="tl-dot-wrap">
-            <div class="tl-dot"></div>
-            <div class="tl-year-badge">2022.09</div>
-          </div>
-          <div class="tl-content">
-            <div class="tl-date">2022년 9월 15일</div>
-            <div class="tl-title">앱 리뉴얼</div>
-            <div class="tl-desc">UX를 전면 개편하고 다크 모드를 추가했다.</div>
-          </div>
-        </div>
+            // (B) 월 내림차순 정렬
+            const sortedMonths = Object.keys(months)
+              .map(Number)
+              .sort((a, b) => b - a);
 
-        <div class="tl-year-marker">
-          <span class="tl-year-label">2023</span>
-        </div>
-        <div class="tl-item left">
-          <div class="tl-dot-wrap">
-            <div class="tl-dot"></div>
-            <div class="tl-year-badge">2023.01</div>
-          </div>
-          <div class="tl-content">
-            <div class="tl-date">2023년 1월 9일</div>
-            <div class="tl-title">시리즈 A 투자 유치</div>
-            <div class="tl-desc">50억 원 규모의 투자를 유치하며 성장에 가속이 붙었다.</div>
-          </div>
-        </div>
-        <div class="tl-item right">
-          <div class="tl-dot-wrap">
-            <div class="tl-dot"></div>
-            <div class="tl-year-badge">2023.05</div>
-          </div>
-          <div class="tl-content">
-            <div class="tl-date">2023년 5월 22일</div>
-            <div class="tl-title">해외 진출</div>
-            <div class="tl-desc">일본과 동남아 시장을 타겟으로 글로벌 확장을 시작했다.</div>
-          </div>
-        </div>
-        <div class="tl-item left">
-          <div class="tl-dot-wrap">
-            <div class="tl-dot"></div>
-            <div class="tl-year-badge">2023.10</div>
-          </div>
-          <div class="tl-content">
-            <div class="tl-date">2023년 10월 31일</div>
-            <div class="tl-title">어워드 수상</div>
-            <div class="tl-desc">올해의 스타트업 디자인 부문 최우수상을 수상했다.</div>
-          </div>
-        </div>
+            return (
+              <>
+                {/* 연도 구분 마커 */}
+                <div class="tl-year-marker">
+                  <span class="tl-year-label">{year}</span>
+                </div>
 
-        <div class="tl-year-marker">
-          <span class="tl-year-label">2024</span>
-        </div>
-        <div class="tl-item right">
-          <div class="tl-dot-wrap">
-            <div class="tl-dot"></div>
-            <div class="tl-year-badge">2024.03</div>
-          </div>
-          <div class="tl-content">
-            <div class="tl-date">2024년 3월 5일</div>
-            <div class="tl-title">AI 기능 탑재</div>
-            <div class="tl-desc">인공지능 추천 엔진을 핵심 기능으로 통합했다.</div>
-          </div>
-        </div>
-        <div class="tl-item left">
-          <div class="tl-dot-wrap">
-            <div class="tl-dot"></div>
-            <div class="tl-year-badge">2024.08</div>
-          </div>
-          <div class="tl-content">
-            <div class="tl-date">2024년 8월 19일</div>
-            <div class="tl-title">사용자 10만 명 돌파</div>
-            <div class="tl-desc">꾸준한 성장 끝에 사용자 10만 명을 넘어섰다.</div>
-          </div>
-        </div>
+                {sortedMonths.map((month) => {
+                  const items = months[month];
+
+                  return items.map((thought) => {
+                    const side = itemIndex++ % 2 === 0 ? "left" : "right";
+                    const dateLabel = `${year}.${String(month).padStart(2, "0")}`;
+                    const fullDate = new Date(thought.created).toLocaleDateString("ko-KR", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    });
+
+                    return (
+                      <div class={`tl-item ${side}`}>
+                        {/* left면 콘텐츠 먼저, right면 빈칸 먼저 */}
+                        {side === "left" ? (
+                          <div class="tl-content">
+                            <div class="tl-date">{fullDate}</div>
+                            <div class="tl-title">{thought.title}</div>
+                            <div class="tl-desc">{thought.description}</div>
+                          </div>
+                        ) : (
+                          <div class="tl-empty" />
+                        )}
+
+                        {/* 가운데 dot */}
+                        <div class="tl-dot-wrap">
+                          <div class="tl-dot" />
+                          <div class="tl-year-badge">{dateLabel}</div>
+                        </div>
+
+                        {/* right면 콘텐츠, left면 빈칸 */}
+                        {side === "right" ? (
+                          <div class="tl-content">
+                            <div class="tl-date">{fullDate}</div>
+                            <div class="tl-title">{thought.title}</div>
+                            <div class="tl-desc">{thought.description}</div>
+                          </div>
+                        ) : (
+                          <div class="tl-empty" />
+                        )}
+                      </div>
+                    );
+                  });
+                })}
+              </>
+            );
+          })
+        }
       </div>
     </div>
   </main>
@@ -221,7 +152,6 @@ const pageTitle = "Home Page";
     }
     box-sizing: border-box;
     position: relative;
-    z-index: 2;
   }
   .tl-scroll::-webkit-scrollbar {
     display: none;
@@ -234,7 +164,6 @@ const pageTitle = "Home Page";
     width: 0.5px;
     background: var(--text);
     transform: translateX(-50%);
-    z-index: 1;
   }
   /*  */
   .tl-dot-wrap {
@@ -245,7 +174,6 @@ const pageTitle = "Home Page";
     flex-direction: column;
     align-items: center;
     gap: 4px;
-    z-index: 3;
   }
   .tl-dot {
     width: 10px;
@@ -331,7 +259,6 @@ const pageTitle = "Home Page";
     /* max-width: 560px; */
     max-width: 800px;
     margin: 16px 0;
-    z-index: 3;
   }
   .tl-year-label {
     /* 앞 요소의 실제 배경은 연하게 */
@@ -343,7 +270,6 @@ const pageTitle = "Home Page";
     padding: 0.1em 0.9em;
     font-size: 1em;
     font-weight: 500;
-    z-index: 4;
   }
   .tl-hint {
     text-align: center;

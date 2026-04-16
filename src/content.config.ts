@@ -25,5 +25,13 @@ const blog = defineCollection({
       description: z.string().optional(),
     }),
 });
+const thoughts = defineCollection({
+  loader: glob({ pattern: "**/[^_]*.md", base: "./thoughts" }),
+  schema: z.object({
+    title: z.string().optional(),
+    created: z.date(),
+    description: z.string(),
+  }),
+});
 // 단일 `collections` 객체를 내보내 컬렉션을 등록하세요
-export const collections = { blog };
+export const collections = { blog, thoughts };
