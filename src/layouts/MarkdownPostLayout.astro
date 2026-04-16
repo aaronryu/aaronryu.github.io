@@ -6,6 +6,7 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import MarkdownPost from "@/layouts/MarkdownPost.astro";
 import { convert } from "@/libs/date";
 import SectionHeader from "@/components/SectionHeader.astro";
+import MarkdownPostHeader from "@/layouts/MarkdownPostHeader.astro";
 
 const { section, frontmatter, headings, relatedPosts } = Astro.props;
 ---
@@ -22,31 +23,7 @@ const { section, frontmatter, headings, relatedPosts } = Astro.props;
   <SectionHeader section={section} />
   {headings && <TableOfContents headings={headings} />}
   <article>
-    <p class="post-category">
-      {frontmatter.category.join(" / ")}
-    </p>
-    <p class="post-headline">
-      {frontmatter.title}
-    </p>
-    {
-      frontmatter.image && (
-        <Image class="post-image" src={frontmatter.image.url} alt={frontmatter.image.alt} />
-      )
-    }
-    {frontmatter.deck && <div class="post-deck">{frontmatter.deck}</div>}
-    {frontmatter.abstract && <div class="post-absract">{frontmatter.abstract}</div>}
-    <div class="post-time">
-      <time class="post-created-time" datetime={frontmatter.created.toISOString()}>
-        생성일 : {convert(frontmatter.created)}
-      </time>
-      {
-        frontmatter.updated && (
-          <time class="post-updated-time" datetime={frontmatter.updated.toISOString()}>
-            수정일 : {convert(frontmatter.updated)}
-          </time>
-        )
-      }
-    </div>
+    <MarkdownPostHeader frontmatter={frontmatter} />
     <MarkdownPost>
       <slot />
     </MarkdownPost>

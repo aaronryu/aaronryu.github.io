@@ -1,0 +1,77 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { getCollection } from "astro:content";
+
+const thoughts = await getCollection("thoughts");
+const descendingThoughts = thoughts
+  .sort(
+    (thought1, thought2) =>
+      new Date(thought2.data.created).getTime() - new Date(thought1.data.created).getTime(),
+  )
+  .map((thought: CollectionEntry<"thoughts">) => thought.data)
+  .slice(0, 10);
+---
+
+<main>
+  <div class="section-articles"></div>
+  <div class="section-thoughts">
+    <div class="title">Thoughts</div>
+    {
+      descendingThoughts.map((thought) => {
+        const fullDate = new Date(thought.created).toLocaleDateString("ko-KR", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        });
+        return (
+          <div class="tl-content">
+            <div class="tl-title">{thought.title}</div>
+            <div class="tl-desc">{thought.description}</div>
+            <div class="tl-date">{fullDate}</div>
+          </div>
+        );
+      })
+    }
+  </div>
+</main>
+
+<style>
+  main {
+    max-width: 1280px;
+    grid-template-columns: 928px 300px;
+    grid-column-gap: 32px;
+
+    margin: 0 auto;
+
+    @media only screen and (max-width: 1300px) {
+    }
+  }
+
+  .section-articles {
+  }
+
+  .section-thoughts {
+    .tl-content {
+      max-width: calc(50% - 2.4em);
+      padding: 0.52em 0.7em 0.6em 0.7em;
+      /* background: var(--color-background-secondary); */
+      border: 1px solid var(--text-auxiliary);
+      /* border-radius: 1em; */
+      border-radius: 0.8em;
+    }
+    .tl-date {
+      font-size: 0.6em;
+      color: var(--text-auxiliary);
+      margin-top: 0.2em;
+    }
+    .tl-title {
+      font-size: 0.8em;
+      font-weight: 500;
+      margin-bottom: 3px;
+    }
+    .tl-desc {
+      font-size: 0.75em;
+      line-height: 1.4;
+    }
+  }
+</style>

@@ -1,48 +1,199 @@
 ---
-import Greeting from "@/components/Greetings";
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import { getCollection, render } from "astro:content";
+import type { CollectionEntry } from "astro:content";
+import { getCollection } from "astro:content";
+import { sectionMap } from "@/scripts/section.ts";
+import { shuffle } from "@/scripts/shuffle.js";
+import MarkdownPostHeader from "@/layouts/MarkdownPostHeader.astro";
+
+const thoughts = await getCollection("thoughts");
+const descendingThoughts = thoughts
+  .sort(
+    (thought1, thought2) =>
+      new Date(thought2.data.created).getTime() - new Date(thought1.data.created).getTime(),
+  )
+  .map((thought: CollectionEntry<"thoughts">) => thought.data)
+  .slice(0, 10);
 
 const posts = await getCollection("blog");
-const recentPosts = posts.map((post) => {
-  const relatedPosts = posts
-    // 생성날짜 기준 최신순으로 정렬
-    .sort(
-      (relatedPost1, relatedPost2) =>
-        new Date(relatedPost2.data.created).getTime() -
-        new Date(relatedPost1.data.created).getTime(),
-    )
-    // 원하는 개수(4개 또는 6개)만큼 자르기
-    .slice(0, 6);
-  return {
-    params: { path: `${post.filePath?.split("/").slice(1, -1).join("/")}` },
-    props: { post, relatedPosts },
-  };
-});
+const recentPosts = posts.sort(
+  (relatedPost1, relatedPost2) =>
+    new Date(relatedPost2.data.created).getTime() - new Date(relatedPost1.data.created).getTime(),
+);
 
-const pageTitle = "Home Page";
+const recentPickedPosts = recentPosts.slice(0, 5);
+const randomPickedSections = shuffle([...Object.keys(sectionMap)]).slice(0, 3);
+const section1Post = recentPosts
+  .filter((post) => randomPickedSections[0] === post.filePath?.split("/").slice(1, -1)[0])
+  .map((post) => post.data);
+const section2Post = recentPosts
+  .filter((post) => randomPickedSections[1] === post.filePath?.split("/").slice(1, -1)[0])
+  .map((post) => post.data);
+const section3Post = recentPosts
+  .filter((post) => randomPickedSections[2] === post.filePath?.split("/").slice(1, -1)[0])
+  .map((post) => post.data);
 ---
 
-<BaseLayout pageTitle={pageTitle}>
-  <main></main>
+<BaseLayout>
+  <main>
+    <div class="dashboard">
+      <div class="section-articles">
+        <div class="random-articles">
+          <MarkdownPostHeader frontmatter={recentPickedPosts[3].data} />
+          <MarkdownPostHeader frontmatter={recentPickedPosts[4].data} />
+        </div>
+        <div class="recent-articles">
+          <div class="recent-articles-headline">
+            <MarkdownPostHeader frontmatter={recentPickedPosts[0].data} />
+          </div>
+          <div class="recent-articles-middle">
+            <MarkdownPostHeader frontmatter={recentPickedPosts[1].data} />
+            <MarkdownPostHeader frontmatter={recentPickedPosts[2].data} />
+          </div>
+          <div class="recent-articles-list">
+            <MarkdownPostHeader frontmatter={recentPickedPosts[3].data} />
+            <MarkdownPostHeader frontmatter={recentPickedPosts[4].data} />
+          </div>
+        </div>
+      </div>
+      <div class="section-thoughts">
+        <a href="/thoughts"><div class="title">Thoughts</div></a>
+        <div class="description">문득 드는 짧은 생각들에 대한 메모</div>
+        <div class="thoughts">
+          {
+            descendingThoughts.map((thought) => {
+              const fullDate = new Date(thought.created).toLocaleDateString("ko-KR", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              });
+              return (
+                <div class="tl-content">
+                  <div class="tl-title">{thought.title}</div>
+                  <div class="tl-desc">{thought.description}</div>
+                  <div class="tl-date">{fullDate}</div>
+                </div>
+              );
+            })
+          }
+        </div>
+      </div>
+    </div>
+  </main>
 </BaseLayout>
 
 <style>
   main {
-    max-width: 800px;
-    /* 여기에 패딩을 주어 우측 공간을 버릴지 아니면 TOC 에 패딩을 줘서 오른쪽으로 좀 옮길지 고민하다 전자 선택 */
-    padding: 0 1.5em 0 0;
     margin: 0 auto;
 
-    @media only screen and (max-width: 1280px) {
-      margin: 0 auto 0 50px;
-      padding: 0 1.2rem;
+    @media only screen and (min-width: 440px) {
+      max-width: 440px;
     }
-    @media only screen and (max-width: 1024px) {
-      margin: 0 auto 0 0;
+
+    @media only screen and (min-width: 640px) {
+      max-width: 640px;
     }
-    @media only screen and (max-width: 970px) {
-      margin: 0 auto;
+
+    @media only screen and (min-width: 980px) {
+      max-width: 980px;
     }
+
+    @media only screen and (min-width: 1300px) {
+      max-width: 1300px;
+    }
+  }
+
+  .dashboard {
+    display: grid;
+    grid-area: content;
+    margin-inline: 20px;
+
+    @media only screen and (min-width: 440px) {
+      grid-template-columns: 400px;
+    }
+
+    @media only screen and (min-width: 640px) {
+      grid-template-columns: 620px;
+    }
+
+    @media only screen and (min-width: 980px) {
+      grid-template-columns: 680px 240px;
+      grid-column-gap: 20px;
+    }
+
+    @media only screen and (min-width: 1300px) {
+      grid-template-columns: 988px 240px;
+      grid-column-gap: 32px;
+    }
+  }
+
+  .section-articles {
+    display: grid;
+
+    @media only screen and (min-width: 440px) {
+      grid-template-columns: 0px 400px;
+    }
+
+    @media only screen and (min-width: 640px) {
+      grid-template-columns: 0px 620px;
+    }
+
+    @media only screen and (min-width: 980px) {
+      grid-template-columns: 300px 320px;
+      grid-column-gap: 20px;
+    }
+
+    @media only screen and (min-width: 1300px) {
+      grid-template-columns: 300px 628px;
+      grid-column-gap: 32px;
+    }
+  }
+
+  .section-thoughts {
+    .title {
+      font-size: 1.3em;
+      line-height: 1.2em;
+    }
+    .description {
+      font-size: 0.85em;
+      color: var(--text-auxiliary);
+    }
+    .thoughts {
+      display: flex;
+      flex-direction: column;
+      /* gap: 0.5em; */
+    }
+    .tl-content {
+      margin-top: 0.5em;
+      /* margin-bottom: 0.5em; */
+      padding: 0.52em 0.7em 0.6em 0.7em;
+      /* background: var(--color-background-secondary); */
+      /* border-radius: 1em; */
+      /* border-radius: 0.8em; */
+      border-left: 0.5px solid var(--text);
+    }
+    .tl-date {
+      font-size: 0.6em;
+      color: var(--text-auxiliary);
+      margin-top: 0.2em;
+    }
+    .tl-title {
+      font-size: 0.8em;
+      font-weight: 500;
+      margin-bottom: 3px;
+    }
+    .tl-desc {
+      font-size: 0.75em;
+      line-height: 1.4;
+    }
+  }
+
+  .random-articles {
+  }
+
+  .recent-articles {
+  }
+
+  .recent-articles-middle {
   }
 </style>

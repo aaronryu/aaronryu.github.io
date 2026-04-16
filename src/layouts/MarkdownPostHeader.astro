@@ -1,0 +1,103 @@
+---
+import { Image } from "astro:assets";
+import { convert } from "@/libs/date";
+
+const { frontmatter } = Astro.props;
+---
+
+<section>
+  <p class="post-category">
+    {frontmatter.category.join(" / ")}
+  </p>
+  <p class="post-headline">
+    {frontmatter.title}
+  </p>
+  {
+    frontmatter.image && (
+      <Image class="post-image" src={frontmatter.image.url} alt={frontmatter.image.alt} />
+    )
+  }
+  {frontmatter.deck && <div class="post-deck">{frontmatter.deck}</div>}
+  {frontmatter.abstract && <div class="post-absract">{frontmatter.abstract}</div>}
+  <div class="post-time">
+    <time class="post-created-time" datetime={frontmatter.created.toISOString()}>
+      생성일 : {convert(frontmatter.created)}
+    </time>
+    {
+      frontmatter.updated && (
+        <time class="post-updated-time" datetime={frontmatter.updated.toISOString()}>
+          수정일 : {convert(frontmatter.updated)}
+        </time>
+      )
+    }
+  </div>
+</section>
+
+<style>
+  .post-image {
+    margin-top: 1.4em;
+  }
+
+  .post-category {
+    padding-top: 1.4em;
+    letter-spacing: 0.03em;
+    font-size: 0.8em;
+    text-transform: uppercase;
+  }
+
+  .post-headline {
+    margin: 0;
+    padding: 0;
+    line-height: 1.4em;
+    font-size: 1.6em;
+    font-weight: 500;
+
+    @media only screen and (max-width: 700px) {
+      font-size: 1.25em;
+    }
+  }
+
+  .post-deck {
+    margin: 0.95em 0 0;
+    padding: 0 0.1em;
+    line-height: 1.8;
+    font-size: 1em;
+
+    @media only screen and (max-width: 700px) {
+      font-size: 0.84em;
+    }
+  }
+
+  .post-absract {
+    margin: 0 auto;
+    padding: 1em 1em 0;
+    max-width: 750px;
+    display: flex;
+    justify-content: center;
+    line-height: 1.8;
+    font-size: 1em;
+
+    @media only screen and (max-width: 700px) {
+      font-size: 0.84em;
+    }
+  }
+  .post-time {
+    margin: 1em 0 1.5em;
+  }
+  .post-created-time {
+    color: var(--brand);
+    font-weight: 300;
+  }
+
+  .post-created-time,
+  .post-updated-time {
+    display: block;
+    padding-left: 1em;
+    letter-spacing: 0.02em;
+    font-size: 0.83em;
+
+    @media only screen and (max-width: 700px) {
+      padding-left: 0.1em;
+    }
+  }
+</style>
