@@ -5,6 +5,7 @@ import TableOfContents from "@/components/TableOfContents.astro";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import MarkdownPost from "@/layouts/MarkdownPost.astro";
 import { convert } from "@/libs/date";
+import SectionHeader from "@/components/SectionHeader.astro";
 
 const { section, frontmatter, headings, relatedPosts } = Astro.props;
 ---
@@ -18,6 +19,7 @@ const { section, frontmatter, headings, relatedPosts } = Astro.props;
   created={frontmatter.created.toISOString()}
   updated={frontmatter.updated?.toISOString()}
 >
+  <SectionHeader section={section} />
   {headings && <TableOfContents headings={headings} />}
   <article>
     <p class="post-category">

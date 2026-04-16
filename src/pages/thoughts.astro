@@ -1,5 +1,6 @@
 ---
 import Greeting from "@/components/Greetings";
+import SectionHeader from "@/components/SectionHeader.astro";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import { getCollection, render } from "astro:content";
 
@@ -24,6 +25,7 @@ const pageTitle = "Home Page";
 ---
 
 <BaseLayout pageTitle={pageTitle}>
+  <SectionHeader section={"thoughts"} />
   <main>
     <div class="tl-wrap">
       <div class="tl-fade-top"></div>
@@ -57,8 +59,6 @@ const pageTitle = "Home Page";
             <div class="tl-desc">
               프로덕트를 만드는것을 목표점에 도착하는 여행으로 비유를 하자면 프로덕트에 AI 는 여행에
               KTX 와 같은 대중교통으로 비유할 수 있다 여행 경로는 결국 KTX 나 전철과 버스를 타더라도
-              중간중간 직접 걸어야할 거리가 분명히 존재한다 만약 제대로 걸을 줄 모르는 한 사람이
-              대중교통을 활용한다해도 걷지못하면 목적에 도착할 수 없다 프로덕트를 AI 로 개발하더라도
             </div>
           </div>
         </div>
