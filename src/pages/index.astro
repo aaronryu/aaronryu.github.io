@@ -94,12 +94,8 @@ const section3Post = recentPosts.filter(
   main {
     margin: 0 auto;
 
-    @media only screen and (min-width: 440px) {
-      max-width: 440px;
-    }
-
-    @media only screen and (min-width: 640px) {
-      max-width: 640px;
+    @media only screen and (min-width: 700px) {
+      max-width: 700px;
     }
 
     @media only screen and (min-width: 980px) {
@@ -113,26 +109,19 @@ const section3Post = recentPosts.filter(
 
   .dashboard {
     display: grid;
-    grid-area: content;
     margin-top: 0.6em;
     margin-inline: 1.2em;
     margin-bottom: 1.8em;
 
-    @media only screen and (min-width: 440px) {
-      grid-template-columns: 400px;
-    }
-
-    @media only screen and (min-width: 640px) {
-      grid-template-columns: 620px;
-    }
+    grid-template-columns: 1fr;
 
     @media only screen and (min-width: 980px) {
-      grid-template-columns: 680px 240px;
+      grid-template-columns: minman(auto, 960px);
       grid-column-gap: 20px;
     }
 
     @media only screen and (min-width: 1300px) {
-      grid-template-columns: 988px 240px;
+      grid-template-columns: 1fr 240px;
       grid-column-gap: 32px;
     }
   }
@@ -140,26 +129,22 @@ const section3Post = recentPosts.filter(
   .section-articles {
     display: grid;
 
-    @media only screen and (min-width: 440px) {
-      grid-template-columns: 0px 400px;
-    }
-
-    @media only screen and (min-width: 640px) {
-      grid-template-columns: 0px 620px;
-    }
+    grid-template-columns: 1fr;
 
     @media only screen and (min-width: 980px) {
-      grid-template-columns: 300px 320px;
+      grid-template-columns: 280px 1fr;
       grid-column-gap: 20px;
     }
 
     @media only screen and (min-width: 1300px) {
-      grid-template-columns: 300px 656px;
+      grid-template-columns: 300px 1fr;
       grid-column-gap: 32px;
     }
   }
 
   .section-thoughts {
+    display: none;
+
     .title {
       font-size: 1.3em;
       line-height: 1.2em;
@@ -198,10 +183,24 @@ const section3Post = recentPosts.filter(
     }
   }
 
+  /* 화면이 커지면(PC) 나타남 */
+  @media (min-width: 1300px) {
+    .section-thoughts {
+      display: block;
+    }
+  }
+
   .random-articles {
-    display: flex;
-    flex-direction: column;
-    gap: 1.2em;
+    display: none;
+  }
+
+  /* 화면이 커지면(PC) 나타남 */
+  @media (min-width: 980px) {
+    .random-articles {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2em;
+    }
   }
 
   .recent-articles {
@@ -236,8 +235,13 @@ const section3Post = recentPosts.filter(
     /* cursor: pointer; */
     border-radius: 4px;
     background-color: var(--text-link-background);
-    height: 3em;
-    line-height: 3em;
+    font-size: 1em;
+    height: 2.6em;
+    line-height: 2.6em;
     text-align: center;
+
+    @media only screen and (max-width: 700px) {
+      font-size: 0.84em;
+    }
   }
 </style>
