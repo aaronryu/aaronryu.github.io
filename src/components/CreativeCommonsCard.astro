@@ -29,7 +29,7 @@ const { title, created } = Astro.props;
     <div>
       <div class="label">Posted on</div>
       <time class="post-datetime" datetime={created.toISOString()}>
-        {convert(created)}
+        {convert(created).full}
       </time>
     </div>
     <div>

@@ -6,5 +6,9 @@ export function convert(param) {
   const minutes = String(param.getMinutes()).padStart(2, "0");
   const seconds = String(param.getSeconds()).padStart(2, "0");
 
-  return `${year}년 ${month}월 ${day}일 ${hours}시 ${minutes}분`;
+  return {
+    date: `${year}년 ${month}월 ${day}일`,
+    time: `${hours}시 ${minutes}분`,
+    full: `${year}년 ${month}월 ${day}일 ${hours}시 ${minutes}분`,
+  };
 }

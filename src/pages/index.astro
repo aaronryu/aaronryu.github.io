@@ -4,7 +4,8 @@ import type { CollectionEntry } from "astro:content";
 import { getCollection } from "astro:content";
 import { sectionMap } from "@/scripts/section.ts";
 import { shuffle } from "@/scripts/shuffle.js";
-import MarkdownPostHeader from "@/layouts/MarkdownPostHeader.astro";
+import MarkdownPostSummary from "@/components/MarkdownPostSummary.astro";
+import MarkdownPostSquare from "@/components/MarkdownPostSquare.astro";
 
 const thoughts = await getCollection("thoughts");
 const descendingThoughts = thoughts
@@ -21,17 +22,17 @@ const recentPosts = posts.sort(
     new Date(relatedPost2.data.created).getTime() - new Date(relatedPost1.data.created).getTime(),
 );
 
-const recentPickedPosts = recentPosts.slice(0, 5);
+const recentPickedPosts = recentPosts.slice(0, 10);
 const randomPickedSections = shuffle([...Object.keys(sectionMap)]).slice(0, 3);
-const section1Post = recentPosts
-  .filter((post) => randomPickedSections[0] === post.filePath?.split("/").slice(1, -1)[0])
-  .map((post) => post.data);
-const section2Post = recentPosts
-  .filter((post) => randomPickedSections[1] === post.filePath?.split("/").slice(1, -1)[0])
-  .map((post) => post.data);
-const section3Post = recentPosts
-  .filter((post) => randomPickedSections[2] === post.filePath?.split("/").slice(1, -1)[0])
-  .map((post) => post.data);
+const section1Post = recentPosts.filter(
+  (post) => randomPickedSections[0] === post.filePath?.split("/").slice(1, -1)[0],
+);
+const section2Post = recentPosts.filter(
+  (post) => randomPickedSections[1] === post.filePath?.split("/").slice(1, -1)[0],
+);
+const section3Post = recentPosts.filter(
+  (post) => randomPickedSections[2] === post.filePath?.split("/").slice(1, -1)[0],
+);
 ---
 
 <BaseLayout>
@@ -39,25 +40,32 @@ const section3Post = recentPosts
     <div class="dashboard">
       <div class="section-articles">
         <div class="random-articles">
-          <MarkdownPostHeader frontmatter={recentPickedPosts[3].data} />
-          <MarkdownPostHeader frontmatter={recentPickedPosts[4].data} />
+          <MarkdownPostSquare post={recentPickedPosts[3]} />
+          <MarkdownPostSquare post={recentPickedPosts[4]} />
+          <MarkdownPostSquare post={recentPickedPosts[5]} />
+          <MarkdownPostSquare post={recentPickedPosts[6]} />
         </div>
         <div class="recent-articles">
           <div class="recent-articles-headline">
-            <MarkdownPostHeader frontmatter={recentPickedPosts[0].data} />
+            <MarkdownPostSummary post={recentPickedPosts[0]} />
           </div>
           <div class="recent-articles-middle">
-            <MarkdownPostHeader frontmatter={recentPickedPosts[1].data} />
-            <MarkdownPostHeader frontmatter={recentPickedPosts[2].data} />
+            <div class="recent-middle-article">
+              <MarkdownPostSquare post={recentPickedPosts[1]} />
+            </div>
+            <div class="recent-middle-article">
+              <MarkdownPostSquare post={recentPickedPosts[2]} />
+            </div>
           </div>
           <div class="recent-articles-list">
-            <MarkdownPostHeader frontmatter={recentPickedPosts[3].data} />
-            <MarkdownPostHeader frontmatter={recentPickedPosts[4].data} />
+            <MarkdownPostSummary post={recentPickedPosts[3]} />
+            <MarkdownPostSummary post={recentPickedPosts[4]} />
           </div>
+          <a class="retrieve-more-button" href={sectionMap.posts.url}>더 많은 글들 보기</a>
         </div>
       </div>
       <div class="section-thoughts">
-        <a href="/thoughts"><div class="title">Thoughts</div></a>
+        <a href={sectionMap.thoughts.url}><div class="title">{sectionMap.thoughts.title}</div></a>
         <div class="description">문득 드는 짧은 생각들에 대한 메모</div>
         <div class="thoughts">
           {
@@ -106,7 +114,9 @@ const section3Post = recentPosts
   .dashboard {
     display: grid;
     grid-area: content;
-    margin-inline: 20px;
+    margin-top: 0.6em;
+    margin-inline: 1.2em;
+    margin-bottom: 1.8em;
 
     @media only screen and (min-width: 440px) {
       grid-template-columns: 400px;
@@ -144,7 +154,7 @@ const section3Post = recentPosts
     }
 
     @media only screen and (min-width: 1300px) {
-      grid-template-columns: 300px 628px;
+      grid-template-columns: 300px 656px;
       grid-column-gap: 32px;
     }
   }
@@ -189,11 +199,45 @@ const section3Post = recentPosts
   }
 
   .random-articles {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2em;
   }
 
   .recent-articles {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2em;
+  }
+
+  .recent-articles-headline {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2em;
   }
 
   .recent-articles-middle {
+    display: flex;
+    flex-direction: row;
+    gap: 1.2em;
+  }
+
+  .recent-middle-article {
+    flex: 1;
+  }
+
+  .recent-articles-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2em;
+  }
+
+  .retrieve-more-button {
+    /* cursor: pointer; */
+    border-radius: 4px;
+    background-color: var(--text-link-background);
+    height: 3em;
+    line-height: 3em;
+    text-align: center;
   }
 </style>

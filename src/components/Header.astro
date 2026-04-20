@@ -1,5 +1,6 @@
 ---
 import ThemeIcon from "@/components/ThemeIcon.astro";
+import { sectionMap } from "@/scripts/section";
 import { Icon } from "astro-icon/components";
 
 const diff = new Date().getTime() - new Date("2017-08-01").getTime();
@@ -9,17 +10,17 @@ const totalYears = diff / (1000 * 60 * 60 * 24 * 365.25);
 <header>
   <div class="wsj-topbar">
     <div class="wsj-topbar-links">
-      <a href="#"><Icon name="fa6-brands:linkedin" /></a>
-      <span> | </span>
-      <a href="#"><Icon name="fa6-brands:facebook" /></a>
-      <span> | </span>
-      <a href="#"><Icon name="fa6-brands:x-twitter" /></a>
+      <a href={sectionMap.linkedin.url}><Icon name="fa6-brands:linkedin" /></a>
+      <span>|</span>
+      <a href={sectionMap.facebook.url}><Icon name="fa6-brands:facebook" /></a>
+      <span>|</span>
+      <a href={sectionMap.twitter.url}><Icon name="fa6-brands:x-twitter" /></a>
     </div>
     <div class="wsj-topbar-right">
       <a href="?hl=ko">한국어</a>
-      <span> | </span>
+      <span>|</span>
       <a href="?hl=en">English</a>
-      <span> | </span>
+      <span>|</span>
       <a href="?hl=jp">日本語</a>
       <span></span>
       <ThemeIcon />
@@ -35,19 +36,33 @@ const totalYears = diff / (1000 * 60 * 60 * 24 * 365.25);
   </div>
 
   <nav class="wsj-subnav" aria-label="main navigation">
-    <a href="/posts">Posts</a>
-    <a href="/thoughts">Thoughts</a>
-    <a href="#">Hobby</a>
-    <a href="https://aaronryu.notion.site" target="_blank" rel="noopener noreferrer"> About </a>
+    <a href={sectionMap.posts.url}>{sectionMap.posts.title}</a>
+    <a href={sectionMap.thoughts.url}>{sectionMap.thoughts.title}</a>
+    <a href={sectionMap.hobby.url}>{sectionMap.hobby.title}</a>
+    <a href={sectionMap.about.url} target="_blank" rel="noopener noreferrer">
+      {sectionMap.about.title}
+    </a>
   </nav>
 
   <nav class="wsj-mainnav" aria-label="sub (blog category) navigation">
-    <a href="#" class="category">Politics<br />정치·사회</a>
-    <a href="#" class="category">Leadership<br />조직·리더</a>
-    <a href="#" class="category">Economy<br />경제·자본</a>
-    <a href="#" class="category">Education<br />교육·학습</a>
-    <a href="#" class="category">Engineering<br />기술·개발</a>
-    <a href="#" class="category">Opinion<br />사유·개인</a>
+    <a href={sectionMap.politics.url} class="category">
+      {sectionMap.politics.title}<br />{sectionMap.politics.shorten}
+    </a>
+    <a href={sectionMap.leadership.url} class="category">
+      {sectionMap.leadership.title}<br />{sectionMap.leadership.shorten}
+    </a>
+    <a href={sectionMap.economy.url} class="category">
+      {sectionMap.economy.title}<br />{sectionMap.economy.shorten}
+    </a>
+    <a href={sectionMap.education.url} class="category">
+      {sectionMap.education.title}<br />{sectionMap.education.shorten}
+    </a>
+    <a href={sectionMap.engineering.url} class="category">
+      {sectionMap.engineering.title}<br />{sectionMap.engineering.shorten}
+    </a>
+    <a href={sectionMap.opinion.url} class="category">
+      {sectionMap.opinion.title}<br />{sectionMap.opinion.shorten}
+    </a>
     <a href="#" class="category">
       <svg
         class="search-icon"
@@ -64,7 +79,9 @@ const totalYears = diff / (1000 * 60 * 60 * 24 * 365.25);
           y2="14"
           stroke="currentColor"
           stroke-width="1.5"
-          stroke-linecap="round"></line>
+          stroke-linecap="round"
+        >
+        </line>
       </svg>
     </a>
   </nav>

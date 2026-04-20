@@ -21,12 +21,12 @@ const { frontmatter } = Astro.props;
   {frontmatter.abstract && <div class="post-absract">{frontmatter.abstract}</div>}
   <div class="post-time">
     <time class="post-created-time" datetime={frontmatter.created.toISOString()}>
-      생성일 : {convert(frontmatter.created)}
+      생성일 : {convert(frontmatter.created).full}
     </time>
     {
       frontmatter.updated && (
         <time class="post-updated-time" datetime={frontmatter.updated.toISOString()}>
-          수정일 : {convert(frontmatter.updated)}
+          수정일 : {convert(frontmatter.updated).full}
         </time>
       )
     }

@@ -1,4 +1,5 @@
 ---
+import { sectionMap } from "@/scripts/section";
 import { Icon } from "astro-icon/components";
 
 const diff = new Date().getTime() - new Date("2017-08-01").getTime();
@@ -16,13 +17,13 @@ const currentYear = new Date().getFullYear();
           {totalYears.toFixed(1)}년차 Web Application Developer 웹 개발자
         </div>
         <div class="social-row">
-          <a href="#" class="social-btn" title="LinkedIn">
+          <a href={sectionMap.linkedin.url} class="social-btn" title={sectionMap.linkedin.title}>
             <Icon name="fa6-brands:linkedin" class="social-icon" />
           </a>
-          <a href="#" class="social-btn" title="Facebook">
+          <a href={sectionMap.facebook.url} class="social-btn" title={sectionMap.facebook.title}>
             <Icon name="fa6-brands:facebook" class="social-icon" />
           </a>
-          <a href="#" class="social-btn" title="X">
+          <a href={sectionMap.twitter.url} class="social-btn" title={sectionMap.twitter.title}>
             <Icon name="fa6-brands:x-twitter" class="social-icon" />
           </a>
         </div>
@@ -30,12 +31,48 @@ const currentYear = new Date().getFullYear();
       <!-- Col 2: Categories -->
       <div class="col-categories">
         <ul class="cat-list">
-          <li><a href="#">Politics<br /><span class="cat-sub">정치·사회</span></a></li>
-          <li><a href="#">Leadership<br /><span class="cat-sub">조직·리더</span></a></li>
-          <li><a href="#">Economy<br /><span class="cat-sub">경제·자본</span></a></li>
-          <li><a href="#">Education<br /><span class="cat-sub">교육·학습</span></a></li>
-          <li><a href="#">Engineering<br /><span class="cat-sub">기술·개발</span></a></li>
-          <li><a href="#">Opinion<br /><span class="cat-sub">사유·개인</span></a></li>
+          <li>
+            <a href={sectionMap.politics.url}>
+              {sectionMap.politics.title}<br /><span class="cat-sub">
+                {sectionMap.politics.shorten}
+              </span>
+            </a>
+          </li>
+          <li>
+            <a href={sectionMap.leadership.url}>
+              {sectionMap.leadership.title}<br /><span class="cat-sub">
+                {sectionMap.leadership.shorten}
+              </span>
+            </a>
+          </li>
+          <li>
+            <a href={sectionMap.economy.url}>
+              {sectionMap.economy.title}<br /><span class="cat-sub">
+                {sectionMap.economy.shorten}
+              </span>
+            </a>
+          </li>
+          <li>
+            <a href={sectionMap.education.url}>
+              {sectionMap.education.title}<br /><span class="cat-sub">
+                {sectionMap.education.shorten}
+              </span>
+            </a>
+          </li>
+          <li>
+            <a href={sectionMap.engineering.url}>
+              {sectionMap.engineering.title}<br /><span class="cat-sub">
+                {sectionMap.engineering.shorten}
+              </span>
+            </a>
+          </li>
+          <li>
+            <a href={sectionMap.opinion.url}>
+              {sectionMap.opinion.title}<br /><span class="cat-sub">
+                {sectionMap.opinion.shorten}
+              </span>
+            </a>
+          </li>
         </ul>
       </div>
     </div>
@@ -44,10 +81,12 @@ const currentYear = new Date().getFullYear();
   <div class="footer-bottom">
     <span class="footer-copy">© 2019-{currentYear} Aaron Ryu. All Rights Reserved.</span>
     <nav class="footer-nav">
-      <a href="/posts">Posts</a>
-      <a href="/thoughts">Thoughts</a>
-      <a href="#">Hobby</a>
-      <a href="https://aaronryu.notion.site" target="_blank" rel="noopener noreferrer"> About </a>
+      <a href={sectionMap.posts.url}>{sectionMap.posts.title}</a>
+      <a href={sectionMap.thoughts.url}>{sectionMap.thoughts.title}</a>
+      <a href={sectionMap.hobby.url}>{sectionMap.hobby.title}</a>
+      <a href={sectionMap.about.url} target="_blank" rel="noopener noreferrer">
+        {sectionMap.about.title}
+      </a>
     </nav>
   </div>
 </footer>

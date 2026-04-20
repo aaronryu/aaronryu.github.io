@@ -1,0 +1,86 @@
+---
+import { Image } from "astro:assets";
+import { convert } from "@/libs/date";
+import { sectionMap } from "@/scripts/section";
+
+const { post } = Astro.props;
+
+const section: keyof typeof sectionMap = post.filePath?.split("/").slice(1, -1)[0];
+---
+
+<section>
+  <div class="post-section">
+    <a href={sectionMap[section].url}>{sectionMap[section].title}</a>
+  </div>
+  <div class="post-category">
+    {post.data.category.join(" / ")}
+  </div>
+  <div class="post-headline">
+    {post.data.title}
+  </div>
+  <div class="post-deck">{post.data.deck}</div>
+  <div class="post-time">
+    <time class="post-created-time" datetime={post.data.created.toISOString()}>
+      {convert(post.data.created).date}
+    </time>
+  </div>
+</section>
+
+<style>
+  .post-image {
+    margin-top: 1.4em;
+  }
+
+  .post-section {
+    letter-spacing: 0.03em;
+    font-size: 1em;
+    /* font-size: 0.8em; */
+    /* text-transform: uppercase; */
+    /* color: var(--text-link); */
+  }
+
+  .post-category {
+    letter-spacing: 0.03em;
+    font-size: 0.8em;
+    text-transform: uppercase;
+  }
+
+  .post-headline {
+    margin: 0;
+    padding: 0;
+    line-height: 1.25em;
+    font-size: 1.25em;
+    font-weight: 500;
+
+    @media only screen and (max-width: 700px) {
+      font-size: 1.1em;
+    }
+  }
+
+  .post-deck {
+    margin: 0.5em 0 0;
+    line-height: 1.4;
+    font-size: 0.8em;
+    /* tl-desc > 메인페이지의 최우측 Thoughs 내 텍스트 사이즈와 유사하게 맞추자 */
+    /* font-size: 0.75em; */
+    /* line-height: 1.4; */
+
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 7;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    @media only screen and (max-width: 700px) {
+      font-size: 0.75em;
+    }
+  }
+
+  .post-time {
+    margin-top: 0.4em;
+    color: var(--text-auxiliary);
+    letter-spacing: 0.02em;
+    font-size: 0.75em;
+    font-weight: 300;
+  }
+</style>
