@@ -1,77 +1,141 @@
 ---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { sectionMap } from "@/scripts/section";
 import type { CollectionEntry } from "astro:content";
 import { getCollection } from "astro:content";
+import MarkdownPostSummary from "@/components/MarkdownPostSummary.astro";
+import MarkdownPostSquare from "@/components/MarkdownPostSquare.astro";
+import SectionHeader from "@/components/SectionHeader.astro";
 
-const thoughts = await getCollection("thoughts");
-const descendingThoughts = thoughts
-  .sort(
-    (thought1, thought2) =>
-      new Date(thought2.data.created).getTime() - new Date(thought1.data.created).getTime(),
-  )
-  .map((thought: CollectionEntry<"thoughts">) => thought.data)
-  .slice(0, 10);
+// 1. /pages/ 로 시작하는 모든 섹션들만 거른 뒤
+const sections = Object.entries(sectionMap)
+  .filter((each) => each[1].url.includes("/posts/"))
+  .map((filtered) => filtered[0]);
+
+// 2. /pages/ 로 시작하는 모든 페이지 가져와 Map (key: Section 명, value: 해당 Section 내 Post 리스트)
+const posts = await getCollection("blog");
+const sectionPosts = new Map(
+  sections.map((section) => {
+    const filteredPosts = posts
+      .filter((post) => post.filePath?.split("/").slice(1, -1)[0] === section)
+      .sort(
+        (thought1, thought2) =>
+          new Date(thought2.data.created).getTime() - new Date(thought1.data.created).getTime(),
+      )
+      .slice(0, 4);
+
+    return [section, filteredPosts];
+  }),
+);
 ---
 
-<main>
-  <div class="section-articles"></div>
-  <div class="section-thoughts">
-    <div class="title">Thoughts</div>
-    {
-      descendingThoughts.map((thought) => {
-        const fullDate = new Date(thought.created).toLocaleDateString("ko-KR", {
-          year: "numeric",
-          month: "long",
-          day: "numeric",
-        });
-        return (
-          <div class="tl-content">
-            <div class="tl-title">{thought.title}</div>
-            <div class="tl-desc">{thought.description}</div>
-            <div class="tl-date">{fullDate}</div>
-          </div>
-        );
-      })
-    }
-  </div>
-</main>
+<BaseLayout>
+  <main>
+    <SectionHeader section={"posts"} />
+    <div class="dashboard">
+      {
+        sectionPosts
+          .entries()
+          .filter((each) => {
+            const section = each[0];
+            const posts = each[1];
+
+            return posts.length !== 0;
+          })
+          .map((each) => {
+            const section = each[0];
+            const posts = each[1];
+
+            return (
+              <div class="recent-articles">
+                {/* @ts-ignore */}
+                <a href={sectionMap[section].url}>
+                  <div class="section-header">
+                    <div class="section-header-title">
+                      {/* @ts-ignore */}
+                      {sectionMap[section].title} {sectionMap[section].shorten}
+                    </div>
+                    <div class="section-header-button">View All</div>
+                  </div>
+                </a>
+                <div class="recent-articles-list">
+                  {posts.length === 1 &&
+                    posts.map((each: CollectionEntry<"blog">, index: number) => (
+                      <MarkdownPostSummary
+                        post={each}
+                        isDisplaySection={false}
+                        isDisplayImage={false}
+                      />
+                    ))}
+                  {posts.length >= 2 &&
+                    posts.map((each: CollectionEntry<"blog">, index: number) => (
+                      <div class="recent-middle-article">
+                        <MarkdownPostSquare
+                          post={each}
+                          isDisplaySection={false}
+                          isDisplayImage={false}
+                        />
+                      </div>
+                    ))}
+                </div>
+              </div>
+            );
+          })
+      }
+    </div>
+  </main>
+</BaseLayout>
 
 <style>
-  main {
-    max-width: 1280px;
-    grid-template-columns: 928px 300px;
-    grid-column-gap: 32px;
+  .dashboard {
+    max-width: 720px;
+    margin: 1.2em auto 2.6em;
+    padding: 0 1.2em;
+  }
 
-    margin: 0 auto;
+  .recent-articles {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6em;
 
-    @media only screen and (max-width: 1300px) {
+    border-top: 1px solid var(--text);
+    margin-bottom: 1em;
+  }
+
+  .section-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 0.6em;
+    padding-inline: 0.3em;
+    border-radius: 0.1em;
+    font-weight: 500;
+    transition: all 0.2s ease;
+
+    .section-header-title {
+      font-size: 1.2em;
+    }
+
+    .section-header-button {
+      color: var(--text);
     }
   }
 
-  .section-articles {
+  .section-header:hover {
+    background-color: var(--text-link-background);
   }
 
-  .section-thoughts {
-    .tl-content {
-      max-width: calc(50% - 2.4em);
-      padding: 0.52em 0.7em 0.6em 0.7em;
-      /* background: var(--color-background-secondary); */
-      border: 1px solid var(--text-auxiliary);
-      /* border-radius: 1em; */
-      border-radius: 0.8em;
-    }
-    .tl-date {
-      font-size: 0.6em;
-      color: var(--text-auxiliary);
-      margin-top: 0.2em;
-    }
-    .tl-title {
-      font-size: 0.8em;
-      font-weight: 500;
-      margin-bottom: 3px;
-    }
-    .tl-desc {
-      font-size: 0.75em;
-      line-height: 1.4;
-    }
+  /* 3번째 요소부터(두 번째 줄) 윗부분에 구분선 추가 */
+  .recent-middle-article:nth-child(n + 3) {
+    border-top: 1px solid var(--text-placeholder);
+    padding-top: 1em;
+  }
+
+  .recent-articles-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.2em;
+    padding-inline: 0.3em;
   }
 </style>
