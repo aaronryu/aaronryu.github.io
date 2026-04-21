@@ -3,15 +3,19 @@ import { Image } from "astro:assets";
 import { convert } from "@/libs/date";
 import { sectionMap } from "@/scripts/section";
 
-const { post } = Astro.props;
+const { post, isDisplaySection = true } = Astro.props;
 
 const section: keyof typeof sectionMap = post.filePath?.split("/").slice(1, -1)[0];
 ---
 
 <section>
-  <div class="post-section">
-    <a href={sectionMap[section].url}>{sectionMap[section].title}</a>
-  </div>
+  {
+    isDisplaySection && (
+      <div class="post-section">
+        <a href={sectionMap[section].url}>{sectionMap[section].title}</a>
+      </div>
+    )
+  }
   <div class="post-category">
     {post.data.category.join(" / ")}
   </div>
