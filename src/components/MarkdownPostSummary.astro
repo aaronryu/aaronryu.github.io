@@ -2,9 +2,17 @@
 import { Image } from "astro:assets";
 import { convert } from "@/libs/date";
 import { sectionMap } from "@/scripts/section";
+import type { CollectionEntry } from "astro:content";
 
-const { post, isDisplaySection = true } = Astro.props;
+interface Props {
+  post: CollectionEntry<"blog">;
+  isDisplaySection?: boolean;
+  isDisplayImage?: boolean;
+}
 
+const { post, isDisplaySection = true, isDisplayImage = true } = Astro.props;
+
+// @ts-ignore
 const section: keyof typeof sectionMap = post.filePath?.split("/").slice(1, -1)[0];
 ---
 
@@ -17,14 +25,29 @@ const section: keyof typeof sectionMap = post.filePath?.split("/").slice(1, -1)[
     )
   }
   <div class="post-category">
-    {post.data.category.join(" / ")}
+    {
+      post.data.category.map((each: string, index: number) => (
+        <a
+          href={
+            sectionMap[section].url +
+            "/" +
+            post.data.category
+              .map((each: string) => each.toLowerCase().replace(",", "").replace(" ", "-"))
+              .slice(0, index + 1)
+              .join("/")
+          }
+        >
+          {each}
+        </a>
+      ))
+    }
   </div>
   <div class="post-headline">
-    {post.data.title}
+    <a href={`/posts/${post.filePath?.split("/").slice(1, -1).join("/")}`}>{post.data.title}</a>
   </div>
   <div class="post-deck">{post.data.deck}</div>
   {
-    post.data.image && (
+    isDisplayImage && post.data.image && (
       <Image class="post-image" src={post.data.image.url} alt={post.data.image.alt} />
     )
   }
@@ -36,6 +59,15 @@ const section: keyof typeof sectionMap = post.filePath?.split("/").slice(1, -1)[
 </section>
 
 <style>
+  a {
+    color: inherit;
+    transition: all 0.2s ease;
+  }
+
+  a:hover {
+    color: var(--text-link);
+  }
+
   .post-image {
     margin-top: 1.4em;
   }
@@ -52,6 +84,11 @@ const section: keyof typeof sectionMap = post.filePath?.split("/").slice(1, -1)[
     letter-spacing: 0.03em;
     font-size: 0.8em;
     text-transform: uppercase;
+    font-weight: 500;
+
+    a:not(:last-child)::after {
+      content: " / ";
+    }
   }
 
   .post-headline {

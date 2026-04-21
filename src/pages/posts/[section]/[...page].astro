@@ -1,6 +1,6 @@
 ---
-import MarkdownPostSquare from "@/components/MarkdownPostSquare.astro";
 import MarkdownPostSummary from "@/components/MarkdownPostSummary.astro";
+import PaginationNavigator from "@/components/PaginationNavigator.astro";
 import SectionHeader from "@/components/SectionHeader.astro";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import { sectionMap } from "@/scripts/section";
@@ -20,14 +20,14 @@ export const getStaticPaths: GetStaticPaths = async ({ paginate }) => {
   // Make sure that you pass `{ params: { section }}` to `paginate()`
   // so that Astro knows which section grouping the result is for.
 
-  // 3.
+  // 3. [section]/[...page] 자동 생성 < Astro 에서 자체적으로 제공하는 Pagination 사용 방법
   return sections.flatMap((section) => {
     const filteredPosts = posts.filter(
       (post) => post.filePath?.split("/").slice(1, -1)[0] === section,
     );
     return paginate(filteredPosts, {
       params: { section },
-      pageSize: 10,
+      pageSize: 5,
     });
   });
 };
@@ -59,30 +59,13 @@ const params = Astro.params;
       {
         page.data.length > 0 && (
           <div class="recent-articles">
-            <div class="recent-articles-headline">
-              <MarkdownPostSummary post={page.data[0]} isDisplaySection={false} />
-            </div>
-            {page.data.length >= 4 && (
-              <div class="recent-articles-middle">
-                <div class="recent-middle-article">
-                  <MarkdownPostSquare post={page.data[1]} isDisplaySection={false} />
-                </div>
-                <div class="recent-middle-article">
-                  <MarkdownPostSquare post={page.data[2]} isDisplaySection={false} />
-                </div>
-                <div class="recent-middle-article">
-                  <MarkdownPostSquare post={page.data[3]} isDisplaySection={false} />
-                </div>
-              </div>
-            )}
             <div class="recent-articles-list">
-              {page.data.slice(page.data.length < 4 ? 1 : 4).map((each, index) => (
-                <MarkdownPostSummary post={each} isDisplaySection={false} />
+              {page.data.map((each, index) => (
+                <MarkdownPostSummary post={each} isDisplaySection={false} isDisplayImage={false} />
               ))}
             </div>
-            <a class="retrieve-more-button" href={sectionMap.posts.url}>
-              더 많은 글들 보기
-            </a>
+            <!-- @ts-ignore -->
+            <PaginationNavigator baseurl={sectionMap[params.section].url} page={page} />
           </div>
         )
       }
@@ -92,12 +75,9 @@ const params = Astro.params;
 
 <style>
   .dashboard {
-    max-width: 800px;
-    margin: 0.6em auto 1.8em;
+    max-width: 700px;
+    margin: 2em auto 2em;
     padding: 0 1.2em;
-    /* margin-top: 0.6em; */
-    /* margin-inline: 1.2em; */
-    /* margin-bottom: 1.8em; */
   }
 
   .recent-articles {
@@ -126,19 +106,5 @@ const params = Astro.params;
     display: flex;
     flex-direction: column;
     gap: 1.2em;
-  }
-
-  .retrieve-more-button {
-    /* cursor: pointer; */
-    border-radius: 4px;
-    background-color: var(--text-link-background);
-    font-size: 1em;
-    height: 2.6em;
-    line-height: 2.6em;
-    text-align: center;
-
-    @media only screen and (max-width: 700px) {
-      font-size: 0.84em;
-    }
   }
 </style>

@@ -17,7 +17,11 @@ const section: keyof typeof sectionMap = post.filePath?.split("/").slice(1, -1)[
     )
   }
   <div class="post-category">
-    {post.data.category.join(" / ")}
+    {
+      post.data.category
+        .map((each: string) => <a href={sectionMap[section].url + "/" + each}>{each}</a>)
+        .join(" / ")
+    }
   </div>
   <div class="post-headline">
     {post.data.title}
@@ -47,6 +51,11 @@ const section: keyof typeof sectionMap = post.filePath?.split("/").slice(1, -1)[
     letter-spacing: 0.03em;
     font-size: 0.8em;
     text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  .num-link:hover:not(.active) {
+    background-color: var(--text-link-background);
   }
 
   .post-headline {

@@ -1,0 +1,108 @@
+---
+import type { Page } from "astro";
+
+interface Props {
+  baseurl: string;
+  page: Page;
+  range?: number;
+}
+
+const { baseurl, page, range = 5 } = Astro.props;
+const { currentPage, lastPage } = page;
+const rangeWithoutStartAndEnd = range - 2;
+
+// 현재 페이지를 기준으로 시작과 끝 번호 계산
+let startPage = Math.max(1, currentPage - Math.floor(rangeWithoutStartAndEnd / 2));
+let endPage = Math.min(lastPage, startPage + rangeWithoutStartAndEnd - 1);
+
+// 끝부분에서 범위가 모자라면 시작 번호를 앞으로 당김
+if (endPage - startPage + 1 < rangeWithoutStartAndEnd) {
+  startPage = Math.max(1, endPage - rangeWithoutStartAndEnd + 1);
+}
+
+// 보여줄 페이지 숫자 배열 생성
+const pageNumbers = Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i);
+---
+
+<div class="pagination-container">
+  {
+    startPage > 1 && (
+      <>
+        <a href={baseurl} class="num-link">
+          1
+        </a>
+        {startPage > 2 && <span class="divider">...</span>}
+      </>
+    )
+  }
+
+  <div class="numbers-wrapper">
+    {
+      pageNumbers.map((num) => (
+        <a
+          href={num === 1 ? baseurl : `${baseurl}/${num}`}
+          class:list={["num-link", { active: num === currentPage }]}
+        >
+          {num}
+        </a>
+      ))
+    }
+
+    {
+      endPage < lastPage && (
+        <>
+          {endPage < lastPage - 1 && <span class="divider">...</span>}
+          <a href={`${baseurl}/${lastPage}`} class="num-link">
+            {lastPage}
+          </a>
+        </>
+      )
+    }
+  </div>
+</div>
+
+<style>
+  .pagination-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5em;
+    font-family: "Pretendard", sans-serif;
+  }
+
+  .numbers-wrapper {
+    display: flex;
+    gap: 0.5em;
+    align-items: center;
+  }
+
+  .num-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 36px;
+    height: 36px;
+    border: 1px solid var(--text);
+    border-radius: 1px;
+    text-decoration: none;
+    color: var(--text);
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+  }
+
+  /* 현재 위치 하이라이트: 굵은 테두리와 강조색 */
+  .num-link.active {
+    background-color: var(--text-placeholder);
+    color: #fff;
+    font-weight: 700;
+  }
+
+  .num-link:hover:not(.active) {
+    background-color: var(--text-link-background);
+  }
+
+  .divider {
+    color: var(--text);
+    padding: 0 4px;
+  }
+</style>
