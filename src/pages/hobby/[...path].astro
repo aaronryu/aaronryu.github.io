@@ -1,0 +1,35 @@
+---
+import MarkdownHobbyLayout from "@/layouts/MarkdownHobbyLayout.astro";
+import { getCollection, render } from "astro:content";
+
+export async function getStaticPaths() {
+  const hobbies = await getCollection("hobby");
+  return hobbies.map((hobby) => {
+    const relatedPosts = hobbies
+      .filter(
+        (anotherHobby) =>
+          hobby.id !== anotherHobby.id && // 현재 읽고 있는 글은 제외
+          hobby.data.category.some((element) => anotherHobby.data.category.includes(element)),
+      )
+      // 무작위로 최신순으로 정렬
+      .sort(
+        (relatedPost1, relatedPost2) =>
+          new Date(relatedPost2.data.created).getTime() -
+          new Date(relatedPost1.data.created).getTime(),
+      )
+      // 원하는 개수(4개 또는 6개)만큼 자르기
+      .slice(0, 6);
+    return {
+      params: { path: `${hobby.filePath?.split("/").slice(1, -1).join("/")}` },
+      props: { post: hobby, relatedPosts },
+    };
+  });
+}
+
+const { post, relatedPosts } = Astro.props;
+const { Content, headings } = await render(post);
+---
+
+<MarkdownHobbyLayout frontmatter={post.data} headings={headings} relatedPosts={relatedPosts}>
+  <Content />
+</MarkdownHobbyLayout>

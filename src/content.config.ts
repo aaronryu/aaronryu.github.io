@@ -33,5 +33,23 @@ const thoughts = defineCollection({
     description: z.string(),
   }),
 });
+const hobby = defineCollection({
+  loader: glob({ pattern: "**/[^_]*.md", base: "./hobby" }),
+  schema: ({ image }) =>
+    z.object({
+      title: z.string(),
+      category: z.array(z.string()).min(1),
+      created: z.date(),
+      updated: z.date().optional(),
+      deck: z.string(),
+      abstract: z.string().optional(),
+      image: z
+        .object({
+          url: image(),
+          alt: z.string(),
+        })
+        .optional(),
+    }),
+});
 // 단일 `collections` 객체를 내보내 컬렉션을 등록하세요
-export const collections = { blog, thoughts };
+export const collections = { blog, thoughts, hobby };

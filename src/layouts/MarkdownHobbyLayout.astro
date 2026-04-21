@@ -1,0 +1,117 @@
+---
+import CreativeCommonsCard from "@/components/CreativeCommonsCard.astro";
+import TableOfContents from "@/components/TableOfContents.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import MarkdownPost from "@/layouts/MarkdownPost.astro";
+import MarkdownPostHeader from "@/components/MarkdownPostHeader.astro";
+
+const { frontmatter, headings, relatedPosts } = Astro.props;
+---
+
+<BaseLayout
+  title={frontmatter.title}
+  keywords={frontmatter.keywords}
+  description={frontmatter.description}
+  image={frontmatter.image}
+  created={frontmatter.created.toISOString()}
+  updated={frontmatter.updated?.toISOString()}
+>
+  {headings && <TableOfContents headings={headings} />}
+  <article>
+    <MarkdownPostHeader frontmatter={frontmatter} />
+    <MarkdownPost>
+      <slot />
+    </MarkdownPost>
+    <CreativeCommonsCard title={frontmatter.title} created={frontmatter.created} />
+    <div>
+      {relatedPosts}
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  article {
+    max-width: 800px;
+    /* 여기에 패딩을 주어 우측 공간을 버릴지 아니면 TOC 에 패딩을 줘서 오른쪽으로 좀 옮길지 고민하다 전자 선택 */
+    padding: 0 1.5em 0 0;
+    margin: 0 auto;
+
+    @media only screen and (max-width: 1280px) {
+      margin: 0 auto 0 50px;
+      padding: 0 1.2rem;
+    }
+    @media only screen and (max-width: 1024px) {
+      margin: 0 auto 0 0;
+    }
+    @media only screen and (max-width: 970px) {
+      margin: 0 auto;
+    }
+  }
+
+  .post-image {
+    margin-top: 1.4em;
+  }
+
+  .post-category {
+    padding-top: 1.4em;
+    letter-spacing: 0.03em;
+    font-size: 0.8em;
+    text-transform: uppercase;
+  }
+
+  .post-headline {
+    margin: 0;
+    padding: 0;
+    line-height: 1.4em;
+    font-size: 1.6em;
+    font-weight: 500;
+
+    @media only screen and (max-width: 700px) {
+      font-size: 1.25em;
+    }
+  }
+
+  .post-deck {
+    margin: 0.95em 0 0;
+    padding: 0 0.1em;
+    line-height: 1.8;
+    font-size: 1em;
+
+    @media only screen and (max-width: 700px) {
+      font-size: 0.84em;
+    }
+  }
+
+  .post-absract {
+    margin: 0 auto;
+    padding: 1em 1em 0;
+    max-width: 750px;
+    display: flex;
+    justify-content: center;
+    line-height: 1.8;
+    font-size: 1em;
+
+    @media only screen and (max-width: 700px) {
+      font-size: 0.84em;
+    }
+  }
+  .post-time {
+    margin: 1em 0 1.5em;
+  }
+  .post-created-time {
+    color: var(--brand);
+    font-weight: 300;
+  }
+
+  .post-created-time,
+  .post-updated-time {
+    display: block;
+    padding-left: 1em;
+    letter-spacing: 0.02em;
+    font-size: 0.83em;
+
+    @media only screen and (max-width: 700px) {
+      padding-left: 0.1em;
+    }
+  }
+</style>

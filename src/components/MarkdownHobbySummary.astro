@@ -1,0 +1,133 @@
+---
+import { Image } from "astro:assets";
+import { convert } from "@/libs/date";
+import { sectionMap } from "@/scripts/section";
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+  post: CollectionEntry<"hobby">;
+  isDisplaySection?: boolean;
+  isDisplayImage?: boolean;
+}
+
+const { post, isDisplaySection = true, isDisplayImage = true } = Astro.props;
+---
+
+<section>
+  <div class="post-category">
+    {
+      post.data.category.map((each: string, index: number) => (
+        <a
+          href={
+            "/hobby/" +
+            post.data.category
+              .map((each: string) => each.toLowerCase().replace(",", "").replace(" ", "-"))
+              .slice(0, index + 1)
+              .join("/")
+          }
+        >
+          {each}
+        </a>
+      ))
+    }
+  </div>
+  <div class="post-headline">
+    <a href={`/hobby/${post.filePath?.split("/").slice(1, -1).join("/")}`}>{post.data.title}</a>
+  </div>
+  <div class="post-deck">{post.data.deck}</div>
+  {
+    isDisplayImage && post.data.image && (
+      <Image class="post-image" src={post.data.image.url} alt={post.data.image.alt} />
+    )
+  }
+  <div class="post-time">
+    <time class="post-created-time" datetime={post.data.created.toISOString()}>
+      {convert(post.data.created).date}
+    </time>
+  </div>
+</section>
+
+<style>
+  a {
+    color: inherit;
+    transition: all 0.2s ease;
+  }
+
+  a:hover {
+    color: var(--text-link);
+  }
+
+  .post-image {
+    margin-top: 1.4em;
+  }
+
+  .post-section {
+    letter-spacing: 0.03em;
+    font-size: 1em;
+    color: var(--text-link);
+    /* font-size: 0.8em; */
+    /* text-transform: uppercase; */
+  }
+
+  .post-category {
+    letter-spacing: 0.03em;
+    font-size: 0.8em;
+    text-transform: uppercase;
+    font-weight: 500;
+
+    a:not(:last-child)::after {
+      content: " / ";
+    }
+  }
+
+  .post-headline {
+    margin: 0;
+    padding: 0;
+    line-height: 1.4em;
+    font-size: 1.4em;
+    /* line-height: 1.25em; */
+    /* font-size: 1.25em; */
+    font-weight: 500;
+
+    @media only screen and (max-width: 700px) {
+      font-size: 1.25em;
+      /* font-size: 1.1em; */
+    }
+  }
+
+  .post-deck {
+    margin: 0.5em 0 0;
+    padding: 0 0.1em;
+    line-height: 1.45;
+    font-size: 0.9em;
+    /* margin: 0.5em 0 0; */
+    /* line-height: 1.4; */
+    /* font-size: 0.8em; */
+
+    @media only screen and (max-width: 700px) {
+      font-size: 0.8em;
+      /* font-size: 0.75em; */
+    }
+  }
+
+  .post-absract {
+    margin: 0 auto;
+    padding: 1em 1em 0;
+    max-width: 750px;
+    display: flex;
+    justify-content: center;
+    line-height: 1.8;
+    font-size: 1em;
+
+    @media only screen and (max-width: 700px) {
+      font-size: 0.84em;
+    }
+  }
+  .post-time {
+    margin-top: 0.4em;
+    color: var(--text-auxiliary);
+    letter-spacing: 0.02em;
+    font-size: 0.75em;
+    font-weight: 300;
+  }
+</style>
