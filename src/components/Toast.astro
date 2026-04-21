@@ -1,0 +1,49 @@
+---
+
+---
+
+<div
+  id="toast"
+  class="pointer-events-none fixed top-10 left-1/2 z-50 -translate-x-1/2 translate-y-5 opacity-0 transition-all duration-300 ease-out"
+>
+  <div id="toast-container" class="flex items-center gap-3 rounded-sm px-6 py-3 shadow-xl">
+    <span id="toast-message" class="text-sm font-medium tracking-tight">토스트 예시 메세지</span>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("show-toast", ((e: CustomEvent) => {
+    const toast = document.getElementById("toast");
+    const toastMsg = document.getElementById("toast-message");
+    if (!toast || !toastMsg) return;
+
+    toastMsg.textContent = e.detail.message;
+
+    toast.classList.remove("opacity-0", "translate-y-0");
+    toast.classList.add("opacity-100", "translate-y-5");
+
+    setTimeout(() => {
+      toast.classList.remove("opacity-100", "translate-y-5");
+      toast.classList.add("opacity-0", "translate-y-0");
+    }, 3000);
+  }) as EventListener);
+
+  // 3. 호출용 헬퍼 함수를 전역에 딱 한 번만 정의
+  if (!window.triggerToast) {
+    window.triggerToast = (message: string) => {
+      const event = new CustomEvent("show-toast", { detail: { message } });
+      document.dispatchEvent(event);
+    };
+  }
+</script>
+
+<style>
+  #toast-container {
+    color: var(--text);
+    border: 1px solid var(--text-link);
+    background-color: var(--bg0);
+    /* background-color: var(--text-link); */
+    /* background-color: var(--text-placeholder); */
+    /* background-color: var(--text-auxiliary); */
+  }
+</style>

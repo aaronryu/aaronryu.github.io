@@ -11,15 +11,19 @@ import {
 } from "@shikijs/transformers";
 import remarkCodeTitles from "remark-code-titles";
 
+import tailwindcss from "@tailwindcss/vite";
+
 // https://astro.build/config
 export default defineConfig({
   // (A) Astro-specific options
   // site: 'https://aaronryu.github.io', - Sitemap / Canonocal 생성하여 SEO 가속
   site: "https://aaronryu.netlify.app",
+
   //
   // (B) Vite-specific options
   // vite: { ... },
   integrations: [preact(), icon()],
+
   markdown: {
     // 여기서 먼저 타이틀을 div로 변환
     remarkPlugins: [remarkCodeTitles],
@@ -39,5 +43,9 @@ export default defineConfig({
         transformerNotationErrorLevel(),
       ],
     },
+  },
+
+  vite: {
+    plugins: [tailwindcss()],
   },
 });

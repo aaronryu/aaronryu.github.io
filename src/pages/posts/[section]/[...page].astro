@@ -76,18 +76,18 @@ const params = Astro.params;
 </BaseLayout>
 
 <script>
-  const btn = document.getElementById('rss-link');
-  btn?.addEventListener('click', () => {
-    const rssUrl = `${window.location.origin}/rss.xml`;
-    
-    // 클립보드 복사
-    navigator.clipboard.writeText(rssUrl).then(() => {
-      alert("RSS 주소가 복사되었습니다. 구독기(Feedly 등)에 추가해주세요 🙂");
-    }).catch(() => {
-      // 실패 시 대비책으로 주소창 이동
-      window.location.href = rssUrl;
-    });
+const btn = document.getElementById('rss-link');
+btn?.addEventListener('click', () => {
+  const rssUrl = `${window.location.origin}/rss.xml`;
+  // 클립보드 복사
+  navigator.clipboard.writeText(rssUrl).then(() => {
+    triggerToast("RSS 주소가 복사되었습니다. 구독기(Feedly 등)에 추가해주세요 🙂");
+    // alert("RSS 주소가 복사되었습니다. 구독기(Feedly 등)에 추가해주세요 🙂");
+  }).catch(() => {
+    // 실패 시 대비책으로 주소창 이동
+    window.location.href = rssUrl;
   });
+});
 </script>
 
 <style>
@@ -102,14 +102,14 @@ const params = Astro.params;
     flex-direction: column;
     align-items: center;
     text-align: center;
-    line-height: 1.4em;
+    line-height: 1.2em;
     
     .line-1 {
-      font-size: 0.95em;
+      font-size: 0.8em;
     }
 
     .line-2 {
-      font-size: 1.1em;
+      font-size: 1em;
     }
 
     #rss-link {
@@ -117,9 +117,9 @@ const params = Astro.params;
       align-items: center;
       justify-content: center;
       gap: 0.2em;
-      padding-inline: 0.8em;
+      padding-inline: 0.6em;
       margin-top: 0.4em;
-      height: 36px;
+      height: 2em;
       border: 1px solid var(--text);
       border-radius: 1px;
       text-decoration: none;

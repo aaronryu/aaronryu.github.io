@@ -4,6 +4,7 @@ import Footer from "@/components/Footer.astro";
 import "@/styles/global.css";
 import HeaderScrollSpy from "@/components/HeaderScrollSpy.astro";
 import OnScrollStickyHeader from "@/components/OnScrollStickyHeader.astro";
+import Toast from "@/components/Toast.astro";
 
 export const AARON = "Aaron Ryu";
 export const AARONS_BLOG_TITLE = "The Pessimistic Optimist";
@@ -94,5 +95,6 @@ const isArticle = title !== AARONS_BLOG_TITLE && !!created;
     <Header />
     <slot />
     <Footer />
+    <Toast />
   </body>
 </html>
