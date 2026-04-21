@@ -23,9 +23,13 @@ export const getStaticPaths: GetStaticPaths = async ({ paginate }) => {
 
   // 3. [section]/[...page] 자동 생성 < Astro 에서 자체적으로 제공하는 Pagination 사용 방법
   return sections.flatMap((section) => {
-    const filteredPosts = posts.filter(
-      (post) => post.filePath?.split("/").slice(1, -1)[0] === section,
-    );
+    const filteredPosts = posts
+      .filter((post) => post.filePath?.split("/").slice(1, -1)[0] === section)
+      .sort(
+        (thought1, thought2) =>
+          new Date(thought2.data.created).getTime() - new Date(thought1.data.created).getTime(),
+      );
+
     return paginate(filteredPosts, {
       params: { section },
       pageSize: 5,
@@ -66,7 +70,7 @@ const params = Astro.params;
                 <MarkdownPostSummary post={each} isDisplaySection={false} isDisplayImage={false} />
               ))}
             </div>
-            <!-- @ts-ignore -->
+            {/* @ts-ignore */}
             <PaginationNavigator baseurl={sectionMap[params.section].url} page={page} />
           </div>
         )
@@ -76,18 +80,21 @@ const params = Astro.params;
 </BaseLayout>
 
 <script>
-const btn = document.getElementById('rss-link');
-btn?.addEventListener('click', () => {
-  const rssUrl = `${window.location.origin}/rss.xml`;
-  // 클립보드 복사
-  navigator.clipboard.writeText(rssUrl).then(() => {
-    triggerToast("RSS 주소가 복사되었습니다. 구독기(Feedly 등)에 추가해주세요 🙂");
-    // alert("RSS 주소가 복사되었습니다. 구독기(Feedly 등)에 추가해주세요 🙂");
-  }).catch(() => {
-    // 실패 시 대비책으로 주소창 이동
-    window.location.href = rssUrl;
+  const btn = document.getElementById("rss-link");
+  btn?.addEventListener("click", () => {
+    const rssUrl = `${window.location.origin}/rss.xml`;
+    // 클립보드 복사
+    navigator.clipboard
+      .writeText(rssUrl)
+      .then(() => {
+        triggerToast("RSS 주소가 복사되었습니다. 구독기(Feedly 등)에 추가해주세요 🙂");
+        // alert("RSS 주소가 복사되었습니다. 구독기(Feedly 등)에 추가해주세요 🙂");
+      })
+      .catch(() => {
+        // 실패 시 대비책으로 주소창 이동
+        window.location.href = rssUrl;
+      });
   });
-});
 </script>
 
 <style>
@@ -103,7 +110,7 @@ btn?.addEventListener('click', () => {
     align-items: center;
     text-align: center;
     line-height: 1.2em;
-    
+
     .line-1 {
       font-size: 0.8em;
     }
