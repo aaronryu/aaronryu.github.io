@@ -1,6 +1,6 @@
 ---
 title: "Swift 4+ 문법 중 open 키워드에 대해 알아보자"
-category: ["Language", "iOS - Swift"]
+category: ["Language", "iOS, Swift"]
 created: 2019-03-09T07:24:17.000Z
 updated: 2019-06-29T05:22:17.368Z
 deck: 상속은 객체지향의 꽃이지만, 잘못 사용하면 기반 클래스의 변경이 하위 클래스를 깨뜨리는 '취약 기반 클래스' 문제를 야기한다. 현대 언어인 Swift는 이 문제를 어떻게 문법적으로 강제하여 해결하고 있는지 알아본다.

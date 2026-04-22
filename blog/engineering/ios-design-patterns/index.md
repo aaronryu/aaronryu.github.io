@@ -1,6 +1,6 @@
 ---
 title: "개발 일지 - iOS 아키텍쳐 패턴 MVC, MVVM, VIPER"
-category: ["Language", "iOS - Swift"]
+category: ["Language", "iOS, Swift"]
 created: 2019-06-29T05:20:40.000Z
 updated: 2019-12-08T16:26:22.848Z
 deck: iOS 개발은 웹과 유사하면서도 View와 Controller가 강력하게 결합되어 있다는 독특한 특징이 있다. 프로젝트의 규모가 커짐에 따라 비대해지는 ViewController를 방지하고, 코드의 재사용성과 유지보수성을 높이기 위해 아키텍처를 어떻게 진화시켜야 하는지 고민해 본다.

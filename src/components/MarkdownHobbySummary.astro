@@ -19,7 +19,8 @@ const { post, isDisplaySection = true, isDisplayImage = true } = Astro.props;
       post.data.category.map((each: string, index: number) => (
         <a
           href={
-            "/hobby/" +
+            sectionMap.categories.url +
+            "/" +
             post.data.category
               .map((each: string) => each.toLowerCase().replace(",", "").replace(" ", "-"))
               .slice(0, index + 1)

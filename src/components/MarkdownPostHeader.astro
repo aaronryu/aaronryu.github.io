@@ -1,13 +1,29 @@
 ---
 import { Image } from "astro:assets";
 import { convert } from "@/libs/date";
+import { sectionMap } from "@/scripts/section";
 
 const { frontmatter } = Astro.props;
 ---
 
 <section>
   <p class="post-category">
-    {frontmatter.category.join(" / ")}
+    {
+      frontmatter.category.map((each: string, index: number) => (
+        <a
+          href={
+            sectionMap.categories.url +
+            "/" +
+            frontmatter.category
+              .map((each: string) => each.toLowerCase().replace(",", "").replace(" ", "-"))
+              .slice(0, index + 1)
+              .join("/")
+          }
+        >
+          {each}
+        </a>
+      ))
+    }
   </p>
   <p class="post-headline">
     {frontmatter.title}
@@ -34,6 +50,15 @@ const { frontmatter } = Astro.props;
 </section>
 
 <style>
+  .post-category a {
+    color: inherit;
+    transition: all 0.2s ease;
+  }
+
+  .post-category a:hover {
+    color: var(--text-link);
+  }
+
   .post-image {
     margin-top: 1.4em;
   }
@@ -43,6 +68,10 @@ const { frontmatter } = Astro.props;
     letter-spacing: 0.03em;
     font-size: 0.8em;
     text-transform: uppercase;
+
+    a:not(:last-child)::after {
+      content: " / ";
+    }
   }
 
   .post-headline {

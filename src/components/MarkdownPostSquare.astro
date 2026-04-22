@@ -21,7 +21,7 @@ const section: keyof typeof sectionMap = post.filePath?.split("/").slice(1, -1)[
       post.data.category.map((each: string, index: number) => (
         <a
           href={
-            sectionMap[section].url +
+            sectionMap.categories.url +
             "/" +
             post.data.category
               .map((each: string) => each.toLowerCase().replace(",", "").replace(" ", "-"))

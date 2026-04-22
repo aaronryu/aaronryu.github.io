@@ -1,6 +1,7 @@
 ---
 import SubCategory from "@/components/SubCategory.astro";
-import type { CategoryNode } from "@/pages/categories/index.astro";
+import type { CategoryNode } from "@/scripts/category";
+import { sectionMap } from "@/scripts/section";
 import { Icon } from "astro-icon/components";
 
 interface Props {
@@ -9,7 +10,7 @@ interface Props {
 
 const { node } = Astro.props;
 const mainCategoryUrl =
-  "/categories/" + node.category.toLowerCase().replace(",", "").replace(" ", "-");
+  sectionMap.categories.url + "/" + node.category.toLowerCase().replace(",", "").replace(" ", "-");
 ---
 
 <div class="main-category">

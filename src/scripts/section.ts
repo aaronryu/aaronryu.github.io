@@ -1,4 +1,10 @@
 export const sectionMap = {
+  categories: {
+    title: "Categories",
+    shorten: "카테고리",
+    description: "원하는 글을 쉽게 찾을 수 있게 도움을 드립니다",
+    url: "/categories",
+  },
   posts: {
     title: "Posts",
     shorten: "글",

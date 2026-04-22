@@ -1,6 +1,6 @@
 ---
 import NestedCategory from "@/components/NestedCategory.astro";
-import type { CategoryNode } from "@/pages/categories/index.astro";
+import type { CategoryNode } from "@/scripts/category";
 import { Icon } from "astro-icon/components";
 
 interface Props {
@@ -9,11 +9,13 @@ interface Props {
 }
 
 const { node, previousUrl } = Astro.props;
+const pathname = Astro.url.pathname;
 const subCategoryUrl =
   previousUrl + "/" + node.category.toLowerCase().replace(",", "").replace(" ", "-");
+const isCurrentCategory = subCategoryUrl === pathname;
 ---
 
-<div class="sub-category">
+<div class:list={["sub-category", { current: isCurrentCategory }]}>
   <div class="sub-category-header">
     <a class="sub-category-title" href={subCategoryUrl}>
       <Icon name="lucide:arrow-right" width="20" />
@@ -57,6 +59,11 @@ const subCategoryUrl =
       margin-top: 0.4em;
       margin-left: 0.5em;
     }
+  }
+
+  .current {
+    background-color: var(--text-link-background);
+    border-radius: 5px;
   }
 
   .sub-category-header {
