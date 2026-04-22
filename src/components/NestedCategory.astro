@@ -1,0 +1,33 @@
+---
+import type { CategoryNode } from "@/pages/categories/index.astro";
+import { Icon } from "astro-icon/components";
+
+interface Props {
+  node: CategoryNode;
+  previousUrl: string;
+}
+
+const { node, previousUrl } = Astro.props;
+const subCategoryUrl =
+  previousUrl + "/" + node.category.toLowerCase().replace(",", "").replace(" ", "-");
+---
+
+<div class="nested-category">
+  <div class="nested-category-header">
+    <a class="nested-category-title" href={subCategoryUrl}>{node.category}</a>
+    <div class="nested-category-count">{node.count}</div>
+  </div>
+  <ul class="nested-category-posts">
+    {
+      node.posts.map((post) => (
+        <li class="nested-category-post">
+          <a href={`/posts/${post.filePath?.split("/").slice(1, -1).join("/")}`}>
+            {post.data.title}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</div>
+
+<style></style>

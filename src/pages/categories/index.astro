@@ -1,6 +1,6 @@
 ---
+import MainCategory from "@/components/MainCategory.astro";
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import { Icon } from "astro-icon/components";
 import type { CollectionEntry } from "astro:content";
 import { getCollection } from "astro:content";
 
@@ -9,10 +9,8 @@ const blogs = await getCollection("blog");
 const hobbies = await getCollection("hobby");
 const posts = [...blogs, ...hobbies];
 
-const uniqueTags = [...new Set(blogs.map((post) => post.data.category).flat())];
-
 type CategoryTree = Array<CategoryNode>;
-interface CategoryNode {
+export interface CategoryNode {
   category: string;
   count: number;
   posts: Array<CollectionEntry<"blog" | "hobby">>;
@@ -64,65 +62,7 @@ const categoryTree: CategoryTree = posts.reduce(
 <BaseLayout>
   <article>
     <div class="categories">
-      {
-        categoryTree.map((eachCategory) => {
-          return (
-            <div class="main-category">
-              {/* MAIN CATEGORY */}
-              <div class="main-category-header">
-                <div class="main-category-title">
-                  <Icon name="lucide:chevron-right" width="20" />
-                  {eachCategory.category}
-                </div>
-                <div class="main-category-count">{eachCategory.count}</div>
-              </div>
-              <ul class="main-category-posts">
-                {eachCategory.posts.map((post) => (
-                  <li class="main-category-post">{post.data.title}</li>
-                ))}
-              </ul>
-              {/* SUB CATEGORY */}
-              {eachCategory.subcategory.map((subcategory) => (
-                <div class="sub-category">
-                  <div class="sub-category-header">
-                    <div class="sub-category-title">
-                      <Icon name="lucide:arrow-right" width="20" />
-                      {subcategory.category}
-                    </div>
-                    <div class="sub-category-count">{subcategory.count}</div>
-                  </div>
-                  <ul class="sub-category-posts">
-                    {subcategory.posts.map((post) => (
-                      <li class="sub-category-post">{post.data.title}</li>
-                    ))}
-                  </ul>
-                  {/* NESTED CATEGORY */}
-                  {subcategory.subcategory.map((subcategory) => (
-                    <div class="nested-category">
-                      <div class="nested-category-header">
-                        <div class="nested-category-title">{subcategory.category}</div>
-                        <div class="nested-category-count">{subcategory.count}</div>
-                      </div>
-                      <ul class="nested-category-posts">
-                        {subcategory.posts.map((post) => (
-                          <li class="nested-category-post">{post.data.title}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  ))}
-                </div>
-              ))}
-            </div>
-          );
-        })
-      }
-      {
-        uniqueTags.map((eachTag) => (
-          <p class="category">
-            <a href={`/categories/${eachTag}`}>{eachTag}</a>
-          </p>
-        ))
-      }
+      {categoryTree.map((eachCategory) => <MainCategory node={eachCategory} />)}
     </div>
   </article>
 </BaseLayout>
@@ -132,132 +72,20 @@ const categoryTree: CategoryTree = posts.reduce(
     max-width: 700px;
     margin: 1.2em auto 2.6em;
     padding: 0 1.2em;
+
+    @media only screen and (max-width: 700px) {
+      margin: 0.9em auto 2em;
+      padding: 0 0.9em;
+    }
   }
 
   .categories {
     display: flex;
     flex-direction: column;
     gap: 1.2em;
-  }
-
-  .category {
-    /* margin: 0.25em;
-    border: dotted 1px #a1a1a1;
-    border-radius: 0.5em;
-    padding: 0.5em 1em;
-    font-size: 1.15em;
-    background-color: #f8fcfd; */
-  }
-
-  .main-category {
-    border: 1px solid var(--text-link);
-    border-radius: 10px;
-    padding: 0.7em;
-    padding-bottom: 0.8em;
 
     @media only screen and (max-width: 700px) {
-      margin: 8px;
-    }
-  }
-
-  .main-category-header {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.1em 0.6em 0.1em 0.2em;
-    /*  */
-    font-size: 1.12em;
-    color: var(--text-link);
-    background-color: var(--text-link-background);
-    border-radius: 5px;
-
-    @media only screen and (max-width: 700px) {
-      font-size: 1.015rem;
-    }
-
-    .main-category-title {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-    }
-  }
-
-  .main-category-posts {
-    margin-top: 0.4em;
-    list-style: disc;
-  }
-
-  .main-category-post {
-    display: list-item;
-    margin-left: 2.4em;
-
-    /* display: flex;
-    flex-direction: row;
-    align-items: center; */
-    margin-top: 0.2em;
-  }
-
-  .sub-category {
-    margin-top: 0.6em;
-    margin-left: 0.8em;
-  }
-
-  .sub-category-header {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.15em 0.6em 0.15em 0.2em;
-    /*  */
-    font-size: 1.05em;
-    color: var(--text-link);
-    border: 1px solid var(--text-link);
-    border-radius: 0.3em;
-    margin-top: 0.2em;
-
-    @media only screen and (max-width: 700px) {
-      margin: 8px;
-    }
-
-    .sub-category-title {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      gap: 0.1em;
-    }
-  }
-
-  .sub-category-posts {
-    margin-top: 0.3em;
-    list-style: circle;
-  }
-
-  .sub-category-post {
-    display: list-item;
-    margin-left: 2.6em;
-
-    /* display: flex;
-    flex-direction: row;
-    align-items: center; */
-    margin-top: 0.2em;
-  }
-
-  .nested-category {
-  }
-
-  .nested-category-header {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    /*  */
-    border: 1px solid var(--text-link);
-    border-radius: 10px;
-    padding: 10px;
-
-    @media only screen and (max-width: 700px) {
-      margin: 8px;
+      gap: 0.9em;
     }
   }
 </style>

@@ -1,0 +1,118 @@
+---
+import SubCategory from "@/components/SubCategory.astro";
+import type { CategoryNode } from "@/pages/categories/index.astro";
+import { Icon } from "astro-icon/components";
+
+interface Props {
+  node: CategoryNode;
+}
+
+const { node } = Astro.props;
+const mainCategoryUrl =
+  "/categories/" + node.category.toLowerCase().replace(",", "").replace(" ", "-");
+---
+
+<div class="main-category">
+  {/* MAIN CATEGORY */}
+  <div class="main-category-header">
+    <a class="main-category-title" href={mainCategoryUrl}>
+      <Icon name="lucide:chevron-right" width="20" />
+      {node.category}
+    </a>
+    <div class="main-category-count">{node.count}</div>
+  </div>
+  <ul class="main-category-posts">
+    {
+      node.posts.map((post) => (
+        <li class="main-category-post">
+          <a href={`/posts/${post.filePath?.split("/").slice(1, -1).join("/")}`}>
+            {post.data.title}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+  {
+    node.subcategory.map((subcategory) => (
+      <SubCategory node={subcategory} previousUrl={mainCategoryUrl} />
+    ))
+  }
+</div>
+
+<style>
+  a {
+    color: inherit;
+    transition: all 0.2s ease;
+  }
+
+  a:hover {
+    color: var(--text-link);
+  }
+
+  .main-category {
+    border: 1px solid var(--text-link);
+    border-radius: 10px;
+    padding: 0.7em;
+    padding-bottom: 0.8em;
+
+    @media only screen and (max-width: 700px) {
+      padding: 0.6em;
+      padding-bottom: 0.7em;
+    }
+  }
+
+  .main-category-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.1em 0.6em 0.1em 0.2em;
+    /*  */
+    font-size: 1.12em;
+    color: var(--text-link);
+    background-color: var(--text-link-background);
+    border-radius: 5px;
+
+    @media only screen and (max-width: 700px) {
+      font-size: 1.015rem;
+    }
+
+    .main-category-title {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+    }
+  }
+
+  .main-category-posts {
+    list-style: disc;
+    margin-top: 0.4em;
+    margin-left: 2.4em;
+
+    @media only screen and (max-width: 700px) {
+      margin-left: 2em;
+      font-size: 0.9em;
+    }
+  }
+
+  .main-category-post {
+    display: list-item;
+    margin-top: 0.2em;
+  }
+
+  .main-category-post a {
+    /* 1. 내용물만큼만 너비를 차지하도록 설정 */
+    display: inline-block;
+
+    /* 2. 최대 너비 지정 (이 지점을 넘어가면 말줄임표 발생) */
+    max-width: 100%;
+
+    /* 3. 말줄임 필수 속성 */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    /* 브라우저가 너비를 계산할 때 도움이 됨 */
+    vertical-align: bottom;
+  }
+</style>
