@@ -11,8 +11,6 @@ import {
 } from "@shikijs/transformers";
 import remarkCodeTitles from "remark-code-titles";
 
-import tailwindcss from "@tailwindcss/vite";
-
 // https://astro.build/config
 export default defineConfig({
   // (A) Astro-specific options
@@ -43,9 +41,5 @@ export default defineConfig({
         transformerNotationErrorLevel(),
       ],
     },
-  },
-
-  vite: {
-    plugins: [tailwindcss()],
   },
 });
