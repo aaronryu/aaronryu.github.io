@@ -67,7 +67,12 @@ const params = Astro.params;
           <div class="recent-articles">
             <div class="recent-articles-list">
               {page.data.map((each, index) => (
-                <MarkdownPostSummary post={each} isDisplaySection={false} isDisplayImage={false} />
+                <MarkdownPostSummary
+                  post={each}
+                  isDisplaySection={false}
+                  isDisplayCategory={params.section !== "opinion"}
+                  isDisplayImage={false}
+                />
               ))}
             </div>
             {/* @ts-ignore */}

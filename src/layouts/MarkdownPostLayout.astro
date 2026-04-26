@@ -22,7 +22,7 @@ const { section, frontmatter, headings, relatedPosts } = Astro.props;
 >
   <SectionHeader section={section} />
   {headings && <TableOfContents headings={headings} />}
-  <article>
+  <article class:list={[{ "non-headings-article": !headings || headings.length === 0 }]}>
     <MarkdownPostHeader frontmatter={frontmatter} />
     <MarkdownPost>
       <slot />
@@ -50,6 +50,15 @@ const { section, frontmatter, headings, relatedPosts } = Astro.props;
     }
     @media only screen and (max-width: 970px) {
       margin: 0 auto;
+    }
+  }
+
+  .non-headings-article {
+    margin: 0 auto;
+    padding-inline: 0.75em;
+
+    @media only screen and (max-width: 1280px) {
+      padding-inline: 1.2rem;
     }
   }
 

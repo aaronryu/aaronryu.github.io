@@ -86,7 +86,6 @@ let itemIndex = 0;
                         {side === "left" ? (
                           <div class="tl-content">
                             <div class="tl-date">{fullDate}</div>
-                            <div class="tl-title">{thought.title}</div>
                             <div class="tl-desc">{thought.description}</div>
                           </div>
                         ) : (
@@ -103,7 +102,6 @@ let itemIndex = 0;
                         {side === "right" ? (
                           <div class="tl-content">
                             <div class="tl-date">{fullDate}</div>
-                            <div class="tl-title">{thought.title}</div>
                             <div class="tl-desc">{thought.description}</div>
                           </div>
                         ) : (
@@ -239,11 +237,6 @@ let itemIndex = 0;
     font-size: 0.6em;
     color: var(--text-auxiliary);
     margin-bottom: 0.2em;
-  }
-  .tl-title {
-    font-size: 0.8em;
-    font-weight: 500;
-    margin-bottom: 3px;
   }
   .tl-desc {
     font-size: 0.75em;

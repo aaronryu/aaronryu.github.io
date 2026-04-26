@@ -7,31 +7,13 @@ import { shuffle } from "@/scripts/shuffle.js";
 import MarkdownPostSummary from "@/components/MarkdownPostSummary.astro";
 import MarkdownPostSquare from "@/components/MarkdownPostSquare.astro";
 
-const thoughts = await getCollection("thoughts");
-const descendingThoughts = thoughts
-  .sort(
-    (thought1, thought2) =>
-      new Date(thought2.data.created).getTime() - new Date(thought1.data.created).getTime(),
-  )
-  .map((thought: CollectionEntry<"thoughts">) => thought.data)
-  .slice(0, 10);
-
-const posts = await getCollection("blog");
-const recentPosts = posts.sort(
+const posts = (await getCollection("blog")).sort(
   (relatedPost1, relatedPost2) =>
     new Date(relatedPost2.data.created).getTime() - new Date(relatedPost1.data.created).getTime(),
 );
-
-const recentPickedPosts = recentPosts.slice(0, 10);
-const randomPickedSections = shuffle([...Object.keys(sectionMap)]).slice(0, 3);
-const section1Post = recentPosts.filter(
-  (post) => randomPickedSections[0] === post.filePath?.split("/").slice(1, -1)[0],
-);
-const section2Post = recentPosts.filter(
-  (post) => randomPickedSections[1] === post.filePath?.split("/").slice(1, -1)[0],
-);
-const section3Post = recentPosts.filter(
-  (post) => randomPickedSections[2] === post.filePath?.split("/").slice(1, -1)[0],
+const recentPosts = posts.filter((post) => post.filePath?.split("/").slice(1, -1)[0] !== "opinion");
+const opinionPosts = posts.filter(
+  (post) => post.filePath?.split("/").slice(1, -1)[0] === "opinion",
 );
 ---
 
@@ -39,51 +21,35 @@ const section3Post = recentPosts.filter(
   <main>
     <div class="dashboard">
       <div class="section-articles">
-        <div class="random-articles">
-          <MarkdownPostSquare post={recentPickedPosts[3]} />
-          <MarkdownPostSquare post={recentPickedPosts[4]} />
-          <MarkdownPostSquare post={recentPickedPosts[5]} />
-          <MarkdownPostSquare post={recentPickedPosts[6]} />
-        </div>
         <div class="recent-articles">
           <div class="recent-articles-headline">
-            <MarkdownPostSummary post={recentPickedPosts[0]} />
-          </div>
-          <div class="recent-articles-middle">
-            <div class="recent-middle-article">
-              <MarkdownPostSquare post={recentPickedPosts[1]} />
-            </div>
-            <div class="recent-middle-article">
-              <MarkdownPostSquare post={recentPickedPosts[2]} />
-            </div>
+            <MarkdownPostSummary post={recentPosts[0]} />
           </div>
           <div class="recent-articles-list">
-            <MarkdownPostSummary post={recentPickedPosts[3]} />
-            <MarkdownPostSummary post={recentPickedPosts[4]} />
+            <MarkdownPostSummary post={recentPosts[1]} isDisplayImage={false} />
+            <MarkdownPostSummary post={recentPosts[2]} isDisplayImage={false} />
+            <MarkdownPostSummary post={recentPosts[3]} isDisplayImage={false} />
           </div>
           <a class="retrieve-more-button" href={sectionMap.posts.url}>더 많은 글들 보기</a>
         </div>
-      </div>
-      <div class="section-thoughts">
-        <a href={sectionMap.thoughts.url}><div class="title">{sectionMap.thoughts.title}</div></a>
-        <div class="description">문득 드는 짧은 생각들에 대한 메모</div>
-        <div class="thoughts">
-          {
-            descendingThoughts.map((thought) => {
-              const fullDate = new Date(thought.created).toLocaleDateString("ko-KR", {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              });
-              return (
-                <div class="tl-content">
-                  <div class="tl-title">{thought.title}</div>
-                  <div class="tl-desc">{thought.description}</div>
-                  <div class="tl-date">{fullDate}</div>
-                </div>
-              );
-            })
-          }
+
+        <div class="random-articles">
+          <div class="post-section">
+            <a href={sectionMap.opinion.url}>{sectionMap.opinion.title}</a>
+          </div>
+          <div class="random-articles-list">
+            {
+              opinionPosts
+                .slice(0, 7)
+                .map((each) => (
+                  <MarkdownPostSquare
+                    post={each}
+                    isDisplaySection={false}
+                    isDisplayCategory={false}
+                  />
+                ))
+            }
+          </div>
         </div>
       </div>
     </div>
@@ -93,18 +59,7 @@ const section3Post = recentPosts.filter(
 <style>
   main {
     margin: 0 auto;
-
-    @media only screen and (min-width: 700px) {
-      max-width: 700px;
-    }
-
-    @media only screen and (min-width: 980px) {
-      max-width: 980px;
-    }
-
-    @media only screen and (min-width: 1300px) {
-      max-width: 1300px;
-    }
+    max-width: 980px;
   }
 
   .dashboard {
@@ -114,16 +69,6 @@ const section3Post = recentPosts.filter(
     margin-bottom: 1.8em;
 
     grid-template-columns: 1fr;
-
-    @media only screen and (min-width: 980px) {
-      grid-template-columns: minman(auto, 960px);
-      grid-column-gap: 20px;
-    }
-
-    @media only screen and (min-width: 1300px) {
-      grid-template-columns: 1fr 240px;
-      grid-column-gap: 32px;
-    }
   }
 
   .section-articles {
@@ -131,62 +76,9 @@ const section3Post = recentPosts.filter(
 
     grid-template-columns: 1fr;
 
-    @media only screen and (min-width: 980px) {
-      grid-template-columns: 280px 1fr;
-      grid-column-gap: 20px;
-    }
-
-    @media only screen and (min-width: 1300px) {
-      grid-template-columns: 300px 1fr;
-      grid-column-gap: 32px;
-    }
-  }
-
-  .section-thoughts {
-    display: none;
-
-    .title {
-      font-size: 1.3em;
-      line-height: 1.2em;
-    }
-    .description {
-      font-size: 0.85em;
-      color: var(--text-auxiliary);
-    }
-    .thoughts {
-      display: flex;
-      flex-direction: column;
-      /* gap: 0.5em; */
-    }
-    .tl-content {
-      margin-top: 0.5em;
-      /* margin-bottom: 0.5em; */
-      padding: 0.52em 0.7em 0.6em 0.7em;
-      /* background: var(--color-background-secondary); */
-      /* border-radius: 1em; */
-      /* border-radius: 0.8em; */
-      border-left: 0.5px solid var(--text);
-    }
-    .tl-date {
-      font-size: 0.6em;
-      color: var(--text-auxiliary);
-      margin-top: 0.2em;
-    }
-    .tl-title {
-      font-size: 0.8em;
-      font-weight: 500;
-      margin-bottom: 3px;
-    }
-    .tl-desc {
-      font-size: 0.75em;
-      line-height: 1.4;
-    }
-  }
-
-  /* 화면이 커지면(PC) 나타남 */
-  @media (min-width: 1300px) {
-    .section-thoughts {
-      display: block;
+    @media only screen and (min-width: 850px) {
+      grid-template-columns: 1fr 280px;
+      grid-column-gap: 26px;
     }
   }
 
@@ -195,12 +87,17 @@ const section3Post = recentPosts.filter(
   }
 
   /* 화면이 커지면(PC) 나타남 */
-  @media (min-width: 980px) {
+  @media (min-width: 850px) {
     .random-articles {
-      display: flex;
-      flex-direction: column;
-      gap: 1.2em;
+      display: block;
     }
+  }
+
+  .random-articles-list {
+    display: flex;
+    flex-direction: column;
+    font-size: 15px;
+    gap: 1.2em;
   }
 
   .recent-articles {
@@ -213,16 +110,6 @@ const section3Post = recentPosts.filter(
     display: flex;
     flex-direction: column;
     gap: 1.2em;
-  }
-
-  .recent-articles-middle {
-    display: flex;
-    flex-direction: row;
-    gap: 1.2em;
-  }
-
-  .recent-middle-article {
-    flex: 1;
   }
 
   .recent-articles-list {

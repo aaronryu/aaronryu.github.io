@@ -7,10 +7,16 @@ import type { CollectionEntry } from "astro:content";
 interface Props {
   post: CollectionEntry<"blog">;
   isDisplaySection?: boolean;
+  isDisplayCategory?: boolean;
   isDisplayImage?: boolean;
 }
 
-const { post, isDisplaySection = true, isDisplayImage = true } = Astro.props;
+const {
+  post,
+  isDisplaySection = true,
+  isDisplayCategory = true,
+  isDisplayImage = true,
+} = Astro.props;
 
 // @ts-ignore
 const section: keyof typeof sectionMap = post.filePath?.split("/").slice(1, -1)[0];
@@ -24,24 +30,26 @@ const section: keyof typeof sectionMap = post.filePath?.split("/").slice(1, -1)[
       </div>
     )
   }
-  <div class="post-category">
-    {
-      post.data.category.map((each: string, index: number) => (
-        <a
-          href={
-            sectionMap.categories.url +
-            "/" +
-            post.data.category
-              .map((each: string) => each.toLowerCase().replace(",", "").replace(" ", "-"))
-              .slice(0, index + 1)
-              .join("/")
-          }
-        >
-          {each}
-        </a>
-      ))
-    }
-  </div>
+  {
+    isDisplayCategory && (
+      <div class="post-category">
+        {post.data.category.map((each: string, index: number) => (
+          <a
+            href={
+              sectionMap.categories.url +
+              "/" +
+              post.data.category
+                .map((each: string) => each.toLowerCase().replace(",", "").replace(" ", "-"))
+                .slice(0, index + 1)
+                .join("/")
+            }
+          >
+            {each}
+          </a>
+        ))}
+      </div>
+    )
+  }
   <div class="post-headline">
     <a href={`/posts/${post.filePath?.split("/").slice(1, -1).join("/")}`}>{post.data.title}</a>
   </div>

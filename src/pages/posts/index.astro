@@ -64,6 +64,7 @@ const sectionPosts = new Map(
                       <MarkdownPostSummary
                         post={each}
                         isDisplaySection={false}
+                        isDisplayCategory={section !== "opinion"}
                         isDisplayImage={false}
                       />
                     ))}
@@ -73,6 +74,7 @@ const sectionPosts = new Map(
                         <MarkdownPostSquare
                           post={each}
                           isDisplaySection={false}
+                          isDisplayCategory={section !== "opinion"}
                           isDisplayImage={false}
                         />
                       </div>
@@ -88,7 +90,7 @@ const sectionPosts = new Map(
 
 <style>
   .dashboard {
-    max-width: 720px;
+    max-width: 800px;
     margin: 1.2em auto 2.6em;
     padding: 0 1.2em;
   }

@@ -28,7 +28,6 @@ const blog = defineCollection({
 const thoughts = defineCollection({
   loader: glob({ pattern: "**/[^_]*.md", base: "./thoughts" }),
   schema: z.object({
-    title: z.string().optional(),
     created: z.date(),
     description: z.string(),
   }),
