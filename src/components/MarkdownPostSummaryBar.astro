@@ -1,0 +1,106 @@
+---
+import { Image } from "astro:assets";
+import { convert } from "@/libs/date";
+import { sectionMap } from "@/scripts/section";
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+  post: CollectionEntry<"blog">;
+  isDisplaySection?: boolean;
+  isDisplayCategory?: boolean;
+}
+
+const { post, isDisplaySection = true, isDisplayCategory = true } = Astro.props;
+
+// @ts-ignore
+const section: keyof typeof sectionMap = post.filePath?.split("/").slice(1, -1)[0];
+---
+
+<section>
+  {
+    isDisplaySection && (
+      <div class="post-section">
+        <span>{sectionMap[section].title}</span>
+      </div>
+    )
+  }
+  {
+    isDisplayCategory && (
+      <div class="post-category">
+        {post.data.category.map((each: string, index: number) => (
+          <span>{each}</span>
+        ))}
+      </div>
+    )
+  }
+  <div class="post-headline">
+    {post.data.title}
+  </div>
+  <div class="post-deck">{post.data.deck}</div>
+</section>
+
+<style>
+  .post-section {
+    letter-spacing: 0.03em;
+    font-size: 0.86em;
+    color: var(--text-link);
+  }
+
+  .post-category {
+    letter-spacing: 0.03em;
+    font-size: 0.75em;
+    text-transform: uppercase;
+    font-weight: 300;
+  }
+
+  .post-category span:not(:last-child)::after {
+    content: " / ";
+  }
+
+  .post-headline {
+    margin: 0;
+    padding: 0;
+    line-height: 1.2em;
+    font-size: 1.12em;
+    font-weight: 500;
+
+    @media only screen and (max-width: 700px) {
+      font-size: 0.95em;
+
+      /* 3. 말줄임 필수 속성 */
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+
+  .post-deck {
+    margin: 0.3em 0 0;
+    padding: 0 0.1em;
+    line-height: 1.45;
+    font-size: 0.9em;
+    /* margin: 0.5em 0 0; */
+    /* line-height: 1.4; */
+    /* font-size: 0.8em; */
+    color: color-mix(in srgb, var(--text), transparent 40%);
+
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    @media only screen and (max-width: 700px) {
+      font-size: 0.8em;
+      /* font-size: 0.75em; */
+    }
+  }
+
+  .post-time {
+    margin-top: 0.4em;
+    color: var(--text-auxiliary);
+    letter-spacing: 0.02em;
+    font-size: 0.75em;
+    font-weight: 300;
+  }
+</style>

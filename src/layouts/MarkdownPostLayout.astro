@@ -7,6 +7,18 @@ import MarkdownPost from "@/layouts/MarkdownPost.astro";
 import { convert } from "@/libs/date";
 import SectionHeader from "@/components/SectionHeader.astro";
 import MarkdownPostHeader from "@/components/MarkdownPostHeader.astro";
+import MarkdownPostSummaryBar from "@/components/MarkdownPostSummaryBar.astro";
+import type { CollectionEntry } from "astro:content";
+import type { sectionMap } from "@/scripts/section";
+import type { CollectionKey } from "astro:content";
+import type { MarkdownHeading } from "astro";
+
+interface Props {
+  section: keyof typeof sectionMap;
+  frontmatter: CollectionEntry<"blog">["data"];
+  headings: MarkdownHeading[];
+  relatedPosts: CollectionEntry<"blog">[];
+}
 
 const { section, frontmatter, headings, relatedPosts } = Astro.props;
 ---
@@ -28,9 +40,28 @@ const { section, frontmatter, headings, relatedPosts } = Astro.props;
       <slot />
     </MarkdownPost>
     <CreativeCommonsCard title={frontmatter.title} created={frontmatter.created} />
-    <div>
-      {relatedPosts}
-    </div>
+    <div>Giscus 댓글란</div>
+    {
+      relatedPosts.length > 0 && (
+        <div class="another-posts">
+          <div class="another-posts-header">같은 분류의 또 다른 글들</div>
+          <div class="another-posts-lists">
+            {relatedPosts.map((each, index) => (
+              <a
+                class:list={["another-post-link", { "padding-top": section === "opinion" }]}
+                href={`/posts/${each.filePath?.split("/").slice(1, -1).join("/")}`}
+              >
+                <MarkdownPostSummaryBar
+                  post={each}
+                  isDisplaySection={false}
+                  isDisplayCategory={section !== "opinion"}
+                />
+              </a>
+            ))}
+          </div>
+        </div>
+      )
+    }
   </article>
 </BaseLayout>
 
@@ -39,22 +70,22 @@ const { section, frontmatter, headings, relatedPosts } = Astro.props;
     max-width: 800px;
     /* 여기에 패딩을 주어 우측 공간을 버릴지 아니면 TOC 에 패딩을 줘서 오른쪽으로 좀 옮길지 고민하다 전자 선택 */
     padding: 0 1.5em 0 0;
-    margin: 0 auto;
+    margin: 0 auto 2.4em;
 
     @media only screen and (max-width: 1280px) {
-      margin: 0 auto 0 50px;
+      margin: 0 auto 2em 50px;
       padding: 0 1.2rem;
     }
     @media only screen and (max-width: 1024px) {
-      margin: 0 auto 0 0;
+      margin: 0 auto 1.6em 0;
     }
     @media only screen and (max-width: 970px) {
-      margin: 0 auto;
+      margin: 0 auto 1.4em;
     }
   }
 
   .non-headings-article {
-    margin: 0 auto;
+    margin-inline: auto;
     padding-inline: 0.75em;
 
     @media only screen and (max-width: 1280px) {
@@ -127,5 +158,55 @@ const { section, frontmatter, headings, relatedPosts } = Astro.props;
     @media only screen and (max-width: 700px) {
       padding-left: 0.1em;
     }
+  }
+
+  .another-posts {
+    margin: 1em 0;
+  }
+
+  .another-post-link {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+
+    padding: 0.4em 0.6em 0.4em;
+    /* padding-left: 0.6em; */
+    /* border-left: 1px solid color-mix(in srgb, var(--text), transparent 50%); */
+    /* border-left: 1px solid var(--hr); */
+
+    border: 1px solid color-mix(in srgb, var(--text), transparent 50%);
+    border-radius: 0.5rem;
+
+    transition: all 0.2s ease;
+  }
+
+  .padding-top {
+    padding-top: 0.5em;
+  }
+
+  .another-post-link:hover {
+    border-color: var(--text-link);
+    background: linear-gradient(135deg, var(--bg) 0%, var(--text-link-background) 100%);
+
+    transform: translateX(1px);
+  }
+
+  .another-posts-header {
+    margin-bottom: 0.4em;
+    font-size: 1.2em;
+    font-weight: 500;
+
+    /* color: var(--text-link); */
+    /* background: hsla(253, 15%, 18%, 0.7);
+    color: white;
+    html.dark & {
+      background: var(--text-placeholder);
+    } */
+  }
+
+  .another-posts-lists {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6em;
   }
 </style>

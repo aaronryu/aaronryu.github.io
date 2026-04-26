@@ -1,5 +1,6 @@
 ---
 import MarkdownPostLayout from "@/layouts/MarkdownPostLayout.astro";
+import type { sectionMap } from "@/scripts/section";
 import { getCollection, render } from "astro:content";
 
 export async function getStaticPaths() {
@@ -31,7 +32,7 @@ const { Content, headings } = await render(post);
 ---
 
 <MarkdownPostLayout
-  section={post.filePath?.split("/").slice(1, -1)[0]}
+  section={post.filePath?.split("/").slice(1, -1)[0] as keyof typeof sectionMap}
   frontmatter={post.data}
   headings={headings}
   relatedPosts={relatedPosts}
