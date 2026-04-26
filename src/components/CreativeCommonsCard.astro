@@ -49,7 +49,7 @@ const { title, created } = Astro.props;
 
 <style>
   .creative-commons-container {
-    padding: 1.2rem;
+    padding: 1rem;
     background-color: var(--text-link-background);
     line-height: 1.2;
     position: relative;
@@ -59,8 +59,14 @@ const { title, created } = Astro.props;
     border-radius: 0.2em;
 
     @media (max-width: 700px) {
+      padding: 0.8em 0.9em;
+      font-size: 15px;
+    }
+
+    @media (max-width: 600px) {
       margin-top: 1em;
       margin-bottom: 1em;
+      font-size: 12px;
     }
 
     .information {
@@ -95,8 +101,13 @@ const { title, created } = Astro.props;
       margin-bottom: 0.6em;
       /* margin-right: 0.4em;
       margin-bottom: 0.2em; */
-      right: 0;
-      bottom: 0;
+      right: -0.1em;
+      bottom: -0.2em;
+      width: 7em;
+
+      @media (max-width: 600px) {
+        display: none;
+      }
     }
   }
 
