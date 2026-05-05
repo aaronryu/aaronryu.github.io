@@ -13,6 +13,16 @@ import remarkCodeTitles from "remark-code-titles";
 
 // https://astro.build/config
 export default defineConfig({
+  output: "static",
+  i18n: {
+    defaultLocale: "ko",
+    locales: ["ko", "en", "jp"],
+    routing: {
+      // 기본 언어인 ko도 /ko/ 경로를 사용하게 함 (추천)
+      prefixDefaultLocale: true,
+    },
+  },
+
   // (A) Astro-specific options
   // site: 'https://aaronryu.github.io', - Sitemap / Canonocal 생성하여 SEO 가속
   site: "https://aaronryu.netlify.app",

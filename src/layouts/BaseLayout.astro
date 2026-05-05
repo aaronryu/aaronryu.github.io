@@ -9,10 +9,16 @@ import Toast from "@/components/Toast.astro";
 export const AARON = "Aaron Ryu";
 export const AARONS_BLOG_TITLE = "The Pessimistic Optimist";
 export const AARONS_TWITTER_ACCOUNT = "@aaronryudev";
-export const AARONS_BLOG_KEYWORDS =
-  "웹, 백엔드, 스프링, 자바, 프론트엔드, 리액트, 데이터베이스, 네트워크, 인프라, 정치, 사회, 조직, 리더, 경제, 자본, 교육, 학습";
-export const AARONS_BLOG_DESCRIPTION =
-  "웹 개발 기술에 대한 쉬운 설명뿐만 아니라 정치, 사회, 리더, 경제 등 인문학에 관련된 저의 생각들을 적어내는 공간입니다";
+export const AARONS_BLOG_KEYWORDS = {
+  ko: "웹, 백엔드, 스프링, 자바, 프론트엔드, 리액트, 데이터베이스, 네트워크, 인프라, 정치, 사회, 조직, 리더, 경제, 자본, 교육, 학습",
+  en: "Web, Backend, Spring, Java, Frontend, React, Database, Network, Infrastructure, Politics, Society, Organization, Leader, Economy, Capital, Education, Learning",
+  ja: "ウェブ, バックエンド, Spring, Java, フロントエンド, React, データベース, ネットワーク, インフラ, 政治, 社会, 組織, リーダー, 経済, 資本, 教育, 学習",
+};
+export const AARONS_BLOG_DESCRIPTION = {
+  ko: "웹 개발 기술에 대한 쉬운 설명뿐만 아니라 정치, 사회, 리더, 경제 등 인문학에 관련된 저의 생각들을 적어내는 공간입니다",
+  en: "This is a space where I share easy-to-understand explanations of web development technologies, as well as my thoughts on humanities including politics, society, leadership, and economy.",
+  ja: "ウェブ開発技術の分かりやすい解説だけでなく、政治、社会、リーダー、経済など、人文科学に関する自身の考えを綴る空間です",
+};
 
 const {
   title = AARONS_BLOG_TITLE,

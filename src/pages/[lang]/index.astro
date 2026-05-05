@@ -1,13 +1,12 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import type { CollectionEntry } from "astro:content";
 import { getCollection } from "astro:content";
 import { sectionMap } from "@/scripts/section.ts";
-import { shuffle } from "@/scripts/shuffle.js";
 import MarkdownPostSummary from "@/components/MarkdownPostSummary.astro";
 import MarkdownPostSquare from "@/components/MarkdownPostSquare.astro";
 
-const posts = (await getCollection("blog")).sort(
+const { lang } = Astro.params;
+const posts = (await getCollection("blog", ({ id }) => id.startsWith(`${lang}/`))).sort(
   (relatedPost1, relatedPost2) =>
     new Date(relatedPost2.data.created).getTime() - new Date(relatedPost1.data.created).getTime(),
 );
