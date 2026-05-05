@@ -7,7 +7,7 @@ const { frontmatter } = Astro.props;
 ---
 
 <section>
-  <p class="post-category">
+  <div class="post-category">
     {
       frontmatter.category.map((each: string, index: number) => (
         <a
@@ -24,7 +24,7 @@ const { frontmatter } = Astro.props;
         </a>
       ))
     }
-  </p>
+  </div>
   <p class="post-headline">
     {frontmatter.title}
   </p>
@@ -53,6 +53,7 @@ const { frontmatter } = Astro.props;
   .post-category a {
     color: inherit;
     transition: all 0.2s ease;
+    font-size: 1.2em;
   }
 
   .post-category a:hover {

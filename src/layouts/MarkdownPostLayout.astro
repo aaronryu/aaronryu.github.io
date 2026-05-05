@@ -23,7 +23,7 @@ interface Props {
   recentlyPosts: CollectionEntry<"blog">[];
 }
 
-const { section, frontmatter, headings, relatedPosts } = Astro.props;
+const { section, frontmatter, headings, relatedPosts, recentlyPosts } = Astro.props;
 const relatedCategoryTree = await getCategoryTree(frontmatter.category[0]);
 ---
 
@@ -47,43 +47,24 @@ const relatedCategoryTree = await getCategoryTree(frontmatter.category[0]);
     <div>Giscus 댓글란</div>
     <div class="another-posts-header">같은 카테고리 내 다른 글들</div>
     <MainCategory node={relatedCategoryTree[0]} />
-    <!-- {
-      relatedPosts.length > 0 && (
+    {
+      recentlyPosts.length > 0 && (
         <div class="another-posts">
-          <div class="another-posts-header">같은 카테고리 내 다른 글들 - 랜덤 (3개)</div>
+          <div class="another-posts-header">최근에 게시된 글들</div>
           <div class="another-posts-lists">
-            {relatedPosts.map((each, index) => (
+            {recentlyPosts.map((each, index) => (
               <a
-                class:list={["another-post-link", { "padding-top": section === "opinion" }]}
+                class:list={[
+                  "another-post-link",
+                  // { "padding-top": each.filePath?.split("/").slice(1, -1)[0] === "opinion" },
+                ]}
                 href={`/posts/${each.filePath?.split("/").slice(1, -1).join("/")}`}
               >
-                <MarkdownPostSummaryBar
-                  post={each}
-                  isDisplaySection={false}
-                  isDisplayCategory={section !== "opinion"}
-                />
+                <MarkdownPostSummaryBar post={each} isDisplaySection={false} />
+                {/* isDisplayCategory={each.filePath?.split("/").slice(1, -1)[0] !== "opinion"} */}
               </a>
             ))}
           </div>
-        </div>
-      )
-    } -->
-    <div class="another-posts-header">최근에 게시된 글들</div>
-    {
-      relatedPosts.length > 0 && (
-        <div class="another-posts-lists">
-          {relatedPosts.map((each, index) => (
-            <a
-              class:list={["another-post-link", { "padding-top": section === "opinion" }]}
-              href={`/posts/${each.filePath?.split("/").slice(1, -1).join("/")}`}
-            >
-              <MarkdownPostSummaryBar
-                post={each}
-                isDisplaySection={false}
-                isDisplayCategory={section !== "opinion"}
-              />
-            </a>
-          ))}
         </div>
       )
     }

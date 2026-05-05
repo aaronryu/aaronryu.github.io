@@ -25,7 +25,7 @@ export async function getStaticPaths() {
           new Date(relatedPost1.data.created).getTime(),
       )
       // (C) 원하는 개수(4개 또는 6개)만큼 자르기
-      .slice(0, 4);
+      .slice(0, 3);
     // .filter(item => new Date(item.time) > referenceDate)
 
     // ---- 최근에 추가된 글들 4개 추출 (본 글 제외) ----
@@ -40,7 +40,7 @@ export async function getStaticPaths() {
           new Date(relatedPost1.data.created).getTime(),
       )
       // (C) 원하는 개수(4개 또는 6개)만큼 자르기
-      .slice(0, 4);
+      .slice(0, 3);
 
     return {
       params: { path: `${post.filePath?.split("/").slice(1, -1).join("/")}` },
