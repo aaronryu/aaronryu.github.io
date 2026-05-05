@@ -1,0 +1,38 @@
+---
+import { Icon } from "astro-icon/components";
+---
+
+<rss-icon-button>
+  <Icon name="lucide:rss" id="rss-link" />
+</rss-icon-button>
+
+<script>
+  class RssIconButton extends HTMLElement {
+    connectedCallback() {
+      const btn = this.querySelector("#rss-link");
+      btn?.addEventListener("click", () => {
+        const rssUrl = `${window.location.origin}/rss.xml`;
+        // 클립보드 복사
+        navigator.clipboard
+          .writeText(rssUrl)
+          .then(() => {
+            triggerToast("RSS 주소가 복사되었습니다. 구독기(Feedly 등)에 추가해주세요 🙂");
+            // alert("RSS 주소가 복사되었습니다. 구독기(Feedly 등)에 추가해주세요 🙂");
+          })
+          .catch(() => {
+            // 실패 시 대비책으로 주소창 이동
+            window.location.href = rssUrl;
+          });
+      });
+    }
+  }
+  customElements.define("rss-icon-button", RssIconButton);
+</script>
+
+<style>
+  #rss-link {
+    cursor: pointer;
+    display: flex;
+    align-items: center; /* 수직 중앙 정렬 */
+  }
+</style>

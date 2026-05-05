@@ -1,4 +1,5 @@
 ---
+import RssIconButton from "@/components/RssIconButton.astro";
 import ThemeIcon from "@/components/ThemeIcon.astro";
 import { sectionMap } from "@/scripts/section";
 import { Icon } from "astro-icon/components";
@@ -14,7 +15,7 @@ const totalYears = diff / (1000 * 60 * 60 * 24 * 365.25);
       <span>|</span>
       <a href={sectionMap.facebook.url}><Icon name="fa6-brands:facebook" /></a>
       <span>|</span>
-      <a href={sectionMap.twitter.url}><Icon name="fa6-brands:x-twitter" /></a>
+      <a><RssIconButton /></a>
     </div>
     <div class="wsj-topbar-right">
       <a href="?hl=ko">한국어</a>

@@ -1,0 +1,56 @@
+---
+import { Icon } from "astro-icon/components";
+---
+
+<rss-round-button>
+  <div id="rss-link">
+    <Icon name="lucide:rss" width="16" height="16" />
+    RSS 링크 복사
+  </div>
+</rss-round-button>
+
+<script is:inline>
+  class RssRoundButton extends HTMLElement {
+    connectedCallback() {
+      const btn = this.querySelector("#rss-link");
+      btn?.addEventListener("click", () => {
+        const rssUrl = `${window.location.origin}/rss.xml`;
+        // 클립보드 복사
+        navigator.clipboard
+          .writeText(rssUrl)
+          .then(() => {
+            triggerToast("RSS 주소가 복사되었습니다. 구독기(Feedly 등)에 추가해주세요 🙂");
+            // alert("RSS 주소가 복사되었습니다. 구독기(Feedly 등)에 추가해주세요 🙂");
+          })
+          .catch(() => {
+            // 실패 시 대비책으로 주소창 이동
+            window.location.href = rssUrl;
+          });
+      });
+    }
+  }
+  customElements.define("rss-round-button", RssRoundButton);
+</script>
+
+<style>
+  #rss-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.2em;
+    padding-inline: 0.6em;
+    margin-top: 0.4em;
+    height: 2em;
+    border: 1px solid var(--text);
+    border-radius: 1px;
+    text-decoration: none;
+    color: var(--text);
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+    cursor: pointer;
+  }
+
+  #rss-link:hover {
+    background-color: var(--text-link-background);
+  }
+</style>

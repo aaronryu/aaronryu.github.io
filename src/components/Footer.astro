@@ -1,4 +1,5 @@
 ---
+import RssIconButton from "@/components/RssIconButton.astro";
 import { sectionMap } from "@/scripts/section";
 import { Icon } from "astro-icon/components";
 
@@ -23,8 +24,8 @@ const currentYear = new Date().getFullYear();
           <a href={sectionMap.facebook.url} class="social-btn" title={sectionMap.facebook.title}>
             <Icon name="fa6-brands:facebook" class="social-icon" />
           </a>
-          <a href={sectionMap.twitter.url} class="social-btn" title={sectionMap.twitter.title}>
-            <Icon name="fa6-brands:x-twitter" class="social-icon" />
+          <a class="social-btn">
+            <RssIconButton />
           </a>
         </div>
       </div>
@@ -163,6 +164,7 @@ const currentYear = new Date().getFullYear();
     display: flex;
     align-items: center;
     justify-content: center;
+    cursor: pointer;
     width: 36px;
     height: 36px;
     border-radius: 50%;

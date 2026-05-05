@@ -8,6 +8,7 @@ import type { GetStaticPaths, Page } from "astro";
 import type { CollectionEntry } from "astro:content";
 import PaginationNavigator from "@/components/PaginationNavigator.astro";
 import { sectionMap } from "@/scripts/section";
+import RssRoundButton from "@/components/RssRoundButton.astro";
 
 export const getStaticPaths: GetStaticPaths = async ({ paginate }) => {
   const hobbyPosts = (await getCollection("hobby")).sort(
@@ -37,10 +38,7 @@ const { page } = Astro.props;
           <div class="non-articles">
             <span class="line-1">아직 작성된 글이 없습니다.</span>
             <span class="line-2">새 글이 올라왔을때 알 수 있게 RSS 등록을 해보세요</span>
-            <div id="rss-link">
-              <Icon name="lucide:rss" width="16" height="16" />
-              RSS 링크 복사
-            </div>
+            <RssRoundButton />
           </div>
         )
       }
@@ -59,24 +57,6 @@ const { page } = Astro.props;
     </div>
   </main>
 </BaseLayout>
-
-<script>
-  const btn = document.getElementById("rss-link");
-  btn?.addEventListener("click", () => {
-    const rssUrl = `${window.location.origin}/rss.xml`;
-    // 클립보드 복사
-    navigator.clipboard
-      .writeText(rssUrl)
-      .then(() => {
-        triggerToast("RSS 주소가 복사되었습니다. 구독기(Feedly 등)에 추가해주세요 🙂");
-        // alert("RSS 주소가 복사되었습니다. 구독기(Feedly 등)에 추가해주세요 🙂");
-      })
-      .catch(() => {
-        // 실패 시 대비책으로 주소창 이동
-        window.location.href = rssUrl;
-      });
-  });
-</script>
 
 <style>
   .dashboard {
@@ -98,27 +78,6 @@ const { page } = Astro.props;
 
     .line-2 {
       font-size: 1em;
-    }
-
-    #rss-link {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.2em;
-      padding-inline: 0.6em;
-      margin-top: 0.4em;
-      height: 2em;
-      border: 1px solid var(--text);
-      border-radius: 1px;
-      text-decoration: none;
-      color: var(--text);
-      font-size: 0.9rem;
-      transition: all 0.2s ease;
-      cursor: pointer;
-    }
-
-    #rss-link:hover {
-      background-color: var(--text-link-background);
     }
   }
 
