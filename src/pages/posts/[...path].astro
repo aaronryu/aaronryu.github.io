@@ -6,28 +6,59 @@ import { getCollection, render } from "astro:content";
 export async function getStaticPaths() {
   const posts = await getCollection("blog");
   return posts.map((post) => {
+    // ---- 같은 카테고리에 있는 글들 4개 추출 (본 글 제외) ----
     const relatedPosts = posts
-      .filter(
-        (anotherPost) =>
+      .filter((anotherPost) => {
+        const criteria =
+          post.data.category.length > 1 ? post.data.category.slice(1) : post.data.category;
+        return (
           post.id !== anotherPost.id && // 현재 읽고 있는 글은 제외
-          post.data.category.some((element) => anotherPost.data.category.includes(element)),
-      )
-      // 무작위로 최신순으로 정렬
+          criteria.some((element) => anotherPost.data.category.includes(element))
+        );
+      })
+      // (A) 무작위로 정렬
+      // .sort(() => 0.5 - Math.random())
+      // (B) 최신순으로 정렬
       .sort(
         (relatedPost1, relatedPost2) =>
           new Date(relatedPost2.data.created).getTime() -
           new Date(relatedPost1.data.created).getTime(),
       )
-      // 원하는 개수(4개 또는 6개)만큼 자르기
-      .slice(0, 6);
+      // (C) 원하는 개수(4개 또는 6개)만큼 자르기
+      .slice(0, 4);
+    // .filter(item => new Date(item.time) > referenceDate)
+
+    // ---- 최근에 추가된 글들 4개 추출 (본 글 제외) ----
+    const recentlyPosts = posts
+      .filter((anotherPost) => post.id !== anotherPost.id)
+      // (A) 무작위로 정렬
+      // .sort(() => 0.5 - Math.random())
+      // (B) 최신순으로 정렬
+      .sort(
+        (relatedPost1, relatedPost2) =>
+          new Date(relatedPost2.data.created).getTime() -
+          new Date(relatedPost1.data.created).getTime(),
+      )
+      // (C) 원하는 개수(4개 또는 6개)만큼 자르기
+      .slice(0, 4);
+
     return {
       params: { path: `${post.filePath?.split("/").slice(1, -1).join("/")}` },
-      props: { post, relatedPosts },
+      props: { post, relatedPosts, recentlyPosts },
+      // 블로그 글 발견 가능성과 다양성의 균형을 맞추기위해 아래의 전략 사용
+      // 0) 본 글과 카테고리의 글들을 볼 수 있게 카테고리 글 리스트로 이동할 수 있는 링크
+      // 1) 본 글과 카테고리가 겹치는 글 2개 랜덤
+      // 2) 본 글과 상관없는 랜덤 글 1개
+      // 3) 본 글과 상관없는 최신 글 1개
+      // - 마지막으로 각각의 글들은 겹치면 안되기때문에 리스트에 담아서 겹치지않도록 매번 체크
+      // .. 으로 하려고했으나 결국엔 아래 안으로 결정
+      // 0) 본 글의 조상 카테고리에 속한 모든 글들을 <MainCategory> 트리로 표기
+      // 1) 최근에 추가된 글 4개 표기
     };
   });
 }
 
-const { post, relatedPosts } = Astro.props;
+const { post, relatedPosts, recentlyPosts } = Astro.props;
 const { Content, headings } = await render(post);
 ---
 
@@ -36,6 +67,7 @@ const { Content, headings } = await render(post);
   frontmatter={post.data}
   headings={headings}
   relatedPosts={relatedPosts}
+  recentlyPosts={recentlyPosts}
 >
   <Content />
 </MarkdownPostLayout>

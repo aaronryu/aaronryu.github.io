@@ -8,13 +8,13 @@ export interface CategoryNode {
   subcategory: CategoryTree;
 }
 
-export async function getCategoryTree(): Promise<CategoryTree> {
+export async function getCategoryTree(parentCategory?: string): Promise<CategoryTree> {
   // const allPosts = Object.values(import.meta.glob("@/pages/posts/*.md", { eager: true }));
   const blogs = await getCollection("blog");
   const hobbies = await getCollection("hobby");
   const posts = [...blogs, ...hobbies];
 
-  return posts.reduce((tree: CategoryTree, post: CollectionEntry<"blog" | "hobby">) => {
+  const tree = posts.reduce((tree: CategoryTree, post: CollectionEntry<"blog" | "hobby">) => {
     const categories = post.data.category;
 
     if (!categories || !Array.isArray(categories)) return tree;
@@ -51,4 +51,5 @@ export async function getCategoryTree(): Promise<CategoryTree> {
 
     return tree;
   }, []);
+  return parentCategory ? tree.filter((each) => each.category === parentCategory) : tree;
 }

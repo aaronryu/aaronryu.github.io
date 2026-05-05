@@ -12,15 +12,19 @@ import type { CollectionEntry } from "astro:content";
 import type { sectionMap } from "@/scripts/section";
 import type { CollectionKey } from "astro:content";
 import type { MarkdownHeading } from "astro";
+import { getCategoryTree } from "@/scripts/category";
+import MainCategory from "@/components/MainCategory.astro";
 
 interface Props {
   section: keyof typeof sectionMap;
   frontmatter: CollectionEntry<"blog">["data"];
   headings: MarkdownHeading[];
   relatedPosts: CollectionEntry<"blog">[];
+  recentlyPosts: CollectionEntry<"blog">[];
 }
 
 const { section, frontmatter, headings, relatedPosts } = Astro.props;
+const relatedCategoryTree = await getCategoryTree(frontmatter.category[0]);
 ---
 
 <BaseLayout
@@ -41,10 +45,12 @@ const { section, frontmatter, headings, relatedPosts } = Astro.props;
     </MarkdownPost>
     <CreativeCommonsCard title={frontmatter.title} created={frontmatter.created} />
     <div>Giscus 댓글란</div>
-    {
+    <div class="another-posts-header">같은 카테고리 내 다른 글들</div>
+    <MainCategory node={relatedCategoryTree[0]} />
+    <!-- {
       relatedPosts.length > 0 && (
         <div class="another-posts">
-          <div class="another-posts-header">같은 분류의 또 다른 글들</div>
+          <div class="another-posts-header">같은 카테고리 내 다른 글들 - 랜덤 (3개)</div>
           <div class="another-posts-lists">
             {relatedPosts.map((each, index) => (
               <a
@@ -59,6 +65,25 @@ const { section, frontmatter, headings, relatedPosts } = Astro.props;
               </a>
             ))}
           </div>
+        </div>
+      )
+    } -->
+    <div class="another-posts-header">최근에 게시된 글들</div>
+    {
+      relatedPosts.length > 0 && (
+        <div class="another-posts-lists">
+          {relatedPosts.map((each, index) => (
+            <a
+              class:list={["another-post-link", { "padding-top": section === "opinion" }]}
+              href={`/posts/${each.filePath?.split("/").slice(1, -1).join("/")}`}
+            >
+              <MarkdownPostSummaryBar
+                post={each}
+                isDisplaySection={false}
+                isDisplayCategory={section !== "opinion"}
+              />
+            </a>
+          ))}
         </div>
       )
     }
@@ -160,10 +185,6 @@ const { section, frontmatter, headings, relatedPosts } = Astro.props;
     }
   }
 
-  .another-posts {
-    margin: 1em 0;
-  }
-
   .another-post-link {
     display: block;
     color: inherit;
@@ -192,8 +213,9 @@ const { section, frontmatter, headings, relatedPosts } = Astro.props;
   }
 
   .another-posts-header {
-    margin-bottom: 0.4em;
-    font-size: 1.2em;
+    margin-top: 0.6em;
+    margin-bottom: 0.2em;
+    font-size: 1.1em;
     font-weight: 500;
 
     /* color: var(--text-link); */
