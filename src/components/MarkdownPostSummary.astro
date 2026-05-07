@@ -67,7 +67,7 @@ const section: keyof typeof sectionMap = post.filePath?.split("/").slice(1, -1)[
   }
   <div class="post-time">
     <time class="post-created-time" datetime={post.data.created.toISOString()}>
-      {convert(post.data.created).date}
+      {convert(post.data.created, lang).date}
     </time>
   </div>
 </section>

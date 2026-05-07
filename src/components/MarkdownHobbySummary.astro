@@ -48,7 +48,7 @@ const translatePath = useTranslatedPath(lang);
   }
   <div class="post-time">
     <time class="post-created-time" datetime={post.data.created.toISOString()}>
-      {convert(post.data.created).date}
+      {convert(post.data.created, lang).date}
     </time>
   </div>
 </section>

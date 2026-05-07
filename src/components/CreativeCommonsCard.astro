@@ -15,7 +15,7 @@ import License from "@/assets/cc-by-nc-sa.svg";
 
 // const currentUrl = Astro.url.href;
 const currentUrl = new URL(Astro.url.pathname, Astro.site).href;
-const { title, created } = Astro.props;
+const { lang, title, created } = Astro.props;
 ---
 
 <div class="creative-commons-container">
@@ -29,7 +29,7 @@ const { title, created } = Astro.props;
     <div>
       <div class="label">Posted on</div>
       <time class="post-datetime" datetime={created.toISOString()}>
-        {convert(created).full}
+        {convert(created, lang).full}
       </time>
     </div>
     <div>

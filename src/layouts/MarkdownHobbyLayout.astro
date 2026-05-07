@@ -41,7 +41,7 @@ const relatedCategoryTree = await getCategoryTree(lang, frontmatter.category[0])
     <MarkdownPost>
       <slot />
     </MarkdownPost>
-    <CreativeCommonsCard title={frontmatter.title} created={frontmatter.created} />
+    <CreativeCommonsCard lang={lang} title={frontmatter.title} created={frontmatter.created} />
     <div>Giscus 댓글란</div>
     <div class="another-posts-header">같은 카테고리 내 다른 글들</div>
     <MainCategory lang={lang} node={relatedCategoryTree[0]} />
