@@ -57,6 +57,8 @@ export const ui = {
     "post.updated": "수정일",
     "post.related-post": "같은 카테고리 내 다른 글들",
     "post.recently-post": "최근에 게시된 글들",
+    "post.not-exists": "아직 작성된 글이 없습니다",
+    "post.rss-guidance": "새 글이 올라왔을때 알 수 있게 RSS 등록을 해보세요",
     "rss.copied": "RSS 주소가 복사되었습니다. 구독기(Feedly 등)에 추가해주세요 🙂",
   },
   en: {
@@ -64,6 +66,8 @@ export const ui = {
     "post.updated": "Updated",
     "post.related-post": "More in this category",
     "post.recently-post": "Recent posts",
+    "post.not-exists": "No posts found yet",
+    "post.rss-guidance": "Subscribe to our RSS feed to stay updated with new posts",
     "rss.copied": "RSS feed URL copied. Please add it to your reader (like Feedly) 🙂",
   },
   ja: {
@@ -71,6 +75,8 @@ export const ui = {
     "post.updated": "更新日",
     "post.related-post": "同じカテゴリーの関連記事",
     "post.recently-post": "最新記事",
+    "post.not-exists": "まだ投稿された記事がありません",
+    "post.rss-guidance": "新しい記事をいち早くチェックするために、RSSを登録してみてください",
     "rss.copied": "RSS URLがコピーされました。リーダー(Feedlyなど)に追加してください 🙂",
   },
 } as const;
