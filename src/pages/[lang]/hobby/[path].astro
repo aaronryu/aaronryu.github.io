@@ -6,8 +6,14 @@ import { getCollection, render } from "astro:content";
 
 export async function getStaticPaths() {
   return getI18nStaticPaths(async (lang) => {
-    const hobbies = await getCollection("hobby", ({ id }) => id.includes(`/${lang}/`));
+    // - 주의 : id 기반으로 includes 검사했더니 일반 blog 는 engineeing/ko/hello 되어서 괜찮은데 hobby 는 ko/hello 라서 안걸려가지고 부득이하게 이렇게 처리함
+    // const hobbies = await getCollection("hobby", ({ id }) => id.includes(`/${lang}/`));
+    const hobbies = await getCollection("hobby", ({ filePath }) => filePath?.includes(`/${lang}/`));
     return hobbies.map((hobby) => {
+      const [lang, slug, ..._] = hobby.id.split("/");
+      // const lang = parts[0];      // "ko"
+      // const slug = parts[1];      // "a-introduction-to-design-patterns"
+
       // ---- 같은 카테고리에 있는 글들 4개 추출 (본 글 제외) ----
       const relatedPosts = hobbies
         .filter((anotherHobby) => lang === extractI18nFromPost(anotherHobby))
@@ -44,7 +50,7 @@ export async function getStaticPaths() {
         .slice(0, 3);
 
       return {
-        params: { lang, path: `${hobby.filePath?.split("/").slice(1, -1).join("/")}` },
+        params: { lang, path: slug },
         props: { post: hobby, relatedPosts, recentlyPosts },
       };
     });

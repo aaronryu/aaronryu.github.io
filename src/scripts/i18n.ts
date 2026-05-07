@@ -3,6 +3,8 @@ import type { CollectionEntry } from "astro:content";
 export const SUPPORTED_LANGUAGES = ["ko", "en", "ja"] as const;
 export type Lang = (typeof SUPPORTED_LANGUAGES)[number];
 
+const langPattern = SUPPORTED_LANGUAGES.join("|");
+
 // 마크다운 파일이 어떤 언어의 디렉토리에 포함되어있는지
 export function extractI18nFromPost(post: CollectionEntry<"blog" | "hobby">): Lang {
   const [lang, ..._] = post.id.split("/");
@@ -21,15 +23,21 @@ export async function getI18nStaticPaths(callback: (lang: Lang) => Promise<any>)
   return allPaths.flat();
 }
 
+export function wipeoutPath(path?: string) {
+  const langRegex = new RegExp(`\\/(${langPattern})\\/`, "g");
+  const wipeoutpath = path?.replace(langRegex, "/");
+  return wipeoutpath;
+}
+
 // (B) 어떤 페이지에서도 다른 페이지로 이동하는 href 링크에 현재 유저가 보고있는 언어(파라미터로 입력받음)에 따라 이동하도록 설정
 export function useTranslatedPath(lang: string) {
   return function translatePath(path: string) {
-    return `/${lang}${path.startsWith("/") ? path : "/" + path}`;
+    const wipeoutpath = wipeoutPath(path);
+    return `/${lang}${path.startsWith("/") ? wipeoutpath : "/" + wipeoutpath}`;
   };
 }
 
 export function changeLanguageOnPathname(pathname: string) {
-  const langPattern = SUPPORTED_LANGUAGES.join("|");
   const langRegex = new RegExp(`^\\/(${langPattern})`);
   const cleanPath = pathname.replace(langRegex, "");
   // const cleanPath = pathname.replace(/^\/(ko|en|ja)/, "");

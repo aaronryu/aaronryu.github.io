@@ -1,6 +1,6 @@
 ---
 import MarkdownPostLayout from "@/layouts/MarkdownPostLayout.astro";
-import { extractI18nFromPost } from "@/scripts/i18n";
+import { wipeoutPath, extractI18nFromPost, type Lang } from "@/scripts/i18n";
 import type { sectionMap } from "@/scripts/section";
 import { getCollection, render } from "astro:content";
 
@@ -8,7 +8,13 @@ export async function getStaticPaths() {
   const posts = await getCollection("blog");
   return posts.map((post) => {
     // 현재 글이 어떤 언어의 글인지에 따라 관련/최근글들도 그에 맞춰 나열해줘야하기에 lang 추출
-    const lang = extractI18nFromPost(post);
+    // const parts = post.id.replace(/\.mdx?$/, "").split("/");
+    const [section, lang, slug, ..._] = post.id.split("/");
+    // id: "ko/education/a-introduction-to-design-patterns"
+    // const lang = extractI18nFromPost(post);
+    // const section = parts[0];   // "education"
+    // const lang = parts[1];      // "ko"
+    // const slug = parts[2];      // "a-introduction-to-design-patterns"
 
     // ---- 같은 카테고리에 있는 글들 4개 추출 (본 글 제외) ----
     const relatedPosts = posts
@@ -49,7 +55,7 @@ export async function getStaticPaths() {
       .slice(0, 3);
 
     return {
-      params: { lang, path: `${post.filePath?.split("/").slice(1, -1).join("/")}` },
+      params: { lang, section, path: wipeoutPath(slug) },
       props: { post, relatedPosts, recentlyPosts },
       // 블로그 글 발견 가능성과 다양성의 균형을 맞추기위해 아래의 전략 사용
       // 0) 본 글과 카테고리의 글들을 볼 수 있게 카테고리 글 리스트로 이동할 수 있는 링크
@@ -64,13 +70,13 @@ export async function getStaticPaths() {
   });
 }
 
-const { lang } = Astro.params;
+const { lang, section, path } = Astro.params;
 const { post, relatedPosts, recentlyPosts } = Astro.props;
 const { Content, headings } = await render(post);
 ---
 
 <MarkdownPostLayout
-  lang={lang}
+  lang={lang as Lang}
   section={post.filePath?.split("/").slice(1, -1)[0] as keyof typeof sectionMap}
   frontmatter={post.data}
   headings={headings}

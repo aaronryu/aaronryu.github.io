@@ -2,7 +2,6 @@
 import SectionHeader from "@/components/SectionHeader.astro";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import { getCollection } from "astro:content";
-import { Icon } from "astro-icon/components";
 import MarkdownHobbySummary from "@/components/MarkdownHobbySummary.astro";
 import type { GetStaticPaths, Page } from "astro";
 import type { CollectionEntry } from "astro:content";
@@ -13,7 +12,11 @@ import { getI18nStaticPaths, useTranslatedPath, type Lang } from "@/scripts/i18n
 
 export const getStaticPaths: GetStaticPaths = async ({ paginate }) => {
   return getI18nStaticPaths(async (lang) => {
-    const hobbyPosts = (await getCollection("hobby", ({ id }) => id.includes(`/${lang}/`))).sort(
+    // - 주의 : id 기반으로 includes 검사했더니 일반 blog 는 engineeing/ko/hello 되어서 괜찮은데 hobby 는 ko/hello 라서 안걸려가지고 부득이하게 이렇게 처리함
+    // const hobbyPosts = (await getCollection("hobby", ({ id }) => id.includes(`/${lang}/`))).sort(
+    const hobbyPosts = (
+      await getCollection("hobby", ({ filePath }) => filePath?.includes(`/${lang}/`))
+    ).sort(
       (hobbyPost1, hobbyPost2) =>
         new Date(hobbyPost2.data.created).getTime() - new Date(hobbyPost1.data.created).getTime(),
     );
@@ -32,12 +35,13 @@ interface Props {
 const { lang } = Astro.params;
 const translatePath = useTranslatedPath(lang!);
 
-const { page } = Astro.props;
+// 왜 pages/[lang]/posts/[section]/[...page].astro 는 잘되는데 이 파일은 Props 가 안되는지 모르겠음
+const { page } = Astro.props as unknown as Props;
 ---
 
 <BaseLayout lang={lang}>
   <main>
-    <SectionHeader lang={lang} section={"hobby"} />
+    <SectionHeader lang={lang as Lang} section={"hobby"} />
     <div class="dashboard">
       {
         page.data.length === 0 && (
