@@ -1,0 +1,36 @@
+---
+
+---
+
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Redirecting...</title>
+    <!-- SEO를 위해 기본 언어 페이지를 Canonical로 설정 -->
+    <link rel="canonical" href={new URL("/ko/", Astro.site).href} />
+
+    <script is:inline>
+      // 1. 브라우저의 기본 언어 설정 가져오기 (예: 'ko-KR', 'en-US')
+      const browserLang = navigator.language || navigator.userLanguage;
+      const userLang = browserLang.split("-")[0].toLowerCase(); // 'ko' 또는 'en' 추출
+
+      // 2. 지원하는 언어 목록
+      const supportedLangs = ["ko", "en", "ja"];
+
+      // 3. 사용자의 언어가 지원 목록에 있으면 해당 언어로, 없으면 기본값(ko)으로 결정
+      const targetLang = supportedLangs.includes(userLang) ? userLang : "ko";
+
+      // 4. 리다이렉트 실행
+      window.location.pathname = `/${targetLang}/`;
+    </script>
+
+    <!-- 자바스크립트가 꺼져있을 경우를 대비한 대체 수단 (Meta Refresh) -->
+    <noscript>
+      <meta http-equiv="refresh" content="0;url=/ko/" />
+    </noscript>
+  </head>
+  <body>
+    <p>Redirecting to your language...</p>
+  </body>
+</html>

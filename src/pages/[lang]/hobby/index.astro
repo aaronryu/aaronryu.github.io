@@ -1,3 +1,11 @@
 ---
-return Astro.redirect("/hobby/1");
+import { SUPPORTED_LANGUAGES } from "@/scripts/i18n";
+
+export async function getStaticPaths() {
+  return SUPPORTED_LANGUAGES.map((lang) => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params;
+return Astro.redirect(`/${lang}/hobby/1`);
+// Pagination 적용을 위해 Dynamic Route 적용해야하는데 [page] 와 [path] 충돌나서 index.astro 추가하여 /hobby 접근 시 /hobby/1 페이지네이션 1번 페이지로 이동
 ---

@@ -1,56 +1,63 @@
 ---
 import MarkdownHobbyLayout from "@/layouts/MarkdownHobbyLayout.astro";
+import { extractI18nFromPost, getI18nStaticPaths } from "@/scripts/i18n";
 import type { sectionMap } from "@/scripts/section";
 import { getCollection, render } from "astro:content";
 
 export async function getStaticPaths() {
-  const hobbies = await getCollection("hobby");
-  return hobbies.map((hobby) => {
-    // ---- 같은 카테고리에 있는 글들 4개 추출 (본 글 제외) ----
-    const relatedPosts = hobbies
-      .filter(
-        (anotherHobby) =>
-          hobby.id !== anotherHobby.id && // 현재 읽고 있는 글은 제외
-          hobby.data.category.some((element) => anotherHobby.data.category.includes(element)),
-        // 추후에 기존 포스트 로직과 하나로 합쳐 사용할때 기존 포스트 로직 그대로 써도됨 - 지금 Hobby 로직은 하나라도 겹치면 동일 카테고리로 분류
-      )
-      // (A) 무작위로 정렬
-      // .sort(() => 0.5 - Math.random())
-      // (B) 최신순으로 정렬
-      .sort(
-        (relatedPost1, relatedPost2) =>
-          new Date(relatedPost2.data.created).getTime() -
-          new Date(relatedPost1.data.created).getTime(),
-      )
-      // (C) 원하는 개수(4개 또는 6개)만큼 자르기
-      .slice(0, 3);
+  return getI18nStaticPaths(async (lang) => {
+    const hobbies = await getCollection("hobby", ({ id }) => id.includes(`/${lang}/`));
+    return hobbies.map((hobby) => {
+      // ---- 같은 카테고리에 있는 글들 4개 추출 (본 글 제외) ----
+      const relatedPosts = hobbies
+        .filter((anotherHobby) => lang === extractI18nFromPost(anotherHobby))
+        .filter(
+          (anotherHobby) =>
+            hobby.id !== anotherHobby.id && // 현재 읽고 있는 글은 제외
+            hobby.data.category.some((element) => anotherHobby.data.category.includes(element)),
+          // 추후에 기존 포스트 로직과 하나로 합쳐 사용할때 기존 포스트 로직 그대로 써도됨 - 지금 Hobby 로직은 하나라도 겹치면 동일 카테고리로 분류
+        )
+        // (A) 무작위로 정렬
+        // .sort(() => 0.5 - Math.random())
+        // (B) 최신순으로 정렬
+        .sort(
+          (relatedPost1, relatedPost2) =>
+            new Date(relatedPost2.data.created).getTime() -
+            new Date(relatedPost1.data.created).getTime(),
+        )
+        // (C) 원하는 개수(4개 또는 6개)만큼 자르기
+        .slice(0, 3);
 
-    // ---- 최근에 추가된 글들 4개 추출 (본 글 제외) ----
-    const recentlyPosts = hobbies
-      .filter((anotherHobby) => hobby.id !== anotherHobby.id)
-      // (A) 무작위로 정렬
-      // .sort(() => 0.5 - Math.random())
-      // (B) 최신순으로 정렬
-      .sort(
-        (relatedPost1, relatedPost2) =>
-          new Date(relatedPost2.data.created).getTime() -
-          new Date(relatedPost1.data.created).getTime(),
-      )
-      // (C) 원하는 개수(4개 또는 6개)만큼 자르기
-      .slice(0, 3);
+      // ---- 최근에 추가된 글들 4개 추출 (본 글 제외) ----
+      const recentlyPosts = hobbies
+        .filter((anotherHobby) => lang === extractI18nFromPost(anotherHobby))
+        .filter((anotherHobby) => hobby.id !== anotherHobby.id)
+        // (A) 무작위로 정렬
+        // .sort(() => 0.5 - Math.random())
+        // (B) 최신순으로 정렬
+        .sort(
+          (relatedPost1, relatedPost2) =>
+            new Date(relatedPost2.data.created).getTime() -
+            new Date(relatedPost1.data.created).getTime(),
+        )
+        // (C) 원하는 개수(4개 또는 6개)만큼 자르기
+        .slice(0, 3);
 
-    return {
-      params: { path: `${hobby.filePath?.split("/").slice(1, -1).join("/")}` },
-      props: { post: hobby, relatedPosts, recentlyPosts },
-    };
+      return {
+        params: { lang, path: `${hobby.filePath?.split("/").slice(1, -1).join("/")}` },
+        props: { post: hobby, relatedPosts, recentlyPosts },
+      };
+    });
   });
 }
 
+const { lang } = Astro.params;
 const { post, relatedPosts, recentlyPosts } = Astro.props;
 const { Content, headings } = await render(post);
 ---
 
 <MarkdownHobbyLayout
+  lang={lang}
   section={"hobby"}
   frontmatter={post.data}
   headings={headings}

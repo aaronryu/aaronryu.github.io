@@ -1,3 +1,4 @@
+import type { Lang } from "@/scripts/i18n";
 import { getCollection, type CollectionEntry } from "astro:content";
 
 export type CategoryTree = Array<CategoryNode>;
@@ -8,10 +9,10 @@ export interface CategoryNode {
   subcategory: CategoryTree;
 }
 
-export async function getCategoryTree(parentCategory?: string): Promise<CategoryTree> {
+export async function getCategoryTree(lang: Lang, parentCategory?: string): Promise<CategoryTree> {
   // const allPosts = Object.values(import.meta.glob("@/pages/posts/*.md", { eager: true }));
-  const blogs = await getCollection("blog");
-  const hobbies = await getCollection("hobby");
+  const blogs = await getCollection("blog", ({ id }) => id.includes(`/${lang}/`));
+  const hobbies = await getCollection("hobby", ({ id }) => id.includes(`/${lang}/`));
   const posts = [...blogs, ...hobbies];
 
   const tree = posts.reduce((tree: CategoryTree, post: CollectionEntry<"blog" | "hobby">) => {

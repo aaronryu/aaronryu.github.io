@@ -2,16 +2,33 @@
 import MainCategory from "@/components/MainCategory.astro";
 import SectionHeader from "@/components/SectionHeader.astro";
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import { getCategoryTree } from "@/scripts/category";
+import { getCategoryTree, type CategoryTree } from "@/scripts/category";
+import { getI18nStaticPaths } from "@/scripts/i18n";
 
-const categoryTree = await getCategoryTree();
+export async function getStaticPaths() {
+  return getI18nStaticPaths(async (lang) => {
+    const categoryTree = await getCategoryTree(lang);
+
+    return {
+      params: { lang },
+      props: { categoryTree },
+    };
+  });
+}
+
+interface Props {
+  categoryTree: CategoryTree;
+}
+
+const { lang } = Astro.params;
+const { categoryTree } = Astro.props;
 ---
 
-<BaseLayout>
+<BaseLayout lang={lang}>
   <SectionHeader section={"categories"} />
   <article>
     <div class="categories">
-      {categoryTree.map((eachCategory) => <MainCategory node={eachCategory} />)}
+      {categoryTree.map((eachCategory) => <MainCategory lang={lang} node={eachCategory} />)}
     </div>
   </article>
 </BaseLayout>

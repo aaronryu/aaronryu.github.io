@@ -5,6 +5,7 @@ import "@/styles/global.css";
 import HeaderScrollSpy from "@/components/HeaderScrollSpy.astro";
 import OnScrollStickyHeader from "@/components/OnScrollStickyHeader.astro";
 import Toast from "@/components/Toast.astro";
+import { changeLanguageOnPathname, type Lang } from "@/scripts/i18n";
 
 export const AARON = "Aaron Ryu";
 export const AARONS_BLOG_TITLE = "The Pessimistic Optimist";
@@ -21,19 +22,27 @@ export const AARONS_BLOG_DESCRIPTION = {
 };
 
 const {
+  lang,
   title = AARONS_BLOG_TITLE,
   author = AARON,
-  keywords = AARONS_BLOG_KEYWORDS,
-  description = AARONS_BLOG_DESCRIPTION,
+  keywords = AARONS_BLOG_KEYWORDS[lang as Lang],
+  description = AARONS_BLOG_DESCRIPTION[lang as Lang],
   image = "",
   section,
   created,
   updated,
 } = Astro.props;
+
 const isArticle = title !== AARONS_BLOG_TITLE && !!created;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site).href;
+const languageURL = changeLanguageOnPathname(Astro.url.pathname);
+const koURL = new URL(languageURL.ko, Astro.site).href;
+const enURL = new URL(languageURL.en, Astro.site).href;
+const jaURL = new URL(languageURL.ja, Astro.site).href;
 ---
 
-<html lang="ko">
+<html lang={lang}>
   <head>
     <!-- (0) 커스텀 폰트 사용을 위해 / 성능을 위해 CSS 가 아닌 HTML 로드 -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -90,7 +99,14 @@ const isArticle = title !== AARONS_BLOG_TITLE && !!created;
     <meta name="twitter:description" content={description} />
     <!-- TODO <meta name="twitter:image" content="https://aaron.github.io/images/og.png" /> -->
     <!-- (C.1) SEO 개선을 위한 Canonical 설정 - 원본 페이지 주소 명시 -->
-    <!-- TODO <link rel="canonical" href="https://aaron.github.io/" /> -->
+    <!-- 현재 페이지의 절대 경로를 가리킴 -->
+    <link rel="canonical" href={canonicalURL} />
+    <!-- 다국어 연결 (hreflang) -->
+    <link rel="alternate" hreflang="ko" href={koURL} />
+    <link rel="alternate" hreflang="en" href={enURL} />
+    <link rel="alternate" hreflang="ja" href={jaURL} />
+    <!-- 그 외 전 세계 유저용 - 디폴트 (한국어 페이지를 기본으로 제안) -->
+    <link rel="alternate" hreflang="x-default" href={koURL} />
     <!-- (C.2) SEO 추적을 위한 네이버 및 구글 태그매니저 설정 -->
     <!-- TODO <meta property="naver-site-verification" content="" /> -->
     <!-- TODO <script type="text/javascript" async="" src=""></script> -->
@@ -98,9 +114,9 @@ const isArticle = title !== AARONS_BLOG_TITLE && !!created;
   <body>
     {isArticle && <HeaderScrollSpy />}
     {isArticle && <OnScrollStickyHeader title={title} />}
-    <Header />
+    <Header lang={lang} />
     <slot />
-    <Footer />
+    <Footer lang={lang} />
     <Toast />
   </body>
 </html>

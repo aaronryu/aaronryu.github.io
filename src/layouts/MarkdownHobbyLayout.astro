@@ -11,8 +11,10 @@ import MainCategory from "@/components/MainCategory.astro";
 import { getCategoryTree } from "@/scripts/category";
 import SectionHeader from "@/components/SectionHeader.astro";
 import type { sectionMap } from "@/scripts/section";
+import { useTranslatedPath, type Lang } from "@/scripts/i18n";
 
 interface Props {
+  lang: Lang;
   section: keyof typeof sectionMap;
   frontmatter: CollectionEntry<"hobby">["data"];
   headings: MarkdownHeading[];
@@ -20,11 +22,13 @@ interface Props {
   recentlyPosts: CollectionEntry<"hobby">[];
 }
 
-const { section, frontmatter, headings, relatedPosts, recentlyPosts } = Astro.props;
-const relatedCategoryTree = await getCategoryTree(frontmatter.category[0]);
+const { lang, section, frontmatter, headings, relatedPosts, recentlyPosts } = Astro.props;
+const translatePath = useTranslatedPath(lang);
+const relatedCategoryTree = await getCategoryTree(lang, frontmatter.category[0]);
 ---
 
 <BaseLayout
+  lang={lang}
   title={frontmatter.title}
   image={frontmatter.image}
   created={frontmatter.created.toISOString()}
@@ -33,14 +37,14 @@ const relatedCategoryTree = await getCategoryTree(frontmatter.category[0]);
   <SectionHeader section={section} />
   {headings && <TableOfContents headings={headings} />}
   <article class:list={[{ "non-headings-article": !headings || headings.length === 0 }]}>
-    <MarkdownPostHeader frontmatter={frontmatter} />
+    <MarkdownPostHeader lang={lang} frontmatter={frontmatter} />
     <MarkdownPost>
       <slot />
     </MarkdownPost>
     <CreativeCommonsCard title={frontmatter.title} created={frontmatter.created} />
     <div>Giscus 댓글란</div>
     <div class="another-posts-header">같은 카테고리 내 다른 글들</div>
-    <MainCategory node={relatedCategoryTree[0]} />
+    <MainCategory lang={lang} node={relatedCategoryTree[0]} />
     {
       recentlyPosts.length > 0 && (
         <div class="another-posts">
@@ -52,7 +56,7 @@ const relatedCategoryTree = await getCategoryTree(frontmatter.category[0]);
                   "another-post-link",
                   // { "padding-top": each.filePath?.split("/").slice(1, -1)[0] === "opinion" },
                 ]}
-                href={`/posts/${each.filePath?.split("/").slice(1, -1).join("/")}`}
+                href={translatePath(`/posts/${each.filePath?.split("/").slice(1, -1).join("/")}`)}
               >
                 <MarkdownPostSummaryBar post={each} isDisplaySection={false} />
                 {/* isDisplayCategory={each.filePath?.split("/").slice(1, -1)[0] !== "opinion"} */}

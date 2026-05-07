@@ -4,9 +4,16 @@ import { getCollection } from "astro:content";
 import { sectionMap } from "@/scripts/section.ts";
 import MarkdownPostSummary from "@/components/MarkdownPostSummary.astro";
 import MarkdownPostSquare from "@/components/MarkdownPostSquare.astro";
+import { SUPPORTED_LANGUAGES, useTranslatedPath } from "@/scripts/i18n";
+
+export async function getStaticPaths() {
+  return SUPPORTED_LANGUAGES.map((lang) => ({ params: { lang } }));
+}
 
 const { lang } = Astro.params;
-const posts = (await getCollection("blog", ({ id }) => id.startsWith(`${lang}/`))).sort(
+const translatePath = useTranslatedPath(lang);
+
+const posts = (await getCollection("blog", ({ id }) => id.includes(`/${lang}/`))).sort(
   (relatedPost1, relatedPost2) =>
     new Date(relatedPost2.data.created).getTime() - new Date(relatedPost1.data.created).getTime(),
 );
@@ -16,25 +23,43 @@ const opinionPosts = posts.filter(
 );
 ---
 
-<BaseLayout>
+<BaseLayout lang={lang}>
   <main>
     <div class="dashboard">
       <div class="section-articles">
         <div class="recent-articles">
           <div class="recent-articles-headline">
-            <MarkdownPostSummary post={recentPosts[0]} />
+            {recentPosts[0] && <MarkdownPostSummary lang={lang} post={recentPosts[0]} />}
           </div>
           <div class="recent-articles-list">
-            <MarkdownPostSummary post={recentPosts[1]} isDisplayImage={false} />
-            <MarkdownPostSummary post={recentPosts[2]} isDisplayImage={false} />
-            <MarkdownPostSummary post={recentPosts[3]} isDisplayImage={false} />
+            {
+              recentPosts[1] && (
+                <MarkdownPostSummary lang={lang} post={recentPosts[1]} isDisplayImage={false} />
+              )
+            }
+            {
+              recentPosts[2] && (
+                <MarkdownPostSummary lang={lang} post={recentPosts[2]} isDisplayImage={false} />
+              )
+            }
+            {
+              recentPosts[3] && (
+                <MarkdownPostSummary lang={lang} post={recentPosts[3]} isDisplayImage={false} />
+              )
+            }
           </div>
-          <a class="retrieve-more-button" href={sectionMap.posts.url}>더 많은 글들 보기</a>
+          {
+            recentPosts.length > 4 && (
+              <a class="retrieve-more-button" href={translatePath(sectionMap.posts.url)}>
+                더 많은 글들 보기
+              </a>
+            )
+          }
         </div>
 
         <div class="random-articles">
           <div class="post-section">
-            <a href={sectionMap.opinion.url}>{sectionMap.opinion.title}</a>
+            <a href={translatePath(sectionMap.opinion.url)}>{sectionMap.opinion.title}</a>
           </div>
           <div class="random-articles-list">
             {
@@ -42,6 +67,7 @@ const opinionPosts = posts.filter(
                 .slice(0, 7)
                 .map((each) => (
                   <MarkdownPostSquare
+                    lang={lang}
                     post={each}
                     isDisplaySection={false}
                     isDisplayCategory={false}

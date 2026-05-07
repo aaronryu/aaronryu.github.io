@@ -1,0 +1,10 @@
+---
+title: "Optimal Timing and Strategy for Salary Negotiation with Senior Candidates"
+category: ["Opinion"]
+created: 2026-04-26T21:54:44.804Z
+deck: Salary negotiation is more than just an exchange of figures; it's a strategic dance of psychological timing. This analysis explores why engaging in a gradual negotiation process from the initial stages of recruitment, rather than waiting until after a final offer (when candidates tend to adopt a more calculative stance), proves more efficient for companies and fosters a more honest sharing of resources.
+---
+
+When it comes to salary negotiations, companies often find it more advantageous to conduct a gradual discussion right from the initial meeting, rather than waiting until after a final offer has been extended. While junior candidates might approach negotiations with a different psychological backdrop, senior professionals, once they've received a final offer and know they are highly desired, tend to develop a stronger inclination to inflate their market value. This implies that candidates are more likely to adopt a highly calculative attitude during negotiations.
+
+Initiating negotiations from the outset of the recruitment process could encourage candidates, keen on securing the position, to present their original value more modestly. It also facilitates a more open and honest discussion about the full range of resources available from both the applicant and the company. Naturally, companies might harbor concerns that publicly disclosing the compensation for a specific role could set a precedent for all future applicants' salary discussions. However, I believe this concern is largely unwarranted. Given that information regarding a candidate's previous salary is typically gathered early in the hiring process anyway, transparent disclosure of compensation can actually serve as a positive mechanism to guide negotiations, ensuring all relevant 'resources' are openly shared between parties.

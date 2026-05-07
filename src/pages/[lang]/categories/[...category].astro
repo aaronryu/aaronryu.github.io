@@ -3,61 +3,67 @@ import MainCategory from "@/components/MainCategory.astro";
 import SectionHeader from "@/components/SectionHeader.astro";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import { getCategoryTree, type CategoryNode, type CategoryTree } from "@/scripts/category";
+import { getI18nStaticPaths } from "@/scripts/i18n";
 
-// 재귀적으로 트리를 돌며 paths 배열을 채우는 헬퍼 함수
 export async function getStaticPaths() {
-  const categoryTree = await getCategoryTree();
+  return getI18nStaticPaths(async (lang) => {
+    const categoryTree = await getCategoryTree(lang);
 
-  function generatePaths(
-    nodes: CategoryTree,
-    parentNodes: CategoryNode[] = [],
-    parentCategories: string[] = [],
-  ): any[] {
-    return nodes.flatMap((node) => {
-      // 현재 노드의 전체 경로 (예: ["Design Pattern", "Observer"])
-      const currentCategories = [...parentCategories, node.category];
-      // 현재 노드를 포함한 전체 경로 노드 리스트 (루트 -> 현재)
-      const currentStaticPath = {
-        params: {
-          category: currentCategories
-            .map((category) => category.toLowerCase().replace(",", "").replace(" ", "-"))
-            .join("/"),
-        },
-        props: { parents: parentNodes, ...node },
-      };
-      const currentAncestors = [...parentNodes, node];
-      return [
-        currentStaticPath,
-        ...generatePaths(node.subcategory, currentAncestors, currentCategories),
-      ];
-    });
-  }
+    // 재귀적으로 트리를 돌며 paths 배열을 채우는 헬퍼 함수
+    function generatePaths(
+      nodes: CategoryTree,
+      parentNodes: CategoryNode[] = [],
+      parentCategories: string[] = [],
+    ): any[] {
+      return nodes.flatMap((node) => {
+        // 현재 노드의 전체 경로 (예: ["Design Pattern", "Observer"])
+        const currentCategories = [...parentCategories, node.category];
+        // 현재 노드를 포함한 전체 경로 노드 리스트 (루트 -> 현재)
+        const currentStaticPath = {
+          params: {
+            category: currentCategories
+              .map((category) => category.toLowerCase().replace(",", "").replace(" ", "-"))
+              .join("/"),
+          },
+          props: { parents: parentNodes, ...node },
+        };
+        const currentAncestors = [...parentNodes, node];
+        return [
+          currentStaticPath,
+          ...generatePaths(node.subcategory, currentAncestors, currentCategories),
+        ];
+      });
+    }
 
-  return generatePaths(categoryTree);
-  // return [
-  //   { params: { tag: "astro" }, props: { posts: allPosts } },
-  //   { params: { tag: "successes" }, props: { posts: allPosts } },
-  //   { params: { tag: "community" }, props: { posts: allPosts } },
-  //   { params: { tag: "blogging" }, props: { posts: allPosts } },
-  //   { params: { tag: "setbacks" }, props: { posts: allPosts } },
-  //   { params: { tag: "learning in public" }, props: { posts: allPosts } },
-  // ];
+    return generatePaths(categoryTree).map((returnObject) => ({
+      params: { lang, ...returnObject.params },
+      props: returnObject.props,
+    }));
+    // return [
+    //   { params: { tag: "astro" }, props: { posts: allPosts } },
+    //   { params: { tag: "successes" }, props: { posts: allPosts } },
+    //   { params: { tag: "community" }, props: { posts: allPosts } },
+    //   { params: { tag: "blogging" }, props: { posts: allPosts } },
+    //   { params: { tag: "setbacks" }, props: { posts: allPosts } },
+    //   { params: { tag: "learning in public" }, props: { posts: allPosts } },
+    // ];
+  });
 }
 
-const { category } = Astro.params;
+const { lang, category } = Astro.params;
 const node = Astro.props;
 // const filteredPosts = posts?.filter((post: any) => post.frontmatter.tags?.includes(tag));
 ---
 
-<BaseLayout>
+<BaseLayout lang={lang}>
   <SectionHeader section={"categories"} />
   <article>
     <div class="category">
       {
         node.parents[0] ? (
-          <MainCategory node={node.parents[0] as CategoryNode} />
+          <MainCategory lang={lang} node={node.parents[0] as CategoryNode} />
         ) : (
-          <MainCategory node={node as CategoryNode} />
+          <MainCategory lang={lang} node={node as CategoryNode} />
         )
       }
     </div>

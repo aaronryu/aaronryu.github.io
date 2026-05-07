@@ -10,9 +10,32 @@ import {
   transformerNotationErrorLevel,
 } from "@shikijs/transformers";
 import remarkCodeTitles from "remark-code-titles";
+import sitemap from "@astrojs/sitemap";
 
 // https://astro.build/config
 export default defineConfig({
+  // (A) Astro-specific options
+  // site: 'https://aaronryu.github.io', - Sitemap / Canonocal 생성하여 SEO 가속
+  site: "https://aaronryu.netlify.app",
+
+  // (B) Vite-specific options
+  // vite: { ... },
+  integrations: [
+    preact(),
+    icon(),
+    sitemap({
+      i18n: {
+        defaultLocale: "ko",
+        locales: {
+          ko: "ko-KR",
+          en: "en-US",
+          ja: "ja-JP",
+        },
+      },
+    }),
+  ],
+
+  // (C) 다국어 설정 - 본 블로그는 무조건 SSG 로 동작되도록 픽스
   output: "static",
   i18n: {
     defaultLocale: "ko",
@@ -22,15 +45,6 @@ export default defineConfig({
       prefixDefaultLocale: true,
     },
   },
-
-  // (A) Astro-specific options
-  // site: 'https://aaronryu.github.io', - Sitemap / Canonocal 생성하여 SEO 가속
-  site: "https://aaronryu.netlify.app",
-
-  //
-  // (B) Vite-specific options
-  // vite: { ... },
-  integrations: [preact(), icon()],
 
   markdown: {
     // 여기서 먼저 타이틀을 div로 변환

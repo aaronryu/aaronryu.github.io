@@ -1,13 +1,16 @@
 ---
 import type { CategoryNode } from "@/scripts/category";
+import { useTranslatedPath, type Lang } from "@/scripts/i18n";
 import { Icon } from "astro-icon/components";
 
 interface Props {
+  lang: Lang;
   node: CategoryNode;
   previousUrl: string;
 }
 
-const { node, previousUrl } = Astro.props;
+const { lang, node, previousUrl } = Astro.props;
+const translatePath = useTranslatedPath(lang);
 const subCategoryUrl =
   previousUrl + "/" + node.category.toLowerCase().replace(",", "").replace(" ", "-");
 ---
@@ -21,7 +24,7 @@ const subCategoryUrl =
     {
       node.posts.map((post) => (
         <li class="nested-category-post">
-          <a href={`/posts/${post.filePath?.split("/").slice(1, -1).join("/")}`}>
+          <a href={translatePath(`/posts/${post.filePath?.split("/").slice(1, -1).join("/")}`)}>
             {post.data.title}
           </a>
         </li>

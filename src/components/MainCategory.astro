@@ -1,16 +1,20 @@
 ---
 import SubCategory from "@/components/SubCategory.astro";
 import type { CategoryNode } from "@/scripts/category";
+import { useTranslatedPath, type Lang } from "@/scripts/i18n";
 import { sectionMap } from "@/scripts/section";
 import { Icon } from "astro-icon/components";
 
 interface Props {
+  lang: Lang;
   node: CategoryNode;
 }
 
-const { node } = Astro.props;
-const mainCategoryUrl =
-  sectionMap.categories.url + "/" + node.category.toLowerCase().replace(",", "").replace(" ", "-");
+const { lang, node } = Astro.props;
+const translatePath = useTranslatedPath(lang);
+const mainCategoryUrl = translatePath(
+  sectionMap.categories.url + "/" + node.category.toLowerCase().replace(",", "").replace(" ", "-"),
+);
 ---
 
 <div class="main-category">
@@ -26,7 +30,7 @@ const mainCategoryUrl =
     {
       node.posts.map((post) => (
         <li class="main-category-post">
-          <a href={`/posts/${post.filePath?.split("/").slice(1, -1).join("/")}`}>
+          <a href={translatePath(`/posts/${post.filePath?.split("/").slice(1, -1).join("/")}`)}>
             {post.data.title}
           </a>
         </li>
@@ -35,7 +39,7 @@ const mainCategoryUrl =
   </ul>
   {
     node.subcategory.map((subcategory) => (
-      <SubCategory node={subcategory} previousUrl={mainCategoryUrl} />
+      <SubCategory lang={lang} node={subcategory} previousUrl={mainCategoryUrl} />
     ))
   }
 </div>

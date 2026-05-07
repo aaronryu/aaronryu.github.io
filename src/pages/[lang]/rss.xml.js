@@ -1,12 +1,14 @@
 import { AARONS_BLOG_DESCRIPTION, AARONS_BLOG_TITLE } from "@/layouts/BaseLayout.astro";
 import rss, { pagesGlobToRssItems } from "@astrojs/rss";
 import { getCollection } from "astro:content";
+import { SUPPORTED_LANGUAGES } from "@/scripts/i18n";
 import sanitizeHtml from "sanitize-html";
 import MarkdownIt from "markdown-it";
+
 const parser = new MarkdownIt();
 
 export async function getStaticPaths() {
-  return [{ params: { lang: "ko" } }, { params: { lang: "en" } }, { params: { lang: "ja" } }];
+  return SUPPORTED_LANGUAGES.map((lang) => ({ params: { lang } }));
 }
 
 export async function GET(context) {

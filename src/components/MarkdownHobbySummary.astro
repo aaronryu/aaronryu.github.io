@@ -3,14 +3,17 @@ import { Image } from "astro:assets";
 import { convert } from "@/libs/date";
 import { sectionMap } from "@/scripts/section";
 import type { CollectionEntry } from "astro:content";
+import { useTranslatedPath, type Lang } from "@/scripts/i18n";
 
 interface Props {
+  lang: Lang;
   post: CollectionEntry<"hobby">;
   isDisplaySection?: boolean;
   isDisplayImage?: boolean;
 }
 
-const { post, isDisplaySection = true, isDisplayImage = true } = Astro.props;
+const { lang, post, isDisplaySection = true, isDisplayImage = true } = Astro.props;
+const translatePath = useTranslatedPath(lang);
 ---
 
 <section>
@@ -18,14 +21,14 @@ const { post, isDisplaySection = true, isDisplayImage = true } = Astro.props;
     {
       post.data.category.map((each: string, index: number) => (
         <a
-          href={
+          href={translatePath(
             sectionMap.categories.url +
-            "/" +
-            post.data.category
-              .map((each: string) => each.toLowerCase().replace(",", "").replace(" ", "-"))
-              .slice(0, index + 1)
-              .join("/")
-          }
+              "/" +
+              post.data.category
+                .map((each: string) => each.toLowerCase().replace(",", "").replace(" ", "-"))
+                .slice(0, index + 1)
+                .join("/"),
+          )}
         >
           {each}
         </a>
@@ -33,7 +36,9 @@ const { post, isDisplaySection = true, isDisplayImage = true } = Astro.props;
     }
   </div>
   <div class="post-headline">
-    <a href={`/hobby/${post.filePath?.split("/").slice(1, -1).join("/")}`}>{post.data.title}</a>
+    <a href={translatePath(`/hobby/${post.filePath?.split("/").slice(1, -1).join("/")}`)}>
+      {post.data.title}
+    </a>
   </div>
   <div class="post-deck">{post.data.deck}</div>
   {

@@ -9,16 +9,19 @@ import type { CollectionEntry } from "astro:content";
 import PaginationNavigator from "@/components/PaginationNavigator.astro";
 import { sectionMap } from "@/scripts/section";
 import RssRoundButton from "@/components/RssRoundButton.astro";
+import { getI18nStaticPaths, useTranslatedPath, type Lang } from "@/scripts/i18n";
 
 export const getStaticPaths: GetStaticPaths = async ({ paginate }) => {
-  const hobbyPosts = (await getCollection("hobby")).sort(
-    (hobbyPost1, hobbyPost2) =>
-      new Date(hobbyPost2.data.created).getTime() - new Date(hobbyPost1.data.created).getTime(),
-  );
+  return getI18nStaticPaths(async (lang) => {
+    const hobbyPosts = (await getCollection("hobby", ({ id }) => id.includes(`/${lang}/`))).sort(
+      (hobbyPost1, hobbyPost2) =>
+        new Date(hobbyPost2.data.created).getTime() - new Date(hobbyPost1.data.created).getTime(),
+    );
 
-  return paginate(hobbyPosts, {
-    params: {},
-    pageSize: 5,
+    return paginate(hobbyPosts, {
+      params: { lang },
+      pageSize: 5,
+    });
   });
 };
 
@@ -26,10 +29,13 @@ interface Props {
   page: Page<CollectionEntry<"hobby">>;
 }
 
+const { lang } = Astro.params;
+const translatePath = useTranslatedPath(lang!);
+
 const { page } = Astro.props;
 ---
 
-<BaseLayout>
+<BaseLayout lang={lang}>
   <main>
     <SectionHeader section={"hobby"} />
     <div class="dashboard">
@@ -47,10 +53,15 @@ const { page } = Astro.props;
           <div class="recent-articles">
             <div class="recent-articles-list">
               {page.data.map((each, index) => (
-                <MarkdownHobbySummary post={each} isDisplaySection={false} isDisplayImage={false} />
+                <MarkdownHobbySummary
+                  lang={lang as Lang}
+                  post={each}
+                  isDisplaySection={false}
+                  isDisplayImage={false}
+                />
               ))}
             </div>
-            <PaginationNavigator baseurl={sectionMap["hobby"].url} page={page} />
+            <PaginationNavigator baseurl={translatePath(sectionMap["hobby"].url)} page={page} />
           </div>
         )
       }

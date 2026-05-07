@@ -11,7 +11,7 @@ import { Icon } from "astro-icon/components";
     connectedCallback() {
       const btn = this.querySelector("#rss-link");
       btn?.addEventListener("click", () => {
-        const rssUrl = `${window.location.origin}/rss.xml`;
+        const rssUrl = `${window.location.origin}/${window.location.pathname.split("/")[1]}/rss.xml`;
         // 클립보드 복사
         navigator.clipboard
           .writeText(rssUrl)

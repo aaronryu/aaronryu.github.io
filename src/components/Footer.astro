@@ -1,7 +1,11 @@
 ---
 import RssIconButton from "@/components/RssIconButton.astro";
+import { useTranslatedPath } from "@/scripts/i18n";
 import { sectionMap } from "@/scripts/section";
 import { Icon } from "astro-icon/components";
+
+const { lang } = Astro.props;
+const translatePath = useTranslatedPath(lang);
 
 const diff = new Date().getTime() - new Date("2017-08-01").getTime();
 const totalYears = diff / (1000 * 60 * 60 * 24 * 365.25);
@@ -33,42 +37,42 @@ const currentYear = new Date().getFullYear();
       <div class="col-categories">
         <ul class="cat-list">
           <li>
-            <a href={sectionMap.politics.url}>
+            <a href={translatePath(sectionMap.politics.url)}>
               {sectionMap.politics.title}<br /><span class="cat-sub">
                 {sectionMap.politics.shorten}
               </span>
             </a>
           </li>
           <li>
-            <a href={sectionMap.leadership.url}>
+            <a href={translatePath(sectionMap.leadership.url)}>
               {sectionMap.leadership.title}<br /><span class="cat-sub">
                 {sectionMap.leadership.shorten}
               </span>
             </a>
           </li>
           <li>
-            <a href={sectionMap.economy.url}>
+            <a href={translatePath(sectionMap.economy.url)}>
               {sectionMap.economy.title}<br /><span class="cat-sub">
                 {sectionMap.economy.shorten}
               </span>
             </a>
           </li>
           <li>
-            <a href={sectionMap.education.url}>
+            <a href={translatePath(sectionMap.education.url)}>
               {sectionMap.education.title}<br /><span class="cat-sub">
                 {sectionMap.education.shorten}
               </span>
             </a>
           </li>
           <li>
-            <a href={sectionMap.engineering.url}>
+            <a href={translatePath(sectionMap.engineering.url)}>
               {sectionMap.engineering.title}<br /><span class="cat-sub">
                 {sectionMap.engineering.shorten}
               </span>
             </a>
           </li>
           <li>
-            <a href={sectionMap.opinion.url}>
+            <a href={translatePath(sectionMap.opinion.url)}>
               {sectionMap.opinion.title}<br /><span class="cat-sub">
                 {sectionMap.opinion.shorten}
               </span>
@@ -82,9 +86,9 @@ const currentYear = new Date().getFullYear();
   <div class="footer-bottom">
     <span class="footer-copy">© 2019-{currentYear} Aaron Ryu. All Rights Reserved.</span>
     <nav class="footer-nav">
-      <a href={sectionMap.posts.url}>{sectionMap.posts.title}</a>
-      <a href={sectionMap.categories.url}>{sectionMap.categories.title}</a>
-      <a href={sectionMap.hobby.url}>{sectionMap.hobby.title}</a>
+      <a href={translatePath(sectionMap.posts.url)}>{sectionMap.posts.title}</a>
+      <a href={translatePath(sectionMap.categories.url)}>{sectionMap.categories.title}</a>
+      <a href={translatePath(sectionMap.hobby.url)}>{sectionMap.hobby.title}</a>
       <a href={sectionMap.about.url} target="_blank" rel="noopener noreferrer">
         {sectionMap.about.title}
       </a>

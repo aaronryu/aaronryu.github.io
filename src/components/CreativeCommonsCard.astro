@@ -14,7 +14,7 @@ import License from "@/assets/cc-by-nc-sa.svg";
 // const pathName = Astro.url.pathname;
 
 // const currentUrl = Astro.url.href;
-const currentUrl = new URL(Astro.url.pathname, import.meta.env.SITE).href;
+const currentUrl = new URL(Astro.url.pathname, Astro.site).href;
 const { title, created } = Astro.props;
 ---
 

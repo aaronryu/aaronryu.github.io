@@ -3,8 +3,10 @@ import { Image } from "astro:assets";
 import { convert } from "@/libs/date";
 import { sectionMap } from "@/scripts/section";
 import type { CollectionEntry } from "astro:content";
+import { useTranslatedPath, type Lang } from "@/scripts/i18n";
 
 interface Props {
+  lang: Lang;
   post: CollectionEntry<"blog">;
   isDisplaySection?: boolean;
   isDisplayCategory?: boolean;
@@ -12,11 +14,13 @@ interface Props {
 }
 
 const {
+  lang,
   post,
   isDisplaySection = true,
   isDisplayCategory = true,
   isDisplayImage = true,
 } = Astro.props;
+const translatePath = useTranslatedPath(lang);
 
 // @ts-ignore
 const section: keyof typeof sectionMap = post.filePath?.split("/").slice(1, -1)[0];
@@ -26,7 +30,7 @@ const section: keyof typeof sectionMap = post.filePath?.split("/").slice(1, -1)[
   {
     isDisplaySection && (
       <div class="post-section">
-        <a href={sectionMap[section].url}>{sectionMap[section].title}</a>
+        <a href={translatePath(sectionMap[section].url)}>{sectionMap[section].title}</a>
       </div>
     )
   }
@@ -35,14 +39,14 @@ const section: keyof typeof sectionMap = post.filePath?.split("/").slice(1, -1)[
       <div class="post-category">
         {post.data.category.map((each: string, index: number) => (
           <a
-            href={
+            href={translatePath(
               sectionMap.categories.url +
-              "/" +
-              post.data.category
-                .map((each: string) => each.toLowerCase().replace(",", "").replace(" ", "-"))
-                .slice(0, index + 1)
-                .join("/")
-            }
+                "/" +
+                post.data.category
+                  .map((each: string) => each.toLowerCase().replace(",", "").replace(" ", "-"))
+                  .slice(0, index + 1)
+                  .join("/"),
+            )}
           >
             {each}
           </a>
@@ -51,7 +55,9 @@ const section: keyof typeof sectionMap = post.filePath?.split("/").slice(1, -1)[
     )
   }
   <div class="post-headline">
-    <a href={`/posts/${post.filePath?.split("/").slice(1, -1).join("/")}`}>{post.data.title}</a>
+    <a href={translatePath(`/posts/${post.filePath?.split("/").slice(1, -1).join("/")}`)}>
+      {post.data.title}
+    </a>
   </div>
   <div class="post-deck">{post.data.deck}</div>
   {

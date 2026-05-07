@@ -2,8 +2,10 @@
 import { Image } from "astro:assets";
 import { convert } from "@/libs/date";
 import { sectionMap } from "@/scripts/section";
+import { useTranslatedPath } from "@/scripts/i18n";
 
-const { frontmatter } = Astro.props;
+const { lang, frontmatter } = Astro.props;
+const translatePath = useTranslatedPath(lang);
 ---
 
 <section>
@@ -11,14 +13,14 @@ const { frontmatter } = Astro.props;
     {
       frontmatter.category.map((each: string, index: number) => (
         <a
-          href={
+          href={translatePath(
             sectionMap.categories.url +
-            "/" +
-            frontmatter.category
-              .map((each: string) => each.toLowerCase().replace(",", "").replace(" ", "-"))
-              .slice(0, index + 1)
-              .join("/")
-          }
+              "/" +
+              frontmatter.category
+                .map((each: string) => each.toLowerCase().replace(",", "").replace(" ", "-"))
+                .slice(0, index + 1)
+                .join("/"),
+          )}
         >
           {each}
         </a>

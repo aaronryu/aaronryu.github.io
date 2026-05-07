@@ -112,7 +112,7 @@ f(1);
 
 자바스크립트를 실행하면 **가장 첫번째로 실행되는 함수는 main()** 이고, **window 라고 불리우는 Global Scope 를 Heap 에 만들며 시작**한다. window 를 global 변수 정의에 사용했던 기억이 있을것이다. 그게 가능한 이유는 이 자체로 Global Scope 이기 때문에 그렇다. 앞으로 Heap 에 적재되는 Scope 영역은 아래와 같이 표현하겠다.
 
-```Heap
+```
 # Global Scope (window)
 -
 -
@@ -123,7 +123,7 @@ f(1);
 2. `var a` 는 **변수 선언**이므로 **Global Scope (window)** 영역에 `a` 적재
 3. `b = 1` 는 **변수 할당**이므로 Heap(Scope) 에 미적재
 
-```Heap
+```
 # Global Scope (window)
 - a =                                           <-- var a = 2;
 -
@@ -132,7 +132,7 @@ f(1);
 4. `function f(z)` 는 **함수 선언**이므로 **Global Scope (window)** 영역에 `f` 적재
    - 함수 적재 시에는 **f 함수의 바이트코드(blob)에 대한 포인터값**을 함께 적재
 
-```Heap
+```
 # Global Scope (window)
 - a =
 - f = a pointer on f functions bytecode        <-- function f(z) {
@@ -160,7 +160,7 @@ f(1);
 
 예시 설명을 계속 이어서 Execution Phase 과정을 설명하자면,
 
-```Heap
+```
 # Global Scope (window)
 - a =
 - f = a pointer for f functions bytecode
@@ -169,7 +169,7 @@ f(1);
 5. `a = 2` 는 **변수 할당**이므로 `a` 변수를 찾아서 대입한다.
    - **Global Scope (window)** 영역에 변수 `a` 존재
 
-```Heap
+```
 # Global Scope (window)
 - a = 2                                         <-- var a = 2;
 - f = a pointer for f functions bytecode
@@ -179,7 +179,7 @@ f(1);
    - **Global Scope (window)** 영역에 변수 `b` 미존재하기 떄문에
      - 새로 `b` 변수 선언과 `1` 할당을 동시에 수행
 
-```Heap
+```
 # Global Scope (window)
 - a = 2
 - f = a pointer for f functions bytecode
@@ -193,7 +193,7 @@ f(1);
        - Scope Chain 을 위해 꼭 자신을 호출한 부모 함수 Scope 에 대한 포인터를 갖는다.
          - `(hidden) A pointer for previous scope`
 
-```Heap
+```
 # Global Scope (window)
 - a = 2
 - f = a pointer for f functions bytecode
@@ -208,7 +208,7 @@ f(1);
 8. `f(1)` 함수 실행 시 새로이 생성된 **Local Execution Scope**에
    - 다시 **Compilation Phase** 과정을 통해 변수, 함수 선언을 적재하면 아래와 같이 된다.
 
-```Heap
+```
 # Global Scope (window)
 - a = 2
 - f = a pointer for f functions bytecode
@@ -224,7 +224,7 @@ f(1);
 9. `f(1)` 의 **Execution Phase** 과정을 마치면
    - 아래와 같이 변수 할당 및 함수 `g()` 에 대한 또 다른 **Local Execution Scope** 가 생성된다.
 
-```Heap
+```
 # Global Scope (window)
 - a = 2
 - f = a pointer for f functions bytecode

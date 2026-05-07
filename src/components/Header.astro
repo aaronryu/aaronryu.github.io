@@ -1,8 +1,13 @@
 ---
 import RssIconButton from "@/components/RssIconButton.astro";
 import ThemeIcon from "@/components/ThemeIcon.astro";
+import { changeLanguageOnPathname, useTranslatedPath } from "@/scripts/i18n";
 import { sectionMap } from "@/scripts/section";
 import { Icon } from "astro-icon/components";
+
+const { lang } = Astro.props;
+const translatePath = useTranslatedPath(lang);
+const languageURL = changeLanguageOnPathname(Astro.url.pathname);
 
 const diff = new Date().getTime() - new Date("2017-08-01").getTime();
 const totalYears = diff / (1000 * 60 * 60 * 24 * 365.25);
@@ -18,11 +23,11 @@ const totalYears = diff / (1000 * 60 * 60 * 24 * 365.25);
       <a><RssIconButton /></a>
     </div>
     <div class="wsj-topbar-right">
-      <a href="?hl=ko">한국어</a>
+      <a href={languageURL.ko}>한국어</a>
       <span>|</span>
-      <a href="?hl=en">English</a>
+      <a href={languageURL.en}>English</a>
       <span>|</span>
-      <a href="?hl=jp">日本語</a>
+      <a href={languageURL.ja}>日本語</a>
       <span></span>
       <ThemeIcon />
     </div>
@@ -37,34 +42,34 @@ const totalYears = diff / (1000 * 60 * 60 * 24 * 365.25);
   </div>
 
   <nav class="wsj-subnav" aria-label="main navigation">
-    <a href={sectionMap.posts.url}>{sectionMap.posts.title}</a>
-    <a href={sectionMap.categories.url}>{sectionMap.categories.title}</a>
-    <a href={sectionMap.hobby.url}>{sectionMap.hobby.title}</a>
+    <a href={translatePath(sectionMap.posts.url)}>{sectionMap.posts.title}</a>
+    <a href={translatePath(sectionMap.categories.url)}>{sectionMap.categories.title}</a>
+    <a href={translatePath(sectionMap.hobby.url)}>{sectionMap.hobby.title}</a>
     <a href={sectionMap.about.url} target="_blank" rel="noopener noreferrer">
       {sectionMap.about.title}
     </a>
   </nav>
 
   <nav class="wsj-mainnav" aria-label="sub (blog category) navigation">
-    <a href={sectionMap.politics.url} class="category">
+    <a href={translatePath(sectionMap.politics.url)} class="category">
       {sectionMap.politics.title}<br />{sectionMap.politics.shorten}
     </a>
-    <a href={sectionMap.leadership.url} class="category">
+    <a href={translatePath(sectionMap.leadership.url)} class="category">
       {sectionMap.leadership.title}<br />{sectionMap.leadership.shorten}
     </a>
-    <a href={sectionMap.economy.url} class="category">
+    <a href={translatePath(sectionMap.economy.url)} class="category">
       {sectionMap.economy.title}<br />{sectionMap.economy.shorten}
     </a>
-    <a href={sectionMap.education.url} class="category">
+    <a href={translatePath(sectionMap.education.url)} class="category">
       {sectionMap.education.title}<br />{sectionMap.education.shorten}
     </a>
-    <a href={sectionMap.engineering.url} class="category">
+    <a href={translatePath(sectionMap.engineering.url)} class="category">
       {sectionMap.engineering.title}<br />{sectionMap.engineering.shorten}
     </a>
-    <a href={sectionMap.opinion.url} class="category">
+    <a href={translatePath(sectionMap.opinion.url)} class="category">
       {sectionMap.opinion.title}<br />{sectionMap.opinion.shorten}
     </a>
-    <a href={sectionMap.categories.url} class="category">
+    <a href={translatePath(sectionMap.categories.url)} class="category">
       <svg
         class="search-icon"
         viewBox="0 0 16 16"
