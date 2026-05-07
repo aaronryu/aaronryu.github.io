@@ -2,10 +2,11 @@
 import { Image } from "astro:assets";
 import { convert } from "@/libs/date";
 import { sectionMap } from "@/scripts/section";
-import { useTranslatedPath } from "@/scripts/i18n";
+import { useTranslatedPath, useTranslations } from "@/scripts/i18n";
 
 const { lang, frontmatter } = Astro.props;
 const translatePath = useTranslatedPath(lang);
+const t = useTranslations(lang);
 ---
 
 <section>
@@ -39,12 +40,12 @@ const translatePath = useTranslatedPath(lang);
   {frontmatter.abstract && <div class="post-absract">{frontmatter.abstract}</div>}
   <div class="post-time">
     <time class="post-created-time" datetime={frontmatter.created.toISOString()}>
-      생성일 : {convert(frontmatter.created, lang).full}
+      {t("post.created")} : {convert(frontmatter.created, lang).full}
     </time>
     {
       frontmatter.updated && (
         <time class="post-updated-time" datetime={frontmatter.updated.toISOString()}>
-          수정일 : {convert(frontmatter.updated, lang).full}
+          {t("post.updated")} : {convert(frontmatter.updated, lang).full}
         </time>
       )
     }

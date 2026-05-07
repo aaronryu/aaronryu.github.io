@@ -7,17 +7,21 @@ import { Icon } from "astro-icon/components";
 </rss-icon-button>
 
 <script>
+  import { useTranslations, type Lang } from "@/scripts/i18n";
+
   class RssIconButton extends HTMLElement {
     connectedCallback() {
       const btn = this.querySelector("#rss-link");
+      const lang = window.location.pathname.split("/")[1];
+      const t = useTranslations(lang as Lang);
+
       btn?.addEventListener("click", () => {
-        const rssUrl = `${window.location.origin}/${window.location.pathname.split("/")[1]}/rss.xml`;
+        const rssUrl = `${window.location.origin}/${lang}/rss.xml`;
         // 클립보드 복사
         navigator.clipboard
           .writeText(rssUrl)
           .then(() => {
-            triggerToast("RSS 주소가 복사되었습니다. 구독기(Feedly 등)에 추가해주세요 🙂");
-            // alert("RSS 주소가 복사되었습니다. 구독기(Feedly 등)에 추가해주세요 🙂");
+            triggerToast(t("rss.copied"));
           })
           .catch(() => {
             // 실패 시 대비책으로 주소창 이동

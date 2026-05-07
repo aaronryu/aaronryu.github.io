@@ -11,7 +11,7 @@ import MainCategory from "@/components/MainCategory.astro";
 import { getCategoryTree } from "@/scripts/category";
 import SectionHeader from "@/components/SectionHeader.astro";
 import type { sectionMap } from "@/scripts/section";
-import { useTranslatedPath, type Lang } from "@/scripts/i18n";
+import { useTranslatedPath, useTranslations, type Lang } from "@/scripts/i18n";
 
 interface Props {
   lang: Lang;
@@ -24,6 +24,7 @@ interface Props {
 
 const { lang, section, frontmatter, headings, relatedPosts, recentlyPosts } = Astro.props;
 const translatePath = useTranslatedPath(lang);
+const t = useTranslations(lang);
 const relatedCategoryTree = await getCategoryTree(lang, frontmatter.category[0]);
 ---
 
@@ -43,12 +44,12 @@ const relatedCategoryTree = await getCategoryTree(lang, frontmatter.category[0])
     </MarkdownPost>
     <CreativeCommonsCard lang={lang} title={frontmatter.title} created={frontmatter.created} />
     <div>Giscus 댓글란</div>
-    <div class="another-posts-header">같은 카테고리 내 다른 글들</div>
+    <div class="another-posts-header">{t("post.related-post")}</div>
     <MainCategory lang={lang} node={relatedCategoryTree[0]} />
     {
       recentlyPosts.length > 0 && (
         <div class="another-posts">
-          <div class="another-posts-header">최근에 게시된 글들</div>
+          <div class="another-posts-header">{t("post.recently-post")}</div>
           <div class="another-posts-lists">
             {recentlyPosts.map((each, index) => (
               <a

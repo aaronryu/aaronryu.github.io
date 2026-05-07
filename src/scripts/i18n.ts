@@ -1,14 +1,16 @@
 import type { CollectionEntry } from "astro:content";
 
 export const SUPPORTED_LANGUAGES = ["ko", "en", "ja"] as const;
+export const DEFAULT_LANGUAGE = SUPPORTED_LANGUAGES[0];
 export type Lang = (typeof SUPPORTED_LANGUAGES)[number];
 
 const langPattern = SUPPORTED_LANGUAGES.join("|");
 
 // 마크다운 파일이 어떤 언어의 디렉토리에 포함되어있는지
-export function extractI18nFromPost(post: CollectionEntry<"blog" | "hobby">): Lang {
-  const [lang, ..._] = post.id.split("/");
-  return lang as Lang;
+export function extractI18nFromPost(post: CollectionEntry<"blog" | "hobby">): Lang | undefined {
+  return post.filePath
+    ?.split("/")
+    .find((segment) => (SUPPORTED_LANGUAGES as readonly string[]).includes(segment)) as Lang;
 }
 
 // (A) /pages/[lang]/ 하위 디렉토리에 존재하는 모든 페이지에 대해 ko, en, ja 각각마다의 페이지 생성 SSG 을 위해 필요
@@ -45,5 +47,36 @@ export function changeLanguageOnPathname(pathname: string) {
     ko: `/ko${cleanPath}`,
     en: `/en${cleanPath}`,
     ja: `/ja${cleanPath}`,
+  };
+}
+
+// 다양한 언어들을 등록하여 사용
+export const ui = {
+  ko: {
+    "post.created": "생성일",
+    "post.updated": "수정일",
+    "post.related-post": "같은 카테고리 내 다른 글들",
+    "post.recently-post": "최근에 게시된 글들",
+    "rss.copied": "RSS 주소가 복사되었습니다. 구독기(Feedly 등)에 추가해주세요 🙂",
+  },
+  en: {
+    "post.created": "Created",
+    "post.updated": "Updated",
+    "post.related-post": "More in this category",
+    "post.recently-post": "Recent posts",
+    "rss.copied": "RSS feed URL copied. Please add it to your reader (like Feedly) 🙂",
+  },
+  ja: {
+    "post.created": "作成日",
+    "post.updated": "更新日",
+    "post.related-post": "同じカテゴリーの関連記事",
+    "post.recently-post": "最新記事",
+    "rss.copied": "RSS URLがコピーされました。リーダー(Feedlyなど)に追加してください 🙂",
+  },
+} as const;
+
+export function useTranslations(lang: Lang) {
+  return function t(key: keyof (typeof ui)[Lang]) {
+    return ui[lang][key] || ui[DEFAULT_LANGUAGE][key];
   };
 }
