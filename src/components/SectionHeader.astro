@@ -1,19 +1,21 @@
 ---
+import type { Lang } from "@/scripts/i18n";
 import { sectionMap } from "@/scripts/section.ts";
 
 interface Props {
+  lang: Lang;
   shorten?: string;
   section: keyof typeof sectionMap;
   description?: string;
 }
 
-const { shorten, section, description } = Astro.props;
+const { lang, shorten, section, description } = Astro.props;
 ---
 
 <div class="section-header-wrapper">
-  <div class="section-shorten">{shorten ?? sectionMap[section].shorten}</div>
+  <div class="section-shorten">{shorten ?? sectionMap[section].shorten[lang]}</div>
   <div class="section-title">{section}</div>
-  <div class="section-description">{description ?? sectionMap[section].description}</div>
+  <div class="section-description">{description ?? sectionMap[section].description[lang]}</div>
 </div>
 
 <style>
@@ -61,6 +63,7 @@ const { shorten, section, description } = Astro.props;
 
   .section-description {
     font-size: 0.9em;
+    line-height: 1.4em;
     text-align: center;
     @media (max-width: 490px) {
       font-size: 0.8em;

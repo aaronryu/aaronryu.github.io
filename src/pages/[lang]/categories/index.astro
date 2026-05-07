@@ -25,7 +25,7 @@ const { categoryTree } = Astro.props;
 ---
 
 <BaseLayout lang={lang}>
-  <SectionHeader section={"categories"} />
+  <SectionHeader lang={lang} section={"categories"} />
   <article>
     <div class="categories">
       {categoryTree.map((eachCategory) => <MainCategory lang={lang} node={eachCategory} />)}

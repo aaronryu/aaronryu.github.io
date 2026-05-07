@@ -6,7 +6,7 @@ import { getCollection } from "astro:content";
 import MarkdownPostSummary from "@/components/MarkdownPostSummary.astro";
 import MarkdownPostSquare from "@/components/MarkdownPostSquare.astro";
 import SectionHeader from "@/components/SectionHeader.astro";
-import { SUPPORTED_LANGUAGES, useTranslatedPath } from "@/scripts/i18n";
+import { SUPPORTED_LANGUAGES, useTranslatedPath, type Lang } from "@/scripts/i18n";
 
 export async function getStaticPaths() {
   return SUPPORTED_LANGUAGES.map((lang) => ({ params: { lang } }));
@@ -39,7 +39,7 @@ const sectionPosts = new Map(
 
 <BaseLayout lang={lang}>
   <main>
-    <SectionHeader section={"posts"} />
+    <SectionHeader lang={lang} section={"posts"} />
     <div class="dashboard">
       {
         sectionPosts
@@ -61,7 +61,9 @@ const sectionPosts = new Map(
                   <div class="section-header">
                     <div class="section-header-title">
                       {/* @ts-ignore */}
-                      {sectionMap[section].title} {sectionMap[section].shorten}
+                      {sectionMap[section].title}{" "}
+                      {lang !== "ko" &&
+                        sectionMap[section as keyof typeof sectionMap].shorten[lang]}
                     </div>
                     <div class="section-header-button">View All</div>
                   </div>

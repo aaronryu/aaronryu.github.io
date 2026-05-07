@@ -1,8 +1,12 @@
 ---
 import RssIconButton from "@/components/RssIconButton.astro";
-import { useTranslatedPath } from "@/scripts/i18n";
+import { useTranslatedPath, type Lang } from "@/scripts/i18n";
 import { sectionMap } from "@/scripts/section";
 import { Icon } from "astro-icon/components";
+
+interface Props {
+  lang: Lang;
+}
 
 const { lang } = Astro.props;
 const translatePath = useTranslatedPath(lang);
@@ -19,7 +23,9 @@ const currentYear = new Date().getFullYear();
       <div class="wsj-masthead">
         <div class="wsj-logo"><a href="/">THE PESSIMISTIC OPTIMIST.</a></div>
         <div class="wsj-author">
-          {totalYears.toFixed(1)}년차 Web Application Developer 웹 개발자
+          {lang === "ko" && <>{totalYears.toFixed(1)}년차 Web Application Developer 웹 개발자</>}
+          {lang === "en" && <>Senior Web Application Developer ({totalYears.toFixed(1)}+ years)</>}
+          {lang === "ja" && <>Webアプリケーションエンジニア (経験{totalYears.toFixed(1)}年)</>}
         </div>
         <div class="social-row">
           <a href={sectionMap.linkedin.url} class="social-btn" title={sectionMap.linkedin.title}>
@@ -38,44 +44,74 @@ const currentYear = new Date().getFullYear();
         <ul class="cat-list">
           <li>
             <a href={translatePath(sectionMap.politics.url)}>
-              {sectionMap.politics.title}<br /><span class="cat-sub">
-                {sectionMap.politics.shorten}
-              </span>
+              {sectionMap.politics.title}{
+                lang !== "en" && (
+                  <>
+                    <br />
+                    <span class="cat-sub">{sectionMap.politics.shorten[lang]}</span>
+                  </>
+                )
+              }
             </a>
           </li>
           <li>
             <a href={translatePath(sectionMap.leadership.url)}>
-              {sectionMap.leadership.title}<br /><span class="cat-sub">
-                {sectionMap.leadership.shorten}
-              </span>
+              {sectionMap.leadership.title}{
+                lang !== "en" && (
+                  <>
+                    <br />
+                    <span class="cat-sub">{sectionMap.leadership.shorten[lang]}</span>
+                  </>
+                )
+              }
             </a>
           </li>
           <li>
             <a href={translatePath(sectionMap.economy.url)}>
-              {sectionMap.economy.title}<br /><span class="cat-sub">
-                {sectionMap.economy.shorten}
-              </span>
+              {sectionMap.economy.title}{
+                lang !== "en" && (
+                  <>
+                    <br />
+                    <span class="cat-sub">{sectionMap.economy.shorten[lang]}</span>
+                  </>
+                )
+              }
             </a>
           </li>
           <li>
             <a href={translatePath(sectionMap.education.url)}>
-              {sectionMap.education.title}<br /><span class="cat-sub">
-                {sectionMap.education.shorten}
-              </span>
+              {sectionMap.education.title}{
+                lang !== "en" && (
+                  <>
+                    <br />
+                    <span class="cat-sub">{sectionMap.education.shorten[lang]}</span>
+                  </>
+                )
+              }
             </a>
           </li>
           <li>
             <a href={translatePath(sectionMap.engineering.url)}>
-              {sectionMap.engineering.title}<br /><span class="cat-sub">
-                {sectionMap.engineering.shorten}
-              </span>
+              {sectionMap.engineering.title}{
+                lang !== "en" && (
+                  <>
+                    <br />
+                    <span class="cat-sub">{sectionMap.engineering.shorten[lang]}</span>
+                  </>
+                )
+              }
             </a>
           </li>
           <li>
             <a href={translatePath(sectionMap.opinion.url)}>
-              {sectionMap.opinion.title}<br /><span class="cat-sub">
-                {sectionMap.opinion.shorten}
-              </span>
+              {sectionMap.opinion.title}{
+                lang !== "en" && (
+                  <>
+                    <br />
+                    <span class="cat-sub">{sectionMap.opinion.shorten[lang]}</span>
+                  </>
+                )
+              }
             </a>
           </li>
         </ul>

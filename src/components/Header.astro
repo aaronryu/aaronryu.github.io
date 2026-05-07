@@ -1,9 +1,13 @@
 ---
 import RssIconButton from "@/components/RssIconButton.astro";
 import ThemeIcon from "@/components/ThemeIcon.astro";
-import { changeLanguageOnPathname, useTranslatedPath } from "@/scripts/i18n";
+import { changeLanguageOnPathname, useTranslatedPath, type Lang } from "@/scripts/i18n";
 import { sectionMap } from "@/scripts/section";
 import { Icon } from "astro-icon/components";
+
+interface Props {
+  lang: Lang;
+}
 
 const { lang } = Astro.props;
 const translatePath = useTranslatedPath(lang);
@@ -35,7 +39,11 @@ const totalYears = diff / (1000 * 60 * 60 * 24 * 365.25);
 
   <div class="wsj-masthead">
     <div class="wsj-logo"><a href="/">THE PESSIMISTIC OPTIMIST.</a></div>
-    <div class="wsj-author">{totalYears.toFixed(1)}년차 Web Application Developer 웹 개발자</div>
+    <div class="wsj-author">
+      {lang === "ko" && <>{totalYears.toFixed(1)}년차 Web Application Developer 웹 개발자</>}
+      {lang === "en" && <>Senior Web Application Developer ({totalYears.toFixed(1)}+ years)</>}
+      {lang === "ja" && <>Webアプリケーションエンジニア (経験{totalYears.toFixed(1)}年)</>}
+    </div>
     <!-- <div class="wsj-actions">
       <ThemeIcon />
     </div> -->
@@ -50,24 +58,66 @@ const totalYears = diff / (1000 * 60 * 60 * 24 * 365.25);
     </a>
   </nav>
 
-  <nav class="wsj-mainnav" aria-label="sub (blog category) navigation">
+  <nav class:list={["wsj-mainnav", `lang-${lang}`]} aria-label="sub (blog category) navigation">
     <a href={translatePath(sectionMap.politics.url)} class="category">
-      {sectionMap.politics.title}<br />{sectionMap.politics.shorten}
+      {sectionMap.politics.title}{
+        lang !== "en" && (
+          <>
+            <br />
+            {sectionMap.politics.shorten[lang]}
+          </>
+        )
+      }
     </a>
     <a href={translatePath(sectionMap.leadership.url)} class="category">
-      {sectionMap.leadership.title}<br />{sectionMap.leadership.shorten}
+      {sectionMap.leadership.title}{
+        lang !== "en" && (
+          <>
+            <br />
+            {sectionMap.leadership.shorten[lang]}
+          </>
+        )
+      }
     </a>
     <a href={translatePath(sectionMap.economy.url)} class="category">
-      {sectionMap.economy.title}<br />{sectionMap.economy.shorten}
+      {sectionMap.economy.title}{
+        lang !== "en" && (
+          <>
+            <br />
+            {sectionMap.economy.shorten[lang]}
+          </>
+        )
+      }
     </a>
     <a href={translatePath(sectionMap.education.url)} class="category">
-      {sectionMap.education.title}<br />{sectionMap.education.shorten}
+      {sectionMap.education.title}{
+        lang !== "en" && (
+          <>
+            <br />
+            {sectionMap.education.shorten[lang]}
+          </>
+        )
+      }
     </a>
     <a href={translatePath(sectionMap.engineering.url)} class="category">
-      {sectionMap.engineering.title}<br />{sectionMap.engineering.shorten}
+      {sectionMap.engineering.title}{
+        lang !== "en" && (
+          <>
+            <br />
+            {sectionMap.engineering.shorten[lang]}
+          </>
+        )
+      }
     </a>
     <a href={translatePath(sectionMap.opinion.url)} class="category">
-      {sectionMap.opinion.title}<br />{sectionMap.opinion.shorten}
+      {sectionMap.opinion.title}{
+        lang !== "en" && (
+          <>
+            <br />
+            {sectionMap.opinion.shorten[lang]}
+          </>
+        )
+      }
     </a>
     <a href={translatePath(sectionMap.categories.url)} class="category">
       <svg
@@ -224,8 +274,9 @@ const totalYears = diff / (1000 * 60 * 60 * 24 * 365.25);
     flex-wrap: wrap;
     gap: 0;
   }
+  /* 한글일때 - 번거롭다 이렇게 다 해줘야하다니 */
   @media only screen and (max-width: 465px) {
-    .wsj-mainnav {
+    .wsj-mainnav.lang-ko {
       padding-left: 0.2em;
       padding-right: 0.2em;
       justify-content: flex-start;
@@ -235,7 +286,39 @@ const totalYears = diff / (1000 * 60 * 60 * 24 * 365.25);
       scrollbar-width: none; /* 파이어폭스 스크롤바 숨김 (선택사항) */
     }
 
-    .wsj-mainnav::-webkit-scrollbar {
+    .wsj-mainnav.lang-ko::-webkit-scrollbar {
+      display: none;
+    }
+  }
+  /* 일본어일때 - 번거롭다 이렇게 다 해줘야하다니 */
+  @media only screen and (max-width: 535px) {
+    .wsj-mainnav.lang-ja {
+      padding-left: 0.2em;
+      padding-right: 0.2em;
+      justify-content: flex-start;
+      flex-wrap: nowrap; /* 줄바꿈 금지 */
+      overflow-x: auto; /* 가로 내용 넘치면 스크롤 생성 */
+      -webkit-overflow-scrolling: touch; /* iOS에서 부드러운 스크롤 */
+      scrollbar-width: none; /* 파이어폭스 스크롤바 숨김 (선택사항) */
+    }
+
+    .wsj-mainnav.lang-ja::-webkit-scrollbar {
+      display: none;
+    }
+  }
+  /* 영어일때 - 번거롭다 이렇게 다 해줘야하다니 */
+  @media only screen and (max-width: 465px) {
+    .wsj-mainnav.lang-en {
+      padding-left: 0.2em;
+      padding-right: 0.2em;
+      justify-content: flex-start;
+      flex-wrap: nowrap; /* 줄바꿈 금지 */
+      overflow-x: auto; /* 가로 내용 넘치면 스크롤 생성 */
+      -webkit-overflow-scrolling: touch; /* iOS에서 부드러운 스크롤 */
+      scrollbar-width: none; /* 파이어폭스 스크롤바 숨김 (선택사항) */
+    }
+
+    .wsj-mainnav.lang-en::-webkit-scrollbar {
       display: none;
     }
   }

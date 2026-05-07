@@ -40,7 +40,7 @@ const relatedCategoryTree = await getCategoryTree(lang, frontmatter.category[0])
   created={frontmatter.created.toISOString()}
   updated={frontmatter.updated?.toISOString()}
 >
-  <SectionHeader section={section} />
+  <SectionHeader lang={lang} section={section} />
   {headings && <TableOfContents headings={headings} />}
   <article class:list={[{ "non-headings-article": !headings || headings.length === 0 }]}>
     <MarkdownPostHeader lang={lang} frontmatter={frontmatter} />
