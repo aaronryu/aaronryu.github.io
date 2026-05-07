@@ -99,7 +99,7 @@ this.Client(new Adapter(new Adaptee()));
 
 어답티는 어답터의 도움으로 TargetInterface 만을 사용하는 클라이언트에 주입가능해졌습니다.
 
-![Class Diagram for understanding Adaptor Pattern](./adapter-depicked.svg)
+![Class Diagram for understanding Adaptor Pattern](./adapter-depicted.svg)
 
 그럼 <b>'클래스 어댑터'</b>은 무엇일까요? Adapter 가 Adaptee 를 객체의 형태로 ‘구성’하지 않고 클래스의 형태로 ‘상속’하면 됩니다.
 

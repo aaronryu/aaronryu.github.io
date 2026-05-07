@@ -99,7 +99,7 @@ this.Client(new Adapter(new Adaptee()));
 
 With the help of the Adapter, the Adaptee can now be injected into clients that only use `TargetInterface`.
 
-![Class Diagram for understanding Adaptor Pattern](../../ko/adapter-decorator-facade-pattern/adapter-depicked.svg)
+![Class Diagram for understanding Adaptor Pattern](../../ko/adapter-decorator-facade-pattern/adapter-depicted.svg)
 
 Then, what is a **'Class Adapter'**? A Class Adapter doesn't 'compose' (has) the Adaptee as an object but 'inherits' (extends) it as a class.
 
