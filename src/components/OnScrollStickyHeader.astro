@@ -1,10 +1,13 @@
 ---
-const { title } = Astro.props;
+import { useTranslatedPath } from "@/scripts/i18n";
+
+const { lang, title } = Astro.props;
+const translatePath = useTranslatedPath(lang);
 ---
 
 <div class="on-scroll-sticky-header">
   <div class="on-scroll-sticky-header-left">
-    <div class="logo"><a href="/">TPO.</a></div>
+    <div class="logo"><a href={translatePath("/")}>TPO.</a></div>
   </div>
   <div class="on-scroll-sticky-header-middle">
     <div class="title"><a href="#">{title}</a></div>
