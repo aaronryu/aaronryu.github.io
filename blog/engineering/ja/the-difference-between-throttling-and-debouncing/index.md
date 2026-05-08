@@ -1,6 +1,6 @@
 ---
 title: 「スロットリングとデバウンスの違い」
-category: ["フロントエンド"]
+category: ["Frontend"]
 created: 2022-11-26 12:30:12
 deck: "スロットリングとデバウンスは、マウススクロールイベントが適用されているウェブページでユーザーがスクロールする際に発生する、数百から数千もの呼び出しによるブラウザのメモリ過負荷やパフォーマンス低下を防ぐための解決策です。呼び出し数を減らすことで性能劣化を回避します。呼び出し間の間隔を制御するのがスロットリング、多数の呼び出しを少数の呼び出しにグループ化するのがデバウンスです。"
 image: { url: ../../ko/the-difference-between-throttling-and-debouncing/throttling-and-debouncing.png, alt: "Difference between throttling and debouncing" }
