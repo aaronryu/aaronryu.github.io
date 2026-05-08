@@ -365,7 +365,7 @@ const, let 의 등장으로 if, for 문과 같은 block-level({}) 단위 변수 
 
 ## Garbage Collection
 
-![Function's Context Scope and Lexical Scope for variables](./functions-context-scope-and-lexical-scope.jpeg)
+<!-- ![Function's Context Scope and Lexical Scope for variables](./functions-context-scope-and-lexical-scope.jpeg) -->
 
 자바스크립트에서 매 새 함수를 호출할때마다 Heap 에 함수 단위의 Context Scope 생성됨이 이젠 머릿속에 박혀있을것이다. Context Scope 는 함수 호출에만 유효하기에, 해당 함수의 호출이 끝난다면 해당 함수의 Scope 는 Heap 에서 제거된다. 이를 메모리 청소의 의미로 Garbage Collection 이라 부른다. 자바스크립트 파일 실행이 모두 끝나면 가장 처음에 호출됐던 `main()` 함수도 끝이나고, 이에 Global Scope(Window) 도 사라지게 된다. 이렇게 **자바스크립트는 단순히 함수(포인터)의 Reachability 를 기반으로 Garbage Collection 를 수행**한다. Swift 라던가 Java 는 Reference Count 전략을 통한 Garbage Collection 를 수행하는것과 달리 Mark And Sweep 이라는 단순한 전략을 취함만 알면 된다.
 

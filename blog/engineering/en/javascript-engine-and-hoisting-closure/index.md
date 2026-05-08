@@ -365,7 +365,7 @@ The advent of `const` and `let` enabled defining and using variables within bloc
 
 ## Garbage Collection
 
-![Function's Context Scope and Lexical Scope for variables](../../ko/javascript-engine-and-hoisting-closure/functions-context-scope-and-lexical-scope.jpeg)
+<!-- ![Function's Context Scope and Lexical Scope for variables](../../ko/javascript-engine-and-hoisting-closure/functions-context-scope-and-lexical-scope.jpeg) -->
 
 By now, it should be ingrained that in JavaScript, a function-unit Context Scope is created in the Heap every time a new function is called. Since a Context Scope is only valid for the duration of its function call, once that function's call ends, its Scope is removed from the Heap. This memory cleanup is called Garbage Collection. When the JavaScript file execution is entirely finished, the `main()` function, which was called first, also ends, and consequently, the Global Scope (Window) disappears. Thus, **JavaScript performs Garbage Collection purely based on the Reachability of functions (pointers).** It's sufficient to know that it employs a simple "Mark And Sweep" strategy, unlike languages like Swift or Java, which use a "Reference Count" strategy for Garbage Collection.
 

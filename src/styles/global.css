@@ -150,6 +150,14 @@ img {
   }
 }
 
+code,
+pre {
+  font-family:
+    "Ubuntu Mono", "Consolas", "Monaco", "Courier New", "Pretendard", "MS Gothic", monospace;
+  font-size: 0.8rem; /* 혹은 특정 px로 강제 고정 */
+  -webkit-text-size-adjust: none; /* 브라우저의 제멋대로 크기 조절 방지 */
+}
+
 .remark-code-title {
   /* padding: 10px 15px;
   background-color: #f1f3f5;
