@@ -35,7 +35,7 @@ export function wipeoutPath(path?: string) {
 export function useTranslatedPath(lang: string) {
   return function translatePath(path: string) {
     const wipeoutpath = wipeoutPath(path);
-    return `/${lang}${path.startsWith("/") ? wipeoutpath : "/" + wipeoutpath}`;
+    return `/${lang}${wipeoutpath}`;
   };
 }
 
