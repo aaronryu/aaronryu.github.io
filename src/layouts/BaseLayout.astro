@@ -34,6 +34,8 @@ const {
 } = Astro.props;
 
 const isArticle = title !== AARONS_BLOG_TITLE && !!created;
+const isProd = import.meta.env.PROD;
+const isDev = import.meta.env.DEV;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site).href;
 const languageURL = changeLanguageOnPathname(Astro.url.pathname);
@@ -107,9 +109,20 @@ const jaURL = new URL(languageURL.ja, Astro.site).href;
     <link rel="alternate" hreflang="ja" href={jaURL} />
     <!-- 그 외 전 세계 유저용 - 디폴트 (한국어 페이지를 기본으로 제안) -->
     <link rel="alternate" hreflang="x-default" href={koURL} />
-    <!-- (C.2) SEO 추적을 위한 네이버 및 구글 태그매니저 설정 -->
-    <!-- TODO <meta property="naver-site-verification" content="" /> -->
-    <!-- TODO <script type="text/javascript" async="" src=""></script> -->
+    <!-- (C.2) SEO 추적을 위한 네이버 및 구글 태그매니저 Google tag (gtag.js) 설정 -->
+    {isProd && (
+      <>
+        <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-Z8BLZPB8BR"></script>
+        <script is:inline>
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag("js", new Date());
+          gtag("config", "G-Z8BLZPB8BR");
+        </script>
+      </>
+    )}
   </head>
   <body>
     {isArticle && <HeaderScrollSpy />}
