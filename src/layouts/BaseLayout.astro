@@ -27,11 +27,13 @@ const {
   author = AARON,
   keywords = AARONS_BLOG_KEYWORDS[lang as Lang],
   description = AARONS_BLOG_DESCRIPTION[lang as Lang],
-  image = "",
+  image,
   section,
   created,
   updated,
 } = Astro.props;
+
+const ogImageUrl = new URL('/tpo-social-share.png', Astro.site).href;
 
 const isArticle = title !== AARONS_BLOG_TITLE && !!created;
 const isProd = import.meta.env.PROD;
@@ -93,13 +95,9 @@ const jaURL = new URL(languageURL.ja, Astro.site).href;
       )
     }
     <meta property="og:url" content="https://aaron.github.io/" />
-    <!-- TODO <meta property="og:image" content="https://aaron.github.io/images/og.png" /> -->
+    <meta property="og:image" content={image ?? ogImageUrl} />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content={AARONS_TWITTER_ACCOUNT} />
-    <meta name="twitter:creator" content={AARONS_TWITTER_ACCOUNT} />
-    <meta name="twitter:title" content={title} />
-    <meta name="twitter:description" content={description} />
-    <!-- TODO <meta name="twitter:image" content="https://aaron.github.io/images/og.png" /> -->
     <!-- (C.1) SEO 개선을 위한 Canonical 설정 - 원본 페이지 주소 명시 -->
     <!-- 현재 페이지의 절대 경로를 가리킴 -->
     <link rel="canonical" href={canonicalURL} />

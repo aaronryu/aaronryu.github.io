@@ -15,6 +15,7 @@ import type { MarkdownHeading } from "astro";
 import { getCategoryTree } from "@/scripts/category";
 import MainCategory from "@/components/MainCategory.astro";
 import { useTranslatedPath, useTranslations, type Lang } from "@/scripts/i18n";
+import Comments from "@/components/Comments.astro";
 
 interface Props {
   lang: Lang;
@@ -49,9 +50,11 @@ const relatedCategoryTree = await getCategoryTree(lang, frontmatter.category[0])
       <slot />
     </MarkdownPost>
     <CreativeCommonsCard lang={lang} title={frontmatter.title} created={frontmatter.created} />
-    <div>Giscus 댓글란</div>
-    <div class="another-posts-header">{t("post.related-post")}</div>
-    <MainCategory lang={lang} node={relatedCategoryTree[0]} />
+    <Comments />
+    <div class="another-posts">
+      <div class="another-posts-header">{t("post.related-post")}</div>
+      <MainCategory lang={lang} node={relatedCategoryTree[0]} />
+    </div>
     {
       recentlyPosts.length > 0 && (
         <div class="another-posts">
@@ -81,17 +84,17 @@ const relatedCategoryTree = await getCategoryTree(lang, frontmatter.category[0])
     max-width: 800px;
     /* 여기에 패딩을 주어 우측 공간을 버릴지 아니면 TOC 에 패딩을 줘서 오른쪽으로 좀 옮길지 고민하다 전자 선택 */
     padding: 0 1.5em 0 0;
-    margin: 0 auto 2.4em;
+    margin: 0 auto 2em;
 
     @media only screen and (max-width: 1280px) {
       margin: 0 auto 2em 50px;
       padding: 0 1.2rem;
     }
     @media only screen and (max-width: 1024px) {
-      margin: 0 auto 1.6em 0;
+      margin: 0 auto 1.2em 0;
     }
     @media only screen and (max-width: 970px) {
-      margin: 0 auto 1.4em;
+      margin: 0 auto 1em;
     }
   }
 
@@ -198,8 +201,12 @@ const relatedCategoryTree = await getCategoryTree(lang, frontmatter.category[0])
     transform: translateX(1px);
   }
 
-  .another-posts-header {
+  .another-posts {
     margin-top: 0.6em;
+    padding-bottom: 0.5em;
+  }
+
+  .another-posts-header {
     margin-bottom: 0.2em;
     font-size: 1.1em;
     font-weight: 500;

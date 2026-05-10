@@ -1,0 +1,67 @@
+---
+const customCss = new URL("/css/giscus-custom.css", Astro.site).href;
+---
+
+<section class="comments">
+  <script
+    is:inline
+    src="https://giscus.app/client.js"
+    data-repo="aaronryu/aaronryu.github.io"
+    data-repo-id="MDEwOlJlcG9zaXRvcnkxNjMwOTgxOTc="
+    data-category="Announcements"
+    data-category-id="DIC_kwDOCbiuVc4C8t_o"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="top"
+    data-theme={customCss}
+    data-lang="ko"
+    data-loading="lazy"
+    crossorigin="anonymous"
+    async
+  >
+  </script>
+  <!-- preferred_color_scheme -->
+</section>
+
+<script is:inline>
+  function getGiscusTheme() {
+    return document.documentElement.classList.contains("dark") ? "dark" : "light";
+  }
+
+  function sendGiscusTheme(theme) {
+    const iframe = document.querySelector("iframe.giscus-frame");
+    if (!iframe) return false;
+
+    iframe.contentWindow.postMessage(
+      { giscus: { setConfig: { theme: theme } } },
+      "https://giscus.app",
+    );
+    return true;
+  }
+
+  // 다크 모드 토글을 감지
+  // + 중복 등록 방지: 이미 observer 가 있으면 스킵
+  if (!window.__giscusObserver) {
+    window.__giscusObserver = new MutationObserver(() => {
+      sendGiscusTheme(getGiscusTheme());
+    });
+
+    window.__giscusObserver.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
+  }
+
+  // Lazy Loading 방식으로 Giscus 댓글창을 로드하기에 그것이 완료되었을때 현재 테마설정을 읽어 사용하도록
+  window.addEventListener("message", (event) => {
+    if (event.origin !== "https://giscus.app") return;
+    if (!(typeof event.data === "object" && event.data.giscus)) return;
+
+    // Giscus sends a message when it's finished loading
+    sendGiscusTheme(getGiscusTheme());
+  });
+</script>
+
+<script></script>
