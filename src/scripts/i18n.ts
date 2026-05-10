@@ -71,7 +71,7 @@ export const ui = {
     "about.explain.study": "세상 모든것들에 관심이 많습니다",
     "about.explain.study.sub":
       "무엇인가 새로운것을 배우는걸 매우 좋아합니다\n지식앞에선 아이같습니다",
-    "about.explain.mountain": "가만히 앉아 생각하거나 산속에서 유유자적하고 글을 씁니다",
+    "about.explain.mountain": "가만히 앉아 생각하거나 산속에서 유유자적하며 글을 씁니다",
     "about.explain.mountain.sub":
       "어렸을적부터 인문학과 토론을 접해와서\n다양한 주제에 대해 이야기하는걸 좋아합니다",
     "about.explain.humanity": "마주하는 모든 이들이 원하는것들을 이루어가길 바랍니다",
