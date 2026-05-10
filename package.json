@@ -4,6 +4,10 @@
   "description": "Aaron's Blog for Development, Economy and Politics",
   "version": "0.1.0",
   "author": "Aaron <aaron.ryu.dev@gmail.com>",
+  "engines": {
+    "npm": ">=6.14.17 <7.0.0",
+    "node": ">=14.21.2 <15.0.0"
+  },
   "dependencies": {
     "@babel/core": "^7.16.0",
     "@babel/preset-react": "^7.16.0",
