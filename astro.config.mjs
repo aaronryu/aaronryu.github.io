@@ -77,6 +77,34 @@ export default defineConfig({
   site: SITE_ORIGIN,
   trailingSlash: "never",
 
+  // prettier-ignore
+  redirects: {
+    "/2019/02/17/how-do-i-make-email-address": "/ko/posts/engineering/how-do-i-make-email-address",
+    "/2019/02/17/how-do-i-make-email-address/": "/ko/posts/engineering/how-do-i-make-email-address",
+    "/2019/02/17/how-do-i-make-email-address/index.html": "/ko/posts/engineering/how-do-i-make-email-address",
+    "/2019/03/24/only-one-page-for-functional-programming": "/ko/posts/engineering/only-one-page-for-functional-programming",
+    "/2019/03/24/only-one-page-for-functional-programming/": "/ko/posts/engineering/only-one-page-for-functional-programming",
+    "/2019/03/24/only-one-page-for-functional-programming/index.html": "/ko/posts/engineering/only-one-page-for-functional-programming",
+    "/2019/05/27/coroutine-and-thread": "/ko/posts/engineering/coroutine-and-thread",
+    "/2019/05/27/coroutine-and-thread/": "/ko/posts/engineering/coroutine-and-thread",
+    "/2019/05/27/coroutine-and-thread/index.html": "/ko/posts/engineering/coroutine-and-thread",
+    "/2021/02/07/things-that-i-should-have-known-when-i-was-a-junior-developer": "/ko/posts/engineering/things-that-i-should-have-known-when-i-was-a-junior-developer",
+    "/2021/02/07/things-that-i-should-have-known-when-i-was-a-junior-developer/": "/ko/posts/engineering/things-that-i-should-have-known-when-i-was-a-junior-developer",
+    "/2021/02/07/things-that-i-should-have-known-when-i-was-a-junior-developer/index.html": "/ko/posts/engineering/things-that-i-should-have-known-when-i-was-a-junior-developer",
+    "/2021/02/14/a-tutorial-for-spring-mvc-and-security": "/ko/posts/engineering/a-tutorial-for-spring-mvc-and-security",
+    "/2021/02/14/a-tutorial-for-spring-mvc-and-security/": "/ko/posts/engineering/a-tutorial-for-spring-mvc-and-security",
+    "/2021/02/14/a-tutorial-for-spring-mvc-and-security/index.html": "/ko/posts/engineering/a-tutorial-for-spring-mvc-and-security",
+    "/2021/03/14/thread-and-security-context-holder-mode": "/ko/posts/engineering/thread-and-security-context-holder-mode",
+    "/2021/03/14/thread-and-security-context-holder-mode/": "/ko/posts/engineering/thread-and-security-context-holder-mode",
+    "/2021/03/14/thread-and-security-context-holder-mode/index.html": "/ko/posts/engineering/thread-and-security-context-holder-mode",
+    "/resume": "/ko/resume",
+    "/resume/": "/ko/resume",
+    "/resume/index.html": "/ko/resume",
+    "/about": "/ko/about",
+    "/about/": "/ko/about",
+    "/about/index.html": "/ko/about",
+  },
+
   // (B) Vite-specific options
   // vite: { ... },
   integrations: [
