@@ -23,7 +23,7 @@ export const AARONS_BLOG_DESCRIPTION = {
 
 const {
   lang,
-  title = AARONS_BLOG_TITLE,
+  title: posttitle = AARONS_BLOG_TITLE,
   author = AARON,
   keywords = AARONS_BLOG_KEYWORDS[lang as Lang],
   description = AARONS_BLOG_DESCRIPTION[lang as Lang],
@@ -33,6 +33,8 @@ const {
   updated,
 } = Astro.props;
 
+// 제목 타이틀은 "예시 글 제목 | The Pessimistic Optimist" 이렇게 되어야한다
+const title = posttitle ? posttitle + ' | ' + AARONS_BLOG_TITLE : AARONS_BLOG_TITLE
 const ogImageUrl = new URL('/tpo-social-share.png', Astro.site).href;
 
 const isArticle = title !== AARONS_BLOG_TITLE && !!created;

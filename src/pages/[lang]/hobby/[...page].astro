@@ -32,15 +32,24 @@ interface Props {
   page: Page<CollectionEntry<"hobby">>;
 }
 
-const { lang } = Astro.params;
-const translatePath = useTranslatedPath(lang!);
-const t = useTranslations(lang as Lang);
+interface Params {
+  lang: Lang;
+}
+
+const { lang } = Astro.params as unknown as Params;
+const translatePath = useTranslatedPath(lang);
+const t = useTranslations(lang);
 
 // 왜 pages/[lang]/posts/[section]/[...page].astro 는 잘되는데 이 파일은 Props 가 안되는지 모르겠음
 const { page } = Astro.props as unknown as Props;
 ---
 
-<BaseLayout lang={lang}>
+<BaseLayout
+  lang={lang}
+  title={sectionMap.hobby.title}
+  keywords={sectionMap.hobby.shorten[lang]}
+  description={sectionMap.hobby.description[lang]}
+>
   <main>
     <SectionHeader lang={lang as Lang} section={"hobby"} />
     <div class="dashboard">

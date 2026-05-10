@@ -146,16 +146,16 @@ export const sectionMap = {
   about: {
     title: "About",
     shorten: {
-      ko: "블로그 주인 소개",
+      ko: "블로그를 만든 주인에 대해",
       en: "About Author",
       ja: "筆者紹介",
     },
     description: {
-      ko: "블로그 주인의 다양한 이력을 확인할 수 있는 노션 페이지",
-      en: "A Notion page showcasing\nthe author's background",
-      ja: "筆者の様々な経歴を\n確認できるNotionページ",
+      ko: "블로그를 만든 주인은 어떤 사람인지 간략하게 설명합니다",
+      en: "A brief introduction to the person behind this blog",
+      ja: "このブログの作者がどのような人物か、簡潔に説明します",
     },
-    url: "https://aaronryu.notion.site",
+    url: "/about",
   },
   // 블로그 주인 관련된 외부 링크
   facebook: {

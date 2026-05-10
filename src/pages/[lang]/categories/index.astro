@@ -3,7 +3,8 @@ import MainCategory from "@/components/MainCategory.astro";
 import SectionHeader from "@/components/SectionHeader.astro";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import { getCategoryTree, type CategoryTree } from "@/scripts/category";
-import { getI18nStaticPaths } from "@/scripts/i18n";
+import { getI18nStaticPaths, type Lang } from "@/scripts/i18n";
+import { sectionMap } from "@/scripts/section";
 
 export async function getStaticPaths() {
   return getI18nStaticPaths(async (lang) => {
@@ -20,11 +21,20 @@ interface Props {
   categoryTree: CategoryTree;
 }
 
-const { lang } = Astro.params;
-const { categoryTree } = Astro.props;
+interface Params {
+  lang: Lang;
+}
+
+const { lang } = Astro.params as unknown as Params;
+const { categoryTree } = Astro.props as unknown as Props;
 ---
 
-<BaseLayout lang={lang}>
+<BaseLayout
+  lang={lang}
+  title={sectionMap.categories.title}
+  keywords={sectionMap.categories.shorten[lang]}
+  description={sectionMap.categories.description[lang]}
+>
   <SectionHeader lang={lang} section={"categories"} />
   <article>
     <div class="categories">

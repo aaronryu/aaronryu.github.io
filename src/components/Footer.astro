@@ -125,9 +125,7 @@ const currentYear = new Date().getFullYear();
       <a href={translatePath(sectionMap.posts.url)}>{sectionMap.posts.title}</a>
       <a href={translatePath(sectionMap.categories.url)}>{sectionMap.categories.title}</a>
       <a href={translatePath(sectionMap.hobby.url)}>{sectionMap.hobby.title}</a>
-      <a href={sectionMap.about.url} target="_blank" rel="noopener noreferrer">
-        {sectionMap.about.title}
-      </a>
+      <a href={translatePath(sectionMap.about.url)}>{sectionMap.about.title}</a>
     </nav>
   </div>
 </footer>

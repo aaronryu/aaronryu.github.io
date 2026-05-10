@@ -45,14 +45,24 @@ interface Props {
   page: Page<CollectionEntry<"blog">>;
 }
 
-const { lang, section } = Astro.params;
+interface Params {
+  lang: Lang;
+  section: keyof typeof sectionMap;
+}
+
+const { lang, section } = Astro.params as unknown as Params;
 const translatePath = useTranslatedPath(lang!);
 const t = useTranslations(lang as Lang);
 
 const { page } = Astro.props as unknown as Props;
 ---
 
-<BaseLayout lang={lang}>
+<BaseLayout
+  lang={lang}
+  title={sectionMap[section].title}
+  keywords={sectionMap[section].shorten[lang]}
+  description={sectionMap[section].description[lang]}
+>
   <!-- @ts-ignore -->
   <SectionHeader lang={lang} section={section} />
   <main>
