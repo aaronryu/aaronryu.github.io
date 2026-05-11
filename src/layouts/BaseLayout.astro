@@ -126,7 +126,7 @@ const jaURL = new URL(languageURL.ja, Astro.site).href;
   </head>
   <body>
     {isArticle && <HeaderScrollSpy />}
-    {isArticle && <OnScrollStickyHeader lang={lang} title={title} />}
+    {isArticle && <OnScrollStickyHeader lang={lang} title={posttitle} />}
     <Header lang={lang} />
     <slot />
     <Footer lang={lang} />
