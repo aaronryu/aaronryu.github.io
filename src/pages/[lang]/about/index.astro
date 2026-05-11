@@ -20,7 +20,7 @@ const t = useTranslations(lang);
   <main>
     <div class="content">
       <div class="information">
-        {t("about.quote")}<br />
+        <span class="quote">{t("about.quote")}</span><br />
         <span class="subspan">{t("about.quote.description")}</span>
       </div>
 
@@ -35,11 +35,11 @@ const t = useTranslations(lang);
 
       <div class="section">
         <div class="information linefeed">{t("about.explain.study")}</div>
-        <span class="information">{t("about.explain.study.sub")}</span>
+        <span class="information subspan">{t("about.explain.study.sub")}</span>
         <div class="information linefeed">{t("about.explain.mountain")}</div>
-        <span class="information">{t("about.explain.mountain.sub")}</span>
+        <span class="information subspan">{t("about.explain.mountain.sub")}</span>
         <div class="information linefeed">{t("about.explain.humanity")}</div>
-        <span class="information">{t("about.explain.humanity.sub")}</span>
+        <span class="information subspan">{t("about.explain.humanity.sub")}</span>
       </div>
 
       <div class="section">
@@ -64,6 +64,7 @@ const t = useTranslations(lang);
     @media only screen and (max-width: 700px) {
       margin: 0.9em auto 2em;
       padding: 0 0.9em;
+      font-size: 0.9em;
     }
   }
 
@@ -97,17 +98,26 @@ const t = useTranslations(lang);
   }
 
   span {
-    font-weight: 100;
+    font-weight: 400;
+  }
+
+  .quote {
+    font-weight: 500;
   }
 
   .information {
     margin-top: 0.4em;
     line-height: 1.4em;
+    font-weight: 600;
 
     @media only screen and (max-width: 490px) {
       margin-top: 0.2em;
       white-space: pre-wrap; /* 줄바꿈 문자(\n)를 렌더링하게 함 */
     }
+  }
+
+  .information.subspan {
+    font-weight: 400;
   }
 
   .section {
