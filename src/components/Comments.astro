@@ -1,5 +1,5 @@
 ---
-const customCss = new URL("/css/giscus-custom.css", Astro.site).href;
+const siteUrl = Astro.site;
 ---
 
 <section class="comments">
@@ -15,17 +15,22 @@ const customCss = new URL("/css/giscus-custom.css", Astro.site).href;
     data-reactions-enabled="1"
     data-emit-metadata="0"
     data-input-position="top"
-    data-theme={customCss}
+    data-theme="preferred_color_scheme"
     data-lang="ko"
     data-loading="lazy"
     crossorigin="anonymous"
     async
   >
   </script>
-  <!-- preferred_color_scheme -->
 </section>
 
-<script is:inline>
+<script is:inline define:vars={{ siteUrl }}>
+  window.ASTRO_SITE_URL = siteUrl;
+
+  function getCustomCss(theme) {
+    return new URL(`/css/giscus-custom-${theme}.css`, window.ASTRO_SITE_URL).href;
+  }
+
   function getGiscusTheme() {
     return document.documentElement.classList.contains("dark") ? "dark" : "light";
   }
@@ -35,7 +40,7 @@ const customCss = new URL("/css/giscus-custom.css", Astro.site).href;
     if (!iframe) return false;
 
     iframe.contentWindow.postMessage(
-      { giscus: { setConfig: { theme: theme } } },
+      { giscus: { setConfig: { theme: getCustomCss(theme) } } },
       "https://giscus.app",
     );
     return true;

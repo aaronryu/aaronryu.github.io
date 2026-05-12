@@ -1,0 +1,158 @@
+main {
+  font-family:
+    "Ubuntu",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    "Hiragino Sans",
+    "Hiragino Kaku Gothic ProN",
+    "Meiryo",
+    "Yu Gothic",
+    Pretendard,
+    Arial,
+    sans-serif;
+  /* --- Syntax Highlighting (Dark mode compatible) --- */
+  --color-prettylights-syntax-comment: #8b949e;
+  --color-prettylights-syntax-constant: #79c0ff;
+  --color-prettylights-syntax-entity: #d2a8ff;
+  --color-prettylights-syntax-storage-modifier-import: #b6bfc8; /* Updated to match main text */
+  --color-prettylights-syntax-entity-tag: #7ee787;
+  --color-prettylights-syntax-keyword: #ff7b72;
+  --color-prettylights-syntax-string: #a5d6ff;
+  --color-prettylights-syntax-variable: #ffa657;
+  --color-prettylights-syntax-brackethighlighter-unmatched: #f85149;
+  --color-prettylights-syntax-invalid-illegal-text: #f0f6fc;
+  --color-prettylights-syntax-invalid-illegal-bg: #8e1519;
+  --color-prettylights-syntax-carriage-return-text: #f0f6fc;
+  --color-prettylights-syntax-carriage-return-bg: #b62324;
+  --color-prettylights-syntax-string-regexp: #7ee787;
+  --color-prettylights-syntax-markup-list: #f2cc60;
+  --color-prettylights-syntax-markup-heading: #1f6feb;
+  --color-prettylights-syntax-markup-italic: #b6bfc8;
+  --color-prettylights-syntax-markup-bold: #b6bfc8;
+  --color-prettylights-syntax-markup-deleted-text: #ffdcd7;
+  --color-prettylights-syntax-markup-deleted-bg: #67060c;
+  --color-prettylights-syntax-markup-inserted-text: #aff5b4;
+  --color-prettylights-syntax-markup-inserted-bg: #033a16;
+  --color-prettylights-syntax-markup-changed-text: #ffdfb6;
+  --color-prettylights-syntax-markup-changed-bg: #5a1e02;
+  --color-prettylights-syntax-markup-ignored-text: #c9d1d9;
+  --color-prettylights-syntax-markup-ignored-bg: #1158c7;
+  --color-prettylights-syntax-meta-diff-range: #d2a8ff;
+  --color-prettylights-syntax-brackethighlighter-angle: #8b949e;
+  --color-prettylights-syntax-sublimelinter-gutter-mark: #484f58;
+  --color-prettylights-syntax-constant-other-reference-link: #a5d6ff;
+
+  /* --- Button Variations (#7f5555 base) --- */
+  --color-btn-text: #b6bfc8;
+  --color-btn-bg: #302a2a;
+  --color-btn-border: #b7949440;
+  --color-btn-shadow: 0 0 transparent;
+  --color-btn-inset-shadow: 0 0 transparent;
+  --color-btn-hover-bg: #3d3535;
+  --color-btn-hover-border: #b79494;
+  --color-btn-active-bg: #4d4343;
+  --color-btn-active-border: #b79494;
+  --color-btn-selected-bg: #211d1d;
+  --color-btn-primary-text: #fff;
+  --color-btn-primary-bg: #7f5555;
+  --color-btn-primary-border: #b79494;
+  --color-btn-primary-shadow: 0 0 transparent;
+  --color-btn-primary-inset-shadow: 0 0 transparent;
+  --color-btn-primary-hover-bg: #946666;
+  --color-btn-primary-hover-border: #b79494;
+  --color-btn-primary-selected-bg: #6d4949;
+  --color-btn-primary-selected-shadow: 0 0 transparent;
+  --color-btn-primary-disabled-text: rgba(255, 255, 255, 0.5);
+  --color-btn-primary-disabled-bg: rgba(127, 85, 85, 0.6);
+  --color-btn-primary-disabled-border: #b7949440;
+
+  --color-action-list-item-default-hover-bg: rgba(183, 148, 148, 0.12);
+  --color-segmented-control-bg: rgb(110 118 129 / 10%);
+  --color-segmented-control-button-bg: #0d1117;
+  --color-segmented-control-button-selected-border: #6e7681;
+
+  /* --- Text Colors --- */
+  --color-fg-default: #b6bfc8; /* 요청하신 가장 진한 텍스트 색상 */
+  --color-fg-muted: #8b949e;
+  --color-fg-subtle: #6e7681;
+
+  /* --- Canvas & Background --- */
+  --color-canvas-default: #0d1117;
+  --color-canvas-overlay: #161b22;
+  --color-canvas-inset: #010409;
+  --color-canvas-subtle: #161b22;
+
+  /* --- Border & Accents --- */
+  --color-border-default: #30363d;
+  --color-border-muted: #21262d;
+
+  --color-neutral-muted: rgb(110 118 129 / 40%);
+  --color-accent-fg: #b79494;
+  --color-accent-emphasis: #7f5555;
+  --color-accent-muted: rgba(183, 148, 148, 0.666);
+  --color-accent-subtle: #b7949430;
+
+  /* --- Feedback & Others --- */
+  --color-success-fg: #3fb950;
+  --color-attention-fg: #d29922;
+  --color-attention-muted: rgb(187 128 9 / 40%);
+  --color-attention-subtle: rgb(187 128 9 / 15%);
+  --color-danger-fg: #f85149;
+  --color-danger-muted: rgb(248 81 73 / 40%);
+  --color-danger-subtle: rgb(248 81 73 / 10%);
+  --color-primer-shadow-inset: 0 0 transparent;
+  --color-scale-gray-7: #21262d;
+  --color-scale-blue-8: #0c2d6b;
+
+  /*! Extensions from @primer/css/alerts/flash.scss */
+  --color-social-reaction-bg-hover: var(--color-scale-gray-7);
+  --color-social-reaction-bg-reacted-hover: var(--color-scale-blue-8);
+}
+
+main .pagination-loader-container {
+  background-image: url("https://github.com/images/modules/pulls/progressive-disclosure-line-dark.svg");
+}
+
+main .gsc-loading-image {
+  background-image: url("https://github.githubassets.com/images/mona-loading-dark.gif");
+}
+
+.gsc-main {
+  gap: 0.6em;
+}
+
+.gsc-comments {
+  gap: 0.3em;
+}
+
+.gsc-timeline {
+  gap: 0.3em;
+}
+
+.gsc-comments-count {
+  font-size: 1.1em;
+  font-weight: 500;
+}
+
+#__next .py-2 {
+  padding-bottom: 0.5rem;
+  padding-top: 0.5rem;
+}
+
+#__next .px-4 {
+  padding-inline-end: 1rem;
+  padding-inline-start: 1rem;
+}
+
+@media only screen and (max-width: 600px) {
+  #__next .py-2 {
+    padding-bottom: 0.4rem;
+    padding-top: 0.4rem;
+  }
+  #__next .px-4 {
+    padding-inline-end: 0.8rem;
+    padding-inline-start: 0.8rem;
+  }
+}
