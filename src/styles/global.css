@@ -150,11 +150,17 @@ img {
   }
 }
 
-code,
-pre {
+code {
   font-family:
     "Ubuntu Mono", "Consolas", "Monaco", "Courier New", "Pretendard", "MS Gothic", monospace;
-  font-size: 0.8rem; /* 혹은 특정 px로 강제 고정 */
+  font-size: 0.83em;
+  -webkit-text-size-adjust: none; /* 브라우저의 제멋대로 크기 조절 방지 */
+}
+
+pre code {
+  font-family:
+    "Ubuntu Mono", "Consolas", "Monaco", "Courier New", "Pretendard", "MS Gothic", monospace;
+  font-size: 0.85rem;
   -webkit-text-size-adjust: none; /* 브라우저의 제멋대로 크기 조절 방지 */
 }
 
