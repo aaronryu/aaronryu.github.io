@@ -5,6 +5,8 @@ created: 2026-05-13T03:03:39.420Z
 # new Date(new Date().getTime() - (new Date()).getTimezoneOffset() * 60000).toISOString();
 deck: 블로그를 새로 만들면서 기존 Hexo 블로그에서 사용하던 Discus 를 더 이상 사용하지 않고 현재 가장 편리하게 쓸 수 있는 Giscus 를 사용하게되었다. Giscus 댓글 컴포넌트를 나의 블로그 CSS 테마에 맞추기 위해 커스터마이즈한 CSS 만들어 외부에서 Giscus 에 주입하려하였다. 어째서인지 마음만큼 잘 되지 않았고, 헤매던 와중에 프론트엔드 개발자라면 질리도록 보는 CORS 뿐만 아니라 Mixed Content 와 PNA (Private Network Access) 에 대한 보안 정책들이 엉켜서 동작되지 않았던 이유들을 설명하고, Giscus 내 CSS 테마를 올바르게 적용하는 법에 대해서도 안내한다.
 abstract: Giscus 는 여느 서드파티 댓글 컴포넌트와 동일하게 <iframe> 으로 동작된다. 먼저 GA 구글 애널리틱스와 유사하게 <script> 통해 여러분들의 브라우저에서 클라이언트 사이드로 실행할 자바스크립트를 Giscus 서버로부터 가져오고, 개발자들이 설정한 세부옵션들을 취합하여 해당 자바스크립트는 Giscus 서버에게 서버 사이드로 Giscus 댓글 HTML 컴포넌트를 생성하여 반환받아 브라우저에서 Giscus 댓글 HTML 컴포넌트가 보이게 된다. 커스텀 CSS 는 이떄 서버에게 함께 보내어 <iframe> 으로 감싸진 댓글 HTML 컴포넌트 안에 <link> 태그로 가져오도록 되어있는데, 웹 페이지에서 웹 페이지를 가져온 서버가 아닌 외부 서버로부터 CSS 파일을 가져오는것이다보니 웹 브라우저에서 몇가지 보안 정책들을 적용하기에, 커스텀 CSS 가져오는데 신경써야할 보안설정들이 있다.
+description: Giscus CSS 커스텀 과정에서 마주하는 CORS, Mixed Content, PNA와 같은 브라우저 보안 정책의 복잡함을 깊이 있게 다룹니다. 외부 CSS 주입이 실패하는 원인과 Giscus 댓글 컴포넌트에 테마를 올바르게 적용하는 방법을 설명하며, 핵심적인 프론트엔드 트러블슈팅 가이드를 제공합니다.
+keywords: Giscus, CSS customization, Browser Security Policies, CORS, Mixed Content, Private Network Access (PNA), iframe, Frontend Development, Troubleshooting, Same-Origin Policy (SOP), Github Discussions, Static Site Generators (SSG), Hexo, Gatsby, Astro, Vite, AWS S3, Github Pages, mkcert, ngrok, localtunnel, SSL/TLS, HTTPS, HTTP
 ---
 
 # Disqus
